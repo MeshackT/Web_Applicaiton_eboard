@@ -609,7 +609,5 @@ class _Grade12State extends State<Grade12> {
     passData.add(term1Mark2);
     passData.add(term1Mark3);
     passData.add(term1Mark4);
-
-    //logger.i("$term1Mark1 $term1Mark2 $term1Mark3 $term1Mark4");
   }
 }
