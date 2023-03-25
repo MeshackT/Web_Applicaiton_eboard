@@ -11,10 +11,9 @@ class LearnerAuthenticate extends StatefulWidget {
 }
 
 class _LearnerAuthenticateState extends State<LearnerAuthenticate> {
-
   bool showSignIn = true;
 
-  void toggleView(){
+  void toggleView() {
     setState(() {
       //get the reverse of showSign In
       showSignIn = !showSignIn;
@@ -23,9 +22,9 @@ class _LearnerAuthenticateState extends State<LearnerAuthenticate> {
 
   @override
   Widget build(BuildContext context) {
-    if(showSignIn == true){
+    if (showSignIn == true) {
       return LearnerSignIn(toggleView: toggleView);
-    }else{
+    } else {
       return LearnerRegister(toggleView: toggleView);
     }
   }

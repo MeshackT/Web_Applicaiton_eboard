@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:levy/AllNew/screens/gradeList/grade12.dart';
 
 import '../../shared/constants.dart';
@@ -114,6 +115,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
 
   //on click loader
   bool loading = false;
+  String subjectName = "";
 
   @override
   void initState() {
@@ -127,9 +129,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
 
   @override
   void dispose() {
-    super.dispose();
     widget.getMarksFromFirestore.clear();
-    widget.subjectName = "";
+    super.dispose();
   }
 
   @override
@@ -161,7 +162,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(children: [
@@ -173,6 +174,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                     AsyncSnapshot<DocumentSnapshot> snapshot) {
                   if (snapshot.hasData && snapshot.data!.exists) {
                     var allSubjects = snapshot.data!.get('allSubjects');
+                    //var allSubjects = snapshot.data!["allSubjects"];
 
                     return SizedBox(
                       height: MediaQuery.of(context).size.height,
@@ -181,2134 +183,2747 @@ class _AddEditForAllState extends State<AddEditForAll> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 20, right: 20),
                           child: ExpansionTile(
-                              title: const Text(
-                                "Add marks For every Term",
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              children: <Widget>[
-                                ////////////// Term One Marks ///////////
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, right: 20),
-                                  child: ExpansionTile(
-                                      title: const Text("Term One"),
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, bottom: 10, right: 20),
-                                          child: ExpansionTile(
-                                            title: const Text("Test Marks"),
-                                            children: [
-                                              ListTile(
-                                                  title: Column(
-                                                children: [
-                                                  const SizedBox(
-                                                    height: 5,
+                            title: const Text(
+                              "Add marks For every Term",
+                              style: TextStyle(
+                                  fontSize: 16.0, fontWeight: FontWeight.w500),
+                            ),
+                            children: <Widget>[
+                              ////////////// Term One Marks ///////////
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20, right: 20),
+                                child: ExpansionTile(
+                                    title: const Text("Term One"),
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, bottom: 10, right: 20),
+                                        child: ExpansionTile(
+                                          title: const Text("Test Marks"),
+                                          children: [
+                                            ListTile(
+                                                title: Column(
+                                              children: [
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration: textInputDecoration
+                                                      .copyWith(
+                                                          hintText: "Test 1",
+                                                          label: const Text(
+                                                              "Test Mark 1")),
+                                                  controller: testOneMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      testOneMark.text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 2",
+                                                    label: const Text(
+                                                        "Test Mark 2"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration: textInputDecoration
-                                                        .copyWith(
-                                                            hintText: "Test 1",
-                                                            label: const Text(
-                                                                "Test Mark 1")),
-                                                    controller: testOneMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        testOneMark.text =
-                                                            value!;
-                                                      });
-                                                    },
+                                                  controller: testTwoMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      testTwoMark.text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 3",
+                                                    label: const Text(
+                                                        "Test Mark 3"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller: testThreeMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      testThreeMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 4",
+                                                    label: const Text(
+                                                        "Test Mark 4"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 2",
-                                                      label: const Text(
-                                                          "Test Mark 2"),
-                                                    ),
-                                                    controller: testTwoMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        testTwoMark.text =
-                                                            value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 3",
-                                                      label: const Text(
-                                                          "Test Mark 3"),
-                                                    ),
-                                                    controller: testThreeMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        testThreeMark.text =
-                                                            value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 4",
-                                                      label: const Text(
-                                                          "Test Mark 4"),
-                                                    ),
-                                                    controller: testFourMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        testFourMark.text =
-                                                            value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      MaterialButton(
-                                                          child: loading
-                                                              ? const SpinKitChasingDots(
-                                                                  color: Colors
-                                                                      .purple,
-                                                                )
-                                                              : const Text(
-                                                                  "Update"),
-                                                          onPressed: () {
+                                                  controller: testFourMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      testFourMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    MaterialButton(
+                                                        child: loading
+                                                            ? const SpinKitChasingDots(
+                                                                color: Colors
+                                                                    .purple,
+                                                              )
+                                                            : const Text(
+                                                                "Update"),
+                                                        onPressed: () async {
+                                                          try {
                                                             setState(() {
                                                               loading = true;
+                                                              subjectName = widget
+                                                                  .subjectName;
                                                             });
                                                             ////////////TODO Term 1 tests////////
 
-                                                            logger
-                                                                .i(allSubjects);
+                                                            //check if the document exits
+                                                            if (allSubjects !=
+                                                                null) {
+                                                              //go to the field in the document
+                                                              //check if the data is a List
+                                                              if (allSubjects
+                                                                  is List) {
+                                                                bool
+                                                                    foundCatIndex =
+                                                                    false;
+                                                                //for every item in the list
+                                                                for (var item
+                                                                    in allSubjects) {
+                                                                  //if the item is==$userSubject
+                                                                  if (item.containsKey(
+                                                                      subjectName)) {
+                                                                    //index is present
+                                                                    foundCatIndex =
+                                                                        true;
 
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]
-                                                                    [
-                                                                    "0"]["tests"]
-                                                                ["test1mark"]);
-                                                            // Make the necessary changes to the "test1mark" field
-                                                            //allSubjects['CAT']['0']['tests']['test1mark'] = '100';
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "0"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test1mark"] =
-                                                                testOneMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "0"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test2mark"] =
-                                                                testTwoMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "0"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test3mark"] =
-                                                                testThreeMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "0"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test4mark"] =
-                                                                testFourMark
-                                                                    .text;
+                                                                    var itemIndex =
+                                                                        allSubjects
+                                                                            .indexOf(item);
+                                                                    //get the teacher subject from the list
+                                                                    logger.i(
+                                                                        "$subjectName Found Subject at index $itemIndex");
 
-                                                            // Update the "allSubjects" field with the modified array
-                                                            identityDocument.set(
-                                                                {
-                                                                  'allSubjects':
-                                                                      allSubjects
-                                                                },
-                                                                SetOptions(
-                                                                    merge:
-                                                                        true));
+                                                                    logger.i(allSubjects[itemIndex][subjectName]["0"]
+                                                                            [
+                                                                            "tests"]
+                                                                        [
+                                                                        "test1mark"]);
+                                                                    ////////////////////////////////
 
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]
-                                                                    [
-                                                                    "0"]["tests"]
-                                                                ["test1mark"]);
+                                                                    allSubjects[itemIndex][subjectName]["0"]["tests"]
+                                                                            [
+                                                                            "test1mark"] =
+                                                                        testOneMark
+                                                                            .text;
+
+                                                                    allSubjects[itemIndex][subjectName]["0"]["tests"]
+                                                                            [
+                                                                            "test2mark"] =
+                                                                        testTwoMark
+                                                                            .text;
+                                                                    allSubjects[itemIndex][subjectName]["0"]["tests"]
+                                                                            [
+                                                                            "test3mark"] =
+                                                                        testThreeMark
+                                                                            .text;
+                                                                    allSubjects[itemIndex][subjectName]["0"]["tests"]
+                                                                            [
+                                                                            "test4mark"] =
+                                                                        testFourMark
+                                                                            .text;
+
+                                                                    // Update the "allSubjects" field with the modified array
+                                                                    await identityDocument
+                                                                        .set({
+                                                                      'allSubjects':
+                                                                          allSubjects
+                                                                    }, SetOptions(merge: true)).then(
+                                                                      (value) =>
+                                                                          Fluttertoast.showToast(
+                                                                              msg: "Added marks"),
+                                                                    );
+
+                                                                    // do something with the 'CAT' data, such as print it
+                                                                    break;
+                                                                  }
+                                                                }
+                                                                //if the teacherSubject is not found
+
+                                                                if (!foundCatIndex) {
+                                                                  // handle case where 'CAT' index does not exist
+                                                                  logger.i(
+                                                                      'No $subjectName index found');
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                          SnackBar(
+                                                                    content: Text(
+                                                                        'The learner is not registered to do $subjectName'),
+                                                                    duration: const Duration(
+                                                                        seconds:
+                                                                            1),
+                                                                  ));
+                                                                }
+                                                                //check if the stored data is a Map
+                                                              } else if (allSubjects
+                                                                      is Map &&
+                                                                  allSubjects
+                                                                      .containsKey(
+                                                                          subjectName)) {
+                                                                //store the teacherSubject here
+                                                                var teacherSubject =
+                                                                    allSubjects[
+                                                                        subjectName];
+                                                                // do something with the 'CAT' data, such as print it
+                                                                logger.i(
+                                                                    teacherSubject);
+                                                              } else {
+                                                                // handle case where teacherSubject index does not exist
+                                                                logger.i(
+                                                                    'No $subjectName index found');
+                                                              }
+                                                            } else {
+                                                              // handle case where document does not exist
+                                                              logger.i(
+                                                                  'Document does not exist');
+                                                            }
 
                                                             setState(() {
                                                               loading = false;
                                                             });
-                                                          }),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
-                                            ],
-                                          ),
+                                                          } catch (e) {
+                                                            logger.i(e);
+                                                            Fluttertoast.showToast(
+                                                                msg: e
+                                                                    .toString());
+                                                          }
+                                                        }),
+                                                  ],
+                                                ),
+                                              ],
+                                            )),
+                                          ],
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, bottom: 10, right: 20),
-                                          child: ExpansionTile(
-                                            title:
-                                                const Text("Assignment Marks"),
-                                            children: [
-                                              ListTile(
-                                                  title: Column(
-                                                children: [
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 1",
-                                                      label: const Text(
-                                                          "Assignment 1"),
-                                                    ),
-                                                    controller:
-                                                        assignmentOneMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        assignmentOneMark.text =
-                                                            value!;
-                                                      });
-                                                    },
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, bottom: 10, right: 20),
+                                        child: ExpansionTile(
+                                          title: const Text("Assignment Marks"),
+                                          children: [
+                                            ListTile(
+                                                title: Column(
+                                              children: [
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 1",
+                                                    label: const Text(
+                                                        "Assignment 1"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller: assignmentOneMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      assignmentOneMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 2",
+                                                    label: const Text(
+                                                        "Assignment 2"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 2",
-                                                      label: const Text(
-                                                          "Assignment 2"),
-                                                    ),
-                                                    controller:
-                                                        assignmentTwoMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        assignmentTwoMark.text =
-                                                            value!;
-                                                      });
-                                                    },
+                                                  controller: assignmentTwoMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      assignmentTwoMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 3",
+                                                    label: const Text(
+                                                        "Assignment 3"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      assignmentThreeMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      assignmentThreeMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 4",
+                                                    label: const Text(
+                                                        "Assignment 4"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 3",
-                                                      label: const Text(
-                                                          "Assignment 3"),
-                                                    ),
-                                                    controller:
-                                                        assignmentThreeMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        assignmentThreeMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 4",
-                                                      label: const Text(
-                                                          "Assignment 4"),
-                                                    ),
-                                                    controller:
-                                                        assignmentFourMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        assignmentFourMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      MaterialButton(
-                                                          child: loading
-                                                              ? const SpinKitChasingDots(
-                                                                  color: Colors
-                                                                      .purple,
-                                                                )
-                                                              : const Text(
-                                                                  "Update"),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              loading = true;
-                                                            });
-                                                            ////////////TODO term 1 Assignments////////
+                                                  controller:
+                                                      assignmentFourMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      assignmentFourMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    MaterialButton(
+                                                        child: loading
+                                                            ? const SpinKitChasingDots(
+                                                                color: Colors
+                                                                    .purple,
+                                                              )
+                                                            : const Text(
+                                                                "Update"),
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            loading = true;
+                                                          });
+                                                          ////////////TODO term 1 Assignments////////
 
-                                                            logger
-                                                                .i(allSubjects);
+                                                          //check if the document exits
+                                                          if (allSubjects !=
+                                                              null) {
+                                                            //go to the field in the document
+                                                            //check if the data is a List
+                                                            if (allSubjects
+                                                                is List) {
+                                                              bool
+                                                                  foundCatIndex =
+                                                                  false;
+                                                              //for every item in the list
+                                                              for (var item
+                                                                  in allSubjects) {
+                                                                //if the item is==$userSubject
+                                                                if (item.containsKey(
+                                                                    subjectName)) {
+                                                                  //index is present
+                                                                  foundCatIndex =
+                                                                      true;
 
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]["0"]
-                                                                    [
-                                                                    "assignments"]
-                                                                [
-                                                                "assignment1mark"]);
-                                                            // Make the necessary changes to the "test1mark" field
-                                                            //allSubjects['CAT']['0']['tests']['test1mark'] = '100';
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "0"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment1mark"] =
-                                                                assignmentOneMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "0"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment2mark"] =
-                                                                assignmentTwoMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "0"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment3mark"] =
-                                                                assignmentThreeMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "0"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment4mark"] =
-                                                                assignmentFourMark
-                                                                    .text;
-
-                                                            // Update the "allSubjects" field with the modified array
-                                                            identityDocument.set(
-                                                                {
-                                                                  'allSubjects':
+                                                                  var itemIndex =
                                                                       allSubjects
-                                                                },
-                                                                SetOptions(
-                                                                    merge:
-                                                                        true));
+                                                                          .indexOf(
+                                                                              item);
+                                                                  logger.i(
+                                                                      itemIndex);
 
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]
-                                                                    ["0"][
-                                                                "assignments"]);
+                                                                  allSubjects[itemIndex][subjectName]["0"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment1mark"] =
+                                                                      assignmentOneMark
+                                                                          .text;
 
-                                                            setState(() {
-                                                              loading = false;
-                                                            });
-                                                          }),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
-                                            ],
-                                          ),
+                                                                  allSubjects[itemIndex][subjectName]["0"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment2mark"] =
+                                                                      assignmentTwoMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["0"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment3mark"] =
+                                                                      assignmentThreeMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["0"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment4mark"] =
+                                                                      assignmentFourMark
+                                                                          .text;
+
+                                                                  // Update the "allSubjects" field with the modified array
+                                                                  await identityDocument.set(
+                                                                      {
+                                                                        'allSubjects':
+                                                                            allSubjects
+                                                                      },
+                                                                      SetOptions(
+                                                                          merge:
+                                                                              true)).then(
+                                                                    (value) => Fluttertoast
+                                                                        .showToast(
+                                                                            msg:
+                                                                                "Added marks"),
+                                                                  );
+
+                                                                  // do something with the 'CAT' data, such as print it
+                                                                  break;
+                                                                }
+                                                              }
+                                                              //if the teacherSubject is not found
+
+                                                              if (!foundCatIndex) {
+                                                                // handle case where 'CAT' index does not exist
+                                                                logger.i(
+                                                                    'No $subjectName index found');
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        SnackBar(
+                                                                  content: Text(
+                                                                      'The learner is not registered to do $subjectName'),
+                                                                  duration:
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                ));
+                                                              }
+                                                              //check if the stored data is a Map
+                                                            } else if (allSubjects
+                                                                    is Map &&
+                                                                allSubjects
+                                                                    .containsKey(
+                                                                        subjectName)) {
+                                                              //store the teacherSubject here
+                                                              var teacherSubject =
+                                                                  allSubjects[
+                                                                      subjectName];
+                                                              // do something with the 'CAT' data, such as print it
+                                                              logger.i(
+                                                                  teacherSubject);
+                                                            } else {
+                                                              // handle case where teacherSubject index does not exist
+                                                              logger.i(
+                                                                  'No $subjectName index found');
+                                                            }
+                                                          } else {
+                                                            // handle case where document does not exist
+                                                            logger.i(
+                                                                'Document does not exist');
+                                                          }
+                                                          // Update the "allSubjects" field with the modified array
+                                                          identityDocument.set(
+                                                              {
+                                                                'allSubjects':
+                                                                    allSubjects
+                                                              },
+                                                              SetOptions(
+                                                                  merge: true));
+
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
+                                                        }),
+                                                  ],
+                                                ),
+                                              ],
+                                            )),
+                                          ],
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, bottom: 10, right: 20),
-                                          child: ExpansionTile(
-                                            title: const Text("Exam Marks"),
-                                            children: [
-                                              ListTile(
-                                                  title: Column(
-                                                children: [
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Exam 1",
-                                                      label:
-                                                          const Text("Exam 1"),
-                                                    ),
-                                                    controller: examOneMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        examOneMark.text =
-                                                            value!;
-                                                      });
-                                                    },
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, bottom: 10, right: 20),
+                                        child: ExpansionTile(
+                                          title: const Text("Exam Marks"),
+                                          children: [
+                                            ListTile(
+                                                title: Column(
+                                              children: [
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Exam 1",
+                                                    label: const Text("Exam 1"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller: examOneMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      examOneMark.text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Exam 2",
+                                                    label: const Text("Exam 2"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Exam 2",
-                                                      label:
-                                                          const Text("Exam 2"),
-                                                    ),
-                                                    controller: examTwoMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        examTwoMark.text =
-                                                            value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      MaterialButton(
-                                                          child: loading
-                                                              ? const SpinKitChasingDots(
-                                                                  color: Colors
-                                                                      .purple,
-                                                                )
-                                                              : const Text(
-                                                                  "Update"),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              loading = true;
-                                                            });
-                                                            ////////////TODO term 1 Exams ////////
+                                                  controller: examTwoMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      examTwoMark.text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    MaterialButton(
+                                                        child: loading
+                                                            ? const SpinKitChasingDots(
+                                                                color: Colors
+                                                                    .purple,
+                                                              )
+                                                            : const Text(
+                                                                "Update"),
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            loading = true;
+                                                            subjectName = widget
+                                                                .subjectName;
+                                                          });
+                                                          ////////////TODO term 1 Exams ////////
 
-                                                            logger
-                                                                .i(allSubjects);
+                                                          //check if the document exits
+                                                          if (allSubjects !=
+                                                              null) {
+                                                            //go to the field in the document
+                                                            //check if the data is a List
+                                                            if (allSubjects
+                                                                is List) {
+                                                              bool
+                                                                  foundCatIndex =
+                                                                  false;
+                                                              //for every item in the list
+                                                              for (var item
+                                                                  in allSubjects) {
+                                                                //if the item is==$userSubject
+                                                                if (item.containsKey(
+                                                                    subjectName)) {
+                                                                  //index is present
+                                                                  foundCatIndex =
+                                                                      true;
 
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]
-                                                                    [
-                                                                    "0"]["exams"]
-                                                                ["exam1mark"]);
-                                                            // Make the necessary changes to the "test1mark" field
-                                                            //allSubjects['CAT']['0']['tests']['test1mark'] = '100';
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "0"]
-                                                                        [
-                                                                        "exams"]
-                                                                    [
-                                                                    "exam1mark"] =
-                                                                examOneMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "0"]
-                                                                        [
-                                                                        "exams"]
-                                                                    [
-                                                                    "exam2mark"] =
-                                                                examTwoMark
-                                                                    .text;
-
-                                                            // Update the "allSubjects" field with the modified array
-                                                            identityDocument.set(
-                                                                {
-                                                                  'allSubjects':
+                                                                  var itemIndex =
                                                                       allSubjects
-                                                                },
-                                                                SetOptions(
-                                                                    merge:
-                                                                        true));
+                                                                          .indexOf(
+                                                                              item);
+                                                                  logger.i(
+                                                                      itemIndex);
 
-                                                            logger.i(allSubjects[
-                                                                        0][
-                                                                    widget
-                                                                        .subjectName]
-                                                                ["0"]["exams"]);
+                                                                  allSubjects[itemIndex][subjectName]["0"]
+                                                                              [
+                                                                              "exams"]
+                                                                          [
+                                                                          "exam1mark"] =
+                                                                      examOneMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["0"]
+                                                                              [
+                                                                              "exams"]
+                                                                          [
+                                                                          "exam2mark"] =
+                                                                      examTwoMark
+                                                                          .text;
 
-                                                            setState(() {
-                                                              loading = false;
-                                                            });
-                                                          }),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
-                                            ],
-                                          ),
+                                                                  // Update the "allSubjects" field with the modified array
+                                                                  await identityDocument.set(
+                                                                      {
+                                                                        'allSubjects':
+                                                                            allSubjects
+                                                                      },
+                                                                      SetOptions(
+                                                                          merge:
+                                                                              true)).then(
+                                                                    (value) => Fluttertoast
+                                                                        .showToast(
+                                                                            msg:
+                                                                                "Added marks"),
+                                                                  );
+
+                                                                  // do something with the 'CAT' data, such as print it
+                                                                  break;
+                                                                }
+                                                              }
+                                                              //if the teacherSubject is not found
+
+                                                              if (!foundCatIndex) {
+                                                                // handle case where 'CAT' index does not exist
+                                                                logger.i(
+                                                                    'No $subjectName index found');
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        SnackBar(
+                                                                  content: Text(
+                                                                      'The learner is not registered to do $subjectName'),
+                                                                  duration:
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                ));
+                                                              }
+                                                              //check if the stored data is a Map
+                                                            } else if (allSubjects
+                                                                    is Map &&
+                                                                allSubjects
+                                                                    .containsKey(
+                                                                        subjectName)) {
+                                                              //store the teacherSubject here
+                                                              var teacherSubject =
+                                                                  allSubjects[
+                                                                      subjectName];
+                                                              // do something with the 'CAT' data, such as print it
+                                                              logger.i(
+                                                                  teacherSubject);
+                                                            } else {
+                                                              // handle case where teacherSubject index does not exist
+                                                              logger.i(
+                                                                  'No $subjectName index found');
+                                                            }
+                                                          } else {
+                                                            // handle case where document does not exist
+                                                            logger.i(
+                                                                'Document does not exist');
+                                                          }
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
+                                                        }),
+                                                  ],
+                                                ),
+                                              ],
+                                            )),
+                                          ],
                                         ),
-                                      ]),
-                                ),
-                                ////////////// Term One End Marks ///////////
-                                //////////////////// TODO Term 4 ///////////
-                                /////////////  Term Two Marks /////////////
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, right: 20),
-                                  child: ExpansionTile(
-                                      title: const Text("Term Two"),
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, bottom: 10, right: 20),
-                                          child: ExpansionTile(
-                                            title: const Text("Test Marks"),
-                                            children: [
-                                              ListTile(
-                                                  title: Column(
-                                                children: [
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 1",
-                                                      label:
-                                                          const Text("Test 1"),
-                                                    ),
-                                                    controller:
-                                                        termTwoTestOneMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termTwoTestOneMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                                      ),
+                                    ]),
+                              ),
+                              ////////////// Term One End Marks ///////////
+                              //////////////////// TODO Term 2 ///////////
+                              /////////////  Term Two Marks /////////////
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20, right: 20),
+                                child: ExpansionTile(
+                                    title: const Text("Term Two"),
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, bottom: 10, right: 20),
+                                        child: ExpansionTile(
+                                          title: const Text("Test Marks"),
+                                          children: [
+                                            ListTile(
+                                                title: Column(
+                                              children: [
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 1",
+                                                    label: const Text("Test 1"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termTwoTestOneMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termTwoTestOneMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 2",
+                                                    label: const Text("Test 2"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 2",
-                                                      label:
-                                                          const Text("Test 2"),
-                                                    ),
-                                                    controller:
-                                                        termTwoTestTwoMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termTwoTestTwoMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                                                  controller:
+                                                      termTwoTestTwoMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termTwoTestTwoMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 3",
+                                                    label: const Text("Test 3"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termTwoTestThreeMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termTwoTestThreeMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 4",
+                                                    label: const Text("Test 4"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 3",
-                                                      label:
-                                                          const Text("Test 3"),
-                                                    ),
-                                                    controller:
-                                                        termTwoTestThreeMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termTwoTestThreeMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 4",
-                                                      label:
-                                                          const Text("Test 4"),
-                                                    ),
-                                                    controller:
-                                                        termTwoTestFourMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termTwoTestFourMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      MaterialButton(
-                                                          child: loading
-                                                              ? const SpinKitChasingDots(
-                                                                  color: Colors
-                                                                      .purple,
-                                                                )
-                                                              : const Text(
-                                                                  "Update"),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              loading = true;
-                                                            });
-                                                            ////////////TODO Term 2 tests////////
+                                                  controller:
+                                                      termTwoTestFourMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termTwoTestFourMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    MaterialButton(
+                                                        child: loading
+                                                            ? const SpinKitChasingDots(
+                                                                color: Colors
+                                                                    .purple,
+                                                              )
+                                                            : const Text(
+                                                                "Update"),
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            loading = true;
+                                                          });
+                                                          ////////////TODO Term 2 tests////////
+//check if the document exits
+                                                          if (allSubjects !=
+                                                              null) {
+                                                            //go to the field in the document
+                                                            //check if the data is a List
+                                                            if (allSubjects
+                                                                is List) {
+                                                              bool
+                                                                  foundCatIndex =
+                                                                  false;
+                                                              //for every item in the list
+                                                              for (var item
+                                                                  in allSubjects) {
+                                                                //if the item is==$userSubject
+                                                                if (item.containsKey(
+                                                                    subjectName)) {
+                                                                  //index is present
+                                                                  foundCatIndex =
+                                                                      true;
 
-                                                            logger
-                                                                .i(allSubjects);
-
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]
-                                                                    [
-                                                                    "1"]["tests"]
-                                                                ["test1mark"]);
-                                                            // Make the necessary changes to the "test1mark" field
-                                                            //allSubjects['CAT']['0']['tests']['test1mark'] = '100';
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "1"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test1mark"] =
-                                                                termTwoTestOneMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "1"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test2mark"] =
-                                                                termTwoTestTwoMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "1"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test3mark"] =
-                                                                termTwoTestThreeMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "1"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test4mark"] =
-                                                                termTwoTestFourMark
-                                                                    .text;
-
-                                                            // Update the "allSubjects" field with the modified array
-                                                            identityDocument.set(
-                                                                {
-                                                                  'allSubjects':
+                                                                  var itemIndex =
                                                                       allSubjects
-                                                                },
-                                                                SetOptions(
-                                                                    merge:
-                                                                        true));
+                                                                          .indexOf(
+                                                                              item);
+                                                                  //get the teacher subject from the list
+                                                                  logger.i(
+                                                                      "$subjectName Found Subject at index $itemIndex");
 
-                                                            logger.i(allSubjects[
-                                                                        0][
-                                                                    widget
-                                                                        .subjectName]
-                                                                ["1"]["tests"]);
+                                                                  logger.i(allSubjects[itemIndex][subjectName]
+                                                                              [
+                                                                              "0"]
+                                                                          [
+                                                                          "tests"]
+                                                                      [
+                                                                      "test1mark"]);
+                                                                  ////////////////////////////////
 
-                                                            setState(() {
-                                                              loading = false;
-                                                            });
-                                                          }),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
-                                            ],
-                                          ),
+                                                                  allSubjects[itemIndex][subjectName]["1"]
+                                                                              [
+                                                                              "tests"]
+                                                                          [
+                                                                          "test1mark"] =
+                                                                      termTwoTestOneMark
+                                                                          .text;
+
+                                                                  allSubjects[itemIndex][subjectName]["1"]
+                                                                              [
+                                                                              "tests"]
+                                                                          [
+                                                                          "test2mark"] =
+                                                                      termTwoTestTwoMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["1"]
+                                                                              [
+                                                                              "tests"]
+                                                                          [
+                                                                          "test3mark"] =
+                                                                      termTwoTestThreeMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["1"]
+                                                                              [
+                                                                              "tests"]
+                                                                          [
+                                                                          "test4mark"] =
+                                                                      termTwoTestFourMark
+                                                                          .text;
+
+                                                                  // Update the "allSubjects" field with the modified array
+                                                                  await identityDocument.set(
+                                                                      {
+                                                                        'allSubjects':
+                                                                            allSubjects
+                                                                      },
+                                                                      SetOptions(
+                                                                          merge:
+                                                                              true)).then(
+                                                                    (value) => Fluttertoast
+                                                                        .showToast(
+                                                                            msg:
+                                                                                "Added marks"),
+                                                                  );
+
+                                                                  // do something with the 'CAT' data, such as print it
+                                                                  break;
+                                                                }
+                                                              }
+                                                              //if the teacherSubject is not found
+
+                                                              if (!foundCatIndex) {
+                                                                // handle case where 'CAT' index does not exist
+                                                                logger.i(
+                                                                    'No $subjectName index found');
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        SnackBar(
+                                                                  content: Text(
+                                                                      'The learner is not registered to do $subjectName'),
+                                                                  duration:
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                ));
+                                                              }
+                                                              //check if the stored data is a Map
+                                                            } else if (allSubjects
+                                                                    is Map &&
+                                                                allSubjects
+                                                                    .containsKey(
+                                                                        subjectName)) {
+                                                              //store the teacherSubject here
+                                                              var teacherSubject =
+                                                                  allSubjects[
+                                                                      subjectName];
+                                                              // do something with the 'CAT' data, such as print it
+                                                              logger.i(
+                                                                  teacherSubject);
+                                                            } else {
+                                                              // handle case where teacherSubject index does not exist
+                                                              logger.i(
+                                                                  'No $subjectName index found');
+                                                            }
+                                                          } else {
+                                                            // handle case where document does not exist
+                                                            logger.i(
+                                                                'Document does not exist');
+                                                          }
+
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
+                                                        }),
+                                                  ],
+                                                ),
+                                              ],
+                                            )),
+                                          ],
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, bottom: 10, right: 20),
-                                          child: ExpansionTile(
-                                            title:
-                                                const Text("Assignment Marks"),
-                                            children: [
-                                              ListTile(
-                                                  title: Column(
-                                                children: [
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 1",
-                                                      label: const Text(
-                                                          "Assignment 1"),
-                                                    ),
-                                                    controller:
-                                                        termTwoAssignmentOneMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termTwoAssignmentOneMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, bottom: 10, right: 20),
+                                        child: ExpansionTile(
+                                          title: const Text("Assignment Marks"),
+                                          children: [
+                                            ListTile(
+                                                title: Column(
+                                              children: [
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 1",
+                                                    label: const Text(
+                                                        "Assignment 1"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termTwoAssignmentOneMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termTwoAssignmentOneMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 2",
+                                                    label: const Text(
+                                                        "Assignment 2"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 2",
-                                                      label: const Text(
-                                                          "Assignment 2"),
-                                                    ),
-                                                    controller:
-                                                        termTwoAssignmentTwoMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termTwoAssignmentTwoMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                                                  controller:
+                                                      termTwoAssignmentTwoMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termTwoAssignmentTwoMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 3",
+                                                    label: const Text(
+                                                        "Assignment 3"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termTwoAssignmentThreeMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termTwoAssignmentThreeMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 4",
+                                                    label: const Text(
+                                                        "Assignment 4"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 3",
-                                                      label: const Text(
-                                                          "Assignment 3"),
-                                                    ),
-                                                    controller:
-                                                        termTwoAssignmentThreeMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termTwoAssignmentThreeMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 4",
-                                                      label: const Text(
-                                                          "Assignment 4"),
-                                                    ),
-                                                    controller:
-                                                        termTwoAssignmentFourMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termTwoAssignmentFourMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      MaterialButton(
-                                                          child: loading
-                                                              ? const SpinKitChasingDots(
-                                                                  color: Colors
-                                                                      .purple,
-                                                                )
-                                                              : const Text(
-                                                                  "Update"),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              loading = true;
-                                                            });
-                                                            ////////////TODO Term 2 assignments////////
+                                                  controller:
+                                                      termTwoAssignmentFourMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termTwoAssignmentFourMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    MaterialButton(
+                                                        child: loading
+                                                            ? const SpinKitChasingDots(
+                                                                color: Colors
+                                                                    .purple,
+                                                              )
+                                                            : const Text(
+                                                                "Update"),
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            loading = true;
+                                                          });
+                                                          ////////////TODO Term 2 assignments////////
 
-                                                            logger
-                                                                .i(allSubjects);
+                                                          //check if the document exits
+                                                          if (allSubjects !=
+                                                              null) {
+                                                            //go to the field in the document
+                                                            //check if the data is a List
+                                                            if (allSubjects
+                                                                is List) {
+                                                              bool
+                                                                  foundCatIndex =
+                                                                  false;
+                                                              //for every item in the list
+                                                              for (var item
+                                                                  in allSubjects) {
+                                                                //if the item is==$userSubject
+                                                                if (item.containsKey(
+                                                                    subjectName)) {
+                                                                  //index is present
+                                                                  foundCatIndex =
+                                                                      true;
 
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]["1"]
-                                                                    [
-                                                                    "assignments"]
-                                                                ["test1mark"]);
-                                                            // Make the necessary changes to the "test1mark" field
-                                                            //allSubjects['CAT']['0']['tests']['test1mark'] = '100';
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "1"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment1mark"] =
-                                                                termTwoAssignmentOneMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "1"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment2mark"] =
-                                                                termTwoAssignmentTwoMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "1"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment3mark"] =
-                                                                termTwoAssignmentThreeMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "1"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment4mark"] =
-                                                                termTwoAssignmentFourMark
-                                                                    .text;
-
-                                                            // Update the "allSubjects" field with the modified array
-                                                            identityDocument.set(
-                                                                {
-                                                                  'allSubjects':
+                                                                  var itemIndex =
                                                                       allSubjects
-                                                                },
-                                                                SetOptions(
-                                                                    merge:
-                                                                        true));
+                                                                          .indexOf(
+                                                                              item);
+                                                                  logger.i(
+                                                                      itemIndex);
 
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]
-                                                                    ["1"]
-                                                                ["assignment"]);
+                                                                  allSubjects[itemIndex][subjectName]["1"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment1mark"] =
+                                                                      termTwoAssignmentOneMark
+                                                                          .text;
 
-                                                            setState(() {
-                                                              loading = false;
-                                                            });
-                                                          }),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
-                                            ],
-                                          ),
+                                                                  allSubjects[itemIndex][subjectName]["1"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment2mark"] =
+                                                                      termTwoAssignmentTwoMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["1"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment3mark"] =
+                                                                      termTwoAssignmentThreeMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["1"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment4mark"] =
+                                                                      termTwoAssignmentFourMark
+                                                                          .text;
+
+                                                                  // Update the "allSubjects" field with the modified array
+                                                                  await identityDocument.set(
+                                                                      {
+                                                                        'allSubjects':
+                                                                            allSubjects
+                                                                      },
+                                                                      SetOptions(
+                                                                          merge:
+                                                                              true)).then(
+                                                                    (value) => Fluttertoast
+                                                                        .showToast(
+                                                                            msg:
+                                                                                "Added marks"),
+                                                                  );
+
+                                                                  // do something with the 'CAT' data, such as print it
+                                                                  break;
+                                                                }
+                                                              }
+                                                              //if the teacherSubject is not found
+
+                                                              if (!foundCatIndex) {
+                                                                // handle case where 'CAT' index does not exist
+                                                                logger.i(
+                                                                    'No $subjectName index found');
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        SnackBar(
+                                                                  content: Text(
+                                                                      'The learner is not registered to do $subjectName'),
+                                                                  duration:
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                ));
+                                                              }
+                                                              //check if the stored data is a Map
+                                                            } else if (allSubjects
+                                                                    is Map &&
+                                                                allSubjects
+                                                                    .containsKey(
+                                                                        subjectName)) {
+                                                              //store the teacherSubject here
+                                                              var teacherSubject =
+                                                                  allSubjects[
+                                                                      subjectName];
+                                                              // do something with the 'CAT' data, such as print it
+                                                              logger.i(
+                                                                  teacherSubject);
+                                                            } else {
+                                                              // handle case where teacherSubject index does not exist
+                                                              logger.i(
+                                                                  'No $subjectName index found');
+                                                            }
+                                                          } else {
+                                                            // handle case where document does not exist
+                                                            logger.i(
+                                                                'Document does not exist');
+                                                          }
+                                                          // Update the "allSubjects" field with the modified array
+                                                          identityDocument.set(
+                                                              {
+                                                                'allSubjects':
+                                                                    allSubjects
+                                                              },
+                                                              SetOptions(
+                                                                  merge: true));
+
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
+                                                        }),
+                                                  ],
+                                                ),
+                                              ],
+                                            )),
+                                          ],
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, bottom: 10, right: 20),
-                                          child: ExpansionTile(
-                                            title: const Text("Exam Marks"),
-                                            children: [
-                                              ListTile(
-                                                  title: Column(
-                                                children: [
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Exam 1",
-                                                      label:
-                                                          const Text("Exam 1"),
-                                                    ),
-                                                    controller:
-                                                        termTwoExamOneMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termTwoExamTwoMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, bottom: 10, right: 20),
+                                        child: ExpansionTile(
+                                          title: const Text("Exam Marks"),
+                                          children: [
+                                            ListTile(
+                                                title: Column(
+                                              children: [
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Exam 1",
+                                                    label: const Text("Exam 1"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termTwoExamOneMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termTwoExamTwoMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Exam 1",
+                                                    label: const Text("Exam 2"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Exam 1",
-                                                      label:
-                                                          const Text("Exam 2"),
-                                                    ),
-                                                    controller:
-                                                        termTwoExamTwoMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termTwoExamTwoMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      MaterialButton(
-                                                          child: loading
-                                                              ? const SpinKitChasingDots(
-                                                                  color: Colors
-                                                                      .purple,
-                                                                )
-                                                              : const Text(
-                                                                  "Update"),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              loading = true;
-                                                            });
-                                                            ////////////TODO Term 2 Exam////////
+                                                  controller:
+                                                      termTwoExamTwoMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termTwoExamTwoMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    MaterialButton(
+                                                        child: loading
+                                                            ? const SpinKitChasingDots(
+                                                                color: Colors
+                                                                    .purple,
+                                                              )
+                                                            : const Text(
+                                                                "Update"),
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            loading = true;
+                                                          });
+                                                          ////////////TODO Term 2 Exam////////
+                                                          //check if the document exits
+                                                          if (allSubjects !=
+                                                              null) {
+                                                            //go to the field in the document
+                                                            //check if the data is a List
+                                                            if (allSubjects
+                                                                is List) {
+                                                              bool
+                                                                  foundCatIndex =
+                                                                  false;
+                                                              //for every item in the list
+                                                              for (var item
+                                                                  in allSubjects) {
+                                                                //if the item is==$userSubject
+                                                                if (item.containsKey(
+                                                                    subjectName)) {
+                                                                  //index is present
+                                                                  foundCatIndex =
+                                                                      true;
 
-                                                            logger
-                                                                .i(allSubjects);
-
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]
-                                                                    [
-                                                                    "1"]["exams"]
-                                                                ["exam1mark"]);
-                                                            // Make the necessary changes to the "test1mark" field
-                                                            //allSubjects['CAT']['0']['tests']['test1mark'] = '100';
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "1"]
-                                                                        [
-                                                                        "exams"]
-                                                                    [
-                                                                    "exam1mark"] =
-                                                                termTwoExamOneMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "1"]
-                                                                        [
-                                                                        "exams"]
-                                                                    [
-                                                                    "exam2mark"] =
-                                                                termTwoExamTwoMark
-                                                                    .text;
-
-                                                            // Update the "allSubjects" field with the modified array
-                                                            identityDocument.set(
-                                                                {
-                                                                  'allSubjects':
+                                                                  var itemIndex =
                                                                       allSubjects
-                                                                },
-                                                                SetOptions(
-                                                                    merge:
-                                                                        true));
+                                                                          .indexOf(
+                                                                              item);
+                                                                  logger.i(
+                                                                      itemIndex);
 
-                                                            logger.i(allSubjects[
-                                                                        0][
-                                                                    widget
-                                                                        .subjectName]
-                                                                ["1"]["exams"]);
+                                                                  allSubjects[itemIndex][subjectName]["1"]
+                                                                              [
+                                                                              "exams"]
+                                                                          [
+                                                                          "exam1mark"] =
+                                                                      termTwoExamOneMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["1"]
+                                                                              [
+                                                                              "exams"]
+                                                                          [
+                                                                          "exam2mark"] =
+                                                                      termTwoExamTwoMark
+                                                                          .text;
 
-                                                            setState(() {
-                                                              loading = false;
-                                                            });
-                                                          }),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
-                                            ],
-                                          ),
+                                                                  // Update the "allSubjects" field with the modified array
+                                                                  await identityDocument.set(
+                                                                      {
+                                                                        'allSubjects':
+                                                                            allSubjects
+                                                                      },
+                                                                      SetOptions(
+                                                                          merge:
+                                                                              true)).then(
+                                                                    (value) => Fluttertoast
+                                                                        .showToast(
+                                                                            msg:
+                                                                                "Added marks"),
+                                                                  );
+
+                                                                  // do something with the 'CAT' data, such as print it
+                                                                  break;
+                                                                }
+                                                              }
+                                                              //if the teacherSubject is not found
+
+                                                              if (!foundCatIndex) {
+                                                                // handle case where 'CAT' index does not exist
+                                                                logger.i(
+                                                                    'No $subjectName index found');
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        SnackBar(
+                                                                  content: Text(
+                                                                      'The learner is not registered to do $subjectName'),
+                                                                  duration:
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                ));
+                                                              }
+                                                              //check if the stored data is a Map
+                                                            } else if (allSubjects
+                                                                    is Map &&
+                                                                allSubjects
+                                                                    .containsKey(
+                                                                        subjectName)) {
+                                                              //store the teacherSubject here
+                                                              var teacherSubject =
+                                                                  allSubjects[
+                                                                      subjectName];
+                                                              // do something with the 'CAT' data, such as print it
+                                                              logger.i(
+                                                                  teacherSubject);
+                                                            } else {
+                                                              // handle case where teacherSubject index does not exist
+                                                              logger.i(
+                                                                  'No $subjectName index found');
+                                                            }
+                                                          } else {
+                                                            // handle case where document does not exist
+                                                            logger.i(
+                                                                'Document does not exist');
+                                                          }
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
+                                                        }),
+                                                  ],
+                                                ),
+                                              ],
+                                            )),
+                                          ],
                                         ),
-                                      ]),
-                                ),
-                                ///////////////// End of term Two //////////////
+                                      ),
+                                    ]),
+                              ),
+                              ///////////////// End of term Two //////////////
 
-                                ///////////////// Term Three Marks ///////////
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, right: 20),
-                                  child: ExpansionTile(
-                                      title: const Text("Term Three"),
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, bottom: 10, right: 20),
-                                          child: ExpansionTile(
-                                            title: const Text("Test Marks"),
-                                            children: [
-                                              ListTile(
-                                                  title: Column(
-                                                children: [
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 1",
-                                                      label:
-                                                          const Text("Test 1"),
-                                                    ),
-                                                    controller:
-                                                        termThreeTestOneMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termThreeTestTwoMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                              ///////////////// Term Three Marks ///////////
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20, right: 20),
+                                child: ExpansionTile(
+                                    title: const Text("Term Three"),
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, bottom: 10, right: 20),
+                                        child: ExpansionTile(
+                                          title: const Text("Test Marks"),
+                                          children: [
+                                            ListTile(
+                                                title: Column(
+                                              children: [
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 1",
+                                                    label: const Text("Test 1"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termThreeTestOneMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termThreeTestTwoMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 2",
+                                                    label: const Text("Test 2"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 2",
-                                                      label:
-                                                          const Text("Test 2"),
-                                                    ),
-                                                    controller:
-                                                        termThreeTestTwoMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termThreeTestTwoMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                                                  controller:
+                                                      termThreeTestTwoMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termThreeTestTwoMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 3",
+                                                    label: const Text("Test 3"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termThreeTestThreeMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termThreeTestThreeMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 4",
+                                                    label: const Text("Test 4"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 3",
-                                                      label:
-                                                          const Text("Test 3"),
-                                                    ),
-                                                    controller:
-                                                        termThreeTestThreeMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termThreeTestThreeMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 4",
-                                                      label:
-                                                          const Text("Test 4"),
-                                                    ),
-                                                    controller:
-                                                        termThreeTestFourMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termThreeTestFourMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      MaterialButton(
-                                                          child: loading
-                                                              ? const SpinKitChasingDots(
-                                                                  color: Colors
-                                                                      .purple,
-                                                                )
-                                                              : const Text(
-                                                                  "Update"),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              loading = true;
-                                                            });
-                                                            ////////////TODO Term 3 test////////
+                                                  controller:
+                                                      termThreeTestFourMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termThreeTestFourMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    MaterialButton(
+                                                        child: loading
+                                                            ? const SpinKitChasingDots(
+                                                                color: Colors
+                                                                    .purple,
+                                                              )
+                                                            : const Text(
+                                                                "Update"),
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            loading = true;
+                                                          });
+                                                          ////////////TODO Term 3 test////////
 
-                                                            logger
-                                                                .i(allSubjects);
+                                                          //check if the document exits
+                                                          if (allSubjects !=
+                                                              null) {
+                                                            //go to the field in the document
+                                                            //check if the data is a List
+                                                            if (allSubjects
+                                                                is List) {
+                                                              bool
+                                                                  foundCatIndex =
+                                                                  false;
+                                                              //for every item in the list
+                                                              for (var item
+                                                                  in allSubjects) {
+                                                                //if the item is==$userSubject
+                                                                if (item.containsKey(
+                                                                    subjectName)) {
+                                                                  //index is present
+                                                                  foundCatIndex =
+                                                                      true;
 
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]
-                                                                    [
-                                                                    "2"]["tests"]
-                                                                ["test1mark"]);
-                                                            // Make the necessary changes to the "test1mark" field
-                                                            //allSubjects['CAT']['0']['tests']['test1mark'] = '100';
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "2"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test1mark"] =
-                                                                termThreeTestOneMark
-                                                                    .text;
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "2"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test2mark"] =
-                                                                termThreeTestTwoMark
-                                                                    .text;
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "2"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test3mark"] =
-                                                                termThreeTestThreeMark
-                                                                    .text;
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "2"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test4mark"] =
-                                                                termThreeTestFourMark
-                                                                    .text;
-
-                                                            // Update the "allSubjects" field with the modified array
-                                                            identityDocument.set(
-                                                                {
-                                                                  'allSubjects':
+                                                                  var itemIndex =
                                                                       allSubjects
-                                                                },
-                                                                SetOptions(
-                                                                    merge:
-                                                                        true));
+                                                                          .indexOf(
+                                                                              item);
 
-                                                            logger.i(allSubjects[
-                                                                        0][
-                                                                    widget
-                                                                        .subjectName]
-                                                                ["2"]["tests"]);
+                                                                  allSubjects[itemIndex][subjectName]["2"]
+                                                                              [
+                                                                              "tests"]
+                                                                          [
+                                                                          "test1mark"] =
+                                                                      termThreeTestOneMark
+                                                                          .text;
 
-                                                            setState(() {
-                                                              loading = false;
-                                                            });
-                                                          }),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
-                                            ],
-                                          ),
+                                                                  allSubjects[itemIndex][subjectName]["2"]
+                                                                              [
+                                                                              "tests"]
+                                                                          [
+                                                                          "test2mark"] =
+                                                                      termThreeTestTwoMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["2"]
+                                                                              [
+                                                                              "tests"]
+                                                                          [
+                                                                          "test3mark"] =
+                                                                      termThreeTestThreeMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["2"]
+                                                                              [
+                                                                              "tests"]
+                                                                          [
+                                                                          "test4mark"] =
+                                                                      termThreeTestFourMark
+                                                                          .text;
+
+                                                                  // Update the "allSubjects" field with the modified array
+                                                                  await identityDocument.set(
+                                                                      {
+                                                                        'allSubjects':
+                                                                            allSubjects
+                                                                      },
+                                                                      SetOptions(
+                                                                          merge:
+                                                                              true)).then(
+                                                                    (value) => Fluttertoast
+                                                                        .showToast(
+                                                                            msg:
+                                                                                "Added marks"),
+                                                                  );
+
+                                                                  // do something with the 'CAT' data, such as print it
+                                                                  break;
+                                                                }
+                                                              }
+                                                              //if the teacherSubject is not found
+
+                                                              if (!foundCatIndex) {
+                                                                // handle case where 'CAT' index does not exist
+                                                                logger.i(
+                                                                    'No $subjectName index found');
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        SnackBar(
+                                                                  content: Text(
+                                                                      'The learner is not registered to do $subjectName'),
+                                                                  duration:
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                ));
+                                                              }
+                                                              //check if the stored data is a Map
+                                                            } else if (allSubjects
+                                                                    is Map &&
+                                                                allSubjects
+                                                                    .containsKey(
+                                                                        subjectName)) {
+                                                              //store the teacherSubject here
+                                                              var teacherSubject =
+                                                                  allSubjects[
+                                                                      subjectName];
+                                                              // do something with the 'CAT' data, such as print it
+                                                              logger.i(
+                                                                  teacherSubject);
+                                                            } else {
+                                                              // handle case where teacherSubject index does not exist
+                                                              logger.i(
+                                                                  'No $subjectName index found');
+                                                            }
+                                                          } else {
+                                                            // handle case where document does not exist
+                                                            logger.i(
+                                                                'Document does not exist');
+                                                          }
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
+                                                        }),
+                                                  ],
+                                                ),
+                                              ],
+                                            )),
+                                          ],
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, bottom: 10, right: 20),
-                                          child: ExpansionTile(
-                                            title:
-                                                const Text("Assignment Marks"),
-                                            children: [
-                                              ListTile(
-                                                  title: Column(
-                                                children: [
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 1",
-                                                      label: const Text(
-                                                          "Assignment 1"),
-                                                    ),
-                                                    controller:
-                                                        termThreeAssignmentOneMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termThreeAssignmentOneMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, bottom: 10, right: 20),
+                                        child: ExpansionTile(
+                                          title: const Text("Assignment Marks"),
+                                          children: [
+                                            ListTile(
+                                                title: Column(
+                                              children: [
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 1",
+                                                    label: const Text(
+                                                        "Assignment 1"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termThreeAssignmentOneMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termThreeAssignmentOneMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 2",
+                                                    label: const Text(
+                                                        "Assignment 2"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 2",
-                                                      label: const Text(
-                                                          "Assignment 2"),
-                                                    ),
-                                                    controller:
-                                                        termThreeAssignmentTwoMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termThreeAssignmentTwoMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                                                  controller:
+                                                      termThreeAssignmentTwoMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termThreeAssignmentTwoMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 3",
+                                                    label: const Text(
+                                                        "Assignment 3"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termThreeAssignmentThreeMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termThreeAssignmentThreeMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 4",
+                                                    label: const Text(
+                                                        "Assignment 4"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 3",
-                                                      label: const Text(
-                                                          "Assignment 3"),
-                                                    ),
-                                                    controller:
-                                                        termThreeAssignmentThreeMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termThreeAssignmentThreeMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 4",
-                                                      label: const Text(
-                                                          "Assignment 4"),
-                                                    ),
-                                                    controller:
-                                                        termThreeAssignmentFourMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termThreeAssignmentFourMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      MaterialButton(
-                                                          child: loading
-                                                              ? const SpinKitChasingDots(
-                                                                  color: Colors
-                                                                      .purple,
-                                                                )
-                                                              : const Text(
-                                                                  "Update"),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              loading = true;
-                                                            });
-                                                            ////////////TODO Term 3 assignments////////
+                                                  controller:
+                                                      termThreeAssignmentFourMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termThreeAssignmentFourMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    MaterialButton(
+                                                        child: loading
+                                                            ? const SpinKitChasingDots(
+                                                                color: Colors
+                                                                    .purple,
+                                                              )
+                                                            : const Text(
+                                                                "Update"),
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            loading = true;
+                                                          });
+                                                          ////////////TODO Term 3 assignments////////
 
-                                                            logger
-                                                                .i(allSubjects);
+                                                          //check if the document exits
+                                                          if (allSubjects !=
+                                                              null) {
+                                                            //go to the field in the document
+                                                            //check if the data is a List
+                                                            if (allSubjects
+                                                                is List) {
+                                                              bool
+                                                                  foundCatIndex =
+                                                                  false;
+                                                              //for every item in the list
+                                                              for (var item
+                                                                  in allSubjects) {
+                                                                //if the item is==$userSubject
+                                                                if (item.containsKey(
+                                                                    subjectName)) {
+                                                                  //index is present
+                                                                  foundCatIndex =
+                                                                      true;
 
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]["2"]
-                                                                    [
-                                                                    "assignments"]
-                                                                [
-                                                                "assignment1mark"]);
-
-                                                            // Make the necessary changes to the "test1mark" field
-                                                            //allSubjects['CAT']['0']['tests']['test1mark'] = '100';
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "2"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment1mark"] =
-                                                                termThreeAssignmentOneMark
-                                                                    .text;
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "2"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment2mark"] =
-                                                                termThreeAssignmentTwoMark
-                                                                    .text;
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "2"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment3mark"] =
-                                                                termThreeAssignmentThreeMark
-                                                                    .text;
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "2"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment4mark"] =
-                                                                termThreeAssignmentFourMark
-                                                                    .text;
-
-                                                            // Update the "allSubjects" field with the modified array
-                                                            identityDocument.set(
-                                                                {
-                                                                  'allSubjects':
+                                                                  var itemIndex =
                                                                       allSubjects
-                                                                },
-                                                                SetOptions(
-                                                                    merge:
-                                                                        true));
+                                                                          .indexOf(
+                                                                              item);
+                                                                  logger.i(
+                                                                      itemIndex);
 
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]
-                                                                    ["2"][
-                                                                "assignments"]);
+                                                                  allSubjects[itemIndex][subjectName]["2"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment1mark"] =
+                                                                      termThreeAssignmentOneMark
+                                                                          .text;
 
-                                                            setState(() {
-                                                              loading = false;
-                                                            });
-                                                          }),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
-                                            ],
-                                          ),
+                                                                  allSubjects[itemIndex][subjectName]["2"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment2mark"] =
+                                                                      termThreeAssignmentTwoMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["2"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment3mark"] =
+                                                                      termThreeAssignmentThreeMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["2"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment4mark"] =
+                                                                      termThreeAssignmentFourMark
+                                                                          .text;
+
+                                                                  // Update the "allSubjects" field with the modified array
+                                                                  await identityDocument.set(
+                                                                      {
+                                                                        'allSubjects':
+                                                                            allSubjects
+                                                                      },
+                                                                      SetOptions(
+                                                                          merge:
+                                                                              true)).then(
+                                                                    (value) => Fluttertoast
+                                                                        .showToast(
+                                                                            msg:
+                                                                                "Added marks"),
+                                                                  );
+
+                                                                  // do something with the 'CAT' data, such as print it
+                                                                  break;
+                                                                }
+                                                              }
+                                                              //if the teacherSubject is not found
+
+                                                              if (!foundCatIndex) {
+                                                                // handle case where 'CAT' index does not exist
+                                                                logger.i(
+                                                                    'No $subjectName index found');
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        SnackBar(
+                                                                  content: Text(
+                                                                      'The learner is not registered to do $subjectName'),
+                                                                  duration:
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                ));
+                                                              }
+                                                              //check if the stored data is a Map
+                                                            } else if (allSubjects
+                                                                    is Map &&
+                                                                allSubjects
+                                                                    .containsKey(
+                                                                        subjectName)) {
+                                                              //store the teacherSubject here
+                                                              var teacherSubject =
+                                                                  allSubjects[
+                                                                      subjectName];
+                                                              // do something with the 'CAT' data, such as print it
+                                                              logger.i(
+                                                                  teacherSubject);
+                                                            } else {
+                                                              // handle case where teacherSubject index does not exist
+                                                              logger.i(
+                                                                  'No $subjectName index found');
+                                                            }
+                                                          } else {
+                                                            // handle case where document does not exist
+                                                            logger.i(
+                                                                'Document does not exist');
+                                                          }
+                                                          // Update the "allSubjects" field with the modified array
+                                                          identityDocument.set(
+                                                              {
+                                                                'allSubjects':
+                                                                    allSubjects
+                                                              },
+                                                              SetOptions(
+                                                                  merge: true));
+
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
+                                                        }),
+                                                  ],
+                                                ),
+                                              ],
+                                            )),
+                                          ],
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, bottom: 10, right: 20),
-                                          child: ExpansionTile(
-                                            title: const Text("Exam Marks"),
-                                            children: [
-                                              ListTile(
-                                                  title: Column(
-                                                children: [
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Exam 1",
-                                                      label:
-                                                          const Text("Exam 1"),
-                                                    ),
-                                                    controller:
-                                                        termThreeExamOneMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termThreeExamOneMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, bottom: 10, right: 20),
+                                        child: ExpansionTile(
+                                          title: const Text("Exam Marks"),
+                                          children: [
+                                            ListTile(
+                                                title: Column(
+                                              children: [
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Exam 1",
+                                                    label: const Text("Exam 1"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termThreeExamOneMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termThreeExamOneMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Exam 2",
+                                                    label: const Text("Exam 2"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Exam 2",
-                                                      label:
-                                                          const Text("Exam 2"),
-                                                    ),
-                                                    controller:
-                                                        termThreeExamTwoMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termThreeExamTwoMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      MaterialButton(
-                                                          child: loading
-                                                              ? const SpinKitChasingDots(
-                                                                  color: Colors
-                                                                      .purple,
-                                                                )
-                                                              : const Text(
-                                                                  "Update"),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              loading = true;
-                                                            });
-                                                            ////////////TODO Term 3 exams////////
+                                                  controller:
+                                                      termThreeExamTwoMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termThreeExamTwoMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    MaterialButton(
+                                                        child: loading
+                                                            ? const SpinKitChasingDots(
+                                                                color: Colors
+                                                                    .purple,
+                                                              )
+                                                            : const Text(
+                                                                "Update"),
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            loading = true;
+                                                          });
+                                                          ////////////TODO Term 3 exams////////
+//check if the document exits
+                                                          if (allSubjects !=
+                                                              null) {
+                                                            //go to the field in the document
+                                                            //check if the data is a List
+                                                            if (allSubjects
+                                                                is List) {
+                                                              bool
+                                                                  foundCatIndex =
+                                                                  false;
+                                                              //for every item in the list
+                                                              for (var item
+                                                                  in allSubjects) {
+                                                                //if the item is==$userSubject
+                                                                if (item.containsKey(
+                                                                    subjectName)) {
+                                                                  //index is present
+                                                                  foundCatIndex =
+                                                                      true;
 
-                                                            logger
-                                                                .i(allSubjects);
-
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]
-                                                                    [
-                                                                    "2"]["exams"]
-                                                                ["exam1mark"]);
-
-                                                            // Make the necessary changes to the "test1mark" field
-                                                            //allSubjects['CAT']['0']['tests']['test1mark'] = '100';
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "2"]
-                                                                        [
-                                                                        "exams"]
-                                                                    [
-                                                                    "exam1mark"] =
-                                                                termThreeExamOneMark
-                                                                    .text;
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "2"]
-                                                                        [
-                                                                        "exams"]
-                                                                    [
-                                                                    "exam2mark"] =
-                                                                termThreeExamTwoMark
-                                                                    .text;
-
-                                                            // Update the "allSubjects" field with the modified array
-                                                            identityDocument.set(
-                                                                {
-                                                                  'allSubjects':
+                                                                  var itemIndex =
                                                                       allSubjects
-                                                                },
-                                                                SetOptions(
-                                                                    merge:
-                                                                        true));
+                                                                          .indexOf(
+                                                                              item);
+                                                                  logger.i(
+                                                                      itemIndex);
 
-                                                            logger.i(allSubjects[
-                                                                        0][
-                                                                    widget
-                                                                        .subjectName]
-                                                                ["2"]["exams"]);
+                                                                  allSubjects[itemIndex][subjectName]["2"]
+                                                                              [
+                                                                              "exams"]
+                                                                          [
+                                                                          "exam1mark"] =
+                                                                      termThreeExamOneMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["2"]
+                                                                              [
+                                                                              "exams"]
+                                                                          [
+                                                                          "exam2mark"] =
+                                                                      termThreeExamTwoMark
+                                                                          .text;
 
-                                                            setState(() {
-                                                              loading = false;
-                                                            });
-                                                          }),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
-                                            ],
-                                          ),
+                                                                  // Update the "allSubjects" field with the modified array
+                                                                  await identityDocument.set(
+                                                                      {
+                                                                        'allSubjects':
+                                                                            allSubjects
+                                                                      },
+                                                                      SetOptions(
+                                                                          merge:
+                                                                              true)).then(
+                                                                    (value) => Fluttertoast
+                                                                        .showToast(
+                                                                            msg:
+                                                                                "Added marks"),
+                                                                  );
+
+                                                                  // do something with the 'CAT' data, such as print it
+                                                                  break;
+                                                                }
+                                                              }
+                                                              //if the teacherSubject is not found
+
+                                                              if (!foundCatIndex) {
+                                                                // handle case where 'CAT' index does not exist
+                                                                logger.i(
+                                                                    'No $subjectName index found');
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        SnackBar(
+                                                                  content: Text(
+                                                                      'The learner is not registered to do $subjectName'),
+                                                                  duration:
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                ));
+                                                              }
+                                                              //check if the stored data is a Map
+                                                            } else if (allSubjects
+                                                                    is Map &&
+                                                                allSubjects
+                                                                    .containsKey(
+                                                                        subjectName)) {
+                                                              //store the teacherSubject here
+                                                              var teacherSubject =
+                                                                  allSubjects[
+                                                                      subjectName];
+                                                              // do something with the 'CAT' data, such as print it
+                                                              logger.i(
+                                                                  teacherSubject);
+                                                            } else {
+                                                              // handle case where teacherSubject index does not exist
+                                                              logger.i(
+                                                                  'No $subjectName index found');
+                                                            }
+                                                          } else {
+                                                            // handle case where document does not exist
+                                                            logger.i(
+                                                                'Document does not exist');
+                                                          }
+
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
+                                                        }),
+                                                  ],
+                                                ),
+                                              ],
+                                            )),
+                                          ],
                                         ),
-                                      ]),
-                                ),
-                                ////////////// End of Term Three////////////////
+                                      ),
+                                    ]),
+                              ),
+                              ////////////// End of Term Three////////////////
 
-                                /////////////////  Term Four Marks  ////////////
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, right: 20),
-                                  child: ExpansionTile(
-                                      title: const Text("Term Four"),
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, bottom: 10, right: 20),
-                                          child: ExpansionTile(
-                                            title: const Text("Test Marks"),
-                                            children: [
-                                              ListTile(
-                                                  title: Column(
-                                                children: [
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 1",
-                                                      label:
-                                                          const Text("Test 1"),
-                                                    ),
-                                                    controller:
-                                                        termFourTestOneMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termFourTestOneMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                              /////////////////  Term Four Marks  ////////////
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20, right: 20),
+                                child: ExpansionTile(
+                                    title: const Text("Term Four"),
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, bottom: 10, right: 20),
+                                        child: ExpansionTile(
+                                          title: const Text("Test Marks"),
+                                          children: [
+                                            ListTile(
+                                                title: Column(
+                                              children: [
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 1",
+                                                    label: const Text("Test 1"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termFourTestOneMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termFourTestOneMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 2",
+                                                    label: const Text("Test 2"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 2",
-                                                      label:
-                                                          const Text("Test 2"),
-                                                    ),
-                                                    controller:
-                                                        termFourTestTwoMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termFourTestTwoMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                                                  controller:
+                                                      termFourTestTwoMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termFourTestTwoMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 3",
+                                                    label: const Text("Test 3"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termFourTestThreeMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termFourTestThreeMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Test 4",
+                                                    label: const Text("Test 2"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 3",
-                                                      label:
-                                                          const Text("Test 3"),
-                                                    ),
-                                                    controller:
-                                                        termFourTestThreeMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termFourTestThreeMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Test 4",
-                                                      label:
-                                                          const Text("Test 2"),
-                                                    ),
-                                                    controller:
-                                                        termFourTestFourMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termFourTestFourMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      MaterialButton(
-                                                          child: loading
-                                                              ? const SpinKitChasingDots(
-                                                                  color: Colors
-                                                                      .purple,
-                                                                )
-                                                              : const Text(
-                                                                  "Update"),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              loading = true;
-                                                            });
-                                                            ////////////TODO Term 4 tests////////
+                                                  controller:
+                                                      termFourTestFourMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termFourTestFourMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    MaterialButton(
+                                                        child: loading
+                                                            ? const SpinKitChasingDots(
+                                                                color: Colors
+                                                                    .purple,
+                                                              )
+                                                            : const Text(
+                                                                "Update"),
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            loading = true;
+                                                          });
+                                                          ////////////TODO Term 4 tests////////
 
-                                                            logger
-                                                                .i(allSubjects);
+                                                          //check if the document exits
+                                                          if (allSubjects !=
+                                                              null) {
+                                                            //go to the field in the document
+                                                            //check if the data is a List
+                                                            if (allSubjects
+                                                                is List) {
+                                                              bool
+                                                                  foundCatIndex =
+                                                                  false;
+                                                              //for every item in the list
+                                                              for (var item
+                                                                  in allSubjects) {
+                                                                //if the item is==$userSubject
+                                                                if (item.containsKey(
+                                                                    subjectName)) {
+                                                                  //index is present
+                                                                  foundCatIndex =
+                                                                      true;
 
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]
-                                                                    [
-                                                                    "3"]["tests"]
-                                                                ["test1mark"]);
-
-                                                            // Make the necessary changes to the "test1mark" field
-                                                            //allSubjects['CAT']['0']['tests']['test1mark'] = '100';
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "3"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test1mark"] =
-                                                                termFourTestOneMark
-                                                                    .text;
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "3"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test2mark"] =
-                                                                termFourTestTwoMark
-                                                                    .text;
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "3"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test4mark"] =
-                                                                termFourTestFourMark
-                                                                    .text;
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "3"]
-                                                                        [
-                                                                        "tests"]
-                                                                    [
-                                                                    "test3mark"] =
-                                                                termFourTestThreeMark
-                                                                    .text;
-                                                            // Update the "allSubjects" field with the modified array
-                                                            identityDocument.set(
-                                                                {
-                                                                  'allSubjects':
+                                                                  var itemIndex =
                                                                       allSubjects
-                                                                },
-                                                                SetOptions(
-                                                                    merge:
-                                                                        true));
+                                                                          .indexOf(
+                                                                              item);
 
-                                                            logger.i(allSubjects[
-                                                                        0][
-                                                                    widget
-                                                                        .subjectName]
-                                                                ["2"]["tests"]);
+                                                                  allSubjects[itemIndex][subjectName]["3"]
+                                                                              [
+                                                                              "tests"]
+                                                                          [
+                                                                          "test1mark"] =
+                                                                      termFourTestOneMark
+                                                                          .text;
 
-                                                            setState(() {
-                                                              loading = false;
-                                                            });
-                                                          }),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
-                                            ],
-                                          ),
+                                                                  allSubjects[itemIndex][subjectName]["3"]
+                                                                              [
+                                                                              "tests"]
+                                                                          [
+                                                                          "test2mark"] =
+                                                                      termFourTestTwoMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["3"]
+                                                                              [
+                                                                              "tests"]
+                                                                          [
+                                                                          "test3mark"] =
+                                                                      termFourTestThreeMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["3"]
+                                                                              [
+                                                                              "tests"]
+                                                                          [
+                                                                          "test4mark"] =
+                                                                      termFourTestFourMark
+                                                                          .text;
+
+                                                                  // Update the "allSubjects" field with the modified array
+                                                                  await identityDocument.set(
+                                                                      {
+                                                                        'allSubjects':
+                                                                            allSubjects
+                                                                      },
+                                                                      SetOptions(
+                                                                          merge:
+                                                                              true)).then(
+                                                                    (value) => Fluttertoast
+                                                                        .showToast(
+                                                                            msg:
+                                                                                "Added marks"),
+                                                                  );
+
+                                                                  // do something with the 'CAT' data, such as print it
+                                                                  break;
+                                                                }
+                                                              }
+                                                              //if the teacherSubject is not found
+
+                                                              if (!foundCatIndex) {
+                                                                // handle case where 'CAT' index does not exist
+                                                                logger.i(
+                                                                    'No $subjectName index found');
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        SnackBar(
+                                                                  content: Text(
+                                                                      'The learner is not registered to do $subjectName'),
+                                                                  duration:
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                ));
+                                                              }
+                                                              //check if the stored data is a Map
+                                                            } else if (allSubjects
+                                                                    is Map &&
+                                                                allSubjects
+                                                                    .containsKey(
+                                                                        subjectName)) {
+                                                              //store the teacherSubject here
+                                                              var teacherSubject =
+                                                                  allSubjects[
+                                                                      subjectName];
+                                                              // do something with the 'CAT' data, such as print it
+                                                              logger.i(
+                                                                  teacherSubject);
+                                                            } else {
+                                                              // handle case where teacherSubject index does not exist
+                                                              logger.i(
+                                                                  'No $subjectName index found');
+                                                            }
+                                                          } else {
+                                                            // handle case where document does not exist
+                                                            logger.i(
+                                                                'Document does not exist');
+                                                          }
+
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
+                                                        }),
+                                                  ],
+                                                ),
+                                              ],
+                                            )),
+                                          ],
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, bottom: 10, right: 20),
-                                          child: ExpansionTile(
-                                            title:
-                                                const Text("Assignment Marks"),
-                                            children: [
-                                              ListTile(
-                                                  title: Column(
-                                                children: [
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 1",
-                                                      label: const Text(
-                                                          "Assignment 1"),
-                                                    ),
-                                                    controller:
-                                                        termFourAssignmentOneMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termFourAssignmentOneMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, bottom: 10, right: 20),
+                                        child: ExpansionTile(
+                                          title: const Text("Assignment Marks"),
+                                          children: [
+                                            ListTile(
+                                                title: Column(
+                                              children: [
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 1",
+                                                    label: const Text(
+                                                        "Assignment 1"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termFourAssignmentOneMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termFourAssignmentOneMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 2",
+                                                    label: const Text(
+                                                        "Assignment 2"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 2",
-                                                      label: const Text(
-                                                          "Assignment 2"),
-                                                    ),
-                                                    controller:
-                                                        termFourAssignmentTwoMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termFourAssignmentTwoMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                                                  controller:
+                                                      termFourAssignmentTwoMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termFourAssignmentTwoMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 3",
+                                                    label: const Text(
+                                                        "Assignment 3"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termFourAssignmentThreeMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termFourAssignmentThreeMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Assignment 4",
+                                                    label: const Text(
+                                                        "Assignment 4"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 3",
-                                                      label: const Text(
-                                                          "Assignment 3"),
-                                                    ),
-                                                    controller:
-                                                        termFourAssignmentThreeMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termFourAssignmentThreeMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Assignment 4",
-                                                      label: const Text(
-                                                          "Assignment 4"),
-                                                    ),
-                                                    controller:
-                                                        termFourAssignmentFourMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termFourAssignmentFourMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      MaterialButton(
-                                                          child: loading
-                                                              ? const SpinKitChasingDots(
-                                                                  color: Colors
-                                                                      .purple,
-                                                                )
-                                                              : const Text(
-                                                                  "Update"),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              loading = true;
-                                                            });
-                                                            ////////////TODO Term 4 assignments////////
+                                                  controller:
+                                                      termFourAssignmentFourMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termFourAssignmentFourMark
+                                                          .text = value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    MaterialButton(
+                                                        child: loading
+                                                            ? const SpinKitChasingDots(
+                                                                color: Colors
+                                                                    .purple,
+                                                              )
+                                                            : const Text(
+                                                                "Update"),
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            loading = true;
+                                                          });
+                                                          ////////////TODO Term 4 assignments////////
+                                                          //check if the document exits
+                                                          if (allSubjects !=
+                                                              null) {
+                                                            //go to the field in the document
+                                                            //check if the data is a List
+                                                            if (allSubjects
+                                                                is List) {
+                                                              bool
+                                                                  foundCatIndex =
+                                                                  false;
+                                                              //for every item in the list
+                                                              for (var item
+                                                                  in allSubjects) {
+                                                                //if the item is==$userSubject
+                                                                if (item.containsKey(
+                                                                    subjectName)) {
+                                                                  //index is present
+                                                                  foundCatIndex =
+                                                                      true;
 
-                                                            logger
-                                                                .i(allSubjects);
-
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]["3"]
-                                                                    [
-                                                                    "assignments"]
-                                                                [
-                                                                "assignment1mark"]);
-
-                                                            // Make the necessary changes to the "test1mark" field
-                                                            //allSubjects['CAT']['0']['tests']['test1mark'] = '100';
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "3"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment1mark"] =
-                                                                termFourAssignmentOneMark
-                                                                    .text;
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "3"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment2mark"] =
-                                                                termFourAssignmentTwoMark
-                                                                    .text;
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "3"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment3mark"] =
-                                                                termFourAssignmentThreeMark
-                                                                    .text;
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "3"]
-                                                                        [
-                                                                        "assignments"]
-                                                                    [
-                                                                    "assignment4mark"] =
-                                                                termFourAssignmentFourMark
-                                                                    .text;
-                                                            // Update the "allSubjects" field with the modified array
-                                                            identityDocument.set(
-                                                                {
-                                                                  'allSubjects':
+                                                                  var itemIndex =
                                                                       allSubjects
-                                                                },
-                                                                SetOptions(
-                                                                    merge:
-                                                                        true));
+                                                                          .indexOf(
+                                                                              item);
+                                                                  logger.i(
+                                                                      itemIndex);
 
-                                                            logger.i(allSubjects[
-                                                                            0][
-                                                                        widget
-                                                                            .subjectName]
-                                                                    ["3"][
-                                                                "assignments"]);
+                                                                  allSubjects[itemIndex][subjectName]["3"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment1mark"] =
+                                                                      termFourAssignmentOneMark
+                                                                          .text;
 
-                                                            setState(() {
-                                                              loading = false;
-                                                            });
-                                                          }),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
-                                            ],
-                                          ),
+                                                                  allSubjects[itemIndex][subjectName]["3"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment2mark"] =
+                                                                      termFourAssignmentTwoMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["3"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment3mark"] =
+                                                                      termFourAssignmentThreeMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["3"]
+                                                                              [
+                                                                              "assignments"]
+                                                                          [
+                                                                          "assignment4mark"] =
+                                                                      termFourAssignmentFourMark
+                                                                          .text;
+
+                                                                  // Update the "allSubjects" field with the modified array
+                                                                  await identityDocument.set(
+                                                                      {
+                                                                        'allSubjects':
+                                                                            allSubjects
+                                                                      },
+                                                                      SetOptions(
+                                                                          merge:
+                                                                              true)).then(
+                                                                    (value) => Fluttertoast
+                                                                        .showToast(
+                                                                            msg:
+                                                                                "Added marks"),
+                                                                  );
+
+                                                                  // do something with the 'CAT' data, such as print it
+                                                                  break;
+                                                                }
+                                                              }
+                                                              //if the teacherSubject is not found
+
+                                                              if (!foundCatIndex) {
+                                                                // handle case where 'CAT' index does not exist
+                                                                logger.i(
+                                                                    'No $subjectName index found');
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        SnackBar(
+                                                                  content: Text(
+                                                                      'The learner is not registered to do $subjectName'),
+                                                                  duration:
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                ));
+                                                              }
+                                                              //check if the stored data is a Map
+                                                            } else if (allSubjects
+                                                                    is Map &&
+                                                                allSubjects
+                                                                    .containsKey(
+                                                                        subjectName)) {
+                                                              //store the teacherSubject here
+                                                              var teacherSubject =
+                                                                  allSubjects[
+                                                                      subjectName];
+                                                              // do something with the 'CAT' data, such as print it
+                                                              logger.i(
+                                                                  teacherSubject);
+                                                            } else {
+                                                              // handle case where teacherSubject index does not exist
+                                                              logger.i(
+                                                                  'No $subjectName index found');
+                                                            }
+                                                          } else {
+                                                            // handle case where document does not exist
+                                                            logger.i(
+                                                                'Document does not exist');
+                                                          }
+                                                          // Update the "allSubjects" field with the modified array
+                                                          identityDocument.set(
+                                                              {
+                                                                'allSubjects':
+                                                                    allSubjects
+                                                              },
+                                                              SetOptions(
+                                                                  merge: true));
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
+                                                        }),
+                                                  ],
+                                                ),
+                                              ],
+                                            )),
+                                          ],
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, bottom: 10, right: 20),
-                                          child: ExpansionTile(
-                                            title: const Text("Exam Marks"),
-                                            children: [
-                                              ListTile(
-                                                  title: Column(
-                                                children: [
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Exam 1",
-                                                      label:
-                                                          const Text("Exam 1"),
-                                                    ),
-                                                    controller:
-                                                        termFourExamOneMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termFourExamOneMark
-                                                            .text = value!;
-                                                      });
-                                                    },
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, bottom: 10, right: 20),
+                                        child: ExpansionTile(
+                                          title: const Text("Exam Marks"),
+                                          children: [
+                                            ListTile(
+                                                title: Column(
+                                              children: [
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Exam 1",
+                                                    label: const Text("Exam 1"),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                  controller:
+                                                      termFourExamOneMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termFourExamOneMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                TextFormField(
+                                                  decoration:
+                                                      textInputDecoration
+                                                          .copyWith(
+                                                    hintText: "Exam 2",
+                                                    label: const Text("Exam 2"),
                                                   ),
-                                                  TextFormField(
-                                                    decoration:
-                                                        textInputDecoration
-                                                            .copyWith(
-                                                      hintText: "Exam 2",
-                                                      label:
-                                                          const Text("Exam 2"),
-                                                    ),
-                                                    controller:
-                                                        termFourExamTwoMark,
-                                                    onSaved: (value) {
-                                                      //Do something with the user input.
-                                                      setState(() {
-                                                        termFourExamTwoMark
-                                                            .text = value!;
-                                                      });
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      MaterialButton(
-                                                          child: loading
-                                                              ? const SpinKitChasingDots(
-                                                                  color: Colors
-                                                                      .purple,
-                                                                )
-                                                              : const Text(
-                                                                  "Update"),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              loading = true;
-                                                            });
-                                                            ////////////TODO Term 4 assignments////////
+                                                  controller:
+                                                      termFourExamTwoMark,
+                                                  onSaved: (value) {
+                                                    //Do something with the user input.
+                                                    setState(() {
+                                                      termFourExamTwoMark.text =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    MaterialButton(
+                                                        child: loading
+                                                            ? const SpinKitChasingDots(
+                                                                color: Colors
+                                                                    .purple,
+                                                              )
+                                                            : const Text(
+                                                                "Update"),
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            loading = true;
+                                                          });
+                                                          ////////////TODO Term 4 exam////////
+                                                          //check if the document exits
+                                                          if (allSubjects !=
+                                                              null) {
+                                                            //go to the field in the document
+                                                            //check if the data is a List
+                                                            if (allSubjects
+                                                                is List) {
+                                                              bool
+                                                                  foundCatIndex =
+                                                                  false;
+                                                              //for every item in the list
+                                                              for (var item
+                                                                  in allSubjects) {
+                                                                //if the item is==$userSubject
+                                                                if (item.containsKey(
+                                                                    subjectName)) {
+                                                                  //index is present
+                                                                  foundCatIndex =
+                                                                      true;
 
-                                                            logger
-                                                                .i(allSubjects);
-
-                                                            logger.i(allSubjects[
-                                                                        0][
-                                                                    widget
-                                                                        .subjectName]
-                                                                ["3"]["exams"]);
-
-                                                            // Make the necessary changes to the "test1mark" field
-                                                            //allSubjects['CAT']['0']['tests']['test1mark'] = '100';
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "3"]
-                                                                        [
-                                                                        "exams"]
-                                                                    [
-                                                                    "exam1mark"] =
-                                                                termFourExamOneMark
-                                                                    .text;
-
-                                                            allSubjects[0][widget.subjectName]
-                                                                            [
-                                                                            "3"]
-                                                                        [
-                                                                        "exams"]
-                                                                    [
-                                                                    "exam2mark"] =
-                                                                termFourExamTwoMark
-                                                                    .text;
-
-                                                            // Update the "allSubjects" field with the modified array
-                                                            identityDocument.set(
-                                                                {
-                                                                  'allSubjects':
+                                                                  var itemIndex =
                                                                       allSubjects
-                                                                },
-                                                                SetOptions(
-                                                                    merge:
-                                                                        true));
+                                                                          .indexOf(
+                                                                              item);
+                                                                  logger.i(
+                                                                      itemIndex);
 
-                                                            logger.i(allSubjects[
-                                                                        0][
-                                                                    widget
-                                                                        .subjectName]
-                                                                ["3"]["exams"]);
+                                                                  allSubjects[itemIndex][subjectName]["3"]
+                                                                              [
+                                                                              "exams"]
+                                                                          [
+                                                                          "exam1mark"] =
+                                                                      termFourExamOneMark
+                                                                          .text;
+                                                                  allSubjects[itemIndex][subjectName]["3"]
+                                                                              [
+                                                                              "exams"]
+                                                                          [
+                                                                          "exam2mark"] =
+                                                                      termFourExamTwoMark
+                                                                          .text;
 
-                                                            setState(() {
-                                                              loading = false;
-                                                            });
-                                                          }),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
-                                            ],
-                                          ),
+                                                                  // Update the "allSubjects" field with the modified array
+                                                                  await identityDocument.set(
+                                                                      {
+                                                                        'allSubjects':
+                                                                            allSubjects
+                                                                      },
+                                                                      SetOptions(
+                                                                          merge:
+                                                                              true)).then(
+                                                                    (value) => Fluttertoast
+                                                                        .showToast(
+                                                                            msg:
+                                                                                "Added marks"),
+                                                                  );
+
+                                                                  // do something with the 'CAT' data, such as print it
+                                                                  break;
+                                                                }
+                                                              }
+                                                              //if the teacherSubject is not found
+
+                                                              if (!foundCatIndex) {
+                                                                // handle case where 'CAT' index does not exist
+                                                                logger.i(
+                                                                    'No $subjectName index found');
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        SnackBar(
+                                                                  content: Text(
+                                                                      'The learner is not registered to do $subjectName'),
+                                                                  duration:
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                ));
+                                                              }
+                                                              //check if the stored data is a Map
+                                                            } else if (allSubjects
+                                                                    is Map &&
+                                                                allSubjects
+                                                                    .containsKey(
+                                                                        subjectName)) {
+                                                              //store the teacherSubject here
+                                                              var teacherSubject =
+                                                                  allSubjects[
+                                                                      subjectName];
+                                                              // do something with the 'CAT' data, such as print it
+                                                              logger.i(
+                                                                  teacherSubject);
+                                                            } else {
+                                                              // handle case where teacherSubject index does not exist
+                                                              logger.i(
+                                                                  'No $subjectName index found');
+                                                            }
+                                                          } else {
+                                                            // handle case where document does not exist
+                                                            logger.i(
+                                                                'Document does not exist');
+                                                          }
+
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
+                                                        }),
+                                                  ],
+                                                ),
+                                              ],
+                                            )),
+                                          ],
                                         ),
-                                      ]),
-                                ),
-                              ]),
+                                      ),
+                                    ]),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );

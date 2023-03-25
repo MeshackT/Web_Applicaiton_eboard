@@ -38,8 +38,8 @@ class _LearnerHomeState extends State<LearnerHome> {
 
   @override
   void initState() {
-    getFieldArray();
     super.initState();
+    getFieldArray();
   }
 
   @override
@@ -87,6 +87,44 @@ class _LearnerHomeState extends State<LearnerHome> {
                             color: Theme.of(context).primaryColor,
                           ),
                         );
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                            child: Column(
+                          children: [
+                            Text(
+                              'Waiting for Internet Connection',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.purple.shade600,
+                              ),
+                            ),
+                            SpinKitChasingDots(
+                              color: Theme.of(context).primaryColorDark,
+                              size: 15,
+                            ),
+                          ],
+                        ));
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.none) {
+                        return Center(
+                            child: Column(
+                          children: [
+                            Text(
+                              'No for Internet Connection',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.purple.shade600,
+                              ),
+                            ),
+                            SpinKitChasingDots(
+                              color: Theme.of(context).primaryColorDark,
+                              size: 15,
+                            ),
+                          ],
+                        ));
                       }
 
                       final documents = snapshot.data!.docs;
@@ -159,13 +197,13 @@ class _LearnerHomeState extends State<LearnerHome> {
             child: Column(
               children: [
                 CircleAvatar(
-                  child: Text(user!.email.toString()[0].toUpperCase()),
+                  child: Text((user!.email.toString()[0].toUpperCase()) ?? ""),
                 ),
                 const SizedBox(
                   height: 22,
                 ),
                 Text(
-                  user!.email.toString().substring(0, 5).toUpperCase() ?? "",
+                  (user!.email.toString().substring(0, 5).toUpperCase() ?? ""),
                   style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
@@ -184,7 +222,7 @@ class _LearnerHomeState extends State<LearnerHome> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            user!.email.toString().toUpperCase() ?? "",
+            user!.email.toString().toUpperCase(),
             style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,

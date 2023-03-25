@@ -370,7 +370,7 @@ class _RegisterState extends State<Register> {
                                   },
                                   color: Colors.purple,
                                   child: loading
-                                      ? const SpinKitDoubleBounce(
+                                      ? const SpinKitChasingDots(
                                           color: Colors.white,
                                         )
                                       : const Text(

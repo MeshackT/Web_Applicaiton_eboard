@@ -1,7 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:levy/AllNew/screens/home/selectTodDo.dart';
-
-import '../home/home.dart';
 
 class Assignments extends StatefulWidget {
   const Assignments({Key? key}) : super(key: key);
@@ -18,7 +17,6 @@ class _AssignmentsState extends State<Assignments> {
   TextEditingController assignMark3 = TextEditingController();
   TextEditingController assignMark4 = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,10 +27,11 @@ class _AssignmentsState extends State<Assignments> {
               onPressed: () {
                 navigate(context);
               },
-              icon: const Icon(Icons.arrow_back),),
+              icon: const Icon(Icons.arrow_back),
+            ),
           ],
         ),
-        title: Text("Test Marks"),
+        title: const Text("Test Marks"),
         titleSpacing: 2,
         backgroundColor: Colors.purple,
       ),
@@ -43,14 +42,20 @@ class _AssignmentsState extends State<Assignments> {
             key: _formKey,
             child: Column(
               children: [
-                const SizedBox(height: 25,),
-                const Text("Assignment Marks", style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
-                  color: Colors.purple,
-
-                ),),
-                const SizedBox(height: 25,),
+                const SizedBox(
+                  height: 25,
+                ),
+                const Text(
+                  "Assignment Marks",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                    color: Colors.purple,
+                  ),
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
                 TextFormField(
                   decoration: const InputDecoration().copyWith(
                     label: const Text("Assignment 1"),
@@ -111,7 +116,6 @@ class _AssignmentsState extends State<Assignments> {
                       assignMark3.text = val;
                     });
                   },
-
                 ),
                 TextFormField(
                   decoration: const InputDecoration().copyWith(
@@ -132,14 +136,18 @@ class _AssignmentsState extends State<Assignments> {
                     });
                   },
                 ),
-                const SizedBox(height: 25,),
+                const SizedBox(
+                  height: 25,
+                ),
                 MaterialButton(
                   onPressed: () async {
                     //check if the form is validated
                     if (_formKey.currentState!.validate()) {
                       //signIn();
                     } else {
-                      print("insert data as required");
+                      if (kDebugMode) {
+                        print("insert data as required");
+                      }
                       // Utils.showSnackBar("Enter log in details");
                       setState(() {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -147,9 +155,7 @@ class _AssignmentsState extends State<Assignments> {
                           duration: const Duration(seconds: 1),
                           action: SnackBarAction(
                             label: 'ACTION',
-                            onPressed: () {
-
-                            },
+                            onPressed: () {},
                           ),
                         ));
                       });
@@ -157,9 +163,10 @@ class _AssignmentsState extends State<Assignments> {
                   },
                   color: Colors.purple,
                   child: const Text(
-                    "Save", style: TextStyle(color: Colors.white),),
+                    "Save",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-
               ],
             ),
           ),
@@ -170,7 +177,10 @@ class _AssignmentsState extends State<Assignments> {
 }
 
 //Navigate to the previous page
-  Future navigate(BuildContext context){
-    return Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context)=> const Select(),),);
-  }
+Future navigate(BuildContext context) {
+  return Navigator.of(context).pushReplacement(
+    MaterialPageRoute(
+      builder: (context) => const Select(),
+    ),
+  );
+}

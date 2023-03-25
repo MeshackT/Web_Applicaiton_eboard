@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:levy/AllNew/screens/Authentication/Authenticate.dart';
 import 'package:levy/AllNew/screens/home/home.dart';
 
@@ -40,12 +41,18 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
   }
 
   Future checkEmailVerified() async {
-    await FirebaseAuth.instance.currentUser!.reload();
+    try {
+      await FirebaseAuth.instance.currentUser!.reload();
 
-    isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-
-    if (isEmailVerified) {
-      timer?.cancel();
+      setState(() {
+        isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+      });
+      if (isEmailVerified) {
+        timer?.cancel();
+      }
+      //Fluttertoast.showToast(msg: "You are verified");
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
     }
   }
 
@@ -56,7 +63,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.toString()),
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 3),
       ));
     }
   }
@@ -95,13 +102,18 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                       child: MaterialButton(
                         height: 80,
                         onPressed: () async {
-                          setState(() {
-                            loading = true;
-                          });
-                          sendVerificationEmail();
-                          setState(() {
-                            loading = false;
-                          });
+                          try {
+                            setState(() {
+                              loading = true;
+                            });
+                            sendVerificationEmail();
+                            setState(() {
+                              loading = false;
+                            });
+                            Fluttertoast.showToast(msg: "Sent Email");
+                          } catch (e) {
+                            Fluttertoast.showToast(msg: e.toString());
+                          }
                         },
                         color: Theme.of(context).primaryColorDark,
                         child: loading

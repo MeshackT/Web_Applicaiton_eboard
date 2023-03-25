@@ -71,7 +71,6 @@ class _HomeState extends State<Home> {
       FirebaseFirestore.instance.collection("learnersData");
 
   /////////////////////////////
-
 //properties required
   String uid = "";
   String documentID = "";
@@ -289,10 +288,41 @@ class _HomeState extends State<Home> {
                     builder: (ctx, streamSnapshot) {
                       if (streamSnapshot.connectionState ==
                           ConnectionState.waiting) {
-                        return const Center(
-                            child: SpinKitChasingDots(
-                          color: Colors.purple,
-                          size: 15,
+                        return Center(
+                            child: Column(
+                          children: [
+                            Text(
+                              'Waiting for Internet Connection',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.purple.shade600,
+                              ),
+                            ),
+                            SpinKitChasingDots(
+                              color: Theme.of(context).primaryColorDark,
+                              size: 15,
+                            ),
+                          ],
+                        ));
+                      } else if (streamSnapshot.connectionState ==
+                          ConnectionState.none) {
+                        return Center(
+                            child: Column(
+                          children: [
+                            Text(
+                              'No for Internet Connection',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.purple.shade600,
+                              ),
+                            ),
+                            SpinKitChasingDots(
+                              color: Theme.of(context).primaryColorDark,
+                              size: 15,
+                            ),
+                          ],
                         ));
                       }
                       documents = streamSnapshot.data!.docs;
@@ -497,7 +527,6 @@ class _HomeState extends State<Home> {
                                                   ["allSubjects"]);
 
                                               ////////////////End of adding marks///////////////
-
                                               //Assuming you have a reference to your document
                                               DocumentReference docRef =
                                                   FirebaseFirestore.instance
@@ -527,7 +556,7 @@ class _HomeState extends State<Home> {
                                                     loading = true;
                                                   });
 
-                                                  docRef
+                                                  await docRef
                                                       .update({
                                                         'allSubjects':
                                                             FieldValue

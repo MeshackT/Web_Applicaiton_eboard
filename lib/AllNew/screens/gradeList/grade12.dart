@@ -282,6 +282,45 @@ class _Grade12State extends State<Grade12> {
                         color: Colors.purple,
                       ));
                     }
+                    if (streamSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return Center(
+                          child: Column(
+                        children: [
+                          Text(
+                            'Waiting for Internet Connection',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.purple.shade600,
+                            ),
+                          ),
+                          SpinKitChasingDots(
+                            color: Theme.of(context).primaryColorDark,
+                            size: 15,
+                          ),
+                        ],
+                      ));
+                    } else if (streamSnapshot.connectionState ==
+                        ConnectionState.none) {
+                      return Center(
+                          child: Column(
+                        children: [
+                          Text(
+                            'No for Internet Connection',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.purple.shade600,
+                            ),
+                          ),
+                          SpinKitChasingDots(
+                            color: Theme.of(context).primaryColorDark,
+                            size: 15,
+                          ),
+                        ],
+                      ));
+                    }
                     documents = streamSnapshot.data!.docs;
                     //todo Documents list added to filterTitle
                     if (searchText.isNotEmpty) {
@@ -404,10 +443,11 @@ class _Grade12State extends State<Grade12> {
                                                       .primaryColor,
                                                   size: 10,
                                                 )
-                                              : const Icon(
+                                              : Icon(
                                                   Icons
                                                       .keyboard_double_arrow_right,
                                                   size: 25,
+                                                  key: widget.key,
                                                   color: Colors.purple,
                                                 ),
                                         ),
