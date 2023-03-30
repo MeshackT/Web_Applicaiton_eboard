@@ -109,7 +109,7 @@ class _RegisterState extends State<Register> {
                       child: Container(
                         height: MediaQuery.of(context).size.height / 5,
                         width: MediaQuery.of(context).size.width / 1.5,
-                        color: Colors.purple,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   ),
@@ -129,7 +129,7 @@ class _RegisterState extends State<Register> {
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 150),
-                  color: Colors.white,
+                  color: Theme.of(context).primaryColorLight.withOpacity(.70),
                   child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 30.0, vertical: 30),

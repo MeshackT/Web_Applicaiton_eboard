@@ -218,425 +218,774 @@ class _HomeState extends State<Home> {
           ),
         ),
         child: Container(
+          height: MediaQuery.of(context).size.height,
           margin: const EdgeInsets.only(top: 0.0),
+          decoration: const BoxDecoration(
+            //screen background color
+            gradient: LinearGradient(
+                colors: [Color(0x0fffffff), Color(0xE7791971)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight),
+          ),
           child: Column(
             children: [
               isVisible
                   ? Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 5),
-                      child: TextField(
-                        controller: _searchController,
-                        cursorColor: Colors.purple,
-                        keyboardType: TextInputType.name,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Colors.purple, width: 1.0),
-                            borderRadius: BorderRadius.circular(30),
+                      child: Container(
+                        color:
+                            Theme.of(context).primaryColorLight.withOpacity(.8),
+                        child: TextField(
+                          controller: _searchController,
+                          cursorColor: Theme.of(context).primaryColorDark,
+                          keyboardType: TextInputType.name,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColorDark,
+                                  width: 1.0),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding: const EdgeInsets.only(
+                              left: 15,
+                              bottom: 11,
+                              top: 11,
+                              right: 15,
+                            ),
+                            hintText: "Enter a name",
+                            hintStyle: TextStyle(
+                                color: Theme.of(context).primaryColorDark,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1),
+                            prefixIcon: const Icon(Icons.search),
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.cancel),
+                              onPressed: () {
+                                setState(() {
+                                  _searchController.text = "";
+                                });
+                              },
+                            ),
                           ),
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          contentPadding: const EdgeInsets.only(
-                            left: 15,
-                            bottom: 11,
-                            top: 11,
-                            right: 15,
-                          ),
-                          hintText: "Enter a name",
-                          hintStyle: const TextStyle(
-                              color: Colors.purple,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1),
-                          prefixIcon: const Icon(Icons.search),
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.cancel),
-                            onPressed: () {
-                              setState(() {
-                                _searchController.text = "";
-                              });
-                            },
-                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              searchText = value;
+                            });
+                          },
                         ),
-                        onChanged: (value) {
-                          setState(() {
-                            searchText = value;
-                          });
-                        },
                       ),
                     )
-                  : const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Text(
                         "Search for a learner",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 17,
-                            color: Colors.purple),
+                            color: Theme.of(context).primaryColorDark),
                       ),
                     ),
               Expanded(
                 flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: StreamBuilder(
-                    stream: allLearnersCollection
-                        .where('teachersID', arrayContains: user!.uid)
-                        .snapshots(),
-                    builder: (ctx, streamSnapshot) {
-                      if (streamSnapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return Center(
-                            child: Column(
-                          children: [
-                            Text(
-                              'Waiting for Internet Connection',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.purple.shade600,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: StreamBuilder(
+                      stream: allLearnersCollection
+                          .where('teachersID', arrayContains: user!.uid)
+                          .snapshots(),
+                      builder: (ctx, streamSnapshot) {
+                        if (streamSnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                              child: Column(
+                            children: [
+                              Text(
+                                'Waiting for Internet Connection',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
                               ),
-                            ),
-                            SpinKitChasingDots(
-                              color: Theme.of(context).primaryColorDark,
-                              size: 15,
-                            ),
-                          ],
-                        ));
-                      } else if (streamSnapshot.connectionState ==
-                          ConnectionState.none) {
-                        return Center(
-                            child: Column(
-                          children: [
-                            Text(
-                              'No for Internet Connection',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.purple.shade600,
+                              SpinKitChasingDots(
+                                color: Theme.of(context).primaryColorDark,
+                                size: 15,
                               ),
-                            ),
-                            SpinKitChasingDots(
-                              color: Theme.of(context).primaryColorDark,
-                              size: 15,
-                            ),
-                          ],
-                        ));
-                      }
-                      documents = streamSnapshot.data!.docs;
-                      //todo Documents list added to filterTitle
-                      if (searchText.isNotEmpty) {
-                        documents = documents.where((element) {
-                          return element
-                              .get('name')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchText.toLowerCase());
-                        }).toList();
-                      }
-
-                      return ListView.builder(
-                        //reverse: true,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: documents.length,
-                        // separatorBuilder: (BuildContext context, int index) {
-                        //   return const Divider();
-                        // },
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 0.0),
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.purple,
-                              child: Text(
-                                documents[index]['name'][0],
+                            ],
+                          ));
+                        } else if (streamSnapshot.connectionState ==
+                            ConnectionState.none) {
+                          return Center(
+                              child: Column(
+                            children: [
+                              Text(
+                                'No for Internet Connection',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
                               ),
-                            ),
-                            title: Text(
-                              documents[index]['name'],
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.purple.shade600,
+                              SpinKitChasingDots(
+                                color: Theme.of(context).primaryColorDark,
+                                size: 15,
                               ),
-                            ),
-                            subtitle: Text(
-                              "Grade " + documents[index]['grade'],
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey.shade700,
-                              ),
-                            ),
-                            trailing: SizedBox(
-                              width: 50,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  IconButton(
-                                    color: Colors.blue,
-                                    onPressed: () async {
-                                      _getUserField();
-                                      setState(() {
-                                        _userSubject;
-                                        nameOfTeacher;
-                                      });
-                                      logger.i(
-                                          'User subject: $_userSubject User Name: $nameOfTeacher');
+                            ],
+                          ));
+                        }
+                        documents = streamSnapshot.data!.docs;
+                        //todo Documents list added to filterTitle
+                        if (searchText.isNotEmpty) {
+                          documents = documents.where((element) {
+                            return element
+                                .get('name')
+                                .toString()
+                                .toLowerCase()
+                                .contains(searchText.toLowerCase());
+                          }).toList();
+                        }
 
-                                      try {
-                                        final DocumentReference documentRef =
-                                            FirebaseFirestore.instance
-                                                .collection('learnersData')
-                                                .doc(documents[index].id);
+                        return ListView.builder(
+                          //reverse: true,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: documents.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return InkWell(
+                              onLongPress: () async {
+                                String nameOfLearner =
+                                    documents[index].get("name");
+                                String gradeOfLeaner =
+                                    documents[index].get("grade");
+                                String emailOfLearner =
+                                    documents[index].get("email");
+                                List<String> subjectsOfLeaner = [];
 
-                                        // Get the document snapshot
-                                        final DocumentSnapshot
-                                            documentSnapshot =
-                                            await documentRef.get();
-                                        //get the documents data from firestore
-                                        DocumentSnapshot snapshot =
-                                            await FirebaseFirestore.instance
-                                                .collection('learnersData')
-                                                .doc(documents[index]
-                                                    .id) // replace 'documentID' with the actual ID of the document
-                                                .get();
+                                var data = documents[index].get(("subjects"));
 
-                                        //check if the document exits
-                                        if (snapshot.exists) {
-                                          //go to the field in the document
-                                          var data =
-                                              snapshot.get(("allSubjects"));
-                                          //check if the data is a List
-                                          if (data is List) {
-                                            bool foundCatIndex = false;
-                                            //for every item in the list
-                                            for (var item in data) {
-                                              //if the item is==$userSubject
-                                              if (item
-                                                  .containsKey(_userSubject)) {
-                                                //index is present
-                                                foundCatIndex = true;
-                                                //get the teacher subject from the list
-                                                //logger.i("Found found found");
-                                                Fluttertoast.showToast(
-                                                    msg: "Already registered");
-                                                // do something with the 'CAT' data, such as print it
-                                                break;
-                                              }
-                                            }
+                                if (data is List) {
+                                  for (var item in data) {
+                                    subjectsOfLeaner.add(item);
+                                  }
+                                }
+                                subjectsOfLeaner.sort();
 
-                                            //if the teacherSubject is not found
-
-                                            if (!foundCatIndex) {
-                                              Fluttertoast.showToast(
-                                                  msg: "registering");
-
-                                              // handle case where 'CAT' index does not exist
-                                              ///TODO add subject
-                                              //get these values from the database
-                                              name = documents[index]['name'] ??
-                                                  "";
-                                              grade = documents[index]
-                                                      ['grade'] ??
-                                                  "";
-
-                                              ////////////adds marks to an array///////////////
-                                              //////////////////////////////////////////////////
-                                              //add test mark in a dict list
-                                              subjectMarks1['test1mark'] =
-                                                  term1Mark1;
-                                              subjectMarks1['test2mark'] =
-                                                  term1Mark2;
-                                              subjectMarks1['test3mark'] =
-                                                  term1Mark3;
-                                              subjectMarks1['test4mark'] =
-                                                  term1Mark4;
-
-                                              //add assignment marks in a dict list
-                                              subjectMarks1['assignment1mark'] =
-                                                  term1Assignment1;
-                                              subjectMarks1['assignment2mark'] =
-                                                  term1Assignment2;
-                                              subjectMarks1['assignment3mark'] =
-                                                  term1Assignment3;
-                                              subjectMarks1['assignment4mark'] =
-                                                  term1Assignment4;
-
-                                              //add exam in a dict list
-                                              subjectMarks1['exam1mark'] =
-                                                  exam1;
-                                              subjectMarks1['exam2mark'] =
-                                                  exam2;
-                                              // subjectMarks1['currentMarkTeacher'] = user!.uid;
-
-                                              //************************************//
-                                              ///////start adding marks//////////
-                                              Map<String, dynamic> testsMarks =
-                                                  {};
-                                              Map<String, dynamic>
-                                                  assignmentsMarks = {};
-                                              Map<String, dynamic> examMarks =
-                                                  {};
-                                              Map<String, dynamic> addAllMark =
-                                                  {};
-                                              Map<String, dynamic> finalMarks =
-                                                  {};
-                                              Map<String, dynamic>
-                                                  indexNumbers = {};
-                                              int count = 0;
-
-                                              testsMarks['test1mark'] = "";
-                                              testsMarks['test2mark'] = "";
-                                              testsMarks['test3mark'] = "";
-                                              testsMarks['test4mark'] = "";
-
-                                              //add assignment marks in a dict list
-                                              assignmentsMarks[
-                                                  'assignment1mark'] = "";
-                                              assignmentsMarks[
-                                                  'assignment2mark'] = "";
-                                              assignmentsMarks[
-                                                  'assignment3mark'] = "";
-                                              assignmentsMarks[
-                                                  'assignment4mark'] = "";
-
-                                              //add exam in a dict list
-                                              examMarks['exam1mark'] = "";
-                                              examMarks['exam2mark'] = "";
-
-                                              addAllMark["tests"] = testsMarks;
-                                              addAllMark["assignments"] =
-                                                  assignmentsMarks;
-                                              addAllMark["exams"] = examMarks;
-
-                                              //add marks holder 4 terms in an array list
-                                              for (int i = 0; i < 4; i++) {
-                                                //subjectMarks.add(subjectMarks1);
-                                                indexNumbers[(count++)
-                                                    .toString()] = addAllMark;
-                                              }
-                                              finalMarks[_userSubject] =
-                                                  indexNumbers;
-                                              logger.i(documents[index]
-                                                  ["allSubjects"]);
-
-                                              ////////////////End of adding marks///////////////
-                                              //Assuming you have a reference to your document
-                                              DocumentReference docRef =
-                                                  FirebaseFirestore.instance
-                                                      .collection(
-                                                          'learnersData')
-                                                      .doc(documents[index].id);
-                                              // Get the document snapshot
-                                              DocumentSnapshot docSnapshot =
-                                                  await docRef.get();
-
-                                              bool docExists = await docRef
-                                                  .get()
-                                                  .then((docSnapshot) =>
-                                                      docSnapshot.exists);
-
-                                              // Check if the 'uid' field exists in the document data
-                                              if (docSnapshot.data() != null &&
-                                                  docExists) {
-                                                if ((docRef
-                                                        .collection(
-                                                            'learnersData')
-                                                        .where('teachersID',
-                                                            arrayContains:
-                                                                user!.uid) !=
-                                                    null)) {
-                                                  setState(() {
-                                                    loading = true;
-                                                  });
-
-                                                  await docRef
-                                                      .update({
-                                                        'allSubjects':
-                                                            FieldValue
-                                                                .arrayUnion([
-                                                          finalMarks
-                                                        ])
-                                                      })
-                                                      .then((value) =>
-                                                          setState(() {
-                                                            loading = false;
-                                                          }))
-                                                      .catchError((error) => print(
-                                                          'Error updating map field: $error'));
-                                                } else {
-                                                  print(
-                                                      'Learner is not doing the subject');
-                                                }
-                                              } else {
-                                                print(
-                                                    "Document already exists");
-                                              }
-
-                                              ////TODO ENds
-                                            }
-                                          }
-                                        } else {
-                                          // handle case where document does not exist
-                                          logger.i('Document does not exist');
-                                        }
-                                      } catch (e) {
-                                        setState(() {
-                                          loading = false;
-                                        });
-                                        logger.i(e);
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              'Failed to Register a learner $e',
-                                              style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
+                                //show the dialog when you press delete
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        textAlign: TextAlign.center,
+                                        'Learners Details',
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                      content: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.height /
+                                                1.5,
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                1.4,
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  "Name",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Theme.of(context)
+                                                          .primaryColorDark
+                                                          .withOpacity(.70)),
+                                                ),
+                                                Text(
+                                                  nameOfLearner,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Theme.of(context)
+                                                          .primaryColorDark
+                                                          .withOpacity(.70)),
+                                                ),
+                                              ],
                                             ),
-                                            backgroundColor: Colors.purple,
-                                          ),
-                                        );
-                                        print(documents[index][user!.uid]);
-                                      }
-                                    },
-                                    icon: loading
-                                        ? const SpinKitChasingDots(
-                                            color: Colors.purple,
-                                            size: 15,
-                                          )
-                                        : Icon(
-                                            Icons.add,
-                                            size: 30,
-                                            color: Colors.purple.shade400,
-                                          ),
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  "Grade",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Theme.of(context)
+                                                          .primaryColorDark
+                                                          .withOpacity(.70)),
+                                                ),
+                                                Text(
+                                                  gradeOfLeaner,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Theme.of(context)
+                                                          .primaryColorDark
+                                                          .withOpacity(.70)),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  "Email",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Theme.of(context)
+                                                          .primaryColorDark
+                                                          .withOpacity(.70)),
+                                                ),
+                                                Text(
+                                                  emailOfLearner,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Theme.of(context)
+                                                          .primaryColorDark
+                                                          .withOpacity(.70)),
+                                                ),
+                                              ],
+                                            ),
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10.0),
+                                              child: Divider(
+                                                height: 1,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  1.8,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        vertical: 19),
+                                                    child: Column(
+                                                      children: [
+                                                        Expanded(
+                                                          child: Text(
+                                                            "Subjects",
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColorDark
+                                                                    .withOpacity(
+                                                                        .70)),
+                                                          ),
+                                                        ),
+                                                        OutlinedButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          style: OutlinedButton
+                                                              .styleFrom(
+                                                            shape: const RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            20))),
+                                                            foregroundColor:
+                                                                Theme.of(
+                                                                        context)
+                                                                    .primaryColor,
+                                                          ),
+                                                          child: Text(
+                                                            "Done",
+                                                            style: TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColorDark,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: ListView.builder(
+                                                        //reverse: true,
+                                                        itemCount:
+                                                            subjectsOfLeaner
+                                                                .length,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          return SizedBox(
+                                                            height: 40,
+                                                            child: ListTile(
+                                                              title: Wrap(
+                                                                alignment:
+                                                                    WrapAlignment
+                                                                        .end,
+                                                                children: [
+                                                                  Text(
+                                                                    subjectsOfLeaner[
+                                                                        index],
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        color: Theme.of(context)
+                                                                            .primaryColorDark
+                                                                            .withOpacity(.70)),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 3.0),
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(30),
+                                    bottomRight: Radius.circular(30),
+                                    topLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30),
                                   ),
-                                ],
+                                  child: Container(
+                                    color: Theme.of(context)
+                                        .primaryColorLight
+                                        .withOpacity(.8),
+                                    child: ListTile(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 0.0),
+                                      leading: CircleAvatar(
+                                        backgroundColor:
+                                            Theme.of(context).primaryColorDark,
+                                        child: Text(
+                                          documents[index]['name'][0],
+                                        ),
+                                      ),
+                                      title: Text(
+                                        documents[index]['name'],
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        "Grade  ${documents[index]['grade']}",
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .primaryColorDark
+                                                .withOpacity(.7),
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                      trailing: SizedBox(
+                                        width: 50,
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            IconButton(
+                                              color: Colors.blue,
+                                              onPressed: () async {
+                                                _getUserField();
+                                                setState(() {
+                                                  _userSubject;
+                                                  nameOfTeacher;
+                                                });
+                                                logger.i(
+                                                    'User subject: $_userSubject User Name: $nameOfTeacher');
+
+                                                try {
+                                                  final DocumentReference
+                                                      documentRef =
+                                                      FirebaseFirestore.instance
+                                                          .collection(
+                                                              'learnersData')
+                                                          .doc(documents[index]
+                                                              .id);
+
+                                                  // Get the document snapshot
+                                                  final DocumentSnapshot
+                                                      documentSnapshot =
+                                                      await documentRef.get();
+                                                  //get the documents data from firestore
+                                                  DocumentSnapshot snapshot =
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(
+                                                              'learnersData')
+                                                          .doc(documents[index]
+                                                              .id) // replace 'documentID' with the actual ID of the document
+                                                          .get();
+
+                                                  //check if the document exits
+                                                  if (snapshot.exists) {
+                                                    //go to the field in the document
+                                                    var data = snapshot
+                                                        .get(("allSubjects"));
+                                                    //check if the data is a List
+                                                    if (data is List) {
+                                                      bool foundCatIndex =
+                                                          false;
+                                                      //for every item in the list
+                                                      for (var item in data) {
+                                                        //if the item is==$userSubject
+                                                        if (item.containsKey(
+                                                            _userSubject)) {
+                                                          //index is present
+                                                          foundCatIndex = true;
+                                                          //get the teacher subject from the list
+                                                          //logger.i("Found found found");
+                                                          Fluttertoast.showToast(
+                                                              msg:
+                                                                  "Already registered");
+                                                          // do something with the 'CAT' data, such as print it
+                                                          break;
+                                                        }
+                                                      }
+
+                                                      //if the teacherSubject is not found
+
+                                                      if (!foundCatIndex) {
+                                                        Fluttertoast.showToast(
+                                                            msg: "registering");
+
+                                                        // handle case where 'CAT' index does not exist
+                                                        ///TODO add subject
+                                                        //get these values from the database
+                                                        name = documents[index]
+                                                                ['name'] ??
+                                                            "";
+                                                        grade = documents[index]
+                                                                ['grade'] ??
+                                                            "";
+
+                                                        ////////////adds marks to an array///////////////
+                                                        //////////////////////////////////////////////////
+                                                        //add test mark in a dict list
+                                                        subjectMarks1[
+                                                                'test1mark'] =
+                                                            term1Mark1;
+                                                        subjectMarks1[
+                                                                'test2mark'] =
+                                                            term1Mark2;
+                                                        subjectMarks1[
+                                                                'test3mark'] =
+                                                            term1Mark3;
+                                                        subjectMarks1[
+                                                                'test4mark'] =
+                                                            term1Mark4;
+
+                                                        //add assignment marks in a dict list
+                                                        subjectMarks1[
+                                                                'assignment1mark'] =
+                                                            term1Assignment1;
+                                                        subjectMarks1[
+                                                                'assignment2mark'] =
+                                                            term1Assignment2;
+                                                        subjectMarks1[
+                                                                'assignment3mark'] =
+                                                            term1Assignment3;
+                                                        subjectMarks1[
+                                                                'assignment4mark'] =
+                                                            term1Assignment4;
+
+                                                        //add exam in a dict list
+                                                        subjectMarks1[
+                                                                'exam1mark'] =
+                                                            exam1;
+                                                        subjectMarks1[
+                                                                'exam2mark'] =
+                                                            exam2;
+                                                        // subjectMarks1['currentMarkTeacher'] = user!.uid;
+
+                                                        //************************************//
+                                                        ///////start adding marks//////////
+                                                        Map<String, dynamic>
+                                                            testsMarks = {};
+                                                        Map<String, dynamic>
+                                                            assignmentsMarks =
+                                                            {};
+                                                        Map<String, dynamic>
+                                                            examMarks = {};
+                                                        Map<String, dynamic>
+                                                            addAllMark = {};
+                                                        Map<String, dynamic>
+                                                            finalMarks = {};
+                                                        Map<String, dynamic>
+                                                            indexNumbers = {};
+                                                        int count = 0;
+
+                                                        testsMarks[
+                                                            'test1mark'] = "";
+                                                        testsMarks[
+                                                            'test2mark'] = "";
+                                                        testsMarks[
+                                                            'test3mark'] = "";
+                                                        testsMarks[
+                                                            'test4mark'] = "";
+
+                                                        //add assignment marks in a dict list
+                                                        assignmentsMarks[
+                                                            'assignment1mark'] = "";
+                                                        assignmentsMarks[
+                                                            'assignment2mark'] = "";
+                                                        assignmentsMarks[
+                                                            'assignment3mark'] = "";
+                                                        assignmentsMarks[
+                                                            'assignment4mark'] = "";
+
+                                                        //add exam in a dict list
+                                                        examMarks['exam1mark'] =
+                                                            "";
+                                                        examMarks['exam2mark'] =
+                                                            "";
+
+                                                        addAllMark["tests"] =
+                                                            testsMarks;
+                                                        addAllMark[
+                                                                "assignments"] =
+                                                            assignmentsMarks;
+                                                        addAllMark["exams"] =
+                                                            examMarks;
+
+                                                        //add marks holder 4 terms in an array list
+                                                        for (int i = 0;
+                                                            i < 4;
+                                                            i++) {
+                                                          //subjectMarks.add(subjectMarks1);
+                                                          indexNumbers[(count++)
+                                                                  .toString()] =
+                                                              addAllMark;
+                                                        }
+                                                        finalMarks[
+                                                                _userSubject] =
+                                                            indexNumbers;
+                                                        logger.i(documents[
+                                                                index]
+                                                            ["allSubjects"]);
+
+                                                        ////////////////End of adding marks///////////////
+                                                        //Assuming you have a reference to your document
+                                                        DocumentReference docRef =
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'learnersData')
+                                                                .doc(documents[
+                                                                        index]
+                                                                    .id);
+                                                        // Get the document snapshot
+                                                        DocumentSnapshot
+                                                            docSnapshot =
+                                                            await docRef.get();
+
+                                                        bool docExists =
+                                                            await docRef.get().then(
+                                                                (docSnapshot) =>
+                                                                    docSnapshot
+                                                                        .exists);
+
+                                                        // Check if the 'uid' field exists in the document data
+                                                        if (docSnapshot
+                                                                    .data() !=
+                                                                null &&
+                                                            docExists) {
+                                                          if ((docRef
+                                                                  .collection(
+                                                                      'learnersData')
+                                                                  .where(
+                                                                      'teachersID',
+                                                                      arrayContains:
+                                                                          user!
+                                                                              .uid) !=
+                                                              null)) {
+                                                            setState(() {
+                                                              loading = true;
+                                                            });
+
+                                                            await docRef
+                                                                .update({
+                                                                  'allSubjects':
+                                                                      FieldValue
+                                                                          .arrayUnion([
+                                                                    finalMarks
+                                                                  ])
+                                                                })
+                                                                .then((value) =>
+                                                                    setState(
+                                                                        () {
+                                                                      loading =
+                                                                          false;
+                                                                    }))
+                                                                .catchError(
+                                                                    (error) =>
+                                                                        print(
+                                                                            'Error updating map field: $error'));
+                                                          } else {
+                                                            print(
+                                                                'Learner is not doing the subject');
+                                                          }
+                                                        } else {
+                                                          print(
+                                                              "Document already exists");
+                                                        }
+
+                                                        ////TODO ENds
+                                                      }
+                                                    }
+                                                  } else {
+                                                    // handle case where document does not exist
+                                                    logger.i(
+                                                        'Document does not exist');
+                                                  }
+                                                } catch (e) {
+                                                  setState(() {
+                                                    loading = false;
+                                                  });
+                                                  logger.i(e);
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Failed to Register a learner $e',
+                                                        style: const TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      backgroundColor:
+                                                          Colors.purple,
+                                                    ),
+                                                  );
+                                                  print(documents[index]
+                                                      [user!.uid]);
+                                                }
+                                              },
+                                              icon: loading
+                                                  ? const SpinKitChasingDots(
+                                                      color: Colors.purple,
+                                                      size: 15,
+                                                    )
+                                                  : Icon(
+                                                      Icons.add,
+                                                      size: 30,
+                                                      color:
+                                                          IconTheme.of(context)
+                                                              .color!
+                                                              .withOpacity(.7),
+                                                    ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    },
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 100,
+              Container(
+                color: Colors.transparent,
+                height: 80,
               ),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: IconTheme.of(context).color,
         onPressed: toggleVisibility,
-        child: const Icon(Icons.search),
+        child: Icon(
+          Icons.search,
+          color: Theme.of(context).primaryColorLight,
+        ),
       ),
     );
   }
@@ -735,9 +1084,11 @@ class NavigationDrawer extends StatelessWidget {
           color: Colors.white,
           width: MediaQuery.of(context).size.width / 1.8,
           height: MediaQuery.of(context).size.height,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [buildHeader(context), buildMenueItems(context)],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [buildHeader(context), buildMenueItems(context)],
+            ),
           ),
         ),
       ),
@@ -749,12 +1100,13 @@ class NavigationDrawer extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(150),
+            bottomLeft: Radius.circular(0),
+            bottomRight: Radius.circular(0),
             topLeft: Radius.circular(150),
+            topRight: Radius.circular(150),
           ),
           child: Container(
-            color: Colors.purple.shade100,
+            color: Theme.of(context).primaryColorDark.withOpacity(.40),
             width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.only(
               top: MediaQuery.of(context).padding.top,
@@ -762,17 +1114,19 @@ class NavigationDrawer extends StatelessWidget {
             child: Column(
               children: [
                 CircleAvatar(
-                  child: Text(user!.email.toString()[0].toUpperCase()),
+                  child: Text(user!.photoURL ??
+                      user!.email.toString()[0].toUpperCase()),
                 ),
                 const SizedBox(
                   height: 22,
                 ),
                 Text(
-                  user!.email.toString().substring(0, 5).toUpperCase() ?? "",
-                  style: const TextStyle(
+                  user!.email.toString().substring(0, 5).toUpperCase(),
+                  style: TextStyle(
                       fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.purple),
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1,
+                      color: Theme.of(context).primaryColorLight),
                 ),
                 const SizedBox(
                   height: 22,
@@ -788,10 +1142,10 @@ class NavigationDrawer extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
             user!.email.toString().toUpperCase() ?? "",
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: Colors.purple),
+                fontWeight: FontWeight.w700,
+                color: Theme.of(context).primaryColorDark),
           ),
         ),
         const SizedBox(
@@ -808,48 +1162,103 @@ class NavigationDrawer extends StatelessWidget {
         child: Column(
           children: [
             ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text("Home"),
+              leading: Icon(
+                Icons.home,
+                color: IconTheme.of(context).color,
+              ),
+              title: Text(
+                "Home",
+                style: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
+                    fontWeight: FontWeight.w700),
+              ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const Home()));
               },
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Divider(
+                height: 1,
+                color: Theme.of(context).primaryColorDark.withOpacity(.7),
+              ),
+            ),
             ListTile(
-              leading: const Icon(Icons.school),
-              title: const Text("Grade 12"),
+              leading: Icon(
+                Icons.school,
+                color: IconTheme.of(context).color,
+              ),
+              title: Text(
+                "Grade 12",
+                style: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
+                    fontWeight: FontWeight.w700),
+              ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const Grade12()));
               },
             ),
             ListTile(
-              leading: const Icon(Icons.school),
-              title: const Text("Grade 11"),
+              leading: Icon(
+                Icons.school,
+                color: IconTheme.of(context).color,
+              ),
+              title: Text(
+                "Grade 11",
+                style: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
+                    fontWeight: FontWeight.w700),
+              ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const Grade11()));
               },
             ),
             ListTile(
-              leading: const Icon(Icons.school),
-              title: const Text("Grade 10"),
+              leading: Icon(
+                Icons.school,
+                color: IconTheme.of(context).color,
+              ),
+              title: Text(
+                "Grade 10",
+                style: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
+                    fontWeight: FontWeight.w700),
+              ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const Grade10()));
               },
             ),
             ListTile(
-              leading: const Icon(Icons.more),
-              title: const Text("More"),
+              leading: Icon(
+                Icons.more,
+                color: IconTheme.of(context).color,
+              ),
+              title: Text(
+                "More",
+                style: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
+                    fontWeight: FontWeight.w700),
+              ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const More()));
               },
             ),
             ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text("Sign Out"),
+              leading: Icon(
+                Icons.person,
+                color: IconTheme.of(context).color,
+              ),
+              title: Text(
+                "Sign Out",
+                style: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
+                    fontWeight: FontWeight.w700),
+              ),
               onTap: () {
                 sigOut(context);
               },
@@ -873,11 +1282,9 @@ class NavigationDrawer extends StatelessWidget {
           });
       await FirebaseAuth.instance
           .signOut()
-          .whenComplete(() => const CircularProgressIndicator())
-          .whenComplete(() => SpinKitChasingDots(
+          .then((value) => SpinKitChasingDots(
                 color: Theme.of(context).primaryColor,
               ))
-          .then((value) => const CircularProgressIndicator())
           .whenComplete(
             () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const Authenticate())),
@@ -885,6 +1292,19 @@ class NavigationDrawer extends StatelessWidget {
       //ChangeNotifier();
     } catch (e) {
       logger.i(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Failed to Sign Out: $e',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColorLight,
+            ),
+          ),
+          backgroundColor: Theme.of(context).primaryColor,
+        ),
+      );
     }
   }
 }

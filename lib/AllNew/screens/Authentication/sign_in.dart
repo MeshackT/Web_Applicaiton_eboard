@@ -324,7 +324,14 @@ class _SignInState extends State<SignIn> {
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snack(
       String message) {
     return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message.toString()),
+      backgroundColor: Theme.of(context).primaryColorDark,
+      content: Text(
+        message.toString(),
+        style: TextStyle(
+          color: Theme.of(context).primaryColorLight,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       duration: const Duration(seconds: 4),
     ));
   }

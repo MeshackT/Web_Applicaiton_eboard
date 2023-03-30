@@ -21,18 +21,16 @@ class User {
   List<String> teachersID;
   Map<String, dynamic> allSubjects;
 
-  User(
-    this.email,
-    this.uid,
-    this.password,
-    this.name,
-    this.grade,
-    this.documentID,
-    this.role,
-    this.subjects,
-    this.teachersID,
-    this.allSubjects,
-  );
+  User(this.email,
+      this.uid,
+      this.password,
+      this.name,
+      this.grade,
+      this.documentID,
+      this.role,
+      this.subjects,
+      this.teachersID,
+      this.allSubjects,);
 
   final userData = FirebaseFirestore.instance.collection('learnersData').doc();
 
@@ -43,18 +41,18 @@ class User {
     // Call the user's CollectionReference to add a new user
     return userData
         .set({
-          'documentID': documentID,
-          'email': email.trim().toLowerCase(), // John Doe
-          'uid': uid, // Stokes and Sons
-          'password': password.trim(), //
-          'name': name.trim(),
-          'grade': grade.trim(),
-          'role': role.trim().toLowerCase(),
-          'subjects': subjects,
-          //added teachers list of IDs
-          'teachersID': teachersID,
-          "allSubjects": allSubjects,
-        })
+      'documentID': documentID,
+      'email': email.trim().toLowerCase(), // John Doe
+      'uid': uid, // Stokes and Sons
+      'password': password.trim(), //
+      'name': name.trim(),
+      'grade': grade.trim(),
+      'role': role.trim().toLowerCase(),
+      'subjects': subjects,
+      //added teachers list of IDs
+      'teachersID': teachersID,
+      "allSubjects": allSubjects,
+    })
         .then((value) => print("User Data"))
         .catchError((error) => print("Failed to add user: $error"));
   }
@@ -168,16 +166,21 @@ class _LearnerRegisterState extends State<LearnerRegister> {
   @override
   Widget build(BuildContext context) {
     CollectionReference teachersRegistered =
-        FirebaseFirestore.instance.collection('userData');
+    FirebaseFirestore.instance.collection('userData');
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: DoubleBackToCloseApp(
         snackBar: SnackBar(
-          backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
+          backgroundColor: Theme
+              .of(context)
+              .primaryColor
+              .withOpacity(1),
           content: Text(
             'Tap back again to leave the application',
-            style: TextStyle(color: Theme.of(context).primaryColorLight),
+            style: TextStyle(color: Theme
+                .of(context)
+                .primaryColorLight),
             textAlign: TextAlign.center,
           ),
         ),
@@ -195,8 +198,14 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                         topLeft: Radius.circular(280),
                       ),
                       child: Container(
-                        height: MediaQuery.of(context).size.height / 5,
-                        width: MediaQuery.of(context).size.width / 1.5,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height / 5,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width / 1.5,
                         color: Colors.purple,
                       ),
                     ),
@@ -231,6 +240,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                             TextFormField(
                               enabled: false,
                               decoration: textInputDecoration.copyWith(
+
                                   label: const Text(
                                     'Learner',
                                     style: TextStyle(
@@ -335,13 +345,13 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                     },
                                     icon: passwordVisible
                                         ? Icon(
-                                            Icons.visibility,
-                                            color: Colors.purple.shade500,
-                                          )
+                                      Icons.visibility,
+                                      color: Colors.purple.shade500,
+                                    )
                                         : Icon(
-                                            Icons.lock,
-                                            color: Colors.purple.shade500,
-                                          ),
+                                      Icons.lock,
+                                      color: Colors.purple.shade500,
+                                    ),
                                   ),
                                   label: const Text(
                                     'Password',
@@ -377,13 +387,13 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                     },
                                     icon: passwordVisible
                                         ? Icon(
-                                            Icons.visibility,
-                                            color: Colors.purple.shade500,
-                                          )
+                                      Icons.visibility,
+                                      color: Colors.purple.shade500,
+                                    )
                                         : Icon(
-                                            Icons.lock,
-                                            color: Colors.purple.shade500,
-                                          ),
+                                      Icons.lock,
+                                      color: Colors.purple.shade500,
+                                    ),
                                   ),
                                   label: const Text(
                                     'Confirm Password',
@@ -428,7 +438,10 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                               height: 20,
                             ),
                             Container(
-                              width: MediaQuery.of(context).size.width,
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   color: Colors.grey.shade300,
@@ -438,7 +451,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                               ),
                               child: Column(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   //==============================================//
                                   //====================== Row one ================//
@@ -460,20 +473,21 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                               //listMathematics
                                               items: listMathematicsType
                                                   .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
+                                                  DropdownMenuItem<String>>(
+                                                    (e) =>
+                                                    DropdownMenuItem(
                                                       value: e,
                                                       child: Text(e),
                                                     ),
-                                                  )
+                                              )
                                                   .toList(),
                                               onChanged: (String? value) =>
                                                   setState(
-                                                () {
-                                                  //valueChoose1
-                                                  valueChoose1 = value;
-                                                },
-                                              ),
+                                                        () {
+                                                      //valueChoose1
+                                                      valueChoose1 = value;
+                                                    },
+                                                  ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -485,13 +499,13 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
+                                                  snapshot) {
                                                 if (!snapshot.hasData)
                                                   return const Text(
                                                       'loading data');
 
                                                 List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
+                                                dropdownItems = [];
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
                                                   dropdownItems.add(
@@ -533,19 +547,20 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                               value: valueChoose2,
                                               items: listEnglishType
                                                   .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
+                                                  DropdownMenuItem<String>>(
+                                                    (e) =>
+                                                    DropdownMenuItem(
                                                       value: e,
                                                       child: Text(e),
                                                     ),
-                                                  )
+                                              )
                                                   .toList(),
                                               onChanged: (String? value) =>
                                                   setState(
-                                                () {
-                                                  valueChoose2 = value;
-                                                },
-                                              ),
+                                                        () {
+                                                      valueChoose2 = value;
+                                                    },
+                                                  ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -554,13 +569,13 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
+                                                  snapshot) {
                                                 if (!snapshot.hasData)
                                                   return const Text(
                                                       'loading data');
 
                                                 List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
+                                                dropdownItems = [];
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
                                                   dropdownItems.add(
@@ -600,19 +615,20 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                               value: valueChoose3,
                                               items: listItem
                                                   .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
+                                                  DropdownMenuItem<String>>(
+                                                    (e) =>
+                                                    DropdownMenuItem(
                                                       value: e,
                                                       child: Text(e),
                                                     ),
-                                                  )
+                                              )
                                                   .toList(),
                                               onChanged: (String? value) =>
                                                   setState(
-                                                () {
-                                                  valueChoose3 = value;
-                                                },
-                                              ),
+                                                        () {
+                                                      valueChoose3 = value;
+                                                    },
+                                                  ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -621,13 +637,13 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
+                                                  snapshot) {
                                                 if (!snapshot.hasData) {
                                                   return const Text(
                                                       'loading data');
                                                 }
                                                 List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
+                                                dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
@@ -667,18 +683,20 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                               value: valueChoose4,
                                               items: listItem
                                                   .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
+                                                  DropdownMenuItem<String>>(
+                                                    (e) =>
+                                                    DropdownMenuItem(
                                                       value: e,
                                                       child: Text(e),
                                                     ),
-                                                  )
+                                              )
                                                   .toList(),
-                                              onChanged: (value) => setState(
-                                                () {
-                                                  valueChoose4 = value;
-                                                },
-                                              ),
+                                              onChanged: (value) =>
+                                                  setState(
+                                                        () {
+                                                      valueChoose4 = value;
+                                                    },
+                                                  ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -687,13 +705,13 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
+                                                  snapshot) {
                                                 if (!snapshot.hasData) {
                                                   return const Text(
                                                       'loading data');
                                                 }
                                                 List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
+                                                dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
@@ -734,18 +752,20 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                               value: valueChoose5,
                                               items: listItem
                                                   .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
+                                                  DropdownMenuItem<String>>(
+                                                    (e) =>
+                                                    DropdownMenuItem(
                                                       value: e,
                                                       child: Text(e),
                                                     ),
-                                                  )
+                                              )
                                                   .toList(),
-                                              onChanged: (value) => setState(
-                                                () {
-                                                  valueChoose5 = value;
-                                                },
-                                              ),
+                                              onChanged: (value) =>
+                                                  setState(
+                                                        () {
+                                                      valueChoose5 = value;
+                                                    },
+                                                  ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -754,13 +774,13 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
+                                                  snapshot) {
                                                 if (!snapshot.hasData) {
                                                   return const Text(
                                                       'loading data');
                                                 }
                                                 List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
+                                                dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
@@ -800,18 +820,20 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                               value: valueChoose6,
                                               items: listItem
                                                   .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
+                                                  DropdownMenuItem<String>>(
+                                                    (e) =>
+                                                    DropdownMenuItem(
                                                       value: e,
                                                       child: Text(e),
                                                     ),
-                                                  )
+                                              )
                                                   .toList(),
-                                              onChanged: (value) => setState(
-                                                () {
-                                                  valueChoose6 = value;
-                                                },
-                                              ),
+                                              onChanged: (value) =>
+                                                  setState(
+                                                        () {
+                                                      valueChoose6 = value;
+                                                    },
+                                                  ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -820,13 +842,13 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
+                                                  snapshot) {
                                                 if (!snapshot.hasData) {
                                                   return const Text(
                                                       'loading data');
                                                 }
                                                 List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
+                                                dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
@@ -867,19 +889,20 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                               value: valueChoose7,
                                               items: listItem
                                                   .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
+                                                  DropdownMenuItem<String>>(
+                                                    (e) =>
+                                                    DropdownMenuItem(
                                                       value: e,
                                                       child: Text(e),
                                                     ),
-                                                  )
+                                              )
                                                   .toList(),
                                               onChanged: (String? value) =>
                                                   setState(
-                                                () {
-                                                  valueChoose7 = value;
-                                                },
-                                              ),
+                                                        () {
+                                                      valueChoose7 = value;
+                                                    },
+                                                  ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -888,13 +911,13 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
+                                                  snapshot) {
                                                 if (!snapshot.hasData) {
                                                   return const Text(
                                                       'loading data');
                                                 }
                                                 List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
+                                                dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
@@ -934,19 +957,20 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                               value: valueChoose8,
                                               items: listItem
                                                   .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
+                                                  DropdownMenuItem<String>>(
+                                                    (e) =>
+                                                    DropdownMenuItem(
                                                       value: e,
                                                       child: Text(e),
                                                     ),
-                                                  )
+                                              )
                                                   .toList(),
                                               onChanged: (String? value) =>
                                                   setState(
-                                                () {
-                                                  valueChoose8 = value;
-                                                },
-                                              ),
+                                                        () {
+                                                      valueChoose8 = value;
+                                                    },
+                                                  ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -955,13 +979,13 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
+                                                  snapshot) {
                                                 if (!snapshot.hasData) {
                                                   return const Text(
                                                       'loading data');
                                                 }
                                                 List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
+                                                dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
@@ -1001,19 +1025,20 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                               value: valueChoose9,
                                               items: listItem
                                                   .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
+                                                  DropdownMenuItem<String>>(
+                                                    (e) =>
+                                                    DropdownMenuItem(
                                                       value: e,
                                                       child: Text(e),
                                                     ),
-                                                  )
+                                              )
                                                   .toList(),
                                               onChanged: (String? value) =>
                                                   setState(
-                                                () {
-                                                  valueChoose9 = value;
-                                                },
-                                              ),
+                                                        () {
+                                                      valueChoose9 = value;
+                                                    },
+                                                  ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -1022,13 +1047,13 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
+                                                  snapshot) {
                                                 if (!snapshot.hasData) {
                                                   return const Text(
                                                       'loading data');
                                                 }
                                                 List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
+                                                dropdownItems = [];
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
                                                   dropdownItems.add(
@@ -1085,12 +1110,12 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                   color: Colors.purple,
                                   child: loading
                                       ? const SpinKitChasingDots(
-                                          color: Colors.white,
-                                        )
+                                    color: Colors.white,
+                                  )
                                       : const Text(
-                                          "Sign Up",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
+                                    "Sign Up",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
                               ),
                             ),

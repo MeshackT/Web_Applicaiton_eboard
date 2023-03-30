@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -9,6 +10,8 @@ import '../Authentication/Authenticate.dart';
 //get current logged in user
 User? user = FirebaseAuth.instance.currentUser;
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
+final CollectionReference learnersRef =
+    FirebaseFirestore.instance.collection('learnersData');
 
 class LearnerHome extends StatefulWidget {
   const LearnerHome({Key? key}) : super(key: key);
@@ -20,30 +23,15 @@ class LearnerHome extends StatefulWidget {
 class _LearnerHomeState extends State<LearnerHome> {
   List<String> fieldArray = [];
 
-  Future<void> getFieldArray() async {
-    final CollectionReference usersCollection =
-        FirebaseFirestore.instance.collection('learnersData');
-
-    final QuerySnapshot snapshot =
-        await usersCollection.where('uid', isEqualTo: user!.uid).get();
-
-    final DocumentSnapshot documentSnapshot = snapshot.docs.first;
-
-    setState(() {
-      fieldArray = List<String>.from(documentSnapshot.get('subjects'));
-      print(fieldArray);
-    });
-    print(fieldArray);
-  }
-
   @override
   void initState() {
     super.initState();
-    getFieldArray();
   }
 
   @override
   Widget build(BuildContext context) {
+    List<DocumentSnapshot> documents = [];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -62,117 +50,97 @@ class _LearnerHomeState extends State<LearnerHome> {
         ],
       ),
       extendBody: true,
-      drawer: SafeArea(
-        child: Container(
-          color: Colors.white,
-          width: MediaQuery.of(context).size.width / 2,
-          child: Column(
-            children: [
-              buildHeader(context),
-              Expanded(
+      drawer: DoubleBackToCloseApp(
+        snackBar: SnackBar(
+          backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
+          content: Text(
+            'Tap back again to leave the application',
+            style: TextStyle(color: Theme.of(context).primaryColorLight),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        child: SafeArea(
+          child: Container(
+            color: Colors.white,
+            width: MediaQuery.of(context).size.width / 2,
+            child: Column(
+              children: [
+                buildHeader(context),
+                Expanded(
                   flex: 1,
-                  child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('learnersData')
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: learnersRef
+                        .where('uid', isEqualTo: user!.uid)
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
+                        return Center(
+                          child: Text('Error: ${snapshot.error}'),
+                        );
                       }
 
-                      if (!snapshot.hasData) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(
-                          child: SpinKitChasingDots(
-                            color: Theme.of(context).primaryColor,
+                          child: Column(
+                            children: [
+                              const Text("Waiting for the internet connection"),
+                              SpinKitChasingDots(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ],
                           ),
                         );
                       }
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                            child: Column(
-                          children: [
-                            Text(
-                              'Waiting for Internet Connection',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.purple.shade600,
-                              ),
-                            ),
-                            SpinKitChasingDots(
-                              color: Theme.of(context).primaryColorDark,
-                              size: 15,
-                            ),
-                          ],
-                        ));
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.none) {
-                        return Center(
-                            child: Column(
-                          children: [
-                            Text(
-                              'No for Internet Connection',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.purple.shade600,
-                              ),
-                            ),
-                            SpinKitChasingDots(
-                              color: Theme.of(context).primaryColorDark,
-                              size: 15,
-                            ),
-                          ],
-                        ));
+
+                      final List<QueryDocumentSnapshot> matchingDocs =
+                          snapshot.data!.docs;
+                      if (matchingDocs.isEmpty) {
+                        return const Center(
+                          child: Text('No matching documents found.'),
+                        );
                       }
 
-                      final documents = snapshot.data!.docs;
+                      final DocumentSnapshot matchingDoc = matchingDocs.first;
+                      final List<dynamic> subjectsList =
+                          matchingDoc['subjects'];
 
                       return ListView.builder(
-                        itemCount: documents.length,
+                        itemCount: subjectsList.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final myArray =
-                              documents[index]['subjects'] as List<dynamic>;
-
-                          return Card(
-                            child: Column(
-                              children: [
-                                for (var item in myArray) ...[
-                                  ClipRRect(
-                                    borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(150),
-                                      bottomRight: Radius.circular(0),
-                                      topLeft: Radius.circular(150),
-                                    ),
-                                    child: InkWell(
-                                      onTap: () {},
-                                      child: Container(
-                                        color: Theme.of(context).primaryColor,
-                                        child: ListTile(
-                                          title: Text(
-                                            item,
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .primaryColorLight),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                ]
-                              ],
+                          final String subject = subjectsList[index];
+                          return ListTile(
+                            title: Text(
+                              subject,
                             ),
                           );
                         },
                       );
                     },
-                  )),
-            ],
+                  ),
+                ),
+              ],
+            ),
           ),
+        ),
+      ),
+      backgroundColor: Theme.of(context).primaryColorLight,
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.only(top: 0.0),
+        decoration: const BoxDecoration(
+          //screen background color
+          gradient: LinearGradient(
+              colors: [Color(0x0fffffff), Color(0xE7791971)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight),
+        ),
+        child: Column(
+          children: [
+            Text(""),
+            Text("data"),
+          ],
         ),
       ),
     );
@@ -189,7 +157,7 @@ class _LearnerHomeState extends State<LearnerHome> {
             topRight: Radius.circular(150),
           ),
           child: Container(
-            color: Colors.purple.shade100,
+            color: Theme.of(context).primaryColor.withOpacity(.40),
             width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.only(
               top: MediaQuery.of(context).padding.top,
@@ -197,13 +165,15 @@ class _LearnerHomeState extends State<LearnerHome> {
             child: Column(
               children: [
                 CircleAvatar(
-                  child: Text((user!.email.toString()[0].toUpperCase()) ?? ""),
+                  child: Text(
+                    user!.email.toString()[0].toUpperCase(),
+                  ),
                 ),
                 const SizedBox(
                   height: 22,
                 ),
                 Text(
-                  (user!.email.toString().substring(0, 5).toUpperCase() ?? ""),
+                  user!.displayName.toString(),
                   style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
@@ -223,10 +193,10 @@ class _LearnerHomeState extends State<LearnerHome> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
             user!.email.toString().toUpperCase(),
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: Colors.purple),
+                color: Theme.of(context).primaryColor),
           ),
         ),
         const SizedBox(
