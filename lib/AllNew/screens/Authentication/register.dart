@@ -75,6 +75,8 @@ class _RegisterState extends State<Register> {
   String subject2 = '';
   List<String> subjects = [];
   String role = "teacher";
+  String code = '';
+  String codePassword = "WMPSST";
 
   String error = '';
   bool loading = false;
@@ -129,7 +131,6 @@ class _RegisterState extends State<Register> {
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 150),
-                  color: Theme.of(context).primaryColorLight.withOpacity(.70),
                   child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 30.0, vertical: 30),
@@ -143,11 +144,9 @@ class _RegisterState extends State<Register> {
                             TextFormField(
                               enabled: false,
                               decoration: textInputDecoration.copyWith(
-                                  label: const Text(
+                                  label: Text(
                                     'Teacher',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        letterSpacing: 1),
+                                    style: textStyleText(context),
                                   ),
                                   hintText: "Teacher"),
                               onChanged: (val) {
@@ -156,17 +155,53 @@ class _RegisterState extends State<Register> {
                                 });
                               },
                             ),
-                            //Name
+                            const SizedBox(height: 10),
+                            TextFormField(
+                              obscureText: passwordVisible,
+                              decoration: textInputDecoration.copyWith(
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        passwordVisible = !passwordVisible;
+                                      });
+                                    },
+                                    icon: passwordVisible
+                                        ? Icon(
+                                            Icons.visibility,
+                                            color: IconTheme.of(context).color,
+                                          )
+                                        : Icon(
+                                            Icons.lock,
+                                            color: IconTheme.of(context).color,
+                                          ),
+                                  ),
+                                  label: Text(
+                                    'Code',
+                                    style: textStyleText(context),
+                                  ),
+                                  hintText: "Insert Code"),
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return "enter a code";
+                                } else if (codePassword != code) {
+                                  return "Incorrect code";
+                                }
+                                return null;
+                              },
+                              onChanged: (val) {
+                                setState(() {
+                                  code = val;
+                                });
+                              },
+                            ),
                             const SizedBox(
-                              height: 10,
+                              height: 20,
                             ),
                             TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  label: const Text(
+                                  label: Text(
                                     'Email',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        letterSpacing: 1),
+                                    style: textStyleText(context),
                                   ),
                                   hintText: "examle@gmail.com"),
                               validator: (val) {
@@ -185,15 +220,13 @@ class _RegisterState extends State<Register> {
                             ),
                             //Name
                             const SizedBox(
-                              height: 10,
+                              height: 20,
                             ),
                             TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  label: const Text(
+                                  label: Text(
                                     'Name',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        letterSpacing: 1),
+                                    style: textStyleText(context),
                                   ),
                                   hintText: "Enter your names"),
                               validator: (val) {
@@ -216,11 +249,9 @@ class _RegisterState extends State<Register> {
                             ),
                             TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  label: const Text(
+                                  label: Text(
                                     'Subject',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        letterSpacing: 1),
+                                    style: textStyleText(context),
                                   ),
                                   hintText: "Subject"),
                               obscureText: false,
@@ -242,11 +273,9 @@ class _RegisterState extends State<Register> {
                             ),
                             TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  label: const Text(
+                                  label: Text(
                                     'Additional Subject (Optional)',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        letterSpacing: 1),
+                                    style: textStyleText(context),
                                   ),
                                   hintText: "Subject"),
                               obscureText: false,
@@ -271,18 +300,16 @@ class _RegisterState extends State<Register> {
                                     icon: passwordVisible
                                         ? Icon(
                                             Icons.visibility,
-                                            color: Colors.purple.shade500,
+                                            color: IconTheme.of(context).color,
                                           )
                                         : Icon(
                                             Icons.lock,
-                                            color: Colors.purple.shade500,
+                                            color: IconTheme.of(context).color,
                                           ),
                                   ),
-                                  label: const Text(
+                                  label: Text(
                                     'Password',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        letterSpacing: 1),
+                                    style: textStyleText(context),
                                   ),
                                   hintText: "Enter your password"),
                               obscureText: passwordVisible,
@@ -320,11 +347,9 @@ class _RegisterState extends State<Register> {
                                             color: Colors.purple.shade500,
                                           ),
                                   ),
-                                  label: const Text(
+                                  label: Text(
                                     'Confirm Password',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        letterSpacing: 1),
+                                    style: textStyleText(context),
                                   ),
                                   hintText: "confirm your password"),
                               obscureText: true,
@@ -361,21 +386,23 @@ class _RegisterState extends State<Register> {
                                       //set this state when I press the button
                                       signUp();
                                     } else {
-                                      print("insert data as required");
-                                      // Utils.showSnackBar("Enter log in details");
                                       setState(() {
-                                        snack("Failed to register");
+                                        snack("Failed to register", context);
                                       });
                                     }
                                   },
-                                  color: Colors.purple,
+                                  color: Theme.of(context).primaryColor,
                                   child: loading
-                                      ? const SpinKitChasingDots(
-                                          color: Colors.white,
+                                      ? SpinKitChasingDots(
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
                                         )
-                                      : const Text(
+                                      : Text(
                                           "Sign Up",
-                                          style: TextStyle(color: Colors.white),
+                                          style: textStyleText(context)
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .primaryColorLight),
                                         ),
                                 ),
                               ),
@@ -395,10 +422,12 @@ class _RegisterState extends State<Register> {
                                   onPressed: () {
                                     widget.toggleView();
                                   },
-                                  color: Colors.purple,
-                                  child: const Text(
+                                  color: Theme.of(context).primaryColor,
+                                  child: Text(
                                     "Sign In",
-                                    style: TextStyle(color: Colors.white),
+                                    style: textStyleText(context).copyWith(
+                                        color: Theme.of(context)
+                                            .primaryColorLight),
                                   ),
                                 ),
                               ),
@@ -421,14 +450,6 @@ class _RegisterState extends State<Register> {
         ),
       ),
     );
-  }
-
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snack(
-      String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message.toString()),
-      duration: const Duration(seconds: 4),
-    ));
   }
 
   Future signUp() async {
@@ -467,14 +488,13 @@ class _RegisterState extends State<Register> {
       if (e.code == 'email-already-in-use') {
         setState(() {
           loading = false;
-          snack("Email already exists");
+          snack("Email already exists", context);
         });
       }
     } catch (e) {
-      print(e);
       setState(() {
         loading = false;
-        snack(e.toString());
+        snack(e.toString(), context);
       });
     }
     //Navigator.current

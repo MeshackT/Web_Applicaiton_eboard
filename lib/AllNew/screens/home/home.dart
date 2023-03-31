@@ -487,9 +487,12 @@ class _HomeState extends State<Home> {
                                                 ),
                                               ],
                                             ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
                                             const Padding(
                                               padding: EdgeInsets.symmetric(
-                                                  horizontal: 10.0),
+                                                  horizontal: 2.0),
                                               child: Divider(
                                                 height: 1,
                                                 color: Colors.grey,

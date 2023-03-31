@@ -35,6 +35,8 @@ class _SignInState extends State<SignIn> {
   String codeUnit = '';
   bool loading = false;
   String role = "teacher";
+  String code = '';
+  String codePassword = "WMPSST";
 
   @override
   void dispose() {
@@ -73,19 +75,19 @@ class _SignInState extends State<SignIn> {
                             child: Container(
                               height: MediaQuery.of(context).size.height / 5,
                               width: MediaQuery.of(context).size.width / 1.5,
-                              color: Colors.purple,
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 50),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 50),
                         child: Center(
                           child: Text(
                             "Facilitator\nSign In",
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
+                            style: textStyleText(context).copyWith(
+                                color: Theme.of(context).primaryColorLight,
                                 fontSize: 28,
                                 fontWeight: FontWeight.w800),
                           ),
@@ -93,7 +95,7 @@ class _SignInState extends State<SignIn> {
                       ),
                       Container(
                         margin: const EdgeInsets.only(top: 150),
-                        color: Colors.white,
+                        color: Theme.of(context).primaryColorLight,
                         child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 30.0, vertical: 30),
@@ -121,12 +123,11 @@ class _SignInState extends State<SignIn> {
                                               ),
                                             );
                                           },
-                                          child: const SizedBox(
+                                          child: SizedBox(
                                             height: 30,
                                             child: Text(
                                               "Click here!",
-                                              style: TextStyle(
-                                                  color: Colors.purple),
+                                              style: textStyleText(context),
                                             ),
                                           ))
                                     ],
@@ -138,10 +139,7 @@ class _SignInState extends State<SignIn> {
                                     enabled: false,
                                     decoration: textInputDecoration.copyWith(
                                       hintText: "Teacher",
-                                      hintStyle: const TextStyle(
-                                        fontSize: 16,
-                                        letterSpacing: 1,
-                                      ),
+                                      hintStyle: textStyleText(context),
                                     ),
                                     validator: (val) {
                                       setState(() {
@@ -154,12 +152,56 @@ class _SignInState extends State<SignIn> {
                                       });
                                     },
                                   ),
+                                  const SizedBox(height: 10),
+                                  TextFormField(
+                                    decoration: textInputDecoration.copyWith(
+                                        suffixIcon: IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              passwordVisible =
+                                                  !passwordVisible;
+                                            });
+                                          },
+                                          icon: passwordVisible
+                                              ? Icon(
+                                                  Icons.visibility,
+                                                  color: IconTheme.of(context)
+                                                      .color,
+                                                )
+                                              : Icon(
+                                                  Icons.lock,
+                                                  color: IconTheme.of(context)
+                                                      .color,
+                                                ),
+                                        ),
+                                        label: Text(
+                                          'Code',
+                                          style: textStyleText(context),
+                                        ),
+                                        hintText: "Insert Code"),
+                                    obscureText: passwordVisible,
+                                    validator: (val) {
+                                      if (val!.isEmpty) {
+                                        return "enter a code";
+                                      } else if (codePassword != code) {
+                                        return "Incorrect code";
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (val) {
+                                      setState(() {
+                                        code = val;
+                                      });
+                                    },
+                                  ),
                                   const SizedBox(
-                                    height: 30,
+                                    height: 10,
                                   ),
                                   TextFormField(
                                     decoration: textInputDecoration.copyWith(
-                                        hintText: "Email"),
+                                      hintText: "Email",
+                                      hintStyle: textStyleText(context),
+                                    ),
                                     validator: (val) {
                                       if (val!.isEmpty) {
                                         return "enter an email";
@@ -179,24 +221,27 @@ class _SignInState extends State<SignIn> {
                                   ),
                                   TextFormField(
                                     decoration: textInputDecoration.copyWith(
-                                        suffixIcon: IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              passwordVisible =
-                                                  !passwordVisible;
-                                            });
-                                          },
-                                          icon: passwordVisible
-                                              ? Icon(
-                                                  Icons.visibility,
-                                                  color: Colors.purple.shade500,
-                                                )
-                                              : Icon(
-                                                  Icons.lock,
-                                                  color: Colors.purple.shade500,
-                                                ),
-                                        ),
-                                        hintText: "Password"),
+                                      suffixIcon: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            passwordVisible = !passwordVisible;
+                                          });
+                                        },
+                                        icon: passwordVisible
+                                            ? Icon(
+                                                Icons.visibility,
+                                                color:
+                                                    IconTheme.of(context).color,
+                                              )
+                                            : Icon(
+                                                Icons.lock,
+                                                color:
+                                                    IconTheme.of(context).color,
+                                              ),
+                                      ),
+                                      hintText: "Password",
+                                      hintStyle: textStyleText(context),
+                                    ),
                                     obscureText: passwordVisible,
                                     validator: (val) {
                                       if (val!.length < 6) {
@@ -233,12 +278,11 @@ class _SignInState extends State<SignIn> {
                                               ),
                                             );
                                           },
-                                          child: const SizedBox(
+                                          child: SizedBox(
                                             height: 30,
                                             child: Text(
                                               "Reset",
-                                              style: TextStyle(
-                                                  color: Colors.purple),
+                                              style: textStyleText(context),
                                             ),
                                           ))
                                     ],
@@ -262,19 +306,22 @@ class _SignInState extends State<SignIn> {
                                             signIn();
                                           } else {
                                             setState(() {
-                                              snack("Failed to sign In");
+                                              snack(
+                                                  "Failed to Sign In", context);
                                             });
                                           }
                                         },
-                                        color: Colors.purple,
+                                        color: Theme.of(context).primaryColor,
                                         child: loading
-                                            ? const SpinKitChasingDots(
-                                                color: Colors.white,
+                                            ? SpinKitChasingDots(
+                                                color: Theme.of(context)
+                                                    .primaryColorLight,
                                               )
-                                            : const Text(
+                                            : Text(
                                                 "Sign In",
                                                 style: TextStyle(
-                                                    color: Colors.white),
+                                                    color: Theme.of(context)
+                                                        .primaryColorLight),
                                               ),
                                       ),
                                     ),
@@ -294,10 +341,13 @@ class _SignInState extends State<SignIn> {
                                         onPressed: () {
                                           widget.toggleView();
                                         },
-                                        color: Colors.purple,
-                                        child: const Text(
+                                        color: Theme.of(context).primaryColor,
+                                        child: Text(
                                           "Sign Up",
-                                          style: TextStyle(color: Colors.white),
+                                          style: textStyleText(context)
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .primaryColorLight),
                                         ),
                                       ),
                                     ),
@@ -319,21 +369,6 @@ class _SignInState extends State<SignIn> {
               ),
             ),
           );
-  }
-
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snack(
-      String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      backgroundColor: Theme.of(context).primaryColorDark,
-      content: Text(
-        message.toString(),
-        style: TextStyle(
-          color: Theme.of(context).primaryColorLight,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      duration: const Duration(seconds: 4),
-    ));
   }
 
   //Works perfect
@@ -364,12 +399,12 @@ class _SignInState extends State<SignIn> {
       //if user is not found then display this msg
       if (e.code == 'user-not-found') {
         setState(() {
-          snack("Email not found");
+          snack("Email not found", context);
         });
       } else if (e.code == 'wrong-password') {
         setState(() {
           loading = false;
-          snack('Wrong password');
+          snack('Wrong password', context);
         });
       }
 

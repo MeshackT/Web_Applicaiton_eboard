@@ -253,6 +253,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       fontSize:
                                                                           16),
                                                                 )),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller: testOneMark,
                                                     onSaved: (value) {
                                                       //Do something with the user input.
@@ -263,7 +266,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -281,6 +284,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller: testTwoMark,
                                                     onSaved: (value) {
                                                       //Do something with the user input.
@@ -291,7 +297,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -309,6 +315,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller: testThreeMark,
                                                     onSaved: (value) {
                                                       //Do something with the user input.
@@ -319,7 +328,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -337,6 +346,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller: testFourMark,
                                                     onSaved: (value) {
                                                       //Do something with the user input.
@@ -347,7 +359,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   Row(
                                                     crossAxisAlignment:
@@ -547,6 +559,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         assignmentOneMark,
                                                     onSaved: (value) {
@@ -558,7 +573,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -576,6 +591,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         assignmentTwoMark,
                                                     onSaved: (value) {
@@ -587,7 +605,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -605,6 +623,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         assignmentThreeMark,
                                                     onSaved: (value) {
@@ -616,7 +637,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -634,6 +655,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         assignmentFourMark,
                                                     onSaved: (value) {
@@ -645,7 +669,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   Row(
                                                     crossAxisAlignment:
@@ -836,6 +860,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller: examOneMark,
                                                     onSaved: (value) {
                                                       //Do something with the user input.
@@ -846,7 +873,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -864,6 +891,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller: examTwoMark,
                                                     onSaved: (value) {
                                                       //Do something with the user input.
@@ -874,7 +904,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   Row(
                                                     crossAxisAlignment:
@@ -1064,6 +1094,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termTwoTestOneMark,
                                                     onSaved: (value) {
@@ -1075,7 +1108,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -1093,6 +1126,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termTwoTestTwoMark,
                                                     onSaved: (value) {
@@ -1104,7 +1140,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -1122,6 +1158,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termTwoTestThreeMark,
                                                     onSaved: (value) {
@@ -1133,7 +1172,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -1151,6 +1190,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termTwoTestFourMark,
                                                     onSaved: (value) {
@@ -1162,7 +1204,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   Row(
                                                     crossAxisAlignment:
@@ -1351,6 +1393,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termTwoAssignmentOneMark,
                                                     onSaved: (value) {
@@ -1362,7 +1407,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -1380,6 +1425,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termTwoAssignmentTwoMark,
                                                     onSaved: (value) {
@@ -1391,7 +1439,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -1409,6 +1457,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termTwoAssignmentThreeMark,
                                                     onSaved: (value) {
@@ -1420,7 +1471,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -1438,6 +1489,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termTwoAssignmentFourMark,
                                                     onSaved: (value) {
@@ -1449,7 +1503,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   Row(
                                                     crossAxisAlignment:
@@ -1640,6 +1694,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termTwoExamOneMark,
                                                     onSaved: (value) {
@@ -1651,7 +1708,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -1669,6 +1726,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termTwoExamTwoMark,
                                                     onSaved: (value) {
@@ -1680,7 +1740,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   Row(
                                                     crossAxisAlignment:
@@ -1866,6 +1926,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termThreeTestOneMark,
                                                     onSaved: (value) {
@@ -1877,7 +1940,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -1895,6 +1958,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termThreeTestTwoMark,
                                                     onSaved: (value) {
@@ -1906,7 +1972,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -1924,6 +1990,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termThreeTestThreeMark,
                                                     onSaved: (value) {
@@ -1935,7 +2004,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -1953,6 +2022,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termThreeTestFourMark,
                                                     onSaved: (value) {
@@ -1964,7 +2036,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   Row(
                                                     crossAxisAlignment:
@@ -2143,6 +2215,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termThreeAssignmentOneMark,
                                                     onSaved: (value) {
@@ -2154,7 +2229,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -2172,6 +2247,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termThreeAssignmentTwoMark,
                                                     onSaved: (value) {
@@ -2183,7 +2261,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -2201,6 +2279,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termThreeAssignmentThreeMark,
                                                     onSaved: (value) {
@@ -2212,7 +2293,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -2230,6 +2311,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termThreeAssignmentFourMark,
                                                     onSaved: (value) {
@@ -2241,7 +2325,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   Row(
                                                     crossAxisAlignment:
@@ -2432,6 +2516,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termThreeExamOneMark,
                                                     onSaved: (value) {
@@ -2443,7 +2530,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -2461,6 +2548,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termThreeExamTwoMark,
                                                     onSaved: (value) {
@@ -2472,7 +2562,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   Row(
                                                     crossAxisAlignment:
@@ -2564,16 +2654,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                   // handle case where 'CAT' index does not exist
                                                                   logger.i(
                                                                       'No $subjectName index found');
-                                                                  ScaffoldMessenger.of(
-                                                                          context)
-                                                                      .showSnackBar(
-                                                                          SnackBar(
-                                                                    content: Text(
-                                                                        'The learner is not registered to do $subjectName'),
-                                                                    duration: const Duration(
-                                                                        seconds:
-                                                                            1),
-                                                                  ));
+                                                                  snack(
+                                                                      "Leaner is not registered to do $subjectName",
+                                                                      context);
                                                                 }
                                                                 //check if the stored data is a Map
                                                               } else if (allSubjects
@@ -2660,6 +2743,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termFourTestOneMark,
                                                     onSaved: (value) {
@@ -2671,7 +2757,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -2689,6 +2775,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termFourTestTwoMark,
                                                     onSaved: (value) {
@@ -2700,7 +2789,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -2718,6 +2807,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termFourTestThreeMark,
                                                     onSaved: (value) {
@@ -2729,7 +2821,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -2747,6 +2839,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termFourTestFourMark,
                                                     onSaved: (value) {
@@ -2758,7 +2853,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   Row(
                                                     crossAxisAlignment:
@@ -2947,6 +3042,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termFourAssignmentOneMark,
                                                     onSaved: (value) {
@@ -2958,7 +3056,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -2976,6 +3074,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termFourAssignmentTwoMark,
                                                     onSaved: (value) {
@@ -2987,7 +3088,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -3005,6 +3106,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termFourAssignmentThreeMark,
                                                     onSaved: (value) {
@@ -3016,7 +3120,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -3034,6 +3138,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termFourAssignmentFourMark,
                                                     onSaved: (value) {
@@ -3045,7 +3152,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   Row(
                                                     crossAxisAlignment:
@@ -3234,6 +3341,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termFourExamOneMark,
                                                     onSaved: (value) {
@@ -3245,7 +3355,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   TextFormField(
                                                     decoration:
@@ -3263,6 +3373,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    style:
+                                                        textStyleText(context),
+                                                    textAlign: TextAlign.center,
                                                     controller:
                                                         termFourExamTwoMark,
                                                     onSaved: (value) {
@@ -3274,7 +3387,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     },
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    height: 10,
                                                   ),
                                                   Row(
                                                     crossAxisAlignment:
@@ -3438,14 +3551,6 @@ class _AddEditForAllState extends State<AddEditForAll> {
         ),
       ),
     );
-  }
-
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
-      scaffoldMessenger() {
-    return ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Update Complete'),
-      duration: Duration(seconds: 4),
-    ));
   }
 
   //gets data from firestore for term 1 tests, assignments, and exams

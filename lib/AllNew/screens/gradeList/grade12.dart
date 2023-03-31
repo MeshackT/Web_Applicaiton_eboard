@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:levy/AllNew/shared/constants.dart';
 import 'package:logger/logger.dart';
 
 import '../home/AddEditMarksForAll.dart';
@@ -492,16 +493,7 @@ class _Grade12State extends State<Grade12> {
                                                                                 await snapshot.reference.update({
                                                                                   "allSubjects": allSubjects
                                                                                 }).then(
-                                                                                  (value) => ScaffoldMessenger.of(context).showSnackBar(
-                                                                                    SnackBar(
-                                                                                      content: Text(
-                                                                                        "Learner de-registered to do $_userSubject",
-                                                                                        style: TextStyle(color: Theme.of(context).primaryColorLight, fontWeight: FontWeight.w700),
-                                                                                      ),
-                                                                                      duration: const Duration(seconds: 2),
-                                                                                      backgroundColor: Theme.of(context).primaryColorDark,
-                                                                                    ),
-                                                                                  ),
+                                                                                  (value) => snack("Learner is de-registered to do $_userSubject", context),
                                                                                 );
                                                                               } else {
                                                                                 // Handle case where document does not exist
@@ -633,6 +625,9 @@ class _Grade12State extends State<Grade12> {
                                                                 documents[index]
                                                                     .id;
 
+                                                            snack(
+                                                                "Loading Data please wait...",
+                                                                context);
                                                             Navigator.of(
                                                                     context)
                                                                 .pushReplacement(
@@ -659,16 +654,9 @@ class _Grade12State extends State<Grade12> {
                                                           // handle case where 'CAT' index does not exist
                                                           logger.i(
                                                               'No $_userSubject index found');
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                                  SnackBar(
-                                                            content: Text(
-                                                                'The learner is not registered to do $_userSubject'),
-                                                            duration:
-                                                                const Duration(
-                                                                    seconds: 4),
-                                                          ));
+                                                          snack(
+                                                              "Leaner is not registered",
+                                                              context);
                                                         }
                                                         //check if the stored data is a Map
                                                       } else if (data is Map &&

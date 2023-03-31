@@ -2,6 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+TextStyle textStyleText(BuildContext context) {
+  return TextStyle(
+      fontWeight: FontWeight.normal,
+      letterSpacing: 1,
+      color: Theme.of(context).primaryColor);
+}
+
 ButtonStyle buttonRound = OutlinedButton.styleFrom(
     shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(20))),

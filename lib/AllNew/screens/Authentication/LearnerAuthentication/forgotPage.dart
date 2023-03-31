@@ -60,15 +60,15 @@ class _LearnerForgotState extends State<LearnerForgot> {
                       child: Container(
                         height: MediaQuery.of(context).size.height / 5,
                         width: MediaQuery.of(context).size.width / 1.5,
-                        color: Colors.purple,
-                        child: const Padding(
-                          padding: EdgeInsets.only(top: 50, bottom: 50),
+                        color: Theme.of(context).primaryColor,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 50, bottom: 50),
                           child: Center(
                             child: Text(
                               "Learner\nReset Password",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Theme.of(context).primaryColorLight,
                                   fontSize: 28,
                                   fontWeight: FontWeight.w800),
                             ),
@@ -94,6 +94,7 @@ class _LearnerForgotState extends State<LearnerForgot> {
                               TextFormField(
                                 decoration: textInputDecoration.copyWith(
                                   hintText: "Email",
+                                  hintStyle: textStyleText(context),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color:
@@ -173,41 +174,28 @@ class _LearnerForgotState extends State<LearnerForgot> {
                                     onPressed: () async {
                                       //check if the form is validated
                                       if (formKey.currentState!.validate()) {
-                                        forgotPassword().then(
-                                          (value) =>
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                  'An email has been sent to your account.'),
-                                              duration: Duration(seconds: 3),
-                                            ),
-                                          ),
-                                        );
+                                        forgotPassword().then((value) => snack(
+                                            "Link sent to your mail", context));
                                       } else {
                                         print("insert data as required");
                                         // Utils.showSnackBar("Enter log in details");
                                         setState(() {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text('Enter your email'),
-                                              duration: Duration(seconds: 1),
-                                            ),
-                                          );
+                                          snack("Enter your email", context);
                                         });
                                       }
                                     },
-                                    color: Colors.purple,
+                                    color: Theme.of(context).primaryColor,
                                     child: loading
                                         ? SpinKitChasingDots(
                                             color: Theme.of(context)
                                                 .primaryColorLight,
                                           )
-                                        : const Text(
+                                        : Text(
                                             "Reset",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            style: textStyleText(context)
+                                                .copyWith(
+                                                    color: Theme.of(context)
+                                                        .primaryColorLight),
                                           ),
                                   ),
                                 ),
@@ -225,14 +213,6 @@ class _LearnerForgotState extends State<LearnerForgot> {
     );
   }
 
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snack(
-      String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message.toString()),
-      duration: const Duration(seconds: 4),
-    ));
-  }
-
   Future forgotPassword() async {
     try {
       setState(() {
@@ -247,7 +227,7 @@ class _LearnerForgotState extends State<LearnerForgot> {
       setState(() {
         loading == false;
       });
-      snack(e.toString());
+      snack(e.toString(), context);
     }
 
     //Navigator.current

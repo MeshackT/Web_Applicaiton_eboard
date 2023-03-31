@@ -21,16 +21,18 @@ class User {
   List<String> teachersID;
   Map<String, dynamic> allSubjects;
 
-  User(this.email,
-      this.uid,
-      this.password,
-      this.name,
-      this.grade,
-      this.documentID,
-      this.role,
-      this.subjects,
-      this.teachersID,
-      this.allSubjects,);
+  User(
+    this.email,
+    this.uid,
+    this.password,
+    this.name,
+    this.grade,
+    this.documentID,
+    this.role,
+    this.subjects,
+    this.teachersID,
+    this.allSubjects,
+  );
 
   final userData = FirebaseFirestore.instance.collection('learnersData').doc();
 
@@ -41,18 +43,18 @@ class User {
     // Call the user's CollectionReference to add a new user
     return userData
         .set({
-      'documentID': documentID,
-      'email': email.trim().toLowerCase(), // John Doe
-      'uid': uid, // Stokes and Sons
-      'password': password.trim(), //
-      'name': name.trim(),
-      'grade': grade.trim(),
-      'role': role.trim().toLowerCase(),
-      'subjects': subjects,
-      //added teachers list of IDs
-      'teachersID': teachersID,
-      "allSubjects": allSubjects,
-    })
+          'documentID': documentID,
+          'email': email.trim().toLowerCase(), // John Doe
+          'uid': uid, // Stokes and Sons
+          'password': password.trim(), //
+          'name': name.trim(),
+          'grade': grade.trim(),
+          'role': role.trim().toLowerCase(),
+          'subjects': subjects,
+          //added teachers list of IDs
+          'teachersID': teachersID,
+          "allSubjects": allSubjects,
+        })
         .then((value) => print("User Data"))
         .catchError((error) => print("Failed to add user: $error"));
   }
@@ -166,21 +168,16 @@ class _LearnerRegisterState extends State<LearnerRegister> {
   @override
   Widget build(BuildContext context) {
     CollectionReference teachersRegistered =
-    FirebaseFirestore.instance.collection('userData');
+        FirebaseFirestore.instance.collection('userData');
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: DoubleBackToCloseApp(
         snackBar: SnackBar(
-          backgroundColor: Theme
-              .of(context)
-              .primaryColor
-              .withOpacity(1),
+          backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
           content: Text(
             'Tap back again to leave the application',
-            style: TextStyle(color: Theme
-                .of(context)
-                .primaryColorLight),
+            style: TextStyle(color: Theme.of(context).primaryColorLight),
             textAlign: TextAlign.center,
           ),
         ),
@@ -198,27 +195,21 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                         topLeft: Radius.circular(280),
                       ),
                       child: Container(
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .height / 5,
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width / 1.5,
-                        color: Colors.purple,
+                        height: MediaQuery.of(context).size.height / 5,
+                        width: MediaQuery.of(context).size.width / 1.5,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 50),
+                Padding(
+                  padding: const EdgeInsets.only(top: 50),
                   child: Center(
                     child: Text(
                       "Learner\nSign Up",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.white,
+                          color: Theme.of(context).primaryColorLight,
                           fontSize: 28,
                           fontWeight: FontWeight.w800),
                     ),
@@ -226,7 +217,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 150),
-                  color: Colors.white,
+                  color: Theme.of(context).primaryColorLight,
                   child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 30),
@@ -234,18 +225,12 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                         key: _formKey,
                         child: Column(
                           children: <Widget>[
-                            const SizedBox(
-                              height: 20,
-                            ),
                             TextFormField(
                               enabled: false,
                               decoration: textInputDecoration.copyWith(
-
-                                  label: const Text(
+                                  label: Text(
                                     'Learner',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        letterSpacing: 1),
+                                    style: textStyleText(context),
                                   ),
                                   hintText: "Learner"),
                               onChanged: (val) {
@@ -259,11 +244,9 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                             ),
                             TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  label: const Text(
+                                  label: Text(
                                     'Email',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        letterSpacing: 1),
+                                    style: textStyleText(context),
                                   ),
                                   hintText: "examle@gmail.com"),
                               validator: (val) {
@@ -286,11 +269,9 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                             ),
                             TextFormField(
                               decoration: textInputDecoration.copyWith(
-                                  label: const Text(
+                                  label: Text(
                                     'Name',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        letterSpacing: 1),
+                                    style: textStyleText(context),
                                   ),
                                   hintText: "Enter your names"),
                               validator: (val) {
@@ -307,15 +288,16 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                 });
                               },
                             ),
-                            //subject1
+                            //subject
+                            const SizedBox(
+                              height: 10,
+                            ),
                             TextFormField(
                               keyboardType: TextInputType.number,
                               decoration: textInputDecoration.copyWith(
-                                label: const Text(
+                                label: Text(
                                   'Grade',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      letterSpacing: 1),
+                                  style: textStyleText(context),
                                 ),
                                 hintText: "10",
                               ),
@@ -345,13 +327,13 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                     },
                                     icon: passwordVisible
                                         ? Icon(
-                                      Icons.visibility,
-                                      color: Colors.purple.shade500,
-                                    )
+                                            Icons.visibility,
+                                            color: IconTheme.of(context).color,
+                                          )
                                         : Icon(
-                                      Icons.lock,
-                                      color: Colors.purple.shade500,
-                                    ),
+                                            Icons.lock,
+                                            color: IconTheme.of(context).color,
+                                          ),
                                   ),
                                   label: const Text(
                                     'Password',
@@ -387,13 +369,13 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                     },
                                     icon: passwordVisible
                                         ? Icon(
-                                      Icons.visibility,
-                                      color: Colors.purple.shade500,
-                                    )
+                                            Icons.visibility,
+                                            color: IconTheme.of(context).color,
+                                          )
                                         : Icon(
-                                      Icons.lock,
-                                      color: Colors.purple.shade500,
-                                    ),
+                                            Icons.lock,
+                                            color: IconTheme.of(context).color,
+                                          ),
                                   ),
                                   label: const Text(
                                     'Confirm Password',
@@ -423,14 +405,13 @@ class _LearnerRegisterState extends State<LearnerRegister> {
 
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   'Select My Subjects',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 1,
-                                      fontSize: 17,
-                                      color: Colors.purple),
+                                  style: textStyleText(context).copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ],
                             ),
@@ -438,20 +419,17 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                               height: 20,
                             ),
                             Container(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width,
+                              width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: Colors.grey.shade300,
+                                  color: Theme.of(context).primaryColor,
                                   width: 1.0,
                                 ),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               child: Column(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   //==============================================//
                                   //====================== Row one ================//
@@ -466,28 +444,33 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                             //subject 2
                                             DropdownButton(
                                               isExpanded: false,
-                                              hint: const Text(
-                                                  "Select a subject"),
+                                              hint: Text(
+                                                "Select a subject",
+                                                style: textStyleText(context),
+                                              ),
                                               //ValueChoose1
                                               value: valueChoose1,
                                               //listMathematics
                                               items: listMathematicsType
                                                   .map<
-                                                  DropdownMenuItem<String>>(
-                                                    (e) =>
-                                                    DropdownMenuItem(
+                                                      DropdownMenuItem<String>>(
+                                                    (e) => DropdownMenuItem(
                                                       value: e,
-                                                      child: Text(e),
+                                                      child: Text(
+                                                        e,
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
-                                              )
+                                                  )
                                                   .toList(),
                                               onChanged: (String? value) =>
                                                   setState(
-                                                        () {
-                                                      //valueChoose1
-                                                      valueChoose1 = value;
-                                                    },
-                                                  ),
+                                                () {
+                                                  //valueChoose1
+                                                  valueChoose1 = value;
+                                                },
+                                              ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -499,26 +482,35 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                  snapshot) {
+                                                      snapshot) {
                                                 if (!snapshot.hasData)
-                                                  return const Text(
-                                                      'loading data');
+                                                  return Text(
+                                                    'loading data',
+                                                    style:
+                                                        textStyleText(context),
+                                                  );
 
                                                 List<DropdownMenuItem<String>>
-                                                dropdownItems = [];
+                                                    dropdownItems = [];
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
                                                   dropdownItems.add(
                                                     DropdownMenuItem(
                                                       value: doc['uid'] ?? "",
                                                       child: Text(
-                                                          doc['name'] ?? ""),
+                                                        doc['name'] ?? "",
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
                                                   );
                                                 });
                                                 return DropdownButton(
-                                                  hint: const Text(
-                                                      "Teachers name"),
+                                                  hint: Text(
+                                                    "Teachers name",
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
                                                   //valueTeacher1
                                                   value: valueTeacher1,
                                                   items: dropdownItems,
@@ -542,25 +534,30 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                             //subject 2
                                             DropdownButton(
                                               isExpanded: false,
-                                              hint: const Text(
-                                                  "Select a subject"),
+                                              hint: Text(
+                                                "Select a subject",
+                                                style: textStyleText(context),
+                                              ),
                                               value: valueChoose2,
                                               items: listEnglishType
                                                   .map<
-                                                  DropdownMenuItem<String>>(
-                                                    (e) =>
-                                                    DropdownMenuItem(
+                                                      DropdownMenuItem<String>>(
+                                                    (e) => DropdownMenuItem(
                                                       value: e,
-                                                      child: Text(e),
+                                                      child: Text(
+                                                        e,
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
-                                              )
+                                                  )
                                                   .toList(),
                                               onChanged: (String? value) =>
                                                   setState(
-                                                        () {
-                                                      valueChoose2 = value;
-                                                    },
-                                                  ),
+                                                () {
+                                                  valueChoose2 = value;
+                                                },
+                                              ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -569,25 +566,35 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                  snapshot) {
+                                                      snapshot) {
                                                 if (!snapshot.hasData)
-                                                  return const Text(
-                                                      'loading data');
+                                                  return Text(
+                                                    'loading data',
+                                                    style:
+                                                        textStyleText(context),
+                                                  );
 
                                                 List<DropdownMenuItem<String>>
-                                                dropdownItems = [];
+                                                    dropdownItems = [];
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
                                                   dropdownItems.add(
                                                     DropdownMenuItem(
                                                       value: doc['uid'],
-                                                      child: Text(doc['name']),
+                                                      child: Text(
+                                                        doc['name'],
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
                                                   );
                                                 });
                                                 return DropdownButton(
-                                                  hint: const Text(
-                                                      "Teachers name"),
+                                                  hint: Text(
+                                                    "Teachers name",
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
                                                   value: valueTeacher2,
                                                   items: dropdownItems,
                                                   onChanged: (newValue) {
@@ -610,25 +617,30 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                             //subject 2
                                             DropdownButton(
                                               isExpanded: false,
-                                              hint: const Text(
-                                                  "Select a subject"),
+                                              hint: Text(
+                                                "Select a subject",
+                                                style: textStyleText(context),
+                                              ),
                                               value: valueChoose3,
                                               items: listItem
                                                   .map<
-                                                  DropdownMenuItem<String>>(
-                                                    (e) =>
-                                                    DropdownMenuItem(
+                                                      DropdownMenuItem<String>>(
+                                                    (e) => DropdownMenuItem(
                                                       value: e,
-                                                      child: Text(e),
+                                                      child: Text(
+                                                        e,
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
-                                              )
+                                                  )
                                                   .toList(),
                                               onChanged: (String? value) =>
                                                   setState(
-                                                        () {
-                                                      valueChoose3 = value;
-                                                    },
-                                                  ),
+                                                () {
+                                                  valueChoose3 = value;
+                                                },
+                                              ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -637,26 +649,36 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                  snapshot) {
+                                                      snapshot) {
                                                 if (!snapshot.hasData) {
-                                                  return const Text(
-                                                      'loading data');
+                                                  return Text(
+                                                    'loading data',
+                                                    style:
+                                                        textStyleText(context),
+                                                  );
                                                 }
                                                 List<DropdownMenuItem<String>>
-                                                dropdownItems = [];
+                                                    dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
                                                   dropdownItems.add(
                                                     DropdownMenuItem(
                                                       value: doc['uid'],
-                                                      child: Text(doc['name']),
+                                                      child: Text(
+                                                        doc['name'],
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
                                                   );
                                                 });
                                                 return DropdownButton(
-                                                  hint: const Text(
-                                                      "Teachers name"),
+                                                  hint: Text(
+                                                    "Teachers name",
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
                                                   value: valueTeacher3,
                                                   items: dropdownItems,
                                                   onChanged: (newValue) {
@@ -678,25 +700,29 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                             //subject 2
                                             DropdownButton(
                                               isExpanded: false,
-                                              hint: const Text(
-                                                  "Select a subject"),
+                                              hint: Text(
+                                                "Select a subject",
+                                                style: textStyleText(context),
+                                              ),
                                               value: valueChoose4,
                                               items: listItem
                                                   .map<
-                                                  DropdownMenuItem<String>>(
-                                                    (e) =>
-                                                    DropdownMenuItem(
+                                                      DropdownMenuItem<String>>(
+                                                    (e) => DropdownMenuItem(
                                                       value: e,
-                                                      child: Text(e),
+                                                      child: Text(
+                                                        e,
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
-                                              )
+                                                  )
                                                   .toList(),
-                                              onChanged: (value) =>
-                                                  setState(
-                                                        () {
-                                                      valueChoose4 = value;
-                                                    },
-                                                  ),
+                                              onChanged: (value) => setState(
+                                                () {
+                                                  valueChoose4 = value;
+                                                },
+                                              ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -705,26 +731,36 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                  snapshot) {
+                                                      snapshot) {
                                                 if (!snapshot.hasData) {
-                                                  return const Text(
-                                                      'loading data');
+                                                  return Text(
+                                                    'loading data',
+                                                    style:
+                                                        textStyleText(context),
+                                                  );
                                                 }
                                                 List<DropdownMenuItem<String>>
-                                                dropdownItems = [];
+                                                    dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
                                                   dropdownItems.add(
                                                     DropdownMenuItem(
                                                       value: doc['uid'],
-                                                      child: Text(doc['name']),
+                                                      child: Text(
+                                                        doc['name'],
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
                                                   );
                                                 });
                                                 return DropdownButton(
-                                                  hint: const Text(
-                                                      "Teachers name"),
+                                                  hint: Text(
+                                                    "Teachers name",
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
                                                   value: valueTeacher4,
                                                   items: dropdownItems,
                                                   onChanged: (newValue) {
@@ -747,25 +783,29 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                             //subject 2
                                             DropdownButton(
                                               isExpanded: false,
-                                              hint: const Text(
-                                                  "Select a subject"),
+                                              hint: Text(
+                                                "Select a subject",
+                                                style: textStyleText(context),
+                                              ),
                                               value: valueChoose5,
                                               items: listItem
                                                   .map<
-                                                  DropdownMenuItem<String>>(
-                                                    (e) =>
-                                                    DropdownMenuItem(
+                                                      DropdownMenuItem<String>>(
+                                                    (e) => DropdownMenuItem(
                                                       value: e,
-                                                      child: Text(e),
+                                                      child: Text(
+                                                        e,
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
-                                              )
+                                                  )
                                                   .toList(),
-                                              onChanged: (value) =>
-                                                  setState(
-                                                        () {
-                                                      valueChoose5 = value;
-                                                    },
-                                                  ),
+                                              onChanged: (value) => setState(
+                                                () {
+                                                  valueChoose5 = value;
+                                                },
+                                              ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -774,26 +814,36 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                  snapshot) {
+                                                      snapshot) {
                                                 if (!snapshot.hasData) {
-                                                  return const Text(
-                                                      'loading data');
+                                                  return Text(
+                                                    'loading data',
+                                                    style:
+                                                        textStyleText(context),
+                                                  );
                                                 }
                                                 List<DropdownMenuItem<String>>
-                                                dropdownItems = [];
+                                                    dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
                                                   dropdownItems.add(
                                                     DropdownMenuItem(
                                                       value: doc['uid'],
-                                                      child: Text(doc['name']),
+                                                      child: Text(
+                                                        doc['name'],
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
                                                   );
                                                 });
                                                 return DropdownButton(
-                                                  hint: const Text(
-                                                      "Teachers name"),
+                                                  hint: Text(
+                                                    "Teachers name",
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
                                                   value: valueTeacher5,
                                                   items: dropdownItems,
                                                   onChanged: (newValue) {
@@ -815,25 +865,29 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                             //subject 2
                                             DropdownButton(
                                               isExpanded: false,
-                                              hint: const Text(
-                                                  "Select a subject"),
+                                              hint: Text(
+                                                "Select a subject",
+                                                style: textStyleText(context),
+                                              ),
                                               value: valueChoose6,
                                               items: listItem
                                                   .map<
-                                                  DropdownMenuItem<String>>(
-                                                    (e) =>
-                                                    DropdownMenuItem(
+                                                      DropdownMenuItem<String>>(
+                                                    (e) => DropdownMenuItem(
                                                       value: e,
-                                                      child: Text(e),
+                                                      child: Text(
+                                                        e,
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
-                                              )
+                                                  )
                                                   .toList(),
-                                              onChanged: (value) =>
-                                                  setState(
-                                                        () {
-                                                      valueChoose6 = value;
-                                                    },
-                                                  ),
+                                              onChanged: (value) => setState(
+                                                () {
+                                                  valueChoose6 = value;
+                                                },
+                                              ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -842,26 +896,36 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                  snapshot) {
+                                                      snapshot) {
                                                 if (!snapshot.hasData) {
-                                                  return const Text(
-                                                      'loading data');
+                                                  return Text(
+                                                    'loading data',
+                                                    style:
+                                                        textStyleText(context),
+                                                  );
                                                 }
                                                 List<DropdownMenuItem<String>>
-                                                dropdownItems = [];
+                                                    dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
                                                   dropdownItems.add(
                                                     DropdownMenuItem(
                                                       value: doc['uid'],
-                                                      child: Text(doc['name']),
+                                                      child: Text(
+                                                        doc['name'],
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
                                                   );
                                                 });
                                                 return DropdownButton(
-                                                  hint: const Text(
-                                                      "Teachers name"),
+                                                  hint: Text(
+                                                    "Teachers name",
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
                                                   value: valueTeacher6,
                                                   items: dropdownItems,
                                                   onChanged: (newValue) {
@@ -884,25 +948,30 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                             //subject 2
                                             DropdownButton(
                                               isExpanded: false,
-                                              hint: const Text(
-                                                  "Select a subject"),
+                                              hint: Text(
+                                                "Select a subject",
+                                                style: textStyleText(context),
+                                              ),
                                               value: valueChoose7,
                                               items: listItem
                                                   .map<
-                                                  DropdownMenuItem<String>>(
-                                                    (e) =>
-                                                    DropdownMenuItem(
+                                                      DropdownMenuItem<String>>(
+                                                    (e) => DropdownMenuItem(
                                                       value: e,
-                                                      child: Text(e),
+                                                      child: Text(
+                                                        e,
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
-                                              )
+                                                  )
                                                   .toList(),
                                               onChanged: (String? value) =>
                                                   setState(
-                                                        () {
-                                                      valueChoose7 = value;
-                                                    },
-                                                  ),
+                                                () {
+                                                  valueChoose7 = value;
+                                                },
+                                              ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -911,26 +980,36 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                  snapshot) {
+                                                      snapshot) {
                                                 if (!snapshot.hasData) {
-                                                  return const Text(
-                                                      'loading data');
+                                                  return Text(
+                                                    'loading data',
+                                                    style:
+                                                        textStyleText(context),
+                                                  );
                                                 }
                                                 List<DropdownMenuItem<String>>
-                                                dropdownItems = [];
+                                                    dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
                                                   dropdownItems.add(
                                                     DropdownMenuItem(
                                                       value: doc['uid'],
-                                                      child: Text(doc['name']),
+                                                      child: Text(
+                                                        doc['name'],
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
                                                   );
                                                 });
                                                 return DropdownButton(
-                                                  hint: const Text(
-                                                      "Teachers name"),
+                                                  hint: Text(
+                                                    "Teachers name",
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
                                                   value: valueTeacher7,
                                                   items: dropdownItems,
                                                   onChanged: (newValue) {
@@ -952,25 +1031,30 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                             //subject 2
                                             DropdownButton(
                                               isExpanded: false,
-                                              hint: const Text(
-                                                  "Select a subject"),
+                                              hint: Text(
+                                                "Select a subject",
+                                                style: textStyleText(context),
+                                              ),
                                               value: valueChoose8,
                                               items: listItem
                                                   .map<
-                                                  DropdownMenuItem<String>>(
-                                                    (e) =>
-                                                    DropdownMenuItem(
+                                                      DropdownMenuItem<String>>(
+                                                    (e) => DropdownMenuItem(
                                                       value: e,
-                                                      child: Text(e),
+                                                      child: Text(
+                                                        e,
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
-                                              )
+                                                  )
                                                   .toList(),
                                               onChanged: (String? value) =>
                                                   setState(
-                                                        () {
-                                                      valueChoose8 = value;
-                                                    },
-                                                  ),
+                                                () {
+                                                  valueChoose8 = value;
+                                                },
+                                              ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -979,26 +1063,36 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                  snapshot) {
+                                                      snapshot) {
                                                 if (!snapshot.hasData) {
-                                                  return const Text(
-                                                      'loading data');
+                                                  return Text(
+                                                    'loading data',
+                                                    style:
+                                                        textStyleText(context),
+                                                  );
                                                 }
                                                 List<DropdownMenuItem<String>>
-                                                dropdownItems = [];
+                                                    dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
                                                   dropdownItems.add(
                                                     DropdownMenuItem(
                                                       value: doc['uid'],
-                                                      child: Text(doc['name']),
+                                                      child: Text(
+                                                        doc['name'],
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
                                                   );
                                                 });
                                                 return DropdownButton(
-                                                  hint: const Text(
-                                                      "Teachers name"),
+                                                  hint: Text(
+                                                    "Teachers name",
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
                                                   value: valueTeacher8,
                                                   items: dropdownItems,
                                                   onChanged: (newValue) {
@@ -1020,25 +1114,30 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                             //subject 2
                                             DropdownButton(
                                               isExpanded: false,
-                                              hint: const Text(
-                                                  "Select a subject"),
+                                              hint: Text(
+                                                "Select a subject",
+                                                style: textStyleText(context),
+                                              ),
                                               value: valueChoose9,
                                               items: listItem
                                                   .map<
-                                                  DropdownMenuItem<String>>(
-                                                    (e) =>
-                                                    DropdownMenuItem(
+                                                      DropdownMenuItem<String>>(
+                                                    (e) => DropdownMenuItem(
                                                       value: e,
-                                                      child: Text(e),
+                                                      child: Text(
+                                                        e,
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
-                                              )
+                                                  )
                                                   .toList(),
                                               onChanged: (String? value) =>
                                                   setState(
-                                                        () {
-                                                      valueChoose9 = value;
-                                                    },
-                                                  ),
+                                                () {
+                                                  valueChoose9 = value;
+                                                },
+                                              ),
                                             ),
                                             //subject 2 ends
                                             //Teachers name
@@ -1047,25 +1146,35 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                   .snapshots(),
                                               builder: (BuildContext context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                  snapshot) {
+                                                      snapshot) {
                                                 if (!snapshot.hasData) {
-                                                  return const Text(
-                                                      'loading data');
+                                                  return Text(
+                                                    'loading data',
+                                                    style:
+                                                        textStyleText(context),
+                                                  );
                                                 }
                                                 List<DropdownMenuItem<String>>
-                                                dropdownItems = [];
+                                                    dropdownItems = [];
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
                                                   dropdownItems.add(
                                                     DropdownMenuItem(
                                                       value: doc['uid'],
-                                                      child: Text(doc['name']),
+                                                      child: Text(
+                                                        doc['name'],
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
                                                     ),
                                                   );
                                                 });
                                                 return DropdownButton(
-                                                  hint: const Text(
-                                                      "Teachers name"),
+                                                  hint: Text(
+                                                    "Teachers name",
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
                                                   value: valueTeacher9,
                                                   items: dropdownItems,
                                                   onChanged: (newValue) {
@@ -1104,18 +1213,22 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                     if (_formKey.currentState!.validate()) {
                                       signUp();
                                     } else {
-                                      print("insert data as required");
+                                      snack("Insert all the details required",
+                                          context);
                                     }
                                   },
-                                  color: Colors.purple,
+                                  color: Theme.of(context).primaryColor,
                                   child: loading
-                                      ? const SpinKitChasingDots(
-                                    color: Colors.white,
-                                  )
-                                      : const Text(
-                                    "Sign Up",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                                      ? SpinKitChasingDots(
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
+                                        )
+                                      : Text(
+                                          "Sign Up",
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColorLight),
+                                        ),
                                 ),
                               ),
                             ),
@@ -1134,10 +1247,12 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                   onPressed: () {
                                     widget.toggleView();
                                   },
-                                  color: Colors.purple,
-                                  child: const Text(
+                                  color: Theme.of(context).primaryColor,
+                                  child: Text(
                                     "Sign In",
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .primaryColorLight),
                                   ),
                                 ),
                               ),
@@ -1160,14 +1275,6 @@ class _LearnerRegisterState extends State<LearnerRegister> {
         ),
       ),
     );
-  }
-
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snack(
-      String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message.toString()),
-      duration: const Duration(seconds: 4),
-    ));
   }
 
   @override
@@ -1242,7 +1349,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
         loading = false;
       });
       if (error == 'email-already-in-use') {
-        snack(error.toString());
+        snack(error.toString(), context);
         logger.i(error.toString());
       }
     } catch (error) {
@@ -1250,23 +1357,23 @@ class _LearnerRegisterState extends State<LearnerRegister> {
         loading = false;
       });
       if (error == "ERROR_INVALID_EMAIL") {
-        snack(error.toString());
+        snack(error.toString(), context);
       } else if (error == "ERROR_WRONG_PASSWORD") {
-        snack(error.toString());
+        snack(error.toString(), context);
         logger.i(error);
       } else if (error == "ERROR_USER_NOT_FOUND") {
-        snack(error.toString());
+        snack(error.toString(), context);
         logger.i(error);
       } else if (error == "ERROR_USER_DISABLED") {
-        snack(error.toString());
+        snack(error.toString(), context);
       } else if (error == "ERROR_TOO_MANY_REQUESTS") {
-        snack(error.toString());
+        snack(error.toString(), context);
         logger.i(error);
       } else if (error == "ERROR_OPERATION_NOT_ALLOWED") {
-        snack(error.toString());
+        snack(error.toString(), context);
         logger.i(error);
       } else {
-        snack(error.toString());
+        snack(error.toString(), context);
         logger.i(error);
       }
     }
