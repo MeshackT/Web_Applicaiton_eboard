@@ -13,6 +13,7 @@ import 'package:levy/AllNew/screens/Authentication/Authenticate.dart';
 import 'package:levy/AllNew/screens/gradeList/grade11.dart';
 import 'package:levy/AllNew/screens/more/more.dart';
 
+import '../../shared/constants.dart';
 import '../gradeList/grade10.dart';
 import '../gradeList/grade12.dart';
 
@@ -537,18 +538,7 @@ class _HomeState extends State<Home> {
                                                                     context)
                                                                 .pop();
                                                           },
-                                                          style: OutlinedButton
-                                                              .styleFrom(
-                                                            shape: const RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            20))),
-                                                            foregroundColor:
-                                                                Theme.of(
-                                                                        context)
-                                                                    .primaryColor,
-                                                          ),
+                                                          style: buttonRound,
                                                           child: Text(
                                                             "Done",
                                                             style: TextStyle(

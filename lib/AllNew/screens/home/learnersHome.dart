@@ -3,6 +3,8 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:levy/AllNew/screens/home/learnerViewMarks.dart';
+import 'package:levy/AllNew/shared/constants.dart';
 import 'package:logger/logger.dart';
 
 import '../Authentication/Authenticate.dart';
@@ -22,6 +24,68 @@ class LearnerHome extends StatefulWidget {
 
 class _LearnerHomeState extends State<LearnerHome> {
   List<String> fieldArray = [];
+  bool loading = false;
+
+  ///TODO Term One//
+  String termOneTestOneMark = "";
+  String termOneTestTwoMark = "";
+  String termOneTestThreeMark = "";
+  String termOneTestFourMark = "";
+
+  String termOneAssignmentOneMark = "";
+  String termOneAssignmentTwoMark = "";
+  String termOneAssignmentThreeMark = "";
+  String termOneAssignmentFourMark = "";
+
+  String termOneExamOneMark = "";
+  String termOneExamTwoMark = "";
+
+  ///TODO Term Two//
+  String termTwoTestOneMark = "";
+  String termTwoTestTwoMark = "";
+  String termTwoTestThreeMark = "";
+  String termTwoTestFourMark = "";
+
+  String termTwoAssignmentOneMark = "";
+  String termTwoAssignmentTwoMark = "";
+  String termTwoAssignmentThreeMark = "";
+  String termTwoAssignmentFourMark = "";
+
+  String termTwoExamOneMark = "";
+  String termTwoExamTwoMark = "";
+
+  ///TODO end of term 2///
+  ///TODO Term One//
+  String termThreeTestOneMark = "";
+  String termThreeTestTwoMark = "";
+  String termThreeTestThreeMark = "";
+  String termThreeTestFourMark = "";
+
+  String termThreeAssignmentOneMark = "";
+  String termThreeAssignmentTwoMark = "";
+  String termThreeAssignmentThreeMark = "";
+  String termThreeAssignmentFourMark = "";
+
+  String termThreeExamOneMark = "";
+  String termThreeExamTwoMark = "";
+
+  ///TODO Term Four//
+  String termFourTestOneMark = "";
+  String termFourTestTwoMark = "";
+  String termFourTestThreeMark = "";
+  String termFourTestFourMark = "";
+
+  String termFourAssignmentOneMark = "";
+  String termFourAssignmentTwoMark = "";
+  String termFourAssignmentThreeMark = "";
+  String termFourAssignmentFourMark = "";
+
+  String termFourExamOneMark = "";
+  String termFourExamTwoMark = "";
+
+  ///TODO end of term 4///
+  ///
+  String _userSubject = '';
 
   @override
   void initState() {
@@ -30,8 +94,6 @@ class _LearnerHomeState extends State<LearnerHome> {
 
   @override
   Widget build(BuildContext context) {
-    List<DocumentSnapshot> documents = [];
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -104,14 +166,146 @@ class _LearnerHomeState extends State<LearnerHome> {
                       final DocumentSnapshot matchingDoc = matchingDocs.first;
                       final List<dynamic> subjectsList =
                           matchingDoc['subjects'];
+                      final List<dynamic> subjectsMarksList =
+                          matchingDoc['allSubjects'];
 
                       return ListView.builder(
                         itemCount: subjectsList.length,
                         itemBuilder: (BuildContext context, int index) {
                           final String subject = subjectsList[index];
-                          return ListTile(
-                            title: Text(
-                              subject,
+                          return ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(0),
+                              bottomRight: Radius.circular(100),
+                              topLeft: Radius.circular(0),
+                              topRight: Radius.circular(100),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: InkWell(
+                                onTap: () async {
+                                  logger.i(subjectsMarksList);
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  ////////////All Marks////////
+
+                                  try {
+                                    //check if the document is not empty and get the data
+                                    if (subjectsMarksList != null) {
+                                      //go to the field in the document
+                                      //check if the data is a List
+                                      if (subjectsMarksList is List) {
+                                        bool foundCatIndex = false;
+                                        //for every item in the list
+                                        for (var item in subjectsMarksList) {
+                                          //if the item is==$userSubject
+                                          if (item.containsKey(
+                                              subjectsList[index])) {
+                                            //index is present
+                                            foundCatIndex = true;
+
+                                            //store the found index in a variable
+                                            var itemIndex =
+                                                subjectsMarksList.indexOf(item);
+                                            logger.i(
+                                                "index of the subject is ==> ,$itemIndex");
+
+                                            Map<String, dynamic> editMarksNew =
+                                                {};
+                                            editMarksNew["0"] =
+                                                subjectsMarksList[itemIndex]
+                                                    [subjectsList[index]];
+                                            logger.i(
+                                                "This is the subject and marks\n"
+                                                "$editMarksNew");
+
+                                            final List<dynamic> indexMarks = [];
+                                            indexMarks.add(
+                                                subjectsMarksList[itemIndex]
+                                                    [subjectsList[index]]);
+
+                                            logger.i(
+                                                "Index of Marks stored ==> $indexMarks");
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LearnerViewMarks(
+                                                            indexMarks:
+                                                                indexMarks)));
+                                            break;
+                                          }
+                                        }
+                                        //if the teacherSubject is not found
+
+                                        if (!foundCatIndex) {
+                                          // handle case where 'CAT' index does not exist
+                                          logger.i(
+                                              'No ${subjectsList[index]} index found');
+                                          snack(
+                                              "No ${subjectsList[index]} marks found",
+                                              context);
+                                        }
+                                        //check if the stored data is a Map
+                                      } else if (subjectsMarksList is Map) {
+                                        //store the teacherSubject here
+                                        var teacherSubject = subjectsMarksList[
+                                            subjectsList[index]];
+                                        logger.i(
+                                            'Found $teacherSubject index found');
+                                      } else {
+                                        // handle case where teacherSubject index does not exist
+                                        logger.i(
+                                            'No ${subjectsList[index]} index found');
+                                        snack("No ${subjectsList[index]}",
+                                            context);
+                                      }
+                                    } else {
+                                      // handle case where document does not exist
+                                      logger.i('Document does not exist');
+                                      snack(
+                                          "No document containing the subject",
+                                          context);
+                                    }
+
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                  } catch (e) {
+                                    snack(e.toString(), context);
+                                  }
+                                },
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    //screen background color
+                                    gradient: LinearGradient(
+                                        colors: [
+                                          Color(0x00cccccc),
+                                          Color(0xE7791971)
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight),
+                                  ),
+                                  //color: Theme.of(context).primaryColor,
+                                  child: ListTile(
+                                    title: loading
+                                        ? SpinKitChasingDots(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          )
+                                        : Text(
+                                            subject,
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w900,
+                                                color: Theme.of(context)
+                                                    .primaryColorLight),
+                                          ),
+                                  ),
+                                ),
+                              ),
                             ),
                           );
                         },
@@ -167,6 +361,10 @@ class _LearnerHomeState extends State<LearnerHome> {
                 CircleAvatar(
                   child: Text(
                     user!.email.toString()[0].toUpperCase(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1,
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -174,10 +372,10 @@ class _LearnerHomeState extends State<LearnerHome> {
                 ),
                 Text(
                   user!.displayName.toString(),
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.purple),
+                      fontWeight: FontWeight.w700,
+                      color: Theme.of(context).primaryColorLight),
                 ),
                 const SizedBox(
                   height: 22,
@@ -195,7 +393,7 @@ class _LearnerHomeState extends State<LearnerHome> {
             user!.email.toString().toUpperCase(),
             style: TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w900,
                 color: Theme.of(context).primaryColor),
           ),
         ),
