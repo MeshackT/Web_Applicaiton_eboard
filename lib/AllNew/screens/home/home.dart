@@ -12,13 +12,15 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:levy/AllNew/screens/Authentication/Authenticate.dart';
 import 'package:levy/AllNew/screens/gradeList/grade11.dart';
 import 'package:levy/AllNew/screens/more/more.dart';
-
+import 'package:logger/logger.dart';
+import '../../../testing_messaging/messaging.dart';
 import '../../shared/constants.dart';
 import '../gradeList/grade10.dart';
 import '../gradeList/grade12.dart';
 
 //get current logged in user
 User? user = FirebaseAuth.instance.currentUser;
+Logger logger = Logger(printer: PrettyPrinter(colors: true));
 
 class Subjects {
   String? indexOfDoc;
@@ -207,6 +209,15 @@ class _HomeState extends State<Home> {
         elevation: 0.0,
         centerTitle: true,
         backgroundColor: const Color(0xE7791971),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Messaging()));
+            },
+            icon: const Icon(Icons.ac_unit),
+          )
+        ],
       ),
       drawer: const NavigationDrawer(),
       body: DoubleBackToCloseApp(
@@ -649,13 +660,35 @@ class _HomeState extends State<Home> {
                                             fontWeight: FontWeight.w700),
                                       ),
                                       trailing: SizedBox(
-                                        width: 50,
+                                        width: 110,
                                         child: Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
+                                            IconButton(
+                                              onPressed: () {
+                                                FirebaseFirestore
+                                                    .instance
+                                                    .collection(
+                                                    "learnersData")
+                                                    .doc(documents[
+                                                index]
+                                                    .id)
+                                                    .delete();
+                                                snack("Learner deleted from the database", context);
+                                              },
+                                              icon: Icon(
+                                                Icons.delete,
+                                                color: Theme.of(context)
+                                                    .primaryColor
+                                                    .withOpacity(.6),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
                                             IconButton(
                                               color: Colors.blue,
                                               onPressed: () async {
@@ -668,18 +701,6 @@ class _HomeState extends State<Home> {
                                                     'User subject: $_userSubject User Name: $nameOfTeacher');
 
                                                 try {
-                                                  final DocumentReference
-                                                      documentRef =
-                                                      FirebaseFirestore.instance
-                                                          .collection(
-                                                              'learnersData')
-                                                          .doc(documents[index]
-                                                              .id);
-
-                                                  // Get the document snapshot
-                                                  final DocumentSnapshot
-                                                      documentSnapshot =
-                                                      await documentRef.get();
                                                   //get the documents data from firestore
                                                   DocumentSnapshot snapshot =
                                                       await FirebaseFirestore
@@ -1054,14 +1075,6 @@ class _HomeState extends State<Home> {
         }
       }
     }
-  }
-
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snack(
-      String message) {
-    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message.toString()),
-      duration: const Duration(seconds: 4),
-    ));
   }
 }
 

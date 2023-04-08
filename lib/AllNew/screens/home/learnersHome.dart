@@ -3,6 +3,7 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:levy/AllNew/screens/Authentication/LearnerAuthentication/EditSubjects.dart';
 import 'package:levy/AllNew/screens/home/learnerViewMarks.dart';
 import 'package:levy/AllNew/shared/constants.dart';
 import 'package:logger/logger.dart';
@@ -184,7 +185,7 @@ class _LearnerHomeState extends State<LearnerHome> {
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: InkWell(
                                 onTap: () async {
-                                  logger.i(subjectsMarksList);
+                                  // logger.i(subjectsMarksList);
                                   setState(() {
                                     loading = true;
                                   });
@@ -208,32 +209,46 @@ class _LearnerHomeState extends State<LearnerHome> {
                                             //store the found index in a variable
                                             var itemIndex =
                                                 subjectsMarksList.indexOf(item);
-                                            logger.i(
-                                                "index of the subject is ==> ,$itemIndex");
+                                            // logger.i(
+                                            //     "index of the subject is ==> ,$itemIndex");
 
                                             Map<String, dynamic> editMarksNew =
                                                 {};
                                             editMarksNew["0"] =
                                                 subjectsMarksList[itemIndex]
                                                     [subjectsList[index]];
-                                            logger.i(
-                                                "This is the subject and marks\n"
-                                                "$editMarksNew");
+                                            // logger.i(
+                                            //     "This is the subject and marks\n"
+                                            //     "$editMarksNew");
 
                                             final List<dynamic> indexMarks = [];
                                             indexMarks.add(
                                                 subjectsMarksList[itemIndex]
                                                     [subjectsList[index]]);
 
-                                            logger.i(
-                                                "Index of Marks stored ==> $indexMarks");
+                                            setState(() {
+                                              _userSubject =
+                                                  subjectsList[index];
+                                              logger.i(_userSubject);
+                                            });
+
+                                            // logger.i(
+                                            //     "Index of Marks stored ==> $indexMarks");
+                                            ////get this subjectsList[index]
+                                            // and check for docs containing a
+                                            // field subjectsList[index]
+
                                             Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        LearnerViewMarks(
-                                                            indexMarks:
-                                                                indexMarks)));
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    LearnerViewMarks(
+                                                  indexMarks: indexMarks,
+                                                  subjectName:
+                                                      _userSubject.toString(),
+                                                ),
+                                              ),
+                                            );
                                             break;
                                           }
                                         }
@@ -241,8 +256,8 @@ class _LearnerHomeState extends State<LearnerHome> {
 
                                         if (!foundCatIndex) {
                                           // handle case where 'CAT' index does not exist
-                                          logger.i(
-                                              'No ${subjectsList[index]} index found');
+                                          // logger.i(
+                                          //     'No ${subjectsList[index]} index found');
                                           snack(
                                               "No ${subjectsList[index]} marks found",
                                               context);
@@ -252,18 +267,18 @@ class _LearnerHomeState extends State<LearnerHome> {
                                         //store the teacherSubject here
                                         var teacherSubject = subjectsMarksList[
                                             subjectsList[index]];
-                                        logger.i(
-                                            'Found $teacherSubject index found');
+                                        // logger.i(
+                                        //     'Found $teacherSubject index found');
                                       } else {
                                         // handle case where teacherSubject index does not exist
-                                        logger.i(
-                                            'No ${subjectsList[index]} index found');
+                                        // logger.i(
+                                        //     'No ${subjectsList[index]} index found');
                                         snack("No ${subjectsList[index]}",
                                             context);
                                       }
                                     } else {
                                       // handle case where document does not exist
-                                      logger.i('Document does not exist');
+                                      // logger.i('Document does not exist');
                                       snack(
                                           "No document containing the subject",
                                           context);
@@ -295,7 +310,7 @@ class _LearnerHomeState extends State<LearnerHome> {
                                                 Theme.of(context).primaryColor,
                                           )
                                         : Text(
-                                            subject,
+                                            subject ?? "",
                                             textAlign: TextAlign.right,
                                             style: TextStyle(
                                                 fontSize: 12,
@@ -311,6 +326,23 @@ class _LearnerHomeState extends State<LearnerHome> {
                         },
                       );
                     },
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LearnerEditSubjects(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Edit Subjects",
+                      style: textStyleText(context),
+                    ),
                   ),
                 ),
               ],
@@ -360,7 +392,7 @@ class _LearnerHomeState extends State<LearnerHome> {
               children: [
                 CircleAvatar(
                   child: Text(
-                    user!.email.toString()[0].toUpperCase(),
+                    user!.email.toString()[0].toUpperCase() ?? "",
                     style: const TextStyle(
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1,
@@ -371,7 +403,7 @@ class _LearnerHomeState extends State<LearnerHome> {
                   height: 22,
                 ),
                 Text(
-                  user!.displayName.toString(),
+                  user!.email.toString().toUpperCase().substring(0, 5),
                   style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w700,

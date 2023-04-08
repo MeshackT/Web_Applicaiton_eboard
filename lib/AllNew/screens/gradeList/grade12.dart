@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:levy/AllNew/screens/Notifications/sendNotification.dart';
 import 'package:levy/AllNew/shared/constants.dart';
 import 'package:logger/logger.dart';
 
@@ -11,7 +12,7 @@ import '../home/AddEditMarksForAll.dart';
 import '../home/home.dart';
 
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
-User? user = FirebaseAuth.instance.currentUser;
+var user = FirebaseAuth.instance.currentUser;
 
 //A Model to grab and store data
 class RegisterLearner {
@@ -165,13 +166,8 @@ class _Grade12State extends State<Grade12> {
     // Get the allSubjects array
     var allSubjects = docSnapshot.get('allSubjects');
 
-    // Remove the 'CAT' key from the allSubjects object
+    // Remove the 'subject' key from the allSubjects object
     allSubjects.remove(_userSubject);
-
-    // Update the document with the modified allSubjects array
-    // learnersDataRef
-    //     .doc('auto-generated-id')
-    //     .update({'allSubjects': allSubjects});
   }
 
   @override
@@ -200,6 +196,20 @@ class _Grade12State extends State<Grade12> {
           title: const Text("Registered learners"),
           elevation: 0.0,
           centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SendNotification()));
+              },
+              icon: Icon(
+                Icons.notification_add,
+                color: Theme.of(context).primaryColorLight,
+              ),
+            ),
+          ],
         ),
         drawer: const NavigationDrawer(),
         body: DoubleBackToCloseApp(
@@ -561,6 +571,9 @@ class _Grade12State extends State<Grade12> {
                                                 ),
                                                 onTap: () async {
                                                   try {
+                                                    snack(
+                                                        "Loading Data please wait...",
+                                                        context);
                                                     final DocumentReference
                                                         documentRef =
                                                         FirebaseFirestore
@@ -624,10 +637,6 @@ class _Grade12State extends State<Grade12> {
                                                                 documentIDToEdit =
                                                                 documents[index]
                                                                     .id;
-
-                                                            snack(
-                                                                "Loading Data please wait...",
-                                                                context);
                                                             Navigator.of(
                                                                     context)
                                                                 .pushReplacement(
@@ -693,7 +702,13 @@ class _Grade12State extends State<Grade12> {
                                                     });
                                                     logger.i(e);
                                                     Fluttertoast.showToast(
-                                                        msg: e.toString());
+                                                        msg: e.toString(),
+                                                        textColor: Theme.of(
+                                                                context)
+                                                            .primaryColorLight,
+                                                        backgroundColor:
+                                                            Theme.of(context)
+                                                                .primaryColor);
                                                   }
                                                 },
                                               ),

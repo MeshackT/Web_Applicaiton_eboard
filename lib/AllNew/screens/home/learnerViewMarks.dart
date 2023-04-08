@@ -1,15 +1,18 @@
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
+import 'package:levy/AllNew/screens/home/learnersHome.dart';
 
 import '../../shared/constants.dart';
-import 'learnersHome.dart';
+import '../Notifications/learnerViewNotifications.dart';
 
 class LearnerViewMarks extends StatefulWidget {
   List<dynamic> indexMarks = [];
+  String subjectName;
 
   LearnerViewMarks({
     Key? key,
     required this.indexMarks,
+    required this.subjectName,
   }) : super(key: key);
 
   @override
@@ -75,11 +78,15 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
   String termFourExamMarkTwo = "";
   String termFourExamMarkOne = "";
 
+  String subjectOfTeacher = "";
+
   @override
   void initState() {
     super.initState();
     setState(() {
       newDataArray = widget.indexMarks;
+      subjectOfTeacher = widget.subjectName;
+      print(subjectOfTeacher);
     });
   }
 
@@ -221,22 +228,49 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: OutlinedButton(
-                    style: buttonRound,
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LearnerHome()));
-                    },
-                    child: Text(
-                      "Back",
-                      style: TextStyle(color: Theme.of(context).primaryColor),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: OutlinedButton(
+                        style: buttonRound,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LearnerHome()));
+                        },
+                        child: Text(
+                          "Back",
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: OutlinedButton(
+                        style: buttonRound,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      LearnerViewNotifications(
+                                        subject: subjectOfTeacher.toString(),
+                                      )));
+                        },
+                        child: Text(
+                          "Notification",
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Expanded(
                   child: SingleChildScrollView(
@@ -246,12 +280,18 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 15, horizontal: 10),
-                          child: Text(
-                            "Term One",
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 16,
+                          child: InkWell(
+                            onTap: () {
+                              // testing
+                              print(subjectOfTeacher);
+                            },
+                            child: Text(
+                              "Term One",
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         ),

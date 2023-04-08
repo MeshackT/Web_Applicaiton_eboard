@@ -239,22 +239,22 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
-                                                                hintText:
-                                                                    "Test 1",
-                                                                label: Text(
-                                                                  "Test Mark 1",
-                                                                  style: TextStyle(
-                                                                      color: Theme.of(
-                                                                              context)
-                                                                          .primaryColorDark,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                      fontSize:
-                                                                          16),
-                                                                )),
+                                                      hintText: "Test 1",
+                                                      label: Text(
+                                                        "Test Mark 1",
+                                                        style: TextStyle(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColorDark,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
                                                     style:
                                                         textStyleText(context),
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     textAlign: TextAlign.center,
                                                     controller: testOneMark,
                                                     onSaved: (value) {
@@ -269,6 +269,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -317,6 +319,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     ),
                                                     style:
                                                         textStyleText(context),
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     textAlign: TextAlign.center,
                                                     controller: testThreeMark,
                                                     onSaved: (value) {
@@ -346,6 +350,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     style:
                                                         textStyleText(context),
                                                     textAlign: TextAlign.center,
@@ -559,6 +565,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                             fontSize: 16),
                                                       ),
                                                     ),
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     style:
                                                         textStyleText(context),
                                                     textAlign: TextAlign.center,
@@ -576,6 +584,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -608,6 +618,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -640,6 +652,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -845,6 +859,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                   title: Column(
                                                 children: [
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -876,6 +892,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -1079,6 +1097,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                   title: Column(
                                                 children: [
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -1111,6 +1131,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -1143,6 +1165,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -1175,6 +1199,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -1378,6 +1404,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                   title: Column(
                                                 children: [
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -1410,6 +1438,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -1442,6 +1472,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -1474,6 +1506,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -1679,6 +1713,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                   title: Column(
                                                 children: [
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -1711,6 +1747,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -1911,6 +1949,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                   title: Column(
                                                 children: [
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -1943,6 +1983,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -1975,6 +2017,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -2007,6 +2051,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -2200,6 +2246,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                   title: Column(
                                                 children: [
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -2232,6 +2280,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -2264,6 +2314,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -2296,6 +2348,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -2501,6 +2555,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                   title: Column(
                                                 children: [
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -2533,6 +2589,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -2728,6 +2786,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                   title: Column(
                                                 children: [
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -2760,6 +2820,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -2792,6 +2854,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -2824,6 +2888,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -3027,6 +3093,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                   title: Column(
                                                 children: [
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -3059,6 +3127,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -3091,6 +3161,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -3123,6 +3195,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -3326,6 +3400,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                   title: Column(
                                                 children: [
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(
@@ -3358,6 +3434,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     height: 10,
                                                   ),
                                                   TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration:
                                                         textInputDecoration
                                                             .copyWith(

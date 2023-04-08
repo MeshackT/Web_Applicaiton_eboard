@@ -1,12 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../shared/constants.dart';
 import '../home/home.dart';
-import '../home/selectTodDo.dart';
 
 class Grade11 extends StatefulWidget {
   const Grade11({Key? key}) : super(key: key);
@@ -39,7 +36,6 @@ class _Grade11State extends State<Grade11> {
   String term1Assignment2 = "";
   String term1Assignment3 = "";
   String term1Assignment4 = "";
-
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +74,9 @@ class _Grade11State extends State<Grade11> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    const SizedBox(height: 5,),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     const Text("A list of grade 11 Mathematics learners"),
                     ListTile(
                       title: Row(
@@ -87,13 +85,14 @@ class _Grade11State extends State<Grade11> {
                             data['name'],
                             style: const TextStyle(color: Colors.black),
                           ),
-                          const SizedBox(width: 10,),
+                          const SizedBox(
+                            width: 10,
+                          ),
                           Text(
-                            "Grade "+data['grade'],
+                            "Grade " + data['grade'],
                             style: const TextStyle(color: Colors.black),
                           ),
                         ],
-
                       ),
                     ),
                     SizedBox(
@@ -102,7 +101,6 @@ class _Grade11State extends State<Grade11> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-
                           Expanded(
                             flex: 1,
                             child: IconButton(
@@ -112,9 +110,7 @@ class _Grade11State extends State<Grade11> {
                                 color: Colors.grey,
                               ),
                               onPressed: () async {
-
                                 try {
-
                                   name = data['name'];
                                   subject1 = data['subject1'];
                                   grade = data['grade'];
@@ -138,12 +134,11 @@ class _Grade11State extends State<Grade11> {
                                       content: Text('Request added '),
                                     ),
                                   );
-
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content:
-                                      Text('Request failed to archive'),
+                                          Text('Request failed to archive'),
                                     ),
                                   );
                                 }
@@ -168,51 +163,51 @@ class _Grade11State extends State<Grade11> {
 // ///////////////////////////////////////
 
   Future<void> addRequest(
-      String name,
-      String documentID,
-      String grade,
-      String subject1,
-      String term1Assignment1,
-      String term1Assignment2,
-      String term1Assignment3,
-      String term1Assignment4,
-      String term1Mark1,
-      String term1Mark2,
-      String term1Mark3,
-      String term1Mark4,
-      ) {
+    String name,
+    String documentID,
+    String grade,
+    String subject1,
+    String term1Assignment1,
+    String term1Assignment2,
+    String term1Assignment3,
+    String term1Assignment4,
+    String term1Mark1,
+    String term1Mark2,
+    String term1Mark3,
+    String term1Mark4,
+  ) {
     User? user = FirebaseAuth.instance.currentUser;
-    final learnersData = FirebaseFirestore.instance
-        .collection('Grade12MathematicsData').doc();
+    final learnersData =
+        FirebaseFirestore.instance.collection('Grade12MathematicsData').doc();
 
     final documentID = learnersData.id;
 
     return learnersData
         .set({
-      'name': name,
-      'subject': subject1,
-      'grade': grade,
-      'uid': user!.uid,
-      'documentID': documentID,
-      'term1Mark1': term1Mark1,
-      'term1Mark2': term1Mark2,
-      'term1Mark3': term1Mark3,
-      'term1Mark4': term1Mark4,
-      'term1Assignment1': term1Assignment1,
-      'term1Assignment2': term1Assignment2,
-      'term1Assignment3': term1Assignment3,
-      'term1Assignment4': term1Assignment4,
-    })
+          'name': name,
+          'subject': subject1,
+          'grade': grade,
+          'uid': user!.uid,
+          'documentID': documentID,
+          'term1Mark1': term1Mark1,
+          'term1Mark2': term1Mark2,
+          'term1Mark3': term1Mark3,
+          'term1Mark4': term1Mark4,
+          'term1Assignment1': term1Assignment1,
+          'term1Assignment2': term1Assignment2,
+          'term1Assignment3': term1Assignment3,
+          'term1Assignment4': term1Assignment4,
+        })
         .then(
           (value) => Fluttertoast.showToast(msg: "Successfully Added Learner")
-      // .whenComplete(() =>
-      //     Navigator.pushNamedAndRemoveUntil(
-      // context, MyRequest.routeName, (route) => false))
-      ,
-    )
+          // .whenComplete(() =>
+          //     Navigator.pushNamedAndRemoveUntil(
+          // context, MyRequest.routeName, (route) => false))
+          ,
+        )
         .catchError(
           (error) =>
-          Fluttertoast.showToast(msg: "failed to add details $error"),
-    );
+              Fluttertoast.showToast(msg: "failed to add details $error"),
+        );
   }
 }

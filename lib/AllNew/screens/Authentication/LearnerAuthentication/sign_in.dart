@@ -246,7 +246,7 @@ class _LearnerSignInState extends State<LearnerSignIn> {
                                         child: loading
                                             ? SpinKitChasingDots(
                                                 color: Theme.of(context)
-                                                    .primaryColor,
+                                                    .primaryColorLight,
                                               )
                                             : Text(
                                                 "Sign In",
