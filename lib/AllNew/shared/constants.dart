@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 TextStyle textStyleText(BuildContext context) {
   return TextStyle(
@@ -50,6 +51,24 @@ InputDecoration textInputDecoration = InputDecoration(
 final messengerKey = GlobalKey<ScaffoldMessengerState>();
 
 class Utils {
+//Tool Tip
+  static SizedBox toolTipMessage(String message, BuildContext context) {
+    return SizedBox(
+      width: 40,
+      height: 40,
+      child: IconButton(
+        onPressed: () async {
+
+        },
+        icon: const Icon(
+          Icons.info,
+          color: Colors.grey,
+        ),
+        tooltip: message,
+      ),
+    );
+  }
+
   static buttonClose() {
     return MaterialButton(
       height: 60,
@@ -92,5 +111,17 @@ class Utils {
       elevation: .5,
       backgroundColor: Colors.purple,
     );
+  }
+
+  static String formattedDate(timeStamp) {
+    var dateFromTimeStamp =
+        DateTime.fromMillisecondsSinceEpoch(timeStamp.seconds * 1000);
+    return DateFormat('dd MMMM yyyy').format(dateFromTimeStamp);
+  }
+
+  static String formattedTime() {
+    DateTime now = DateTime.now();
+    String formattedTime = DateFormat.Hm().format(now);
+    return formattedTime;
   }
 }

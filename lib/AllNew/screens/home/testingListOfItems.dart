@@ -49,7 +49,7 @@ class _TestingListOfItemsState extends State<TestingListOfItems> {
                         shrinkWrap: true,
                         itemCount: myArray.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final item = myArray[index];
+                          //final item = myArray[index];
 
                           return Column(
                             children: [

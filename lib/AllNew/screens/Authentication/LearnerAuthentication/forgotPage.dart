@@ -2,10 +2,10 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:levy/AllNew/screens/Authentication/Authenticate.dart';
-
 import '../../../main.dart';
+import '../../../model/ConnectionChecker.dart';
 import '../../../shared/constants.dart';
+import '../Authenticate.dart';
 
 class LearnerForgot extends StatefulWidget {
   const LearnerForgot({Key? key}) : super(key: key);
@@ -20,6 +20,12 @@ class _LearnerForgotState extends State<LearnerForgot> {
   bool loading = false;
 
   @override
+  void initState() {
+    super.initState();
+    ConnectionChecker.checkTimer();
+
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: DoubleBackToCloseApp(
@@ -31,51 +37,58 @@ class _LearnerForgotState extends State<LearnerForgot> {
             textAlign: TextAlign.center,
           ),
         ),
-        child: SingleChildScrollView(
-          child: SafeArea(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              margin: const EdgeInsets.only(top: 0.0),
-              decoration: const BoxDecoration(
-                //screen background color
-                gradient: LinearGradient(
-                    colors: [Color(0x0fffffff), Color(0xE7791971)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight),
-              ),
+        child: SafeArea(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            margin: const EdgeInsets.only(top: 0.0),
+            decoration: const BoxDecoration(
+              //screen background color
+              gradient: LinearGradient(
+                  colors: [Color(0x0fffffff), Color(0xE7791971)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight),
+            ),
+            child: SingleChildScrollView(
               child: Column(
                 children: [
                   const SizedBox(
                     height: 20,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(0),
-                        bottomRight: Radius.circular(0),
-                        topRight: Radius.circular(280),
-                        topLeft: Radius.circular(280),
-                      ),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 5,
-                        width: MediaQuery.of(context).size.width / 1.5,
-                        color: Theme.of(context).primaryColor,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 50, bottom: 50),
-                          child: Center(
-                            child: Text(
-                              "Learner\nReset Password",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColorLight,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w800),
+                  Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(0),
+                            bottomRight: Radius.circular(0),
+                            topRight: Radius.circular(280),
+                            topLeft: Radius.circular(280),
+                          ),
+                          child: Container(
+                            height: 180,
+                            width: MediaQuery.of(context).size.width,
+                            color: Theme.of(context).primaryColor,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 50, bottom: 50),
+                              child: Center(
+                                child: Text(
+                                  "Learner\nReset Password",
+                                  textAlign: TextAlign.center,
+                                  style: textStyleText(context).copyWith(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 26,
+                                    color:
+                                        Theme.of(context).primaryColorLight,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                   const SizedBox(
                     height: 20,
@@ -97,15 +110,15 @@ class _LearnerForgotState extends State<LearnerForgot> {
                                   hintStyle: textStyleText(context),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                        color:
-                                            Theme.of(context).primaryColorDark,
+                                        color: Theme.of(context)
+                                            .primaryColorDark,
                                         width: 2.0),
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                        color:
-                                            Theme.of(context).primaryColorDark,
+                                        color: Theme.of(context)
+                                            .primaryColorDark,
                                         width: 2.0),
                                     borderRadius: BorderRadius.circular(30),
                                   ),
@@ -131,9 +144,17 @@ class _LearnerForgotState extends State<LearnerForgot> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  const SizedBox(
+                                  SizedBox(
                                       height: 30,
-                                      child: Text("Forgot password?")),
+                                      child: Text(
+                                        "Forgot password?",
+                                        style:
+                                            textStyleText(context).copyWith(
+                                          fontWeight: FontWeight.w700,
+                                          color:
+                                              Theme.of(context).primaryColor,
+                                        ),
+                                      )),
                                   const SizedBox(
                                     width: 10,
                                   ),
@@ -151,10 +172,12 @@ class _LearnerForgotState extends State<LearnerForgot> {
                                         height: 30,
                                         child: Text(
                                           "Login",
-                                          style: TextStyle(
-                                              letterSpacing: 1,
-                                              color: Theme.of(context)
-                                                  .primaryColorLight),
+                                          style:
+                                              textStyleText(context).copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
+                                          ),
                                         ),
                                       ))
                                 ],
@@ -174,14 +197,21 @@ class _LearnerForgotState extends State<LearnerForgot> {
                                     onPressed: () async {
                                       //check if the form is validated
                                       if (formKey.currentState!.validate()) {
-                                        forgotPassword().then((value) => snack(
-                                            "Link sent to your mail", context));
+                                        await forgotPassword()
+                                            .then((value) => snack(
+                                                "Link sent to your mail",
+                                                context))
+                                            .whenComplete(
+                                              () => Navigator.of(context)
+                                                  .pushReplacement(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const Authenticate(),
+                                                ),
+                                              ),
+                                            );
                                       } else {
-                                        print("insert data as required");
-                                        // Utils.showSnackBar("Enter log in details");
-                                        setState(() {
-                                          snack("Enter your email", context);
-                                        });
+                                        snack("Enter your email", context);
                                       }
                                     },
                                     color: Theme.of(context).primaryColor,
@@ -194,6 +224,8 @@ class _LearnerForgotState extends State<LearnerForgot> {
                                             "Reset",
                                             style: textStyleText(context)
                                                 .copyWith(
+                                                    fontWeight:
+                                                        FontWeight.w700,
                                                     color: Theme.of(context)
                                                         .primaryColorLight),
                                           ),
@@ -214,25 +246,21 @@ class _LearnerForgotState extends State<LearnerForgot> {
   }
 
   Future forgotPassword() async {
+    setState(() {
+      loading = true;
+    });
     try {
-      setState(() {
-        loading = true;
-      });
-
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email.trim());
-      setState(() {
-        loading = false;
-      });
     } on FirebaseAuthException catch (e) {
-      setState(() {
-        loading == false;
-      });
       snack(e.toString(), context);
     }
 
     //Navigator.current
     navigatorKey.currentState!.popUntil((route) {
       return route.isFirst;
+    });
+    setState(() {
+      loading == false;
     });
   }
 }

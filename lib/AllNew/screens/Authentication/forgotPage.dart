@@ -2,10 +2,11 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:levy/AllNew/screens/Authentication/Authenticate.dart';
 
 import '../../main.dart';
+import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';
+import 'Authenticate.dart';
 
 class Forgot extends StatefulWidget {
   const Forgot({Key? key}) : super(key: key);
@@ -20,9 +21,14 @@ class _ForgotState extends State<Forgot> {
   final formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    ConnectionChecker.checkTimer();
+
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorLight,
       body: DoubleBackToCloseApp(
         snackBar: SnackBar(
           backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
@@ -171,15 +177,19 @@ class _ForgotState extends State<Forgot> {
                                     onPressed: () async {
                                       //check if the form is validated
                                       if (formKey.currentState!.validate()) {
-                                        forgotPassword().then(
-                                          (value) => snack(
-                                              "Link sent to your email",
-                                              context),
-                                        );
+                                        await forgotPassword()
+                                            .then(
+                                              (value) => snack(
+                                                  "Link sent to your email",
+                                                  context),
+                                            )
+                                            .whenComplete(() => Navigator.of(
+                                                    context)
+                                                .pushReplacement(MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const Authenticate())));
                                       } else {
-                                        setState(() {
-                                          snack("enter your email", context);
-                                        });
+                                        snack("enter your email", context);
                                       }
                                     },
                                     color: Theme.of(context).primaryColor,
@@ -211,28 +221,26 @@ class _ForgotState extends State<Forgot> {
     );
   }
 
-  Future forgotPassword() async {
-    try {
-      //set this state after I press the button
-      setState(() {
-        loading = true;
-      });
 
+
+  Future<void> forgotPassword() async {
+    //set this state after I press the button
+    setState(() {
+      loading = true;
+    });
+    try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email.trim());
-      //set this state after I press the button
-      setState(() {
-        loading = false;
-      });
     } on FirebaseAuthException catch (e) {
-      setState(() {
-        loading = false;
-      });
       snack(e.toString(), context);
     }
 
     //Navigator.current
     navigatorKey.currentState!.popUntil((route) {
       return route.isFirst;
+    });
+    //set this state after I press the button
+    setState(() {
+      loading = false;
     });
   }
 }

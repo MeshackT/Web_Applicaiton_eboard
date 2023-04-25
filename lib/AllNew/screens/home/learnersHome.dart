@@ -3,18 +3,21 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:levy/AllNew/screens/Authentication/LearnerAuthentication/EditSubjects.dart';
-import 'package:levy/AllNew/screens/home/learnerViewMarks.dart';
-import 'package:levy/AllNew/shared/constants.dart';
 import 'package:logger/logger.dart';
-
+import '../../../testing_messaging/LearnerViewAllMessages.dart';
+import '../../../testing_messaging/LearnerViewAllTexts.dart';
+import '../../model/ConnectionChecker.dart';
+import '../../shared/constants.dart';
 import '../Authentication/Authenticate.dart';
+import '../Authentication/LearnerAuthentication/EditSubjects.dart';
+import '../Authentication/LearnerAuthentication/LearnersProfile.dart';
+import 'learnerViewMarks.dart';
 
 //get current logged in user
 User? user = FirebaseAuth.instance.currentUser;
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
 final CollectionReference learnersRef =
-    FirebaseFirestore.instance.collection('learnersData');
+FirebaseFirestore.instance.collection('learnersData');
 
 class LearnerHome extends StatefulWidget {
   const LearnerHome({Key? key}) : super(key: key);
@@ -87,45 +90,190 @@ class _LearnerHomeState extends State<LearnerHome> {
   ///TODO end of term 4///
   ///
   String _userSubject = '';
+  String learnersName = "";
+  String learnersEmail = "";
 
   @override
   void initState() {
     super.initState();
+    ConnectionChecker.checkTimer();
+    _getCurrentUserFields(learnersName, learnersEmail);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 0,
-        title: const Text("My Marks"),
-        actions: [
-          IconButton(
-            onPressed: () {
-              sigOut(context);
-            },
-            icon: Icon(
-              Icons.exit_to_app,
-              color: Theme.of(context).primaryColorLight,
+    return DefaultTabController(
+      length: 2,
+      initialIndex: 0,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("What's new?"),
+          titleSpacing: 2,
+          centerTitle: false,
+          elevation: 0,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(30),
             ),
           ),
-        ],
-      ),
-      extendBody: true,
-      drawer: DoubleBackToCloseApp(
-        snackBar: SnackBar(
-          backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
-          content: Text(
-            'Tap back again to leave the application',
-            style: TextStyle(color: Theme.of(context).primaryColorLight),
-            textAlign: TextAlign.center,
+          actions: [
+            PopupMenuButton(
+              itemBuilder: (BuildContext context) =>
+              <PopupMenuEntry>[
+                PopupMenuItem(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LearnersProfile(),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.person,
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
+                          size: 12,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "My Profile",
+                          style: textStyleText(context).copyWith(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                PopupMenuItem(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                              const LearnerEditSubjects()));
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.subject,
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
+                          size: 12,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Edit Subjects",
+                          style: textStyleText(context).copyWith(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                PopupMenuItem(
+                  child: TextButton(
+                    onPressed: () async {
+                      try {
+                        setState(() {
+                          loading == true;
+                        });
+                        sigOut(context);
+                        sigOut(context);
+                      } on Exception catch (e) {
+                        setState(() {
+                          loading == false;
+                        });
+                        snack(e.toString(), context);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        loading
+                            ? SpinKitChasingDots(
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
+                          size: 12,
+                        )
+                            : Icon(
+                          Icons.logout,
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
+                          size: 12,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Log Out",
+                          style: textStyleText(context).copyWith(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+          bottom: TabBar(
+            indicatorColor: Theme
+                .of(context)
+                .primaryColorLight,
+            indicatorWeight: 2,
+            tabs: [
+              Tab(
+                icon: Icon(
+                  Icons.image,
+                  color: Theme
+                      .of(context)
+                      .primaryColorLight,
+                  size: 12,
+                ),
+                //text: "Images",
+              ),
+              Tab(
+                icon: Icon(Icons.text_fields_sharp,
+                    size: 12, color: Theme
+                        .of(context)
+                        .primaryColorLight),
+                //text: "Text",
+              ),
+            ],
           ),
         ),
-        child: SafeArea(
+        extendBodyBehindAppBar: false,
+        drawerScrimColor: Colors.transparent,
+        endDrawerEnableOpenDragGesture: true,
+        extendBody: true,
+        drawer: SafeArea(
           child: Container(
-            color: Colors.white,
-            width: MediaQuery.of(context).size.width / 2,
+            color: Theme
+                .of(context)
+                .primaryColorLight,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width / 1.4,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
             child: Column(
               children: [
                 buildHeader(context),
@@ -149,7 +297,9 @@ class _LearnerHomeState extends State<LearnerHome> {
                             children: [
                               const Text("Waiting for the internet connection"),
                               SpinKitChasingDots(
-                                color: Theme.of(context).primaryColor,
+                                color: Theme
+                                    .of(context)
+                                    .primaryColor,
                               ),
                             ],
                           ),
@@ -166,9 +316,9 @@ class _LearnerHomeState extends State<LearnerHome> {
 
                       final DocumentSnapshot matchingDoc = matchingDocs.first;
                       final List<dynamic> subjectsList =
-                          matchingDoc['subjects'];
-                      final List<dynamic> subjectsMarksList =
-                          matchingDoc['allSubjects'];
+                      matchingDoc['subjects'];
+                      final Map<String, dynamic> subjectsMarksList =
+                      matchingDoc['allSubjects'];
 
                       return ListView.builder(
                         itemCount: subjectsList.length,
@@ -185,119 +335,67 @@ class _LearnerHomeState extends State<LearnerHome> {
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: InkWell(
                                 onTap: () async {
-                                  // logger.i(subjectsMarksList);
                                   setState(() {
                                     loading = true;
                                   });
-                                  ////////////All Marks////////
+                                  //check if the document is not empty and get the data
+                                  if (subjectsMarksList != null) {
+                                    //check if the data is a List
+                                    if (subjectsMarksList is Map) {
+                                      //initially the subject is no found
+                                      bool foundCatIndex = false;
+                                      subjectsMarksList.forEach((key, value) {
+                                        if (key == subjectsList[index]) {
+                                          //if the subject is found
+                                          foundCatIndex = true;
+                                          //add the marks to this new local Map
+                                          Map<String, dynamic> indexMarks = {};
+                                          _userSubject = subjectsList[index];
+                                          indexMarks[_userSubject] = value;
+                                          // logger.i("$_userSubject\n${ indexMarks[_userSubject] = value}");
 
-                                  try {
-                                    //check if the document is not empty and get the data
-                                    if (subjectsMarksList != null) {
-                                      //go to the field in the document
-                                      //check if the data is a List
-                                      if (subjectsMarksList is List) {
-                                        bool foundCatIndex = false;
-                                        //for every item in the list
-                                        for (var item in subjectsMarksList) {
-                                          //if the item is==$userSubject
-                                          if (item.containsKey(
-                                              subjectsList[index])) {
-                                            //index is present
-                                            foundCatIndex = true;
-
-                                            //store the found index in a variable
-                                            var itemIndex =
-                                                subjectsMarksList.indexOf(item);
-                                            // logger.i(
-                                            //     "index of the subject is ==> ,$itemIndex");
-
-                                            Map<String, dynamic> editMarksNew =
-                                                {};
-                                            editMarksNew["0"] =
-                                                subjectsMarksList[itemIndex]
-                                                    [subjectsList[index]];
-                                            // logger.i(
-                                            //     "This is the subject and marks\n"
-                                            //     "$editMarksNew");
-
-                                            final List<dynamic> indexMarks = [];
-                                            indexMarks.add(
-                                                subjectsMarksList[itemIndex]
-                                                    [subjectsList[index]]);
-
-                                            setState(() {
-                                              _userSubject =
-                                                  subjectsList[index];
-                                              logger.i(_userSubject);
-                                            });
-
-                                            // logger.i(
-                                            //     "Index of Marks stored ==> $indexMarks");
-                                            ////get this subjectsList[index]
-                                            // and check for docs containing a
-                                            // field subjectsList[index]
-
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    LearnerViewMarks(
-                                                  indexMarks: indexMarks,
-                                                  subjectName:
-                                                      _userSubject.toString(),
-                                                ),
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => LearnerViewMarks(
+                                                indexMarks: indexMarks,
+                                                subjectName: _userSubject.toString(),
                                               ),
-                                            );
-                                            break;
-                                          }
+                                            ),
+                                          );
                                         }
-                                        //if the teacherSubject is not found
-
-                                        if (!foundCatIndex) {
-                                          // handle case where 'CAT' index does not exist
-                                          // logger.i(
-                                          //     'No ${subjectsList[index]} index found');
-                                          snack(
-                                              "No ${subjectsList[index]} marks found",
-                                              context);
-                                        }
-                                        //check if the stored data is a Map
-                                      } else if (subjectsMarksList is Map) {
-                                        //store the teacherSubject here
-                                        var teacherSubject = subjectsMarksList[
-                                            subjectsList[index]];
-                                        // logger.i(
-                                        //     'Found $teacherSubject index found');
-                                      } else {
-                                        // handle case where teacherSubject index does not exist
-                                        // logger.i(
-                                        //     'No ${subjectsList[index]} index found');
-                                        snack("No ${subjectsList[index]}",
-                                            context);
-                                      }
-                                    } else {
-                                      // handle case where document does not exist
-                                      // logger.i('Document does not exist');
+                                      });
+                                     if (!foundCatIndex) {
+                                      //this shows when the index has no marks
+                                      logger.e("List is Empty");
                                       snack(
-                                          "No document containing the subject",
+                                          "No ${subjectsList[index]} marks found",
                                           context);
                                     }
-
-                                    setState(() {
-                                      loading = false;
-                                    });
-                                  } catch (e) {
-                                    snack(e.toString(), context);
+                                    } else {
+                                      snack(
+                                          "No ${subjectsList[index]} marks found. No data inserted yet",
+                                          context);
+                                    }
+                                  } else {
+                                    logger.e(
+                                        "Map is Empty, no subjects instead");
+                                    snack("There are no Subjects currently",
+                                        context);
                                   }
+
+                                  setState(() {
+                                    loading = false;
+                                  });
                                 },
                                 child: Container(
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     //screen background color
                                     gradient: LinearGradient(
                                         colors: [
-                                          Color(0x00cccccc),
-                                          Color(0xE7791971)
+                                          const Color(0xffcccccc),
+                                          const Color(0xE6691971)
+                                              .withOpacity(.7)
                                         ],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight),
@@ -306,18 +404,21 @@ class _LearnerHomeState extends State<LearnerHome> {
                                   child: ListTile(
                                     title: loading
                                         ? SpinKitChasingDots(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          )
+                                      color:
+                                      Theme
+                                          .of(context)
+                                          .primaryColor,
+                                    )
                                         : Text(
-                                            subject ?? "",
-                                            textAlign: TextAlign.right,
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w900,
-                                                color: Theme.of(context)
-                                                    .primaryColorLight),
-                                          ),
+                                      subject,
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w900,
+                                          color: Theme
+                                              .of(context)
+                                              .primaryColorLight),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -328,20 +429,34 @@ class _LearnerHomeState extends State<LearnerHome> {
                     },
                   ),
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LearnerEditSubjects(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "Edit Subjects",
-                      style: textStyleText(context),
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(100),
+                    topRight: Radius.circular(100),
+                  ),
+                  child: Container(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    color: Theme
+                        .of(context)
+                        .primaryColor
+                        .withOpacity(.2),
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LearnerEditSubjects(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Edit Subjects",
+                        style: textStyleText(context).copyWith(
+                            fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
@@ -349,29 +464,31 @@ class _LearnerHomeState extends State<LearnerHome> {
             ),
           ),
         ),
-      ),
-      backgroundColor: Theme.of(context).primaryColorLight,
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        margin: const EdgeInsets.only(top: 0.0),
-        decoration: const BoxDecoration(
-          //screen background color
-          gradient: LinearGradient(
-              colors: [Color(0x0fffffff), Color(0xE7791971)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight),
-        ),
-        child: Column(
-          children: [
-            Text(""),
-            Text("data"),
-          ],
+        body: DoubleBackToCloseApp(
+          snackBar: SnackBar(
+            backgroundColor: Theme
+                .of(context)
+                .primaryColor
+                .withOpacity(1),
+            content: Text(
+              'Tap back again to leave the application',
+              style: TextStyle(color: Theme
+                  .of(context)
+                  .primaryColorLight),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          child: const TabBarView(
+            children: [
+              //Tabs/Terms
+              LearnerViewAllMessages(),
+              LearnerViewAllTexts(),
+            ],
+          ),
         ),
       ),
     );
   }
-
   Widget buildHeader(BuildContext context) {
     return Column(
       children: [
@@ -382,37 +499,60 @@ class _LearnerHomeState extends State<LearnerHome> {
             topLeft: Radius.circular(150),
             topRight: Radius.circular(150),
           ),
-          child: Container(
-            color: Theme.of(context).primaryColor.withOpacity(.40),
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top,
-            ),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  child: Text(
-                    user!.email.toString()[0].toUpperCase() ?? "",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1,
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => const LearnersProfile(),
+                ),
+              );
+              logger.e(FirebaseAuth.instance.currentUser!.email);
+            },
+            child: Container(
+              color: Theme
+                  .of(context)
+                  .primaryColor
+                  .withOpacity(.40),
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              padding: EdgeInsets.only(
+                top: MediaQuery
+                    .of(context)
+                    .padding
+                    .top,
+              ),
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    child: Text(
+                      user!.email.toString()[0].toUpperCase(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 22,
-                ),
-                Text(
-                  user!.email.toString().toUpperCase().substring(0, 5),
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: Theme.of(context).primaryColorLight),
-                ),
-                const SizedBox(
-                  height: 22,
-                ),
-              ],
+                  const SizedBox(
+                    height: 22,
+                  ),
+                  Wrap(children: [
+                    Text(
+                      learnersName.toString(),
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Theme
+                              .of(context)
+                              .primaryColorLight),
+                    ),
+                  ]),
+                  const SizedBox(
+                    height: 22,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -421,12 +561,18 @@ class _LearnerHomeState extends State<LearnerHome> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Text(
-            user!.email.toString().toUpperCase(),
-            style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w900,
-                color: Theme.of(context).primaryColor),
+          child: Wrap(
+            children: [
+              Text(
+                learnersEmail.toString(),
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w900,
+                    color: Theme
+                        .of(context)
+                        .primaryColor),
+              ),
+            ],
           ),
         ),
         const SizedBox(
@@ -443,21 +589,54 @@ class _LearnerHomeState extends State<LearnerHome> {
           builder: (context) {
             return Center(
               child: SpinKitChasingDots(
-                color: Theme.of(context).primaryColor,
+                color: Theme
+                    .of(context)
+                    .primaryColor,
               ),
             );
           });
       await FirebaseAuth.instance
           .signOut()
-          .then((value) => SpinKitChasingDots(
-                color: Theme.of(context).primaryColor,
-              ))
+          .then(
+            (value) => logger.i("signed out"),
+      )
           .whenComplete(
-            () => Navigator.push(context,
+            () =>
+            Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const Authenticate())),
-          );
+      );
     } catch (e) {
       logger.i(e.toString());
     }
+  }
+
+  //get the field required for the current logged in user
+  Future<void> _getCurrentUserFields(String nameOfLeaner,
+      String emailOfLeaner,) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    Query<Map<String, dynamic>> userQuery =
+    firestore.collection('learnersData').where('uid', isEqualTo: user!.uid);
+    userQuery.get().then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+      if (querySnapshot.size > 0) {
+        DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+            querySnapshot.docs.first;
+        Map<String, dynamic>? data = documentSnapshot.data();
+
+        //get the learners details
+        nameOfLeaner = data!['name'].toString();
+        emailOfLeaner = data['email'].toString();
+
+        setState(() {
+          learnersName = nameOfLeaner.toString();
+          learnersEmail = emailOfLeaner.toString();
+        });
+
+        logger.i("inside getField $learnersEmail");
+        logger.i("inside getField $learnersName");
+      } else {
+        print('No document found');
+      }
+    }).catchError((error) => print('Failed to get document: $error'));
   }
 }

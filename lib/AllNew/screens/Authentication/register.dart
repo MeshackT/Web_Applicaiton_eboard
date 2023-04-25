@@ -3,10 +3,9 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:levy/AllNew/screens/gradeList/grade12.dart';
-import 'package:levy/AllNew/shared/constants.dart';
-
+import '../../../verifyEmailPage.dart';
 import '../../main.dart';
+import '../../shared/constants.dart';
 
 //A Model to grab and store data
 class User {
@@ -14,6 +13,7 @@ class User {
   final String uid;
   final String password;
   final String name;
+  final String secondName;
   final String documentID;
   final List<String> subjects;
 
@@ -22,6 +22,7 @@ class User {
     this.uid,
     this.password,
     this.name,
+    this.secondName,
     this.documentID,
     this.subjects,
   );
@@ -40,6 +41,7 @@ class User {
           'uid': uid, // Stokes and Sons
           'password': password, //
           'name': name,
+          'secondName': secondName,
           'subjects': subjects, //
         })
         .then((value) => print("User Data"))
@@ -70,6 +72,7 @@ class _RegisterState extends State<Register> {
   String confirmPassword = '';
   String uid = '';
   String name = '';
+  String secondName = '';
   String documentID = '';
   String subject1 = '';
   String subject2 = '';
@@ -85,7 +88,6 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: DoubleBackToCloseApp(
         snackBar: SnackBar(
           backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
@@ -96,64 +98,69 @@ class _RegisterState extends State<Register> {
           ),
         ),
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-                  child: Center(
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(0),
-                        topRight: Radius.circular(280),
-                        topLeft: Radius.circular(280),
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            margin: const EdgeInsets.only(top: 0.0),
+            decoration: const BoxDecoration(
+              //screen background color
+              gradient: LinearGradient(
+                  colors: [Color(0x0fffffff), Color(0xE7791971)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 20, right: 20, top: 0),
+                        child: Center(
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(0),
+                              topRight: Radius.circular(280),
+                              topLeft: Radius.circular(280),
+                            ),
+                            child: Container(
+                              height: 180,
+                              width: MediaQuery.of(context).size.width,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        ),
                       ),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 5,
-                        width: MediaQuery.of(context).size.width / 1.5,
-                        color: Theme.of(context).primaryColor,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 50),
+                        child: Center(
+                          child: Text(
+                            "Facilitator\nSign up",
+                            textAlign: TextAlign.center,
+                            style: textStyleText(context).copyWith(
+                                color: Theme.of(context).primaryColorLight,
+                                fontSize: 28,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 50),
-                  child: Center(
-                    child: Text(
-                      "Facilitator\nSign up",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 28,
-                          fontWeight: FontWeight.w800),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 150),
-                  child: Padding(
+                  Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 30),
+                          horizontal: 30.0, vertical: 10),
                       child: Form(
                         key: _formKey,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             const SizedBox(
                               height: 20,
                             ),
-                            TextFormField(
-                              enabled: false,
-                              decoration: textInputDecoration.copyWith(
-                                  label: Text(
-                                    'Teacher',
-                                    style: textStyleText(context),
-                                  ),
-                                  hintText: "Teacher"),
-                              onChanged: (val) {
-                                setState(() {
-                                  email = role;
-                                });
-                              },
+                            Text(
+                              'Facilitator',
+                              style: textStyleText(context).copyWith(
+                                  fontSize: 16, fontWeight: FontWeight.w700),
                             ),
                             const SizedBox(height: 10),
                             TextFormField(
@@ -225,13 +232,13 @@ class _RegisterState extends State<Register> {
                             TextFormField(
                               decoration: textInputDecoration.copyWith(
                                   label: Text(
-                                    'Name',
+                                    'First Name',
                                     style: textStyleText(context),
                                   ),
-                                  hintText: "Enter your names"),
+                                  hintText: "Enter your first name"),
                               validator: (val) {
                                 if (val!.isEmpty) {
-                                  return "enter your names";
+                                  return "enter your name";
                                 } else if (val.length < 3) {
                                   return "enter your correct name";
                                 }
@@ -246,6 +253,31 @@ class _RegisterState extends State<Register> {
                             //subject1
                             const SizedBox(
                               height: 20,
+                            ),
+                            TextFormField(
+                              decoration: textInputDecoration.copyWith(
+                                  label: Text(
+                                    'Second Name',
+                                    style: textStyleText(context),
+                                  ),
+                                  hintText: "Enter your second name"),
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return "enter your second name";
+                                } else if (val.length < 3) {
+                                  return "enter your correct name";
+                                }
+                                return null;
+                              },
+                              onChanged: (val) {
+                                setState(() {
+                                  secondName = val;
+                                });
+                              },
+                            ),
+                            //subject
+                            const SizedBox(
+                              height: 10,
                             ),
                             TextFormField(
                               decoration: textInputDecoration.copyWith(
@@ -352,7 +384,7 @@ class _RegisterState extends State<Register> {
                                     style: textStyleText(context),
                                   ),
                                   hintText: "confirm your password"),
-                              obscureText: true,
+                              obscureText: passwordVisible,
                               validator: (val) {
                                 if (!confirmPassword
                                     .trim()
@@ -370,66 +402,78 @@ class _RegisterState extends State<Register> {
                             const SizedBox(
                               height: 30,
                             ),
-
-                            ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(70),
-                                topLeft: Radius.circular(70),
-                              ),
-                              child: SizedBox(
-                                width: 120,
-                                child: MaterialButton(
-                                  height: 60,
-                                  onPressed: () async {
-                                    //check if the form is validated
-                                    if (_formKey.currentState!.validate()) {
-                                      //set this state when I press the button
-                                      signUp();
-                                    } else {
-                                      setState(() {
-                                        snack("Failed to register", context);
-                                      });
-                                    }
-                                  },
-                                  color: Theme.of(context).primaryColor,
-                                  child: loading
-                                      ? SpinKitChasingDots(
-                                          color: Theme.of(context)
-                                              .primaryColorLight,
-                                        )
-                                      : Text(
-                                          "Sign Up",
+                            Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.only(
+                                      topRight: Radius.circular(70),
+                                      topLeft: Radius.circular(70),
+                                    ),
+                                    child: SizedBox(
+                                      width: 120,
+                                      child: MaterialButton(
+                                        height: 60,
+                                        onPressed: () async {
+                                          //check if the form is validated
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            //set this state when I press the button
+                                            signUp();
+                                          } else {
+                                            setState(() {
+                                              snack("Failed to register",
+                                                  context);
+                                            });
+                                          }
+                                        },
+                                        color: Theme.of(context).primaryColor,
+                                        child: loading
+                                            ? SpinKitChasingDots(
+                                                color: Theme.of(context)
+                                                    .primaryColorLight,
+                                              )
+                                            : Text(
+                                                "Sign Up",
+                                                style: textStyleText(context)
+                                                    .copyWith(
+                                                        color: Theme.of(context)
+                                                            .primaryColorLight,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(70),
+                                      bottomRight: Radius.circular(70),
+                                    ),
+                                    child: SizedBox(
+                                      width: 120,
+                                      child: MaterialButton(
+                                        height: 60,
+                                        onPressed: () {
+                                          widget.toggleView();
+                                        },
+                                        color: Theme.of(context).primaryColor,
+                                        child: Text(
+                                          "Sign In",
                                           style: textStyleText(context)
                                               .copyWith(
                                                   color: Theme.of(context)
-                                                      .primaryColorLight),
+                                                      .primaryColorLight,
+                                                  fontWeight: FontWeight.w700),
                                         ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 6,
-                            ),
-                            ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(70),
-                                bottomRight: Radius.circular(70),
-                              ),
-                              child: SizedBox(
-                                width: 120,
-                                child: MaterialButton(
-                                  height: 60,
-                                  onPressed: () {
-                                    widget.toggleView();
-                                  },
-                                  color: Theme.of(context).primaryColor,
-                                  child: Text(
-                                    "Sign In",
-                                    style: textStyleText(context).copyWith(
-                                        color: Theme.of(context)
-                                            .primaryColorLight),
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
 
@@ -443,8 +487,8 @@ class _RegisterState extends State<Register> {
                           ],
                         ),
                       )),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -453,13 +497,24 @@ class _RegisterState extends State<Register> {
   }
 
   Future signUp() async {
+    setState(() {
+      loading = true;
+    });
     try {
-      setState(() {
-        loading = true;
-      });
+      // Check if email already exists
+      final signInMethods = await FirebaseAuth.instance
+          .fetchSignInMethodsForEmail(email.toLowerCase().trim());
+      if (signInMethods.isNotEmpty) {
+        snack("Email already exists", context);
+        setState(() {
+          loading = false;
+        });
+        return;
+      }
 
+      // Create new user account
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email.toLowerCase().trim(), password: password);
+          email: email.toLowerCase().trim(), password: password.trim());
 
       final FirebaseAuth auth = FirebaseAuth.instance;
       //get Current User
@@ -472,34 +527,23 @@ class _RegisterState extends State<Register> {
 
       //insert data using a class
       User _user = User(email.trim().toLowerCase(), uid, password.trim(),
-          name.trim(), documentID, subjects);
+          name.trim(), secondName.trim(), documentID, subjects);
       //this should add the registered user to the userData collection with UID
-      _user.addUser();
-      logger.i(_user.addUser());
-
-      //set this state after I press the button
-      setState(() {
-        loading = false;
-      });
+      await _user.addUser();
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const VerifyEmailPage()));
+      //logger.i(_user.addUser());
     } on FirebaseAuthException catch (e) {
-      setState(() {
-        loading = false;
-      });
-      if (e.code == 'email-already-in-use') {
-        setState(() {
-          loading = false;
-          snack("Email already exists", context);
-        });
-      }
+      snack(e.message!, context);
     } catch (e) {
-      setState(() {
-        loading = false;
-        snack(e.toString(), context);
-      });
+      snack(e.toString(), context);
     }
     //Navigator.current
     navigatorKey.currentState!.popUntil((route) {
       return route.isFirst;
+    });
+    setState(() {
+      loading = false;
     });
   }
 }

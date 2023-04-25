@@ -1,15 +1,18 @@
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
-import 'package:levy/AllNew/screens/home/learnersHome.dart';
+import 'package:logger/logger.dart';
 
+import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';
 import '../Notifications/learnerViewNotifications.dart';
+import 'learnersHome.dart';
+Logger logger = Logger(printer: PrettyPrinter(colors: true));
 
 class LearnerViewMarks extends StatefulWidget {
-  List<dynamic> indexMarks = [];
-  String subjectName;
+  Map<String, dynamic> indexMarks = {};
+  final String subjectName;
 
-  LearnerViewMarks({
+   LearnerViewMarks({
     Key? key,
     required this.indexMarks,
     required this.subjectName,
@@ -20,7 +23,7 @@ class LearnerViewMarks extends StatefulWidget {
 }
 
 class _LearnerViewMarksState extends State<LearnerViewMarks> {
-  List<dynamic> newDataArray = [];
+  Map<String, dynamic> newDataArray = {};
 
   ///TODO TERM 1///
   String termOneTestMarkOne = "";
@@ -83,10 +86,11 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
   @override
   void initState() {
     super.initState();
+    ConnectionChecker.checkTimer();
     setState(() {
-      newDataArray = widget.indexMarks;
       subjectOfTeacher = widget.subjectName;
-      print(subjectOfTeacher);
+      newDataArray = widget.indexMarks;
+      //logger.i("on stat view marks ${subjectOfTeacher}\n $newDataArray");
     });
   }
 
@@ -99,109 +103,82 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
 
   @override
   Widget build(BuildContext context) {
+
     ///TODO SHOW MARKS Term One///
-    termOneTestMarkOne =
-        (newDataArray[0]["0"]["tests"]["test1mark"]).toString();
-    termOneTestMarkTwo =
-        (newDataArray[0]["0"]["tests"]["test2mark"]).toString();
-    termOneTestMarkThree =
-        (newDataArray[0]["0"]["tests"]["test3mark"]).toString();
-    termOneTestMarkFour =
-        (newDataArray[0]["0"]["tests"]["test4mark"]).toString();
-
-    //Assignments
-    termOneAssignmentMarkOne =
-        (newDataArray[0]["0"]["assignments"]["assignment1mark"]).toString();
-    termOneAssignmentMarkTwo =
-        (newDataArray[0]["0"]["assignments"]["assignment2mark"]).toString();
-    termOneAssignmentMarkThree =
-        (newDataArray[0]["0"]["assignments"]["assignment3mark"]).toString();
-    termOneAssignmentMarkFour =
-        (newDataArray[0]["0"]["assignments"]["assignment4mark"]).toString();
-
-    //Exams
-    termOneExamMarkOne =
-        (newDataArray[0]["0"]["exams"]["exam1mark"]).toString();
-    termOneExamMarkTwo =
-        (newDataArray[0]["0"]["exams"]["exam2mark"]).toString();
+    termOneTestMarkOne = newDataArray[subjectOfTeacher][0]["tests"]['test1mark']??"0";
+    termOneTestMarkTwo = newDataArray[subjectOfTeacher][0]["tests"]['test2mark']??"0";
+    termOneTestMarkThree = newDataArray[subjectOfTeacher][0]["tests"]['test3mark']??"0";
+    termOneTestMarkFour = newDataArray[subjectOfTeacher][0]["tests"]['test4mark']??"0";
+    //
+    // //Assignments
+    termOneAssignmentMarkOne = newDataArray[subjectOfTeacher][0]["assignments"]
+    ['assignment1mark']??"0";
+    termOneAssignmentMarkTwo = newDataArray[subjectOfTeacher][0]["assignments"]
+    ['assignment2mark']??"0";
+    termOneAssignmentMarkThree = newDataArray[subjectOfTeacher][0]["assignments"
+    ]['assignment3mark']??"0";
+    termOneAssignmentMarkFour = newDataArray[subjectOfTeacher][0]["assignments"]
+    ['assignment4mark']??"0";
+    //
+    // //Exams
+    termOneExamMarkOne = newDataArray[subjectOfTeacher][0]["exams"]
+    ['exam1mark']??"0";
+    termOneExamMarkTwo = newDataArray[subjectOfTeacher][0]["exams"]
+    ['exam2mark']??"0";
 
     ///TODO SHOW MARKS Term Two///
-    termTwoTestMarkOne =
-        (newDataArray[0]["1"]["tests"]["test1mark"]).toString();
-    termTwoTestMarkTwo =
-        (newDataArray[0]["1"]["tests"]["test2mark"]).toString();
-    termTwoTestMarkThree =
-        (newDataArray[0]["1"]["tests"]["test3mark"]).toString();
-    termTwoTestMarkFour =
-        (newDataArray[0]["1"]["tests"]["test4mark"]).toString();
+    termTwoTestMarkOne = newDataArray[subjectOfTeacher][1]["tests"]['test1mark']??"0";
+    termTwoTestMarkTwo =newDataArray[subjectOfTeacher][1]["tests"]["test2mark"]??"0";
+    termTwoTestMarkThree =newDataArray[subjectOfTeacher][1]["tests"]["test3mark"]??"0";
+    termTwoTestMarkFour =newDataArray[subjectOfTeacher][1]["tests"]["test4mark"]??"0";
 
-    //Assignments
-    termTwoAssignmentMarkOne =
-        (newDataArray[0]["1"]["assignments"]["assignment1mark"]).toString();
-    termTwoAssignmentMarkTwo =
-        (newDataArray[0]["1"]["assignments"]["assignment2mark"]).toString();
-    termTwoAssignmentMarkThree =
-        (newDataArray[0]["1"]["assignments"]["assignment3mark"]).toString();
-    termTwoAssignmentMarkFour =
-        (newDataArray[0]["1"]["assignments"]["assignment4mark"]).toString();
+    // //Assignments
+    termTwoAssignmentMarkOne = newDataArray[subjectOfTeacher][1]["assignments"]
+    ['assignment1mark']??"0";
+    termTwoAssignmentMarkTwo = newDataArray[subjectOfTeacher][1]["assignments"]
+    ['assignment2mark']??"0";
+    termTwoAssignmentMarkThree = newDataArray[subjectOfTeacher][1]["assignments"]
+    ['assignment3mark']??"0";
+    termTwoAssignmentMarkFour = newDataArray[subjectOfTeacher][1]["assignments"]
+    ['assignment4mark']??"0";
 
-    //Exams
-    termTwoExamMarkOne =
-        (newDataArray[0]["1"]["exams"]["exam1mark"]).toString();
-    termTwoExamMarkTwo =
-        (newDataArray[0]["1"]["exams"]["exam2mark"]).toString();
+    // //Exams
+    termTwoExamMarkOne = newDataArray[subjectOfTeacher][1]["exams"]
+        ['exam1mark']??"0";
+    termTwoExamMarkTwo = newDataArray[subjectOfTeacher][1]["exams"]
+        ['exam2mark']??"0";
 
     ///TODO SHOW MARKS Term Three///
-    termThreeTestMarkOne =
-        (newDataArray[0]["2"]["tests"]["test1mark"]).toString();
-    termThreeTestMarkTwo =
-        (newDataArray[0]["2"]["tests"]["test2mark"]).toString();
-    termThreeTestMarkThree =
-        (newDataArray[0]["2"]["tests"]["test3mark"]).toString();
-    termThreeTestMarkFour =
-        (newDataArray[0]["2"]["tests"]["test4mark"]).toString();
+    termThreeTestMarkOne =newDataArray[subjectOfTeacher][2]["tests"]["test1mark"]??"0";
+    termThreeTestMarkTwo =newDataArray[subjectOfTeacher][2]["tests"]["test2mark"]??"0";
+    termThreeTestMarkThree =newDataArray[subjectOfTeacher][2]["tests"]["test3mark"]??"0";
+    termThreeTestMarkFour =newDataArray[subjectOfTeacher][2]["tests"]["test4mark"]??"0";
 
     //Assignments
-    termThreeAssignmentMarkOne =
-        (newDataArray[0]["2"]["assignments"]["assignment1mark"]).toString();
-    termThreeAssignmentMarkTwo =
-        (newDataArray[0]["2"]["assignments"]["assignment2mark"]).toString();
-    termThreeAssignmentMarkThree =
-        (newDataArray[0]["2"]["assignments"]["assignment3mark"]).toString();
-    termThreeAssignmentMarkFour =
-        (newDataArray[0]["2"]["assignments"]["assignment4mark"]).toString();
+    termThreeAssignmentMarkOne =newDataArray[subjectOfTeacher][2]["assignments"]["assignment1mark"]??"";
+    termThreeAssignmentMarkTwo =newDataArray[subjectOfTeacher][2]["assignments"]["assignment2mark"]??"";
+    termThreeAssignmentMarkThree =newDataArray[subjectOfTeacher][2]["assignments"]["assignment3mark"]??"";
+    termThreeAssignmentMarkFour =newDataArray[subjectOfTeacher][2]["assignments"]["assignment4mark"]??"";
 
     //Exams
-    termThreeExamMarkOne =
-        (newDataArray[0]["2"]["exams"]["exam1mark"]).toString();
-    termThreeExamMarkTwo =
-        (newDataArray[0]["2"]["exams"]["exam2mark"]).toString();
+    termThreeExamMarkOne =newDataArray[subjectOfTeacher][2]["exams"]['exam1mark']??"0";
+    termThreeExamMarkTwo =newDataArray[subjectOfTeacher][2]["exams"]['exam2mark']??"0";
 
-    ///TODO SHOW MARKS Term Three///
-    termFourTestMarkOne =
-        (newDataArray[0]["3"]["tests"]["test1mark"]).toString();
-    termFourTestMarkTwo =
-        (newDataArray[0]["3"]["tests"]["test2mark"]).toString();
-    termFourTestMarkThree =
-        (newDataArray[0]["3"]["tests"]["test3mark"]).toString();
-    termFourTestMarkFour =
-        (newDataArray[0]["3"]["tests"]["test4mark"]).toString();
+    ///TODO SHOW MARKS Term Four///
+    termFourTestMarkOne =newDataArray[subjectOfTeacher][3]["tests"]["test1mark"]??"0";
+    termFourTestMarkTwo =newDataArray[subjectOfTeacher][3]["tests"]["test2mark"]??"0";
+    termFourTestMarkThree =newDataArray[subjectOfTeacher][3]["tests"]["test3mark"]??"0";
+    termFourTestMarkFour =newDataArray[subjectOfTeacher][3]["tests"]["test4mark"]??"0";
 
     //Assignments
-    termFourAssignmentMarkOne =
-        (newDataArray[0]["3"]["assignments"]["assignment1mark"]).toString();
-    termFourAssignmentMarkTwo =
-        (newDataArray[0]["3"]["assignments"]["assignment2mark"]).toString();
-    termFourAssignmentMarkThree =
-        (newDataArray[0]["3"]["assignments"]["assignment3mark"]).toString();
-    termFourAssignmentMarkFour =
-        (newDataArray[0]["3"]["assignments"]["assignment4mark"]).toString();
+    termFourAssignmentMarkOne =newDataArray[subjectOfTeacher][3]["assignments"]["assignment1mark"]??"";
+    termFourAssignmentMarkTwo =newDataArray[subjectOfTeacher][3]["assignments"]["assignment2mark"]??"";
+    termFourAssignmentMarkThree =newDataArray[subjectOfTeacher][3]["assignments"]["assignment3mark"]??"";
+    termFourAssignmentMarkFour =newDataArray[subjectOfTeacher][3]["assignments"]["assignment4mark"]??"";
 
-    //Exams
-    termFourExamMarkOne =
-        (newDataArray[0]["3"]["exams"]["exam1mark"]).toString();
-    termFourExamMarkTwo =
-        (newDataArray[0]["3"]["exams"]["exam2mark"]).toString();
+    // //Exams
+    termFourExamMarkOne =newDataArray[subjectOfTeacher][3]["exams"]['exam1mark']??"0";
+    termFourExamMarkTwo =newDataArray[subjectOfTeacher][3]["exams"]['exam2mark']??"0";
 
     return Scaffold(
       body: DoubleBackToCloseApp(
@@ -237,10 +214,15 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                       child: OutlinedButton(
                         style: buttonRound,
                         onPressed: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const LearnerHome()));
+                          // newDataArray.clear();
+                          // subjectOfTeacher = "";
+                          // widget.indexMarks.clear();
+                          // widget.subjectName == "";
+
                         },
                         child: Text(
                           "Back",
@@ -255,7 +237,8 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                       child: OutlinedButton(
                         style: buttonRound,
                         onPressed: () {
-                          Navigator.push(
+                          ///TODO Send subject
+                          Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
@@ -264,7 +247,7 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                       )));
                         },
                         child: Text(
-                          "Notification",
+                          "Subject Notification",
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
                         ),
@@ -282,8 +265,8 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                               vertical: 15, horizontal: 10),
                           child: InkWell(
                             onTap: () {
-                              // testing
-                              print(subjectOfTeacher);
+
+
                             },
                             child: Text(
                               "Term One",
@@ -1431,7 +1414,7 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
   }
 
   navigateBack() {
-    Navigator.push(
+    Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const LearnerHome()));
   }
 }

@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:levy/AllNew/screens/gradeList/grade12.dart';
-import 'package:levy/AllNew/shared/constants.dart';
-
+import 'package:logger/logger.dart';
 import '../../../main.dart';
+import '../../../model/ConnectionChecker.dart';
+import '../../../shared/constants.dart';
+import '../Authenticate.dart';
+
+Logger logger = Logger(printer: PrettyPrinter(colors: true));
 
 //A Model to grab and store data
 class User {
@@ -15,6 +17,7 @@ class User {
   final String uid;
   final String password;
   final String name;
+  final String secondName;
   final String documentID;
   final String grade;
   final String role;
@@ -27,6 +30,7 @@ class User {
     this.uid,
     this.password,
     this.name,
+    this.secondName,
     this.grade,
     this.documentID,
     this.role,
@@ -49,6 +53,7 @@ class User {
           'uid': uid, // Stokes and Sons
           'password': password.trim(), //
           'name': name.trim(),
+          'secondName': secondName.trim(),
           'grade': grade.trim(),
           'role': role.trim().toLowerCase(),
           'subjects': subjects,
@@ -155,6 +160,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
   String confirmPassword = '';
   String uid = '';
   String name = '';
+  String secondName = '';
   String grade = '';
   String role = "Learner";
   String documentID = '';
@@ -164,7 +170,22 @@ class _LearnerRegisterState extends State<LearnerRegister> {
   bool passwordVisible = true;
 
   // final user = FirebaseAuth.instance.currentUser;
-  User? user = FirebaseAuth.instance.currentUser as User?;
+  var user = FirebaseAuth.instance.currentUser;
+
+  bool _isValid = false;
+
+  _validateForm(String selectedItem) {
+    _isValid = _formKey.currentState!.validate();
+
+    if (selectedItem == null) {
+      setState(() => selectedItem = "Please select an option!");
+      _isValid = false;
+    }
+
+    if (_isValid) {
+      //form is valid
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +193,6 @@ class _LearnerRegisterState extends State<LearnerRegister> {
         FirebaseFirestore.instance.collection('userData');
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: DoubleBackToCloseApp(
         snackBar: SnackBar(
           backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
@@ -183,62 +203,67 @@ class _LearnerRegisterState extends State<LearnerRegister> {
           ),
         ),
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-                  child: Center(
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(0),
-                        topRight: Radius.circular(280),
-                        topLeft: Radius.circular(280),
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            margin: const EdgeInsets.only(top: 0.0),
+            decoration: const BoxDecoration(
+              //screen background color
+              gradient: LinearGradient(
+                  colors: [Color(0x0fffffff), Color(0xE7791971)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 20, right: 20, top: 20),
+                        child: Center(
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(0),
+                              topRight: Radius.circular(280),
+                              topLeft: Radius.circular(280),
+                            ),
+                            child: Container(
+                              height: 180,
+                              width: MediaQuery.of(context).size.width,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        ),
                       ),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 5,
-                        width: MediaQuery.of(context).size.width / 1.5,
-                        color: Theme.of(context).primaryColor,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 50),
+                        child: Center(
+                          child: Text(
+                            "Learner\nSign Up",
+                            textAlign: TextAlign.center,
+                            style: textStyleText(context).copyWith(
+                              color: Theme.of(context).primaryColorLight,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 28,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 50),
-                  child: Center(
-                    child: Text(
-                      "Learner\nSign Up",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColorLight,
-                          fontSize: 28,
-                          fontWeight: FontWeight.w800),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 150),
-                  color: Theme.of(context).primaryColorLight,
-                  child: Padding(
+                  Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 30),
                       child: Form(
                         key: _formKey,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            TextFormField(
-                              enabled: false,
-                              decoration: textInputDecoration.copyWith(
-                                  label: Text(
-                                    'Learner',
-                                    style: textStyleText(context),
-                                  ),
-                                  hintText: "Learner"),
-                              onChanged: (val) {
-                                setState(() {
-                                  email = role;
-                                });
-                              },
+                            Text(
+                              'Learner',
+                              style: textStyleText(context).copyWith(
+                                  fontSize: 16, fontWeight: FontWeight.w700),
                             ),
                             const SizedBox(
                               height: 10,
@@ -271,10 +296,10 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                             TextFormField(
                               decoration: textInputDecoration.copyWith(
                                   label: Text(
-                                    'Name',
+                                    'First Name',
                                     style: textStyleText(context),
                                   ),
-                                  hintText: "Enter your names"),
+                                  hintText: "Enter your First name"),
                               validator: (val) {
                                 if (val!.isEmpty) {
                                   return "enter your names";
@@ -286,6 +311,30 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                               onChanged: (val) {
                                 setState(() {
                                   name = val;
+                                });
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              decoration: textInputDecoration.copyWith(
+                                  label: Text(
+                                    'Second Name',
+                                    style: textStyleText(context),
+                                  ),
+                                  hintText: "Enter your second name"),
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return "enter your second name";
+                                } else if (val.length < 3) {
+                                  return "enter your correct name";
+                                }
+                                return null;
+                              },
+                              onChanged: (val) {
+                                setState(() {
+                                  secondName = val;
                                 });
                               },
                             ),
@@ -422,6 +471,9 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                             Container(
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .primaryColorLight
+                                    .withOpacity(.8),
                                 border: Border.all(
                                   color: Theme.of(context).primaryColor,
                                   width: 1.0,
@@ -435,62 +487,57 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                   //==============================================//
                                   //====================== Row one ================//
                                   SizedBox(
-                                    child: Column(
-                                      children: [
-                                        Wrap(
-                                          direction: Axis.horizontal,
-                                          alignment: WrapAlignment.spaceEvenly,
-                                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            //subject 2
-                                            DropdownButton(
-                                              isExpanded: false,
-                                              hint: Text(
-                                                "Select a subject",
-                                                style: textStyleText(context),
-                                              ),
-                                              //ValueChoose1
-                                              value: valueChoose1,
-                                              //listMathematics
-                                              items: listMathematicsType
-                                                  .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
-                                                      value: e,
-                                                      child: Text(
-                                                        e,
-                                                        style: textStyleText(
-                                                            context),
-                                                      ),
+                                    child: Column(children: [
+                                      Wrap(
+                                        direction: Axis.horizontal,
+                                        alignment: WrapAlignment.spaceEvenly,
+                                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          //subject 2
+                                          DropdownButton(
+                                            isExpanded: false,
+                                            hint: Text(
+                                              "Select a subject",
+                                              style: textStyleText(context),
+                                            ),
+                                            //ValueChoose1
+                                            value: valueChoose1,
+                                            //listMathematics
+                                            items: listMathematicsType
+                                                .map<DropdownMenuItem<String>>(
+                                                  (e) => DropdownMenuItem(
+                                                    value: e,
+                                                    child: Text(
+                                                      e,
+                                                      style: textStyleText(
+                                                          context),
                                                     ),
-                                                  )
-                                                  .toList(),
-                                              onChanged: (String? value) =>
-                                                  setState(
-                                                () {
-                                                  //valueChoose1
-                                                  valueChoose1 = value;
-                                                },
-                                              ),
-                                            ),
-                                            //subject 2 ends
-                                            //Teachers name
-                                            const SizedBox(
-                                              width: 20,
-                                            ),
-                                            StreamBuilder<QuerySnapshot>(
-                                              stream: teachersRegistered
-                                                  .snapshots(),
-                                              builder: (BuildContext context,
-                                                  AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
-                                                if (!snapshot.hasData)
-                                                  return Text(
-                                                    'loading data',
-                                                    style:
-                                                        textStyleText(context),
-                                                  );
-
+                                                  ),
+                                                )
+                                                .toList(),
+                                            onChanged: (String? value) {
+                                              setState(() {
+                                                valueChoose1 = value;
+                                              });
+                                            },
+                                          ),
+                                          //subject 2 ends
+                                          //Teachers name
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                          StreamBuilder<QuerySnapshot>(
+                                            stream:
+                                                teachersRegistered.snapshots(),
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<QuerySnapshot>
+                                                    snapshot) {
+                                              if (!snapshot.hasData) {
+                                                return Text(
+                                                  'No teachers yet',
+                                                  style: textStyleText(context),
+                                                );
+                                              } else if (snapshot.hasData) {
                                                 List<DropdownMenuItem<String>>
                                                     dropdownItems = [];
                                                 snapshot.data?.docs
@@ -506,75 +553,101 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                     ),
                                                   );
                                                 });
-                                                return DropdownButton(
-                                                  hint: Text(
-                                                    "Teachers name",
-                                                    style:
-                                                        textStyleText(context),
+                                                dropdownItems.add(
+                                                  DropdownMenuItem(
+                                                    value: "N/A",
+                                                    child: Text(
+                                                      "Not Applicable",
+                                                      style: textStyleText(
+                                                          context),
+                                                    ),
                                                   ),
-                                                  //valueTeacher1
-                                                  value: valueTeacher1,
-                                                  items: dropdownItems,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      //valueTeacher1
-                                                      valueTeacher1 = newValue;
-                                                    });
-                                                  },
                                                 );
+                                                return Column(
+                                                  children: [
+                                                    DropdownButton(
+                                                        hint: Text(
+                                                          "Teachers name",
+                                                          style: textStyleText(
+                                                              context),
+                                                        ),
+                                                        //valueTeacher1
+                                                        value: valueTeacher1,
+                                                        items: dropdownItems,
+                                                        onChanged: (newValue) {
+                                                          setState(() {
+                                                            //valueTeacher1
+                                                            valueTeacher1 =
+                                                                newValue;
+                                                          });
+                                                        }),
+                                                    if (valueTeacher1 == null)
+                                                      const Text(
+                                                        "Please select a teachers name",
+                                                        style: TextStyle(
+                                                          color: Colors.red,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                  ],
+                                                );
+                                              } else {
+                                                return Text(
+                                                    'Error retrieving names',
+                                                    style:
+                                                        textStyleText(context));
+                                              }
+                                            },
+                                          ),
+                                          //subject3 ends
+                                        ],
+                                      ),
+                                      Wrap(
+                                        direction: Axis.horizontal,
+                                        alignment: WrapAlignment.spaceEvenly,
+                                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          //subject 2
+                                          DropdownButton(
+                                            isExpanded: false,
+                                            hint: Text(
+                                              "Select a subject",
+                                              style: textStyleText(context),
+                                            ),
+                                            value: valueChoose2,
+                                            items: listEnglishType
+                                                .map<DropdownMenuItem<String>>(
+                                                  (e) => DropdownMenuItem(
+                                                    value: e,
+                                                    child: Text(
+                                                      e,
+                                                      style: textStyleText(
+                                                          context),
+                                                    ),
+                                                  ),
+                                                )
+                                                .toList(),
+                                            onChanged: (String? value) =>
+                                                setState(
+                                              () {
+                                                valueChoose2 = value;
                                               },
                                             ),
-                                            //subject3 ends
-                                          ],
-                                        ),
-                                        Wrap(
-                                          direction: Axis.horizontal,
-                                          alignment: WrapAlignment.spaceEvenly,
-                                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            //subject 2
-                                            DropdownButton(
-                                              isExpanded: false,
-                                              hint: Text(
-                                                "Select a subject",
-                                                style: textStyleText(context),
-                                              ),
-                                              value: valueChoose2,
-                                              items: listEnglishType
-                                                  .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
-                                                      value: e,
-                                                      child: Text(
-                                                        e,
-                                                        style: textStyleText(
-                                                            context),
-                                                      ),
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                              onChanged: (String? value) =>
-                                                  setState(
-                                                () {
-                                                  valueChoose2 = value;
-                                                },
-                                              ),
-                                            ),
-                                            //subject 2 ends
-                                            //Teachers name
-                                            StreamBuilder<QuerySnapshot>(
-                                              stream: teachersRegistered
-                                                  .snapshots(),
-                                              builder: (BuildContext context,
-                                                  AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
-                                                if (!snapshot.hasData)
-                                                  return Text(
-                                                    'loading data',
-                                                    style:
-                                                        textStyleText(context),
-                                                  );
-
+                                          ),
+                                          //subject 2 ends
+                                          //Teachers name
+                                          StreamBuilder<QuerySnapshot>(
+                                            stream:
+                                                teachersRegistered.snapshots(),
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<QuerySnapshot>
+                                                    snapshot) {
+                                              if (!snapshot.hasData) {
+                                                return Text(
+                                                  'No teachers yet',
+                                                  style: textStyleText(context),
+                                                );
+                                              } else if (snapshot.hasData) {
                                                 List<DropdownMenuItem<String>>
                                                     dropdownItems = [];
                                                 snapshot.data?.docs
@@ -590,144 +663,90 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                     ),
                                                   );
                                                 });
-                                                return DropdownButton(
-                                                  hint: Text(
-                                                    "Teachers name",
-                                                    style:
-                                                        textStyleText(context),
+                                                dropdownItems.add(
+                                                  DropdownMenuItem(
+                                                    value: "N/A",
+                                                    child: Text(
+                                                      "Not Applicable",
+                                                      style: textStyleText(
+                                                          context),
+                                                    ),
                                                   ),
-                                                  value: valueTeacher2,
-                                                  items: dropdownItems,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      valueTeacher2 = newValue!;
-                                                    });
-                                                  },
                                                 );
+                                                return Column(
+                                                  children: [
+                                                    DropdownButton(
+                                                      hint: Text(
+                                                        "Teachers name",
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
+                                                      value: valueTeacher2,
+                                                      items: dropdownItems,
+                                                      onChanged: (newValue) {
+                                                        setState(() {
+                                                          valueTeacher2 =
+                                                              newValue!;
+                                                        });
+                                                      },
+                                                    ),
+                                                    if (valueTeacher2 == null)
+                                                      const Text(
+                                                        "Please select a teachers name",
+                                                        style: TextStyle(
+                                                          color: Colors.red,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                  ],
+                                                );
+                                              } else {
+                                                return Text(
+                                                    'Error retrieving names',
+                                                    style:
+                                                        textStyleText(context));
+                                              }
+                                            },
+                                          ),
+                                          //subject3 ends
+                                        ],
+                                      ),
+                                      /////////////////////////////////////////////////////////////////////
+                                      Wrap(
+                                        direction: Axis.horizontal,
+                                        alignment: WrapAlignment.spaceEvenly,
+                                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          //subject 2
+                                          DropdownButton(
+                                            isExpanded: false,
+                                            hint: Text(
+                                              "Select a subject",
+                                              style: textStyleText(context),
+                                            ),
+                                            value: valueChoose3,
+                                            items: listItem
+                                                .map<DropdownMenuItem<String>>(
+                                                  (e) => DropdownMenuItem(
+                                                    value: e,
+                                                    child: Text(
+                                                      e,
+                                                      style: textStyleText(
+                                                          context),
+                                                    ),
+                                                  ),
+                                                )
+                                                .toList(),
+                                            onChanged: (String? value) =>
+                                                setState(
+                                              () {
+                                                valueChoose3 = value;
                                               },
                                             ),
-                                            //subject3 ends
-                                          ],
-                                        ),
-                                        /////////////////////////////////////////////////////////////////////
-                                        Wrap(
-                                          direction: Axis.horizontal,
-                                          alignment: WrapAlignment.spaceEvenly,
-                                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            //subject 2
-                                            DropdownButton(
-                                              isExpanded: false,
-                                              hint: Text(
-                                                "Select a subject",
-                                                style: textStyleText(context),
-                                              ),
-                                              value: valueChoose3,
-                                              items: listItem
-                                                  .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
-                                                      value: e,
-                                                      child: Text(
-                                                        e,
-                                                        style: textStyleText(
-                                                            context),
-                                                      ),
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                              onChanged: (String? value) =>
-                                                  setState(
-                                                () {
-                                                  valueChoose3 = value;
-                                                },
-                                              ),
-                                            ),
-                                            //subject 2 ends
-                                            //Teachers name
-                                            StreamBuilder<QuerySnapshot>(
-                                              stream: teachersRegistered
-                                                  .snapshots(),
-                                              builder: (BuildContext context,
-                                                  AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
-                                                if (!snapshot.hasData) {
-                                                  return Text(
-                                                    'loading data',
-                                                    style:
-                                                        textStyleText(context),
-                                                  );
-                                                }
-                                                List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
-
-                                                snapshot.data?.docs
-                                                    .forEach((doc) {
-                                                  dropdownItems.add(
-                                                    DropdownMenuItem(
-                                                      value: doc['uid'],
-                                                      child: Text(
-                                                        doc['name'],
-                                                        style: textStyleText(
-                                                            context),
-                                                      ),
-                                                    ),
-                                                  );
-                                                });
-                                                return DropdownButton(
-                                                  hint: Text(
-                                                    "Teachers name",
-                                                    style:
-                                                        textStyleText(context),
-                                                  ),
-                                                  value: valueTeacher3,
-                                                  items: dropdownItems,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      valueTeacher3 = newValue!;
-                                                    });
-                                                  },
-                                                );
-                                              },
-                                            ),
-                                            //subject3 ends
-                                          ],
-                                        ),
-                                        Wrap(
-                                          direction: Axis.horizontal,
-                                          alignment: WrapAlignment.spaceEvenly,
-                                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            //subject 2
-                                            DropdownButton(
-                                              isExpanded: false,
-                                              hint: Text(
-                                                "Select a subject",
-                                                style: textStyleText(context),
-                                              ),
-                                              value: valueChoose4,
-                                              items: listItem
-                                                  .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
-                                                      value: e,
-                                                      child: Text(
-                                                        e,
-                                                        style: textStyleText(
-                                                            context),
-                                                      ),
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                              onChanged: (value) => setState(
-                                                () {
-                                                  valueChoose4 = value;
-                                                },
-                                              ),
-                                            ),
-                                            //subject 2 ends
-                                            //Teachers name
-                                            StreamBuilder<QuerySnapshot>(
+                                          ),
+                                          //subject 2 ends
+                                          //Teachers name
+                                          StreamBuilder<QuerySnapshot>(
                                               stream: teachersRegistered
                                                   .snapshots(),
                                               builder: (BuildContext context,
@@ -735,530 +754,931 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                       snapshot) {
                                                 if (!snapshot.hasData) {
                                                   return Text(
-                                                    'loading data',
+                                                    'No teachers yet',
                                                     style:
                                                         textStyleText(context),
                                                   );
-                                                }
-                                                List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
+                                                } else if (snapshot.hasData) {
+                                                  List<DropdownMenuItem<String>>
+                                                      dropdownItems = [];
 
-                                                snapshot.data?.docs
-                                                    .forEach((doc) {
+                                                  snapshot.data?.docs
+                                                      .forEach((doc) {
+                                                    dropdownItems.add(
+                                                      DropdownMenuItem(
+                                                        value: doc['uid'],
+                                                        child: Text(
+                                                          doc['name'],
+                                                          style: textStyleText(
+                                                              context),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  });
                                                   dropdownItems.add(
                                                     DropdownMenuItem(
-                                                      value: doc['uid'],
+                                                      value: "N/A",
                                                       child: Text(
-                                                        doc['name'],
+                                                        "Not Applicable",
                                                         style: textStyleText(
                                                             context),
                                                       ),
                                                     ),
                                                   );
-                                                });
-                                                return DropdownButton(
-                                                  hint: Text(
-                                                    "Teachers name",
-                                                    style:
-                                                        textStyleText(context),
-                                                  ),
-                                                  value: valueTeacher4,
-                                                  items: dropdownItems,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      valueTeacher4 = newValue;
-                                                    });
-                                                  },
-                                                );
-                                              },
-                                            ),
-                                            //subject3 ends
-                                          ],
-                                        ),
-                                        //////////////////////new Streams////////
-                                        Wrap(
-                                          direction: Axis.horizontal,
-                                          alignment: WrapAlignment.spaceEvenly,
-                                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            //subject 2
-                                            DropdownButton(
-                                              isExpanded: false,
-                                              hint: Text(
-                                                "Select a subject",
-                                                style: textStyleText(context),
-                                              ),
-                                              value: valueChoose5,
-                                              items: listItem
-                                                  .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
-                                                      value: e,
-                                                      child: Text(
-                                                        e,
-                                                        style: textStyleText(
-                                                            context),
+
+                                                  return Column(
+                                                    children: [
+                                                      DropdownButton(
+                                                        hint: Text(
+                                                          "Teachers name",
+                                                          style: textStyleText(
+                                                              context),
+                                                        ),
+                                                        value: valueTeacher3,
+                                                        items: dropdownItems,
+                                                        onChanged: (newValue) {
+                                                          setState(() {
+                                                            valueTeacher3 =
+                                                                newValue!;
+                                                          });
+                                                        },
                                                       ),
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                              onChanged: (value) => setState(
-                                                () {
-                                                  valueChoose5 = value;
-                                                },
-                                              ),
-                                            ),
-                                            //subject 2 ends
-                                            //Teachers name
-                                            StreamBuilder<QuerySnapshot>(
-                                              stream: teachersRegistered
-                                                  .snapshots(),
-                                              builder: (BuildContext context,
-                                                  AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
-                                                if (!snapshot.hasData) {
+                                                      if (valueTeacher3 == null)
+                                                        const Text(
+                                                          "Please select a teachers name",
+                                                          style: TextStyle(
+                                                            color: Colors.red,
+                                                            fontSize: 12,
+                                                          ),
+                                                        ),
+                                                    ],
+                                                  );
+                                                } else {
                                                   return Text(
-                                                    'loading data',
-                                                    style:
-                                                        textStyleText(context),
-                                                  );
+                                                      'Error retrieving names',
+                                                      style: textStyleText(
+                                                          context));
                                                 }
-                                                List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
-
-                                                snapshot.data?.docs
-                                                    .forEach((doc) {
-                                                  dropdownItems.add(
-                                                    DropdownMenuItem(
-                                                      value: doc['uid'],
-                                                      child: Text(
-                                                        doc['name'],
-                                                        style: textStyleText(
-                                                            context),
+                                                //subject3 end,
+                                              }),
+                                          Wrap(
+                                            direction: Axis.horizontal,
+                                            alignment:
+                                                WrapAlignment.spaceEvenly,
+                                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              //subject 2
+                                              DropdownButton(
+                                                isExpanded: false,
+                                                hint: Text(
+                                                  "Select a subject",
+                                                  style: textStyleText(context),
+                                                ),
+                                                value: valueChoose4,
+                                                items: listItem
+                                                    .map<
+                                                        DropdownMenuItem<
+                                                            String>>(
+                                                      (e) => DropdownMenuItem(
+                                                        value: e,
+                                                        child: Text(
+                                                          e,
+                                                          style: textStyleText(
+                                                              context),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  );
-                                                });
-                                                return DropdownButton(
-                                                  hint: Text(
-                                                    "Teachers name",
-                                                    style:
-                                                        textStyleText(context),
-                                                  ),
-                                                  value: valueTeacher5,
-                                                  items: dropdownItems,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      valueTeacher5 = newValue;
-                                                    });
+                                                    )
+                                                    .toList(),
+                                                onChanged: (value) => setState(
+                                                  () {
+                                                    valueChoose4 = value;
                                                   },
-                                                );
-                                              },
-                                            ),
-                                            //subject3 ends
-                                          ],
-                                        ),
-                                        Wrap(
-                                          direction: Axis.horizontal,
-                                          alignment: WrapAlignment.spaceEvenly,
-                                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            //subject 2
-                                            DropdownButton(
-                                              isExpanded: false,
-                                              hint: Text(
-                                                "Select a subject",
-                                                style: textStyleText(context),
+                                                ),
                                               ),
-                                              value: valueChoose6,
-                                              items: listItem
-                                                  .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
-                                                      value: e,
-                                                      child: Text(
-                                                        e,
+                                              //subject 2 ends
+                                              //Teachers name
+                                              StreamBuilder<QuerySnapshot>(
+                                                  stream: teachersRegistered
+                                                      .snapshots(),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          AsyncSnapshot<
+                                                                  QuerySnapshot>
+                                                              snapshot) {
+                                                    if (!snapshot.hasData) {
+                                                      return Text(
+                                                        'No teachers yet',
                                                         style: textStyleText(
                                                             context),
-                                                      ),
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                              onChanged: (value) => setState(
-                                                () {
-                                                  valueChoose6 = value;
-                                                },
-                                              ),
-                                            ),
-                                            //subject 2 ends
-                                            //Teachers name
-                                            StreamBuilder<QuerySnapshot>(
-                                              stream: teachersRegistered
-                                                  .snapshots(),
-                                              builder: (BuildContext context,
-                                                  AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
-                                                if (!snapshot.hasData) {
-                                                  return Text(
-                                                    'loading data',
-                                                    style:
-                                                        textStyleText(context),
-                                                  );
-                                                }
-                                                List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
+                                                      );
+                                                    } else if (snapshot
+                                                        .hasData) {
+                                                      List<
+                                                              DropdownMenuItem<
+                                                                  String>>
+                                                          dropdownItems = [];
 
-                                                snapshot.data?.docs
-                                                    .forEach((doc) {
-                                                  dropdownItems.add(
-                                                    DropdownMenuItem(
-                                                      value: doc['uid'],
-                                                      child: Text(
-                                                        doc['name'],
-                                                        style: textStyleText(
-                                                            context),
+                                                      snapshot.data?.docs
+                                                          .forEach((doc) {
+                                                        dropdownItems.add(
+                                                          DropdownMenuItem(
+                                                            value: doc['uid'],
+                                                            child: Text(
+                                                              doc['name'],
+                                                              style:
+                                                                  textStyleText(
+                                                                      context),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      });
+                                                      dropdownItems.add(
+                                                        DropdownMenuItem(
+                                                          value: "N/A",
+                                                          child: Text(
+                                                            "Not Applicable",
+                                                            style:
+                                                                textStyleText(
+                                                                    context),
+                                                          ),
+                                                        ),
+                                                      );
+                                                      return Column(
+                                                        children: [
+                                                          DropdownButton(
+                                                            hint: Text(
+                                                              "Teachers name",
+                                                              style:
+                                                                  textStyleText(
+                                                                      context),
+                                                            ),
+                                                            value:
+                                                                valueTeacher4,
+                                                            items:
+                                                                dropdownItems,
+                                                            onChanged:
+                                                                (newValue) {
+                                                              setState(() {
+                                                                valueTeacher4 =
+                                                                    newValue;
+                                                              });
+                                                            },
+                                                          ),
+                                                          if (valueTeacher4 ==
+                                                              null)
+                                                            const Text(
+                                                              "Please select a teachers name",
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                        ],
+                                                      );
+                                                    } else {
+                                                      return Text(
+                                                          'Error retrieving names',
+                                                          style: textStyleText(
+                                                              context));
+                                                    }
+                                                  }),
+                                              //subject3 ends
+                                            ],
+                                          ),
+                                          //////////////////////new Streams////////
+                                          Wrap(
+                                            direction: Axis.horizontal,
+                                            alignment:
+                                                WrapAlignment.spaceEvenly,
+                                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              //subject 2
+                                              DropdownButton(
+                                                isExpanded: false,
+                                                hint: Text(
+                                                  "Select a subject",
+                                                  style: textStyleText(context),
+                                                ),
+                                                value: valueChoose5,
+                                                items: listItem
+                                                    .map<
+                                                        DropdownMenuItem<
+                                                            String>>(
+                                                      (e) => DropdownMenuItem(
+                                                        value: e,
+                                                        child: Text(
+                                                          e,
+                                                          style: textStyleText(
+                                                              context),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  );
-                                                });
-                                                return DropdownButton(
-                                                  hint: Text(
-                                                    "Teachers name",
-                                                    style:
-                                                        textStyleText(context),
-                                                  ),
-                                                  value: valueTeacher6,
-                                                  items: dropdownItems,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      valueTeacher6 = newValue;
-                                                    });
+                                                    )
+                                                    .toList(),
+                                                onChanged: (value) => setState(
+                                                  () {
+                                                    valueChoose5 = value;
                                                   },
-                                                );
-                                              },
-                                            ),
-                                            //subject3 ends
-                                          ],
-                                        ),
-                                        //      /////////////////////////////////////////////////////////////////////
-                                        Wrap(
-                                          direction: Axis.horizontal,
-                                          alignment: WrapAlignment.spaceEvenly,
-                                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            //subject 2
-                                            DropdownButton(
-                                              isExpanded: false,
-                                              hint: Text(
-                                                "Select a subject",
-                                                style: textStyleText(context),
+                                                ),
                                               ),
-                                              value: valueChoose7,
-                                              items: listItem
-                                                  .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
-                                                      value: e,
-                                                      child: Text(
-                                                        e,
+                                              //subject 2 ends
+                                              //Teachers name
+                                              StreamBuilder<QuerySnapshot>(
+                                                  stream: teachersRegistered
+                                                      .snapshots(),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          AsyncSnapshot<
+                                                                  QuerySnapshot>
+                                                              snapshot) {
+                                                    if (!snapshot.hasData) {
+                                                      return Text(
+                                                        'No Teacher',
                                                         style: textStyleText(
                                                             context),
-                                                      ),
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                              onChanged: (String? value) =>
-                                                  setState(
-                                                () {
-                                                  valueChoose7 = value;
-                                                },
-                                              ),
-                                            ),
-                                            //subject 2 ends
-                                            //Teachers name
-                                            StreamBuilder<QuerySnapshot>(
-                                              stream: teachersRegistered
-                                                  .snapshots(),
-                                              builder: (BuildContext context,
-                                                  AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
-                                                if (!snapshot.hasData) {
-                                                  return Text(
-                                                    'loading data',
-                                                    style:
-                                                        textStyleText(context),
-                                                  );
-                                                }
-                                                List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
+                                                      );
+                                                    } else if (snapshot
+                                                        .hasData) {
+                                                      List<
+                                                              DropdownMenuItem<
+                                                                  String>>
+                                                          dropdownItems = [];
 
-                                                snapshot.data?.docs
-                                                    .forEach((doc) {
-                                                  dropdownItems.add(
-                                                    DropdownMenuItem(
-                                                      value: doc['uid'],
-                                                      child: Text(
-                                                        doc['name'],
-                                                        style: textStyleText(
-                                                            context),
+                                                      snapshot.data?.docs
+                                                          .forEach((doc) {
+                                                        dropdownItems.add(
+                                                          DropdownMenuItem(
+                                                            value: doc['uid'],
+                                                            child: Text(
+                                                              doc['name'],
+                                                              style:
+                                                                  textStyleText(
+                                                                      context),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      });
+                                                      dropdownItems.add(
+                                                        DropdownMenuItem(
+                                                          value: "N/A",
+                                                          child: Text(
+                                                            "Not Applicable",
+                                                            style:
+                                                                textStyleText(
+                                                                    context),
+                                                          ),
+                                                        ),
+                                                      );
+                                                      return Column(
+                                                        children: [
+                                                          DropdownButton(
+                                                            hint: Text(
+                                                              "Teachers name",
+                                                              style:
+                                                                  textStyleText(
+                                                                      context),
+                                                            ),
+                                                            value:
+                                                                valueTeacher5,
+                                                            items:
+                                                                dropdownItems,
+                                                            onChanged:
+                                                                (newValue) {
+                                                              setState(() {
+                                                                valueTeacher5 =
+                                                                    newValue;
+                                                              });
+                                                            },
+                                                          ),
+                                                          if (valueTeacher5 ==
+                                                              null)
+                                                            const Text(
+                                                              "Please select a teachers name",
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                        ],
+                                                      );
+                                                    } else {
+                                                      return Text(
+                                                          'Error retrieving names',
+                                                          style: textStyleText(
+                                                              context));
+                                                    }
+                                                  }),
+                                              //subject3 ends
+                                            ],
+                                          ),
+                                          Wrap(
+                                            direction: Axis.horizontal,
+                                            alignment:
+                                                WrapAlignment.spaceEvenly,
+                                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              //subject 2
+                                              DropdownButton(
+                                                isExpanded: false,
+                                                hint: Text(
+                                                  "Select a subject",
+                                                  style: textStyleText(context),
+                                                ),
+                                                value: valueChoose6,
+                                                items: listItem
+                                                    .map<
+                                                        DropdownMenuItem<
+                                                            String>>(
+                                                      (e) => DropdownMenuItem(
+                                                        value: e,
+                                                        child: Text(
+                                                          e,
+                                                          style: textStyleText(
+                                                              context),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  );
-                                                });
-                                                return DropdownButton(
-                                                  hint: Text(
-                                                    "Teachers name",
-                                                    style:
-                                                        textStyleText(context),
-                                                  ),
-                                                  value: valueTeacher7,
-                                                  items: dropdownItems,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      valueTeacher7 = newValue;
-                                                    });
+                                                    )
+                                                    .toList(),
+                                                onChanged: (value) => setState(
+                                                  () {
+                                                    valueChoose6 = value;
                                                   },
-                                                );
-                                              },
-                                            ),
-                                            //subject3 ends
-                                          ],
-                                        ),
-                                        Wrap(
-                                          direction: Axis.horizontal,
-                                          alignment: WrapAlignment.spaceEvenly,
-                                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            //subject 2
-                                            DropdownButton(
-                                              isExpanded: false,
-                                              hint: Text(
-                                                "Select a subject",
-                                                style: textStyleText(context),
+                                                ),
                                               ),
-                                              value: valueChoose8,
-                                              items: listItem
-                                                  .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
-                                                      value: e,
-                                                      child: Text(
-                                                        e,
+                                              //subject 2 ends
+                                              //Teachers name
+                                              StreamBuilder<QuerySnapshot>(
+                                                  stream: teachersRegistered
+                                                      .snapshots(),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          AsyncSnapshot<
+                                                                  QuerySnapshot>
+                                                              snapshot) {
+                                                    if (!snapshot.hasData) {
+                                                      return Text(
+                                                        'No teacher yet',
                                                         style: textStyleText(
                                                             context),
-                                                      ),
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                              onChanged: (String? value) =>
-                                                  setState(
-                                                () {
-                                                  valueChoose8 = value;
-                                                },
-                                              ),
-                                            ),
-                                            //subject 2 ends
-                                            //Teachers name
-                                            StreamBuilder<QuerySnapshot>(
-                                              stream: teachersRegistered
-                                                  .snapshots(),
-                                              builder: (BuildContext context,
-                                                  AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
-                                                if (!snapshot.hasData) {
-                                                  return Text(
-                                                    'loading data',
-                                                    style:
-                                                        textStyleText(context),
-                                                  );
-                                                }
-                                                List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
+                                                      );
+                                                    } else if (snapshot
+                                                        .hasData) {
+                                                      List<
+                                                              DropdownMenuItem<
+                                                                  String>>
+                                                          dropdownItems = [];
 
-                                                snapshot.data?.docs
-                                                    .forEach((doc) {
-                                                  dropdownItems.add(
-                                                    DropdownMenuItem(
-                                                      value: doc['uid'],
-                                                      child: Text(
-                                                        doc['name'],
-                                                        style: textStyleText(
-                                                            context),
+                                                      snapshot.data?.docs
+                                                          .forEach((doc) {
+                                                        dropdownItems.add(
+                                                          DropdownMenuItem(
+                                                            value: doc['uid'],
+                                                            child: Text(
+                                                              doc['name'],
+                                                              style:
+                                                                  textStyleText(
+                                                                      context),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      });
+                                                      dropdownItems.add(
+                                                        DropdownMenuItem(
+                                                          value: "N/A",
+                                                          child: Text(
+                                                            "Not Applicable",
+                                                            style:
+                                                                textStyleText(
+                                                                    context),
+                                                          ),
+                                                        ),
+                                                      );
+                                                      return Column(
+                                                        children: [
+                                                          DropdownButton(
+                                                            hint: Text(
+                                                              "Teachers name",
+                                                              style:
+                                                                  textStyleText(
+                                                                      context),
+                                                            ),
+                                                            value:
+                                                                valueTeacher6,
+                                                            items:
+                                                                dropdownItems,
+                                                            onChanged:
+                                                                (newValue) {
+                                                              setState(() {
+                                                                valueTeacher6 =
+                                                                    newValue;
+                                                              });
+                                                            },
+                                                          ),
+                                                          if (valueTeacher6 ==
+                                                              null)
+                                                            const Text(
+                                                              "Please select a teachers name",
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                        ],
+                                                      );
+                                                    } else {
+                                                      return Text(
+                                                          'Error retrieving names',
+                                                          style: textStyleText(
+                                                              context));
+                                                    }
+                                                  }),
+                                              //subject3 ends
+                                            ],
+                                          ),
+                                          //      /////////////////////////////////////////////////////////////////////
+                                          Wrap(
+                                            direction: Axis.horizontal,
+                                            alignment:
+                                                WrapAlignment.spaceEvenly,
+                                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              //subject 2
+                                              DropdownButton(
+                                                isExpanded: false,
+                                                hint: Text(
+                                                  "Select a subject",
+                                                  style: textStyleText(context),
+                                                ),
+                                                value: valueChoose7,
+                                                items: listItem
+                                                    .map<
+                                                        DropdownMenuItem<
+                                                            String>>(
+                                                      (e) => DropdownMenuItem(
+                                                        value: e,
+                                                        child: Text(
+                                                          e,
+                                                          style: textStyleText(
+                                                              context),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  );
-                                                });
-                                                return DropdownButton(
-                                                  hint: Text(
-                                                    "Teachers name",
-                                                    style:
-                                                        textStyleText(context),
-                                                  ),
-                                                  value: valueTeacher8,
-                                                  items: dropdownItems,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      valueTeacher8 = newValue;
-                                                    });
+                                                    )
+                                                    .toList(),
+                                                onChanged: (String? value) =>
+                                                    setState(
+                                                  () {
+                                                    valueChoose7 = value;
                                                   },
-                                                );
-                                              },
-                                            ),
-                                            //subject3 ends
-                                          ],
-                                        ),
-                                        Wrap(
-                                          direction: Axis.horizontal,
-                                          alignment: WrapAlignment.spaceEvenly,
-                                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            //subject 2
-                                            DropdownButton(
-                                              isExpanded: false,
-                                              hint: Text(
-                                                "Select a subject",
-                                                style: textStyleText(context),
+                                                ),
                                               ),
-                                              value: valueChoose9,
-                                              items: listItem
-                                                  .map<
-                                                      DropdownMenuItem<String>>(
-                                                    (e) => DropdownMenuItem(
-                                                      value: e,
-                                                      child: Text(
-                                                        e,
+                                              //subject 2 ends
+                                              //Teachers name
+                                              StreamBuilder<QuerySnapshot>(
+                                                  stream: teachersRegistered
+                                                      .snapshots(),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          AsyncSnapshot<
+                                                                  QuerySnapshot>
+                                                              snapshot) {
+                                                    if (!snapshot.hasData) {
+                                                      return Text(
+                                                        'No teacher yet',
                                                         style: textStyleText(
                                                             context),
-                                                      ),
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                              onChanged: (String? value) =>
-                                                  setState(
-                                                () {
-                                                  valueChoose9 = value;
-                                                },
-                                              ),
-                                            ),
-                                            //subject 2 ends
-                                            //Teachers name
-                                            StreamBuilder<QuerySnapshot>(
-                                              stream: teachersRegistered
-                                                  .snapshots(),
-                                              builder: (BuildContext context,
-                                                  AsyncSnapshot<QuerySnapshot>
-                                                      snapshot) {
-                                                if (!snapshot.hasData) {
-                                                  return Text(
-                                                    'loading data',
-                                                    style:
-                                                        textStyleText(context),
-                                                  );
-                                                }
-                                                List<DropdownMenuItem<String>>
-                                                    dropdownItems = [];
-                                                snapshot.data?.docs
-                                                    .forEach((doc) {
-                                                  dropdownItems.add(
-                                                    DropdownMenuItem(
-                                                      value: doc['uid'],
-                                                      child: Text(
-                                                        doc['name'],
-                                                        style: textStyleText(
-                                                            context),
-                                                      ),
-                                                    ),
-                                                  );
-                                                });
-                                                return DropdownButton(
-                                                  hint: Text(
-                                                    "Teachers name",
-                                                    style:
-                                                        textStyleText(context),
-                                                  ),
-                                                  value: valueTeacher9,
-                                                  items: dropdownItems,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      valueTeacher9 = newValue;
-                                                    });
-                                                  },
-                                                );
-                                              },
-                                            ),
-                                            //subject3 ends
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                                      );
+                                                    } else if (snapshot
+                                                        .hasData) {
+                                                      List<
+                                                              DropdownMenuItem<
+                                                                  String>>
+                                                          dropdownItems = [];
 
-                                  //================= Row nine ends ============//
+                                                      snapshot.data?.docs
+                                                          .forEach((doc) {
+                                                        dropdownItems.add(
+                                                          DropdownMenuItem(
+                                                            value: doc['uid'],
+                                                            child: Text(
+                                                              doc['name'],
+                                                              style:
+                                                                  textStyleText(
+                                                                      context),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      });
+                                                      dropdownItems.add(
+                                                        DropdownMenuItem(
+                                                          value: "N/A",
+                                                          child: Text(
+                                                            "Not Applicable",
+                                                            style:
+                                                                textStyleText(
+                                                                    context),
+                                                          ),
+                                                        ),
+                                                      );
+                                                      return Column(
+                                                        children: [
+                                                          DropdownButton(
+                                                            hint: Text(
+                                                              "Teachers name",
+                                                              style:
+                                                                  textStyleText(
+                                                                      context),
+                                                            ),
+                                                            value:
+                                                                valueTeacher7,
+                                                            items:
+                                                                dropdownItems,
+                                                            onChanged:
+                                                                (newValue) {
+                                                              setState(() {
+                                                                valueTeacher7 =
+                                                                    newValue;
+                                                              });
+                                                            },
+                                                          ),
+                                                          if (valueTeacher7 ==
+                                                              null)
+                                                            const Text(
+                                                              "Please select a teachers name",
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                        ],
+                                                      );
+                                                    } else {
+                                                      return Text(
+                                                          'Error retrieving names',
+                                                          style: textStyleText(
+                                                              context));
+                                                    }
+                                                  }),
+                                              //subject3 ends
+                                            ],
+                                          ),
+                                          Wrap(
+                                            direction: Axis.horizontal,
+                                            alignment:
+                                                WrapAlignment.spaceEvenly,
+                                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              //subject 2
+                                              DropdownButton(
+                                                isExpanded: false,
+                                                hint: Text(
+                                                  "Select a subject",
+                                                  style: textStyleText(context),
+                                                ),
+                                                value: valueChoose8,
+                                                items: listItem
+                                                    .map<
+                                                        DropdownMenuItem<
+                                                            String>>(
+                                                      (e) => DropdownMenuItem(
+                                                        value: e,
+                                                        child: Text(
+                                                          e,
+                                                          style: textStyleText(
+                                                              context),
+                                                        ),
+                                                      ),
+                                                    )
+                                                    .toList(),
+                                                onChanged: (String? value) =>
+                                                    setState(
+                                                  () {
+                                                    valueChoose8 = value;
+                                                  },
+                                                ),
+                                              ),
+                                              //subject 2 ends
+                                              //Teachers name
+                                              StreamBuilder<QuerySnapshot>(
+                                                  stream: teachersRegistered
+                                                      .snapshots(),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          AsyncSnapshot<
+                                                                  QuerySnapshot>
+                                                              snapshot) {
+                                                    if (!snapshot.hasData) {
+                                                      return Text(
+                                                        'No teacher yet',
+                                                        style: textStyleText(
+                                                            context),
+                                                      );
+                                                    } else if (snapshot
+                                                        .hasData) {
+                                                      List<
+                                                              DropdownMenuItem<
+                                                                  String>>
+                                                          dropdownItems = [];
+
+                                                      snapshot.data?.docs
+                                                          .forEach((doc) {
+                                                        dropdownItems.add(
+                                                          DropdownMenuItem(
+                                                            value: doc['uid'],
+                                                            child: Text(
+                                                              doc['name'],
+                                                              style:
+                                                                  textStyleText(
+                                                                      context),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      });
+                                                      dropdownItems.add(
+                                                        DropdownMenuItem(
+                                                          value: "N/A",
+                                                          child: Text(
+                                                            "Not Applicable",
+                                                            style:
+                                                                textStyleText(
+                                                                    context),
+                                                          ),
+                                                        ),
+                                                      );
+                                                      return Column(
+                                                        children: [
+                                                          DropdownButton(
+                                                            hint: Text(
+                                                              "Teachers name",
+                                                              style:
+                                                                  textStyleText(
+                                                                      context),
+                                                            ),
+                                                            value:
+                                                                valueTeacher8,
+                                                            items:
+                                                                dropdownItems,
+                                                            onChanged:
+                                                                (newValue) {
+                                                              setState(() {
+                                                                valueTeacher8 =
+                                                                    newValue;
+                                                              });
+                                                            },
+                                                          ),
+                                                          if (valueTeacher8 ==
+                                                              null)
+                                                            const Text(
+                                                              "Please select a teachers name",
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                        ],
+                                                      );
+                                                    } else {
+                                                      return Text(
+                                                          'Error retrieving names',
+                                                          style: textStyleText(
+                                                              context));
+                                                    }
+                                                  }),
+                                              //subject3 ends
+                                            ],
+                                          ),
+                                          Wrap(
+                                            direction: Axis.horizontal,
+                                            alignment:
+                                                WrapAlignment.spaceEvenly,
+                                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              //subject 2
+                                              DropdownButton(
+                                                isExpanded: false,
+                                                hint: Text(
+                                                  "Select a subject",
+                                                  style: textStyleText(context),
+                                                ),
+                                                value: valueChoose9,
+                                                items: listItem
+                                                    .map<
+                                                        DropdownMenuItem<
+                                                            String>>(
+                                                      (e) => DropdownMenuItem(
+                                                        value: e,
+                                                        child: Text(
+                                                          e,
+                                                          style: textStyleText(
+                                                              context),
+                                                        ),
+                                                      ),
+                                                    )
+                                                    .toList(),
+                                                onChanged: (String? value) =>
+                                                    setState(
+                                                  () {
+                                                    valueChoose9 = value;
+                                                  },
+                                                ),
+                                              ),
+                                              //subject 2 ends
+                                              //Teachers name
+                                              StreamBuilder<QuerySnapshot>(
+                                                  stream: teachersRegistered
+                                                      .snapshots(),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          AsyncSnapshot<
+                                                                  QuerySnapshot>
+                                                              snapshot) {
+                                                    if (!snapshot.hasData) {
+                                                      return Text(
+                                                        'No teacher yet',
+                                                        style: textStyleText(
+                                                            context),
+                                                      );
+                                                    } else if (snapshot
+                                                        .hasData) {
+                                                      List<
+                                                              DropdownMenuItem<
+                                                                  String>>
+                                                          dropdownItems = [];
+                                                      snapshot.data?.docs
+                                                          .forEach((doc) {
+                                                        dropdownItems.add(
+                                                          DropdownMenuItem(
+                                                            value: doc['uid'],
+                                                            child: Text(
+                                                              doc['name'],
+                                                              style:
+                                                                  textStyleText(
+                                                                      context),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      });
+                                                      dropdownItems.add(
+                                                        DropdownMenuItem(
+                                                          value: "N/A",
+                                                          child: Text(
+                                                            "Not Applicable",
+                                                            style:
+                                                                textStyleText(
+                                                                    context),
+                                                          ),
+                                                        ),
+                                                      );
+                                                      return Column(
+                                                        children: [
+                                                          DropdownButton(
+                                                            hint: Text(
+                                                              "Teachers name",
+                                                              style:
+                                                                  textStyleText(
+                                                                      context),
+                                                            ),
+                                                            value:
+                                                                valueTeacher9,
+                                                            items:
+                                                                dropdownItems,
+                                                            onChanged:
+                                                                (newValue) {
+                                                              setState(() {
+                                                                valueTeacher9 =
+                                                                    newValue;
+                                                              });
+                                                            },
+                                                          ),
+                                                          if (valueTeacher9 ==
+                                                              null)
+                                                            const Text(
+                                                              "Please select a teachers name",
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                        ],
+                                                      );
+                                                    } else {
+                                                      return Text(
+                                                          'Error retrieving names',
+                                                          style: textStyleText(
+                                                              context));
+                                                    }
+                                                  }),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                    ]),
+                                    //================= Row nine ends ============//
+                                  )
                                 ],
                               ),
                             ),
                             const SizedBox(
                               height: 20,
                             ),
-                            ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(70),
-                                topLeft: Radius.circular(70),
-                              ),
-                              child: SizedBox(
-                                width: 120,
-                                child: MaterialButton(
-                                  height: 60,
-                                  onPressed: () async {
-                                    //check if the form is validated
-                                    if (_formKey.currentState!.validate()) {
-                                      signUp();
-                                    } else {
-                                      snack("Insert all the details required",
-                                          context);
-                                    }
-                                  },
-                                  color: Theme.of(context).primaryColor,
-                                  child: loading
-                                      ? SpinKitChasingDots(
-                                          color: Theme.of(context)
-                                              .primaryColorLight,
-                                        )
-                                      : Text(
-                                          "Sign Up",
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .primaryColorLight),
+                            Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.only(
+                                      topRight: Radius.circular(70),
+                                      topLeft: Radius.circular(70),
+                                    ),
+                                    child: SizedBox(
+                                      width: 120,
+                                      child: MaterialButton(
+                                        height: 60,
+                                        onPressed: () async {
+                                          //check if the form is validated
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            await signUp()
+                                                .then(
+                                                  (value) async => snack(
+                                                      "Account created, now sign in.",
+                                                      context),
+                                                )
+                                                .whenComplete(
+                                                  () =>
+                                                      Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const Authenticate(),
+                                                    ),
+                                                  ),
+                                                );
+                                          } else {
+                                            snack(
+                                                "Insert all the details required",
+                                                context);
+                                          }
+                                        },
+                                        color: Theme.of(context).primaryColor,
+                                        child: loading
+                                            ? SpinKitChasingDots(
+                                                color: Theme.of(context)
+                                                    .primaryColorLight,
+                                              )
+                                            : Text(
+                                                "Sign Up",
+                                                style: textStyleText(context)
+                                                    .copyWith(
+                                                        color: Theme.of(context)
+                                                            .primaryColorLight,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(70),
+                                      bottomRight: Radius.circular(70),
+                                    ),
+                                    child: SizedBox(
+                                      width: 120,
+                                      child: MaterialButton(
+                                        height: 60,
+                                        onPressed: () {
+                                          widget.toggleView();
+                                        },
+                                        color: Theme.of(context).primaryColor,
+                                        child: Text(
+                                          "Sign In",
+                                          style: textStyleText(context)
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .primaryColorLight,
+                                                  fontWeight: FontWeight.w700),
                                         ),
-                                ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             const SizedBox(
-                              height: 6,
+                              height: 10,
                             ),
-                            ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(70),
-                                bottomRight: Radius.circular(70),
-                              ),
-                              child: SizedBox(
-                                width: 120,
-                                child: MaterialButton(
-                                  height: 60,
-                                  onPressed: () {
-                                    widget.toggleView();
-                                  },
-                                  color: Theme.of(context).primaryColor,
-                                  child: Text(
-                                    "Sign In",
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .primaryColorLight),
-                                  ),
-                                ),
-                              ),
-                            ),
-
                             Text(
                               error,
                               style: const TextStyle(
@@ -1269,8 +1689,8 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                           ],
                         ),
                       )),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -1281,27 +1701,25 @@ class _LearnerRegisterState extends State<LearnerRegister> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      teachersID;
-    });
+    ConnectionChecker.checkTimer();
+
+    // setState(() {
+    //   teachersID;
+    // });
   }
 
   Future signUp() async {
+    setState(() {
+      loading = true;
+    });
     try {
-      setState(() {
-        loading = true;
-      });
-
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: email.toLowerCase().trim(), password: password.trim());
 
       final FirebaseAuth auth = FirebaseAuth.instance;
-      //get Current User
       final userCurrent = auth.currentUser!.uid;
-      //store user in a string/
       uid = userCurrent.toString();
 
-      //add subjects to the list
       subjects.add(valueChoose1!);
       subjects.add(valueChoose2!);
       subjects.add(valueChoose3!);
@@ -1322,16 +1740,12 @@ class _LearnerRegisterState extends State<LearnerRegister> {
       teachersID.add(valueTeacher8!);
       teachersID.add(valueTeacher9!);
 
-      logger.i(teachersID);
-      logger.i(subjects);
-      logger.i(addAllMark);
-
-      //insert data using a class
       User _user = User(
         email.trim().toLowerCase(),
         uid,
         password.trim(),
         name.trim(),
+        secondName.trim(),
         grade.trim(),
         documentID,
         role,
@@ -1339,47 +1753,40 @@ class _LearnerRegisterState extends State<LearnerRegister> {
         teachersID,
         allSubjects,
       );
-      //this should add the registered user to the userData collection with UID
-      _user.addUser();
 
-      logger.i(_user.addUser());
-      setState(() {
-        loading = false;
-      });
+      //add user to the database
+      _user.addUser();
+      logger.i("user added");
+      // Navigator.of(context).pushReplacement(
+      //     MaterialPageRoute(builder: (context) => const LearnerHome()));
+
+      //catch exceptions
     } on FirebaseAuthException catch (e) {
-      setState(() {
-        loading = false;
-      });
-      if (error == 'email-already-in-use') {
-        snack(error.toString(), context);
-        logger.i(error.toString());
+      if (e.code == 'weak-password') {
+        snack("your password is weak", context);
+      } else if (e.code == 'email-already-in-use') {
+        snack("email already in use", context);
       }
     } catch (error) {
-      setState(() {
-        loading = false;
-      });
       if (error == "ERROR_INVALID_EMAIL") {
         snack(error.toString(), context);
       } else if (error == "ERROR_WRONG_PASSWORD") {
         snack(error.toString(), context);
-        logger.i(error);
       } else if (error == "ERROR_USER_NOT_FOUND") {
         snack(error.toString(), context);
-        logger.i(error);
       } else if (error == "ERROR_USER_DISABLED") {
         snack(error.toString(), context);
       } else if (error == "ERROR_TOO_MANY_REQUESTS") {
         snack(error.toString(), context);
-        logger.i(error);
       } else if (error == "ERROR_OPERATION_NOT_ALLOWED") {
         snack(error.toString(), context);
-        logger.i(error);
       } else {
         snack(error.toString(), context);
-        logger.i(error);
       }
     }
-    //Navigator.current
+    setState(() {
+      loading = false;
+    });
     navigatorKey.currentState!.popUntil((route) {
       return route.isFirst;
     });

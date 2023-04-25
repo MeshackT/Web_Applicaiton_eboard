@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:levy/verifyEmailPage.dart';
 
+import '../../verifyEmailPage.dart';
 import 'Authentication/Authenticate.dart';
 
 class Wrapper extends StatelessWidget {

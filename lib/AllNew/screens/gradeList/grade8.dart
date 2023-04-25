@@ -93,15 +93,15 @@ class RegisterLearner {
   }
 }
 
-class Grade11 extends StatefulWidget {
-  const Grade11({Key? key}) : super(key: key);
+class Grade8 extends StatefulWidget {
+  const Grade8({Key? key}) : super(key: key);
   static const routeName = '/grade12';
 
   @override
-  State<Grade11> createState() => _Grade11State();
+  State<Grade8> createState() => _Grade8State();
 }
 
-class _Grade11State extends State<Grade11> {
+class _Grade8State extends State<Grade8> {
   final TextEditingController _searchController = TextEditingController();
   String searchText = '';
 
@@ -290,8 +290,7 @@ class _Grade11State extends State<Grade11> {
                     child: StreamBuilder<QuerySnapshot>(
                       stream: allLearnersCollection
                           .where('teachersID', arrayContains: user!.uid)
-                          .where('grade', isEqualTo: "11")
-                          .orderBy('name', descending: true)
+                          .where('grade', isEqualTo: "8")
                           .snapshots(),
                       builder: (ctx, streamSnapshot) {
                         if (streamSnapshot.connectionState ==
@@ -300,8 +299,7 @@ class _Grade11State extends State<Grade11> {
                               child: SpinKitChasingDots(
                                 color: Theme.of(context).primaryColorDark,
                               ));
-                        }
-                        if (streamSnapshot.connectionState ==
+                        } else if (streamSnapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Center(
                               child: Column(
@@ -339,11 +337,11 @@ class _Grade11State extends State<Grade11> {
                                   ),
                                 ],
                               ));
-                        } else if (streamSnapshot.hasError) {
+                        }else if (streamSnapshot.hasError) {
                           return Text("Error: ${streamSnapshot.error}");
                         } else if(!streamSnapshot.hasData || streamSnapshot.data == null ||
                             streamSnapshot.data!.size <= 0){
-                          return Center(child: Text("No grade 11, list No learner registered yet.",
+                          return Center(child: Text("No grade 9 list, No learner registered yet.",
                             style: textStyleText(context).copyWith(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
@@ -389,11 +387,10 @@ class _Grade11State extends State<Grade11> {
                                       child: ListTile(
                                         leading: CircleAvatar(
                                           child:
-                                          Text(
-                                              "${documents[index]['secondName']} ${documents[index]['name'][0]}"),
+                                          Text(documents[index]['name'][0]),
                                         ),
                                         title: Text(
-                                          documents[index]['name'],
+                                          "${documents[index]['secondName']} ${documents[index]['name'][0]}",
                                           style: TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold,

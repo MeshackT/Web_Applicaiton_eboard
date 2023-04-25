@@ -4,10 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:levy/AllNew/screens/Notifications/sendNotification.dart';
-import 'package:levy/AllNew/shared/constants.dart';
 import 'package:logger/logger.dart';
-
+import '../../model/ConnectionChecker.dart';
+import '../../shared/constants.dart';
+import '../Notifications/sendNotification.dart';
 import '../home/AddEditMarksForAll.dart';
 import '../home/home.dart';
 
@@ -141,10 +141,13 @@ class _Grade12State extends State<Grade12> {
 
   String nameOfTeacher = "";
   String _userSubject = '';
+  String _userSubject2 = '';
+
 
   @override
   void initState() {
     super.initState();
+    ConnectionChecker.checkTimer();
     _getUserField();
   }
 
@@ -155,6 +158,7 @@ class _Grade12State extends State<Grade12> {
 
   @override
   void dispose() {
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -185,21 +189,20 @@ class _Grade12State extends State<Grade12> {
       });
     }
 
-    @override
-    void dispose() {
-      _searchController.dispose();
-      super.dispose();
-    }
-
     return Scaffold(
         appBar: AppBar(
           title: const Text("Registered learners"),
           elevation: 0.0,
           centerTitle: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(30),
+            ),
+          ),
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const SendNotification()));
@@ -212,6 +215,7 @@ class _Grade12State extends State<Grade12> {
           ],
         ),
         drawer: const NavigationDrawer(),
+        drawerScrimColor: Colors.transparent,
         body: DoubleBackToCloseApp(
           snackBar: SnackBar(
             backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
@@ -264,19 +268,10 @@ class _Grade12State extends State<Grade12> {
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 1),
                             prefixIcon: const Icon(Icons.search),
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.cancel),
-                              onPressed: () {
-                                setState(() {
-                                  _searchController.text = "";
-                                });
-                              },
-                            ),
                           ),
                           onChanged: (value) {
                             setState(() {
                               searchText = value;
-                              print(searchText);
                             });
                           },
                         ),
@@ -296,6 +291,8 @@ class _Grade12State extends State<Grade12> {
                     child: StreamBuilder<QuerySnapshot>(
                       stream: allLearnersCollection
                           .where('teachersID', arrayContains: user!.uid)
+                          .where('grade', isEqualTo: "12")
+                      .orderBy('name', descending: true)
                           .snapshots(),
                       builder: (ctx, streamSnapshot) {
                         if (streamSnapshot.connectionState ==
@@ -304,8 +301,7 @@ class _Grade12State extends State<Grade12> {
                               child: SpinKitChasingDots(
                             color: Theme.of(context).primaryColorDark,
                           ));
-                        }
-                        if (streamSnapshot.connectionState ==
+                        } else if (streamSnapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Center(
                               child: Column(
@@ -343,11 +339,20 @@ class _Grade12State extends State<Grade12> {
                               ),
                             ],
                           ));
+                        }else if (streamSnapshot.hasError) {
+                          return Text("Error: ${streamSnapshot.error}");
+                        } else if(!streamSnapshot.hasData || streamSnapshot.data == null ||
+                            streamSnapshot.data!.size <= 0){
+                          return Center(child: Text("No grade 12 list, No learner registered yet.",
+                            style: textStyleText(context).copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),),);
                         }
                         documents = streamSnapshot.data!.docs;
                         //todo Documents list added to filterTitle
                         if (searchText.isNotEmpty) {
-                          documents = documents.where((element) {
+                          documents= documents.where((element) {
                             return element
                                 .get('name')
                                 .toString()
@@ -372,22 +377,22 @@ class _Grade12State extends State<Grade12> {
                                   // const Text("A list of grade 12 Mathematics learners"),
                                   ClipRRect(
                                     borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(30),
-                                      bottomRight: Radius.circular(30),
-                                      topLeft: Radius.circular(30),
-                                      topRight: Radius.circular(30),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10),
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
                                     ),
                                     child: Container(
                                       color: Theme.of(context)
                                           .primaryColorLight
-                                          .withOpacity(.8),
+                                          .withOpacity(.3),
                                       child: ListTile(
                                         leading: CircleAvatar(
                                           child:
                                               Text(documents[index]['name'][0]),
                                         ),
                                         title: Text(
-                                          documents[index]['name'],
+                                          "${documents[index]['secondName']} ${documents[index]['name'][0]}",
                                           style: TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold,
@@ -396,7 +401,7 @@ class _Grade12State extends State<Grade12> {
                                           ),
                                         ),
                                         subtitle: Text(
-                                          "Grade " + documents[index]['grade'],
+                                          "Grade ${documents[index]['grade']}",
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .primaryColorDark,
@@ -491,24 +496,61 @@ class _Grade12State extends State<Grade12> {
                                                                               // Get the document data from Firestore
                                                                               DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('learnersData').doc(documents[index].id).get();
 
-                                                                              // Check if the document exists
+                                                                              // if (snapshot.exists) {
+                                                                              //   List<dynamic> allSubjects = snapshot.get("allSubjects");
+                                                                              //   allSubjects.removeWhere((item) {
+                                                                              //     if (item is Map && item.containsKey(_userSubject)) {
+                                                                              //       if (item.isNotEmpty) {
+                                                                              //         return true;
+                                                                              //       } else {
+                                                                              //         return false;
+                                                                              //       }
+                                                                              //     } else {
+                                                                              //       return false;
+                                                                              //     }
+                                                                              //   });
+                                                                              //   await snapshot.reference.update({
+                                                                              //     "allSubjects": allSubjects
+                                                                              //   }).then(
+                                                                              //         (value) => snack("Learner is de-registered to do $_userSubject", context),
+                                                                              //   );
+                                                                              // } else {
+                                                                              //   logger.i('Document does not exist');
+                                                                              // }
                                                                               if (snapshot.exists) {
-                                                                                // Go to the field in the document
-                                                                                List<dynamic> allSubjects = snapshot.get("allSubjects");
-
-                                                                                // Remove the desired item from the array
-                                                                                allSubjects.removeWhere((item) => item.containsKey(_userSubject));
-
-                                                                                // Update the document in Firestore to save the modified array
-                                                                                await snapshot.reference.update({
-                                                                                  "allSubjects": allSubjects
-                                                                                }).then(
-                                                                                  (value) => snack("Learner is de-registered to do $_userSubject", context),
-                                                                                );
+                                                                                Map<String, dynamic> allSubjects = snapshot.get("allSubjects");
+                                                                                if (allSubjects.containsKey(_userSubject)) {
+                                                                                  allSubjects.remove(_userSubject);
+                                                                                  await snapshot.reference.update({
+                                                                                    "allSubjects": allSubjects
+                                                                                  }).then(
+                                                                                    (value) => snack("Learner is de-registered to do $_userSubject", context),
+                                                                                  );
+                                                                                } else {
+                                                                                  logger.i('Subject does not exist for this learner');
+                                                                                }
                                                                               } else {
-                                                                                // Handle case where document does not exist
                                                                                 logger.i('Document does not exist');
                                                                               }
+
+                                                                              // Check if the document exists
+                                                                              // if (snapshot.exists) {
+                                                                              //   // Go to the field in the document
+                                                                              //   List<dynamic> allSubjects = snapshot.get("allSubjects");
+                                                                              //
+                                                                              //   // Remove the desired item from the array
+                                                                              //   allSubjects.removeWhere((item) => item.containsKey(_userSubject));
+                                                                              //
+                                                                              //   // Update the document in Firestore to save the modified array
+                                                                              //   await snapshot.reference.update({
+                                                                              //     "allSubjects": allSubjects
+                                                                              //   }).then(
+                                                                              //     (value) => snack("Learner is de-registered to do $_userSubject", context),
+                                                                              //   );
+                                                                              // } else {
+                                                                              //   // Handle case where document does not exist
+                                                                              //   logger.i('Document does not exist');
+                                                                              // }
                                                                               Navigator.of(context).pop();
                                                                             } catch (e) {
                                                                               logger.i(e);
@@ -544,174 +586,309 @@ class _Grade12State extends State<Grade12> {
                                                         color: IconTheme.of(
                                                                 context)
                                                             .color!
-                                                            .withOpacity(.7),
+                                                            .withOpacity(.6),
                                                       ),
                                               ),
                                               InkWell(
-                                                child: SizedBox(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child: loading
-                                                      ? SpinKitChasingDots(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .primaryColor,
-                                                          size: 10,
-                                                        )
-                                                      : Icon(
-                                                          Icons
-                                                              .keyboard_double_arrow_right,
-                                                          size: 25,
-                                                          key: widget.key,
-                                                          color: IconTheme.of(
-                                                                  context)
-                                                              .color!
-                                                              .withOpacity(.7),
-                                                        ),
-                                                ),
-                                                onTap: () async {
-                                                  try {
-                                                    snack(
-                                                        "Loading Data please wait...",
-                                                        context);
-                                                    final DocumentReference
-                                                        documentRef =
-                                                        FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                'learnersData')
-                                                            .doc(
-                                                                documents[index]
-                                                                    .id);
-
-                                                    // Get the document snapshot
-                                                    final DocumentSnapshot
-                                                        documentSnapshot =
-                                                        await documentRef.get();
-                                                    // Get the allSubjects array from
-                                                    // the document data
-                                                    final List<dynamic>
-                                                        allSubjects =
-                                                        documentSnapshot[
-                                                            'allSubjects'];
-
-                                                    //get the documents data from firestore
-                                                    DocumentSnapshot snapshot =
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                'learnersData')
-                                                            .doc(documents[
-                                                                    index]
-                                                                .id) // replace 'documentID' with the actual ID of the document
-                                                            .get();
-
-                                                    //check if the document exits
-                                                    if (snapshot.exists) {
-                                                      //go to the field in the document
-                                                      var data = snapshot
-                                                          .get(("allSubjects"));
-                                                      //check if the data is a List
-                                                      if (data is List) {
-                                                        bool foundCatIndex =
-                                                            false;
-                                                        //for every item in the list
-                                                        for (var item in data) {
-                                                          //if the item is==$userSubject
-                                                          if (item.containsKey(
-                                                              _userSubject)) {
-                                                            //index is present
-                                                            foundCatIndex =
-                                                                true;
-                                                            Map<String, dynamic>
-                                                                finalMarks = {};
-
-                                                            var teacherSub = item[
-                                                                _userSubject];
-
-                                                            //logger.i(teacherSub);
-                                                            finalMarks[
-                                                                    _userSubject] =
-                                                                teacherSub;
-                                                            String
-                                                                documentIDToEdit =
-                                                                documents[index]
-                                                                    .id;
-                                                            Navigator.of(
+                                                  child: SizedBox(
+                                                    height: 40,
+                                                    width: 40,
+                                                    child: loading
+                                                        ? SpinKitChasingDots(
+                                                            color: Theme.of(
                                                                     context)
-                                                                .pushReplacement(
-                                                              MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        AddEditForAll(
-                                                                  getMarksFromFirestore:
-                                                                      finalMarks,
-                                                                  subjectName:
-                                                                      _userSubject,
-                                                                  documentIDToEdit:
-                                                                      documentIDToEdit,
-                                                                ),
-                                                              ),
-                                                            );
-                                                            // do something with the 'CAT' data, such as print it
-                                                            break;
-                                                          }
-                                                        }
-                                                        //if the teacherSubject is not found
+                                                                .primaryColor,
+                                                            size: 10,
+                                                          )
+                                                        : Icon(
+                                                            Icons
+                                                                .keyboard_double_arrow_right,
+                                                            size: 25,
+                                                            key: widget.key,
+                                                            color: IconTheme.of(
+                                                                    context)
+                                                                .color!
+                                                                .withOpacity(
+                                                                    .7),
+                                                          ),
+                                                  ),
+                                                  onTap: () async {
+                                                    try {
+                                                      snack(
+                                                          "Loading Data please wait...",
+                                                          context);
+                                                      final DocumentReference
+                                                          documentRef =
+                                                          FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'learnersData')
+                                                              .doc(documents[
+                                                                      index]
+                                                                  .id);
 
-                                                        if (!foundCatIndex) {
-                                                          // handle case where 'CAT' index does not exist
+                                                      // Get the document snapshot
+                                                      final DocumentSnapshot
+                                                          documentSnapshot =
+                                                          await documentRef
+                                                              .get();
+                                                      // Get the allSubjects map from the document data
+                                                      final Map<String, dynamic>
+                                                          allSubjects =
+                                                          documentSnapshot[
+                                                              'allSubjects'];
+
+                                                      // get the document data from firestore
+                                                      DocumentSnapshot
+                                                          snapshot =
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'learnersData')
+                                                              .doc(documents[
+                                                                      index]
+                                                                  .id)
+                                                              .get();
+
+                                                      // check if the document exists
+                                                      if (snapshot.exists) {
+                                                        // get the allSubjects map from the document data
+                                                        Map<String, dynamic>
+                                                            data = snapshot.get(
+                                                                "allSubjects");
+                                                        // check if the data is a map
+                                                        if (data is Map) {
+                                                          bool foundCatIndex = false;
+                                                          // for every key-value pair in the map
+                                                          data.forEach(
+                                                              (key, value) {
+                                                            // if the key is equal to _userSubject
+                                                            if (key == _userSubject) {
+                                                              // index is present
+                                                              foundCatIndex = true;
+                                                              Map<String, dynamic>finalMarks = {};
+                                                              // store the teacherSubject here
+                                                              var teacherSubject = value;
+
+                                                              finalMarks[_userSubject] = teacherSubject;
+                                                              String documentIDToEdit = documents[index].id;
+                                                              logger.i("$finalMarks\n$documentIDToEdit\n$_userSubject");
+                                                              Navigator.of(context).pushReplacement(
+                                                                MaterialPageRoute(
+                                                                  builder: (context) => AddEditForAll(
+                                                                    getMarksFromFirestore: finalMarks, subjectName:
+                                                                        _userSubject, documentIDToEdit: documentIDToEdit,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                              // do something with the 'CAT' data, such as print it
+                                                            }else if (key == _userSubject2) {
+                                                              // index is present
+                                                              foundCatIndex = true;
+                                                              Map<String, dynamic>finalMarks2 = {};
+                                                              // store the teacherSubject here
+                                                              var teacherSubject2 = value;
+
+                                                              finalMarks2[_userSubject2] = teacherSubject2;
+                                                              String documentIDToEdit = documents[index].id;
+                                                              logger.i("$finalMarks2\n$documentIDToEdit\n$_userSubject2");
+                                                              Navigator.of(context).pushReplacement(
+                                                                MaterialPageRoute(
+                                                                  builder: (context) => AddEditForAll(
+                                                                    getMarksFromFirestore: finalMarks2, subjectName:
+                                                                  _userSubject2, documentIDToEdit: documentIDToEdit,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                              // do something with the 'CAT' data, such as print it
+                                                            }
+
+                                                          });
+                                                          // if the teacherSubject is not found
+                                                          if (!foundCatIndex) {
+                                                            // handle case where _userSubject index does not exist
+                                                            logger.i(
+                                                                'No $_userSubject index found');
+                                                            snack(
+                                                                "Leaner is not registered",
+                                                                context);
+                                                          }
+                                                        } else {
+                                                          // handle case where teacherSubject index does not exist
                                                           logger.i(
                                                               'No $_userSubject index found');
-                                                          snack(
-                                                              "Leaner is not registered",
-                                                              context);
+                                                          Fluttertoast.showToast(
+                                                              msg:
+                                                                  "$_userSubject not found");
                                                         }
-                                                        //check if the stored data is a Map
-                                                      } else if (data is Map &&
-                                                          data.containsKey(
-                                                              _userSubject)) {
-                                                        //store the teacherSubject here
-                                                        var teacherSubject =
-                                                            data[_userSubject];
-                                                        // do something with the 'CAT' data, such as print it
-                                                        logger
-                                                            .i(teacherSubject);
                                                       } else {
-                                                        // handle case where teacherSubject index does not exist
+                                                        // handle case where document does not exist
                                                         logger.i(
-                                                            'No $_userSubject index found');
+                                                            'Document does not exist');
                                                         Fluttertoast.showToast(
                                                             msg:
-                                                                "$_userSubject not found");
+                                                                "No document found");
                                                       }
-                                                    } else {
-                                                      // handle case where document does not exist
-                                                      logger.i(
-                                                          'Document does not exist');
+                                                      setState(() {
+                                                        loading = false;
+                                                      });
+                                                    } catch (e) {
+                                                      setState(() {
+                                                        loading = false;
+                                                      });
+                                                      logger.i(e);
                                                       Fluttertoast.showToast(
-                                                          msg:
-                                                              "No document found");
-                                                    }
-                                                    setState(() {
-                                                      loading = false;
-                                                    });
-                                                  } catch (e) {
-                                                    setState(() {
-                                                      loading = false;
-                                                    });
-                                                    logger.i(e);
-                                                    Fluttertoast.showToast(
                                                         msg: e.toString(),
                                                         textColor: Theme.of(
                                                                 context)
                                                             .primaryColorLight,
                                                         backgroundColor:
                                                             Theme.of(context)
-                                                                .primaryColor);
+                                                                .primaryColor,
+                                                      );
+                                                    }
                                                   }
-                                                },
-                                              ),
+                                                  //snack(
+                                                  //       "Loading Data please wait...",
+                                                  //       context);
+                                                  //   final DocumentReference
+                                                  //       documentRef =
+                                                  //       FirebaseFirestore
+                                                  //           .instance
+                                                  //           .collection(
+                                                  //               'learnersData')
+                                                  //           .doc(
+                                                  //               documents[index]
+                                                  //                   .id);
+                                                  //
+                                                  //   // Get the document snapshot
+                                                  //   final DocumentSnapshot
+                                                  //       documentSnapshot =
+                                                  //       await documentRef.get();
+                                                  //   // Get the allSubjects array from
+                                                  //   // the document data
+                                                  //   final List<dynamic>
+                                                  //       allSubjects =
+                                                  //       documentSnapshot[
+                                                  //           'allSubjects'];
+                                                  //
+                                                  //   //get the documents data from firestore
+                                                  //   DocumentSnapshot snapshot =
+                                                  //       await FirebaseFirestore
+                                                  //           .instance
+                                                  //           .collection(
+                                                  //               'learnersData')
+                                                  //           .doc(documents[
+                                                  //                   index]
+                                                  //               .id) // replace 'documentID' with the actual ID of the document
+                                                  //           .get();
+                                                  //
+                                                  //   //check if the document exits
+                                                  //   if (snapshot.exists) {
+                                                  //     //go to the field in the document
+                                                  //     var data = snapshot
+                                                  //         .get(("allSubjects"));
+                                                  //     //check if the data is a List
+                                                  //     if (data is List) {
+                                                  //       bool foundCatIndex =
+                                                  //           false;
+                                                  //       //for every item in the list
+                                                  //       for (var item in data) {
+                                                  //         //if the item is==$userSubject
+                                                  //         if (item.containsKey(
+                                                  //             _userSubject)) {
+                                                  //           //index is present
+                                                  //           foundCatIndex =
+                                                  //               true;
+                                                  //           Map<String, dynamic>
+                                                  //               finalMarks = {};
+                                                  //
+                                                  //           var teacherSub = item[
+                                                  //               _userSubject];
+                                                  //
+                                                  //           //logger.i(teacherSub);
+                                                  //           finalMarks[
+                                                  //                   _userSubject] =
+                                                  //               teacherSub;
+                                                  //           String
+                                                  //               documentIDToEdit =
+                                                  //               documents[index]
+                                                  //                   .id;
+                                                  //           Navigator.of(
+                                                  //                   context)
+                                                  //               .pushReplacement(
+                                                  //             MaterialPageRoute(
+                                                  //               builder:
+                                                  //                   (context) =>
+                                                  //                       AddEditForAll(
+                                                  //                 getMarksFromFirestore:
+                                                  //                     finalMarks,
+                                                  //                 subjectName:
+                                                  //                     _userSubject,
+                                                  //                 documentIDToEdit:
+                                                  //                     documentIDToEdit,
+                                                  //               ),
+                                                  //             ),
+                                                  //           );
+                                                  //           // do something with the 'CAT' data, such as print it
+                                                  //           break;
+                                                  //         }
+                                                  //       }
+                                                  //       //if the teacherSubject is not found
+                                                  //
+                                                  //       if (!foundCatIndex) {
+                                                  //         // handle case where 'CAT' index does not exist
+                                                  //         logger.i(
+                                                  //             'No $_userSubject index found');
+                                                  //         snack(
+                                                  //             "Leaner is not registered",
+                                                  //             context);
+                                                  //       }
+                                                  //       //check if the stored data is a Map
+                                                  //     } else if (data is Map &&
+                                                  //         data.containsKey(
+                                                  //             _userSubject)) {
+                                                  //       //store the teacherSubject here
+                                                  //       var teacherSubject =
+                                                  //           data[_userSubject];
+                                                  //       // do something with the 'CAT' data, such as print it
+                                                  //       logger
+                                                  //           .i(teacherSubject);
+                                                  //     } else {
+                                                  //       // handle case where teacherSubject index does not exist
+                                                  //       logger.i(
+                                                  //           'No $_userSubject index found');
+                                                  //       Fluttertoast.showToast(
+                                                  //           msg:
+                                                  //               "$_userSubject not found");
+                                                  //     }
+                                                  //   } else {
+                                                  //     // handle case where document does not exist
+                                                  //     logger.i(
+                                                  //         'Document does not exist');
+                                                  //     Fluttertoast.showToast(
+                                                  //         msg:
+                                                  //             "No document found");
+                                                  //   }
+                                                  //   setState(() {
+                                                  //     loading = false;
+                                                  //   });
+                                                  // } catch (e) {
+                                                  //   setState(() {
+                                                  //     loading = false;
+                                                  //   });
+                                                  //   logger.i(e);
+                                                  //   Fluttertoast.showToast(
+                                                  //       msg: e.toString(),
+                                                  //       textColor: Theme.of(
+                                                  //               context)
+                                                  //           .primaryColorLight,
+                                                  //       backgroundColor:
+                                                  //           Theme.of(context)
+                                                  //               .primaryColor);
+                                                  // }
+
+                                                  ),
                                             ],
                                           ),
                                         ),
@@ -754,11 +931,10 @@ class _Grade12State extends State<Grade12> {
         DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
             querySnapshot.docs.first;
         Map<String, dynamic>? data = documentSnapshot.data();
-        _userSubject = data?['subjects'][0] ??
-            ''; // get the name field or empty string if it doesn't exist
-        nameOfTeacher = data?['name'] ??
-            ''; // get the name field or empty string if it doesn't exist
-        print('User subject: $_userSubject User Name: $nameOfTeacher');
+        _userSubject = data?['subjects'][0] ?? '';
+        _userSubject2 = data?['subjects'][1] ?? '';
+        nameOfTeacher = data?['name'] ?? '';
+        print('User subjects: $_userSubject and $_userSubject2, User Name: $nameOfTeacher');
       } else {
         print('No document found');
       }

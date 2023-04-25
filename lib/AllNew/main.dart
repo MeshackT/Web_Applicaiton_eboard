@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:levy/AllNew/screens/wrapper.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:yueway/AllNew/screens/wrapper.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,11 +12,52 @@ Future<void> main() async {
 final navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
+
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Future<void> getPermission() async {
+      await Permission.photos.request();
+      await Permission.contacts.request();
+      await Permission.storage.request();
+      await Permission.notification.request();
+      // You can request multiple permissions at once.
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.photos,
+        Permission.phone,
+        Permission.storage,
+        Permission.notification,
+        //add more permission to request here.
+      ].request();
+      if (statuses[Permission.photos]!.isDenied) {
+        //check each permission status after.
+        //showToast("Permission Denied");
+        print("Permission Denied");
+      } else if (statuses[Permission.phone]!.isDenied) {
+        //check each permission status after.
+        //showToast("Permission Denied");
+        print("Permission Denied");
+      }else if (statuses[Permission.storage]!.isDenied) {
+        //check each permission status after.
+        //showToast("Permission Denied");
+        print("Permission Denied");
+      } else if (statuses[Permission.notification]!.isDenied) {
+        //check each permission status after.
+        //showToast("Permission Denied");
+        print("Permission Denied");
+      }else if (statuses[Permission.camera]!.isDenied) {
+        //check each permission status after.
+        //showToast("Permission Denied");
+        print("Permission Denied");
+      }else {
+        //showToast("Permission Granted");
+        print("Permission Granted");
+      }
+    }
+
+
     bool darkModeEnabled = false; // initial state of the switch
 
     MaterialColor myColor = const MaterialColor(
@@ -45,7 +87,7 @@ class MyApp extends StatelessWidget {
     );
     final ThemeData darkTheme = ThemeData(
       primarySwatch: myColor,
-      primaryColorDark: const Color(0xE7791971),
+      primaryColorDark: const Color(0xE7151533),
       primaryColorLight: Colors.white,
       fontFamily: 'Poppins',
       iconTheme: const IconThemeData(
