@@ -51,15 +51,30 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
-                } else if(!snapshot.hasData || snapshot.data == null ||
-                    snapshot.data!.size <= 0){
-                  return Center(child: Text("No data sent yet.",
-                    style: textStyleText(context).copyWith(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),),);
-                }
-                else if (snapshot.connectionState ==
+                }  else if (!snapshot.hasData ||
+                    snapshot.data == null ||
+                    snapshot.data!.size <= 0) {
+                  return Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    decoration: const BoxDecoration(
+                      //screen background color
+                      gradient: LinearGradient(
+                          colors: [Color(0x0fffffff), Color(0xE7791971)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "No data sent yet.",
+                        style: textStyleText(context).copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  );
+                } else if (snapshot.connectionState ==
                     ConnectionState.waiting) {
                   return SpinKitChasingDots(
                     color: Theme.of(context).primaryColor,
@@ -73,7 +88,7 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
                       String text = document.get("text");
                       String name = document.get("nameOfTeacher");
                       var dateAndTime = document.get("timestamp");
-                      String documentIDCurrent = document.id;
+                      // String documentIDCurrent = document.id;
 
                       Timestamp timestamp = document.get("timestamp");
                       DateTime dateTime = timestamp.toDate();
@@ -81,150 +96,131 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
                       var formattedDateTime =
                           " ${dateTime.hour}:${dateTime.minute}";
 
-                      return Expanded(
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 3, horizontal: 5),
-                          color: Theme.of(context)
-                              .primaryColorLight
-                              .withOpacity(.3),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    child: Text(
-                                      name.toString()[0],
-                                      style: textStyleText(context).copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: Theme.of(context)
-                                            .primaryColorLight,
-                                      ),
+                      return Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 3, horizontal: 5),
+                        color: Theme.of(context)
+                            .primaryColorLight
+                            .withOpacity(.3),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  child: Text(
+                                    name.toString()[0]??"",
+                                    style: textStyleText(context).copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context)
+                                          .primaryColorLight,
                                     ),
                                   ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          name,
-                                          style:
-                                          textStyleText(context).copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color:
-                                            Theme.of(context).primaryColor,
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              Utils.formattedDate(dateAndTime),
-                                              style: textStyleText(context)
-                                                  .copyWith(
-                                                  fontWeight:
-                                                  FontWeight.normal,
-                                                  color: Theme.of(context)
-                                                      .primaryColor
-                                                      .withOpacity(.7),
-                                                  fontSize: 10),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              formattedDateTime,
-                                              style: textStyleText(context)
-                                                  .copyWith(
-                                                  fontWeight:
-                                                  FontWeight.normal,
-                                                  color: Theme.of(context)
-                                                      .primaryColor
-                                                      .withOpacity(.7),
-                                                  fontSize: 10),
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  SizedBox(
-                                    width: 30,
-                                    height: 40,
-                                    child: PopupMenuButton<int>(
-                                      color: Colors.white,
-                                      elevation: 5.0,
-                                      itemBuilder: (context) => [
-                                        PopupMenuItem<int>(
-                                          value: 0,
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.download,
-                                                color: Theme.of(context)
-                                                    .primaryColor
-                                                    .withOpacity(.7),
-                                              ),
-                                              const SizedBox(
-                                                width: 7,
-                                              ),
-                                              Text(
-                                                "Download",
-                                                style: textStyleText(context)
-                                                    .copyWith(),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const PopupMenuDivider(),
-                                        PopupMenuItem<int>(
-                                          value: 1,
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.share,
-                                                color: Theme.of(context)
-                                                    .primaryColor
-                                                    .withOpacity(.7),
-                                              ),
-                                              const SizedBox(
-                                                width: 7,
-                                              ),
-                                              Text(
-                                                "Share",
-                                                style: textStyleText(context)
-                                                    .copyWith(),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                      onSelected: (item) => selectedItem(
-                                          context,
-                                          item,
-                                          name,
-                                          text),
-                                    ),
-                                  ),                                ],
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 8),
-                                child: Text(
-                                  text,
-                                  style: textStyleText(context),
                                 ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        
+                                        children: [
+                                          Text(
+                                            name??"",
+                                            style:
+                                            textStyleText(context).copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                              Theme.of(context).primaryColor,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 30,
+                                            height: 40,
+                                            child: PopupMenuButton<int>(
+                                              color: Colors.white,
+                                              elevation: 5.0,
+                                              itemBuilder: (context) => [
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.share,
+                                                        color: Theme.of(context)
+                                                            .primaryColor
+                                                            .withOpacity(.7),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 7,
+                                                      ),
+                                                      Text(
+                                                        "Share",
+                                                        style: textStyleText(context)
+                                                            .copyWith(),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                              onSelected: (item) => selectedItem(
+                                                  context,
+                                                  item,
+                                                  name,
+                                                  text),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            Utils.formattedDate(dateAndTime),
+                                            style: textStyleText(context)
+                                                .copyWith(
+                                                fontWeight:
+                                                FontWeight.normal,
+                                                color: Theme.of(context)
+                                                    .primaryColor
+                                                    .withOpacity(.7),
+                                                fontSize: 10),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            formattedDateTime,
+                                            style: textStyleText(context)
+                                                .copyWith(
+                                                fontWeight:
+                                                FontWeight.normal,
+                                                color: Theme.of(context)
+                                                    .primaryColor
+                                                    .withOpacity(.7),
+                                                fontSize: 10),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 8),
+                              child: Text(
+                                text,
+                                style: textStyleText(context),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       );
                     },
@@ -242,13 +238,6 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
       BuildContext context, item, String nameOfSender,String text) async {
     switch (item) {
       case 0:
-        try {
-          //TODO https://youtu.be/FcVADQsqEYk
-        } catch (e) {
-          snack(e.toString(), context);
-        }
-        break;
-      case 1:
         try {
           if (text.isEmpty || text == "") {
             print("cant share");

@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:yueway/AllNew/screens/Authentication/Authenticate.dart';
 import '../../shared/constants.dart';
 import '../home/home.dart';
 import 'feedbackclass.dart';
@@ -17,26 +19,27 @@ class More extends StatefulWidget {
 
 class _MoreState extends State<More> {
   bool isLoading = false;
-  PackageInfo _packageInfo = PackageInfo(
-    appName: 'Unknown',
-    packageName: 'Unknown',
-    version: 'Unknown',
-    buildNumber: 'Unknown',
-    buildSignature: 'Unknown',
-    installerStore: 'Unknown',
-  );
+  String appName = "";
+  String appVersion = "";
+  String appBuildUpNumber = "";
+  String appPackage = "";
+
+  void _load() async {
+    PackageInfo _packageInfo = await PackageInfo.fromPlatform();
+
+    appName = _packageInfo.appName;
+    appVersion = _packageInfo.version;
+    appBuildUpNumber = _packageInfo.buildNumber;
+    appPackage = _packageInfo.packageName;
+
+    isLoading = false;
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
-    _packageInfo;
-  }
-
-  Future<void> _initPackageInfo() async {
-    final info = await PackageInfo.fromPlatform();
-    setState(() {
-      _packageInfo = info;
-    });
+    _load();
   }
 
   @override
@@ -53,17 +56,17 @@ class _MoreState extends State<More> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight),
           ),
-          child: Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   OutlinedButton(
                     style: buttonRound,
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => const Home()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const Home()));
                     },
                     child: Text(
                       "Back",
@@ -74,7 +77,8 @@ class _MoreState extends State<More> {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColorLight.withOpacity(.4),
+                      color:
+                          Theme.of(context).primaryColorLight.withOpacity(.4),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                       border: Border.all(
                         color: Theme.of(context).primaryColor,
@@ -106,8 +110,9 @@ class _MoreState extends State<More> {
                               fontWeight: FontWeight.w500,
                               fontSize: 16,
                               letterSpacing: 1,
-                              color:
-                                  Theme.of(context).primaryColor.withOpacity(.6),
+                              color: Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(.6),
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -119,10 +124,11 @@ class _MoreState extends State<More> {
                   Container(
                     height: 120,
                     width: MediaQuery.of(context).size.width,
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColorLight.withOpacity(.4),
+                      color:
+                          Theme.of(context).primaryColorLight.withOpacity(.4),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                       border: Border.all(
                         color: Theme.of(context).primaryColor,
@@ -198,11 +204,16 @@ class _MoreState extends State<More> {
                       });
                       try {
                         await FirebaseAuth.instance.signOut();
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const Authenticate(),
+                          ),
+                        );
                       } catch (e) {
                         snack("Failed to sign out", context);
                       }
                       setState(() {
-                        isLoading = true;
+                        isLoading = false;
                       });
                     },
                     child: Container(
@@ -210,7 +221,8 @@ class _MoreState extends State<More> {
                       decoration: BoxDecoration(
                         color:
                             Theme.of(context).primaryColorLight.withOpacity(.4),
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
                         border: Border.all(
                           color: Theme.of(context).primaryColor,
                         ),
@@ -236,16 +248,22 @@ class _MoreState extends State<More> {
                   spaceVertical(),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    child: Text(
-                      "App Name: ${_packageInfo.appName}\nApp Version: ${_packageInfo.version}\nApp Version: ${_packageInfo.buildNumber}\nApp Version: ${_packageInfo.buildSignature}",
-                      style: textStyleText(context).copyWith(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        letterSpacing: 1,
-                        color: Theme.of(context).primaryColor.withOpacity(.6),
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
+                    child: isLoading
+                        ? SpinKitChasingDots(
+                            color: Theme.of(context).primaryColor,
+                          )
+                        : Text(
+                            "App Name: $appName\nApp Version: $appVersion\nApp BuildNumber: $appBuildUpNumber\n$appPackage",
+                            style: textStyleText(context).copyWith(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              letterSpacing: 1,
+                              color: Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(.6),
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
                   ),
                 ],
               ),
@@ -320,8 +338,8 @@ class _MoreState extends State<More> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding:
-                        const EdgeInsets.symmetric(horizontal: 25.0, vertical: 3),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25.0, vertical: 3),
                         child: Column(children: [
                           ClipRRect(
                             borderRadius: const BorderRadius.only(
@@ -331,7 +349,9 @@ class _MoreState extends State<More> {
                               topRight: Radius.circular(50),
                             ),
                             child: Container(
-                              color: Theme.of(context).primaryColor.withOpacity(.7),
+                              color: Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(.7),
                               width: MediaQuery.of(context).size.width,
                               height: 50,
                               child: Center(
@@ -341,7 +361,8 @@ class _MoreState extends State<More> {
                                       fontSize: 15,
                                       fontWeight: FontWeight.w700,
                                       fontFamily: 'Apple SD Gothic Neo',
-                                      color: Theme.of(context).primaryColorLight),
+                                      color:
+                                          Theme.of(context).primaryColorLight),
                                 ),
                               ),
                             ),
@@ -356,7 +377,9 @@ class _MoreState extends State<More> {
                               hintText: "Your name here",
                               hintStyle: textStyleText(context).copyWith(
                                 fontWeight: FontWeight.w800,
-                                color: Theme.of(context).primaryColor.withOpacity(.7),
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.7),
                               ),
                             ),
                             style: textStyleText(context),
@@ -378,7 +401,9 @@ class _MoreState extends State<More> {
                               hintText: "Your email here",
                               hintStyle: textStyleText(context).copyWith(
                                 fontWeight: FontWeight.w800,
-                                color: Theme.of(context).primaryColor.withOpacity(.7),
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.7),
                               ),
                             ),
                             style: textStyleText(context),
@@ -400,7 +425,9 @@ class _MoreState extends State<More> {
                               hintText: "Your subject here",
                               hintStyle: textStyleText(context).copyWith(
                                 fontWeight: FontWeight.w800,
-                                color: Theme.of(context).primaryColor.withOpacity(.7),
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.7),
                               ),
                             ),
                             style: textStyleText(context),
@@ -423,7 +450,9 @@ class _MoreState extends State<More> {
                               hintText: "Your message here",
                               hintStyle: textStyleText(context).copyWith(
                                 fontWeight: FontWeight.w800,
-                                color: Theme.of(context).primaryColor.withOpacity(.7),
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.7),
                               ),
                             ),
                             style: textStyleText(context),
@@ -435,7 +464,6 @@ class _MoreState extends State<More> {
                               messageOfSender.text = value!;
                             },
                           ),
-
                           const SizedBox(
                             height: 10,
                           ),
@@ -451,7 +479,8 @@ class _MoreState extends State<More> {
                                         emailOfSender.text.isEmpty ||
                                         subjectOfSender.text.isEmpty ||
                                         messageOfSender.text.isEmpty) {
-                                      snack("Insert your details and message", context);
+                                      snack("Insert your details and message",
+                                          context);
                                     } else {
                                       SendEmail.sendEmail(
                                         name: nameOfSender.text,
@@ -461,9 +490,9 @@ class _MoreState extends State<More> {
                                       );
                                       Fluttertoast.showToast(
                                           backgroundColor:
-                                          Theme.of(context).primaryColor,
+                                              Theme.of(context).primaryColor,
                                           msg:
-                                          "Thank you for your feedback, your email submitted.");
+                                              "Thank you for your feedback, your email submitted.");
                                       Navigator.of(context).pop();
                                     }
                                     nameOfSender.clear();
@@ -500,7 +529,6 @@ class _MoreState extends State<More> {
 
 //TODO Show bottom Sheet To add Subject to the learner
 showSheetToShare(BuildContext context) {
-  bool isLoading = false;
   showModalBottomSheet(
     barrierColor: Theme.of(context).primaryColor.withOpacity(.1),
     isScrollControlled: true,
@@ -525,99 +553,102 @@ showSheetToShare(BuildContext context) {
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Share these applications with your friends",
-                      style: textStyleText(context).copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 10,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 70),
-                      child: Divider(
-                        height: 7,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        FlutterShare.share(
-                            title: "E-Board application",
-                            chooserTitle: "E-Board application",
-                            text: "Download Yueway on appStores",
-                            linkUrl:
-                                "https://play.google.com/store/apps/details?id=com.eq.yueway");
-                      },
-                      child: Text(
-                        "E-Board",
-                        textAlign: TextAlign.start,
+                      Text(
+                        "Share these applications with your friends",
                         style: textStyleText(context).copyWith(
-                          fontSize: 14,
                           fontWeight: FontWeight.w600,
+                          fontSize: 14,
                         ),
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        FlutterShare.share(
-                            title: "E-Board application",
-                            chooserTitle: "E-Board application",
-                            text: "Download Yueway on appStores",
-                            linkUrl:
-                                "https://play.google.com/store/apps/details?id=com.yueway.yueway_go");
-                      },
-                      child: Text(
-                        "Yueway Go",
-                        textAlign: TextAlign.start,
-                        style: textStyleText(context).copyWith(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 70),
+                        child: Divider(
+                          height: 7,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        FlutterShare.share(
-                            title: "E-Board application",
-                            chooserTitle: "E-Board application",
-                            text: "Download Yueway on appStores",
-                            linkUrl:
-                                "https://play.google.com/store/apps/details?id=com.eq.yueway");
-                      },
-                      child: Text(
-                        "Yueway Security",
-                        style: textStyleText(context).copyWith(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                      TextButton(
+                        onPressed: () async {
+                          FlutterShare.share(
+                              title: "E-Board application",
+                              chooserTitle: "E-Board application",
+                              text: "Download E-board on appStore",
+                              linkUrl:
+                                  "https://play.google.com/store/apps/details?id=com.eq.yueway");
+                        },
+                        child: Text(
+                          "E-Board",
+                          textAlign: TextAlign.start,
+                          style: textStyleText(context).copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        FlutterShare.share(
-                            title: "E-Board application",
-                            chooserTitle: "E-Board application",
-                            text: "Download Yueway on appStores",
-                            linkUrl: "https://play.google.com/store/apps/det"
-                                "ails?id=com.yueway.revival_life_ministry");
-                      },
-                      child: Text(
-                        "Revival Life Ministry",
-                        style: textStyleText(context).copyWith(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                      TextButton(
+                        onPressed: () async {
+                          FlutterShare.share(
+                              title: "Yueway Go application",
+                              chooserTitle: "Yueway Go application",
+                              text: "Download Yueway Go on appStores",
+                              linkUrl:
+                                  "https://play.google.com/store/apps/details?id=com.yueway.yueway_go");
+                        },
+                        child: Text(
+                          "Yueway Go",
+                          textAlign: TextAlign.start,
+                          style: textStyleText(context).copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      TextButton(
+                        onPressed: () async {
+                          FlutterShare.share(
+                              title: "E-Board application",
+                              chooserTitle: "Yueway application",
+                              text: "Download Yueway on appStores",
+                              linkUrl:
+                                  "https://play.google.com/store/apps/details?id=com.eq.yueway");
+                        },
+                        child: Text(
+                          "Yueway Security",
+                          style: textStyleText(context).copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          FlutterShare.share(
+                              title: "E-Board application",
+                              chooserTitle: "Revival Life Ministry application",
+                              text:
+                                  "Download Revival Life Ministry application on appStores",
+                              linkUrl: "https://play.google.com/store/apps/det"
+                                  "ails?id=com.yueway.revival_life_ministry");
+                        },
+                        child: Text(
+                          "Revival Life Ministry",
+                          style: textStyleText(context).copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

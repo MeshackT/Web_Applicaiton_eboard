@@ -96,6 +96,7 @@ class _ViewMyTextsForEditingState extends State<ViewMyTextsForEditing> {
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection("messagesWithTextOnly")
+                      .orderBy("timestamp", descending: true)
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -137,117 +138,117 @@ class _ViewMyTextsForEditingState extends State<ViewMyTextsForEditing> {
                           var formattedDateTime =
                               " ${dateTime.hour}:${dateTime.minute}";
 
-                          return Expanded(
-                            child: InkWell(
-                              onLongPress: () {
-                                setState(() {
-                                  titleEdit.text = text.toString();
-                                });
-                                showSheetToEdit(text, documentIDCurrent, teacherID);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 3, horizontal: 5),
-                                color: Theme.of(context)
-                                    .primaryColorLight
-                                    .withOpacity(.3),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        CircleAvatar(
-                                          child: Text(
-                                            name.toString()[0],
-                                            style:
-                                                textStyleText(context).copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context)
-                                                  .primaryColorLight,
-                                            ),
+                          return InkWell(
+                            onLongPress: () {
+                              setState(() {
+                                titleEdit.text = text.toString();
+                              });
+                              showSheetToEdit(
+                                  text, documentIDCurrent, teacherID);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 3, horizontal: 5),
+                              color: Theme.of(context)
+                                  .primaryColorLight
+                                  .withOpacity(.3),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      CircleAvatar(
+                                        child: Text(
+                                          name.toString()[0],
+                                          style:
+                                              textStyleText(context).copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
                                           ),
                                         ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                name,
-                                                style: textStyleText(context)
-                                                    .copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                ),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    Utils.formattedDate(
-                                                        dateAndTime),
-                                                    style: textStyleText(context)
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight.normal,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor
-                                                                .withOpacity(.7),
-                                                            fontSize: 10),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Text(
-                                                    formattedDateTime,
-                                                    style: textStyleText(context)
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight.normal,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor
-                                                                .withOpacity(.7),
-                                                            fontSize: 10),
-                                                  )
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Utils.toolTipMessage("Press and hold to edit or delete the message", context),
-                                        SizedBox(
-                                          width: 40,
-                                          height: 40,
-                                          child: IconButton(
-                                            onPressed: () async {},
-                                            icon: Icon(
-                                              Icons.circle,
-                                              color: Theme.of(context)
-                                                  .primaryColor
-                                                  .withOpacity(.5),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 8),
-                                      child: Text(
-                                        text,
-                                        style: textStyleText(context),
                                       ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Flexible(
+                                        flex:1,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              name,
+                                              style: textStyleText(context)
+                                                  .copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  Utils.formattedDate(
+                                                      dateAndTime),
+                                                  style: textStyleText(context)
+                                                      .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor
+                                                              .withOpacity(.7),
+                                                          fontSize: 10),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  formattedDateTime,
+                                                  style: textStyleText(context)
+                                                      .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor
+                                                              .withOpacity(.7),
+                                                          fontSize: 10),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Utils.toolTipMessage("Press and hold to edit or delete the message", context),
+                                      SizedBox(
+                                        width: 40,
+                                        height: 40,
+                                        child: IconButton(
+                                          onPressed: () async {},
+                                          icon: Icon(
+                                            Icons.circle,
+                                            color: Theme.of(context)
+                                                .primaryColor
+                                                .withOpacity(.5),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 8),
+                                    child: Text(
+                                      text,
+                                      style: textStyleText(context),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           );

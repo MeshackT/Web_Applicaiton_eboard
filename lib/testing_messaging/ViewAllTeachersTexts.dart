@@ -126,7 +126,6 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
                           String text = document.get("text");
                           String name = document.get("nameOfTeacher");
                           var dateAndTime = document.get("timestamp");
-                          String documentIDCurrent = document.id;
 
                           Timestamp timestamp = document.get("timestamp");
                           DateTime dateTime = timestamp.toDate();
@@ -218,28 +217,15 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
                                             value: 0,
                                             child: Row(
                                               children: [
-
-                                                Text(
-                                                  "Download",
-                                                  style: textStyleText(context)
-                                                      .copyWith(),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const PopupMenuDivider(),
-                                          PopupMenuItem<int>(
-                                            value: 1,
-                                            child: Row(
-                                              children: [
                                                 Icon(
                                                   Icons.share,
                                                   color: Theme.of(context)
                                                       .primaryColor
                                                       .withOpacity(.7),
+                                                  size: 15,
                                                 ),
                                                 const SizedBox(
-                                                  width: 7,
+                                                  width: 10,
                                                 ),
                                                 Text(
                                                   "Share",

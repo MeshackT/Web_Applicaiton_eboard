@@ -80,7 +80,6 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() async {
       await prefs.setBool('my_switch_state', value);
-
     });
   }
 

@@ -397,11 +397,24 @@ class _TeachersProfileState extends State<TeachersProfile> {
           .signOut()
           .then((value) => SpinKitChasingDots(
                 color: Theme.of(context).primaryColor,
-              ))
-          .whenComplete(
-            () => Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const Authenticate())),
-          );
+              ));
+      await FirebaseAuth.instance
+          .signOut()
+          .then((value) => SpinKitChasingDots(
+        color: Theme.of(context).primaryColor,
+      ));
+      FirebaseAuth.instance
+          .authStateChanges()
+          .listen((User? user) {
+        if (user == null) {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const Authenticate()));
+        } else {
+          Fluttertoast.showToast(
+              backgroundColor: Theme.of(context).primaryColor,
+              msg: 'Could not log out, you are still signed in!');
+        }
+      });
 
       //ChangeNotifier();
     } catch (e) {
@@ -821,29 +834,5 @@ class _TeachersProfileState extends State<TeachersProfile> {
       // TODO
       logger.i(e);
     }
-  }
-
-  //Get all documents with user Id in subjects field
-  Future<void> _getAllLearnersWithSubjectCurrentUser() async {
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    Query<Map<String, dynamic>> userQuery = firestore
-        .collection('learnersData')
-        .where('subjects', arrayContains: teachersSubjects[0].toString());
-
-    userQuery.get().then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
-      if (querySnapshot.size > 0) {
-        logger.i("Data Found");
-        querySnapshot.docs
-            .forEach((DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
-          //get the document data
-          Map<String, dynamic>? data = documentSnapshot.data();
-          //display the data
-          logger.i(data);
-        });
-      } else {
-        logger.i('No documents found');
-      }
-    }).catchError((error) => logger.i('Failed to get documents: $error'));
   }
 }

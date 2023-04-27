@@ -63,6 +63,10 @@ dependencies:
   path_provider: ^2.0.14
   #get app infor
   package_info_plus: ^3.1.0
+  #insta viewer
+  insta_image_viewer: ^1.0.2
+  #cached network images
+  #cached_network_image: ^3.2.3
 
 
 

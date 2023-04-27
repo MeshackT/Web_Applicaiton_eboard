@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -151,7 +152,9 @@ class _MessagingState extends State<Messaging>
       });
     } catch (e) {
       Fluttertoast.showToast(
-          msg: e.toString(), backgroundColor: Theme.of(context).primaryColor);
+          msg: e.toString(), backgroundColor: Theme
+          .of(context)
+          .primaryColor);
     }
   }
 
@@ -189,14 +192,14 @@ class _MessagingState extends State<Messaging>
     logger.i("unSubscribe $topic");
     await FirebaseMessaging.instance.unsubscribeFromTopic(topic).whenComplete(
           () => Fluttertoast.showToast(msg: "Unsubscribed"),
-        );
+    );
   }
 
   void subscribeToTopicSwitch() async {
     logger.i("subscribe $topic");
     await FirebaseMessaging.instance.subscribeToTopic(topic).whenComplete(
           () => Fluttertoast.showToast(msg: "Subscribed"),
-        );
+    );
   }
 
   @override
@@ -204,7 +207,10 @@ class _MessagingState extends State<Messaging>
     return Scaffold(
       body: SafeArea(
         child: Container(
-          height: MediaQuery.of(context).size.height,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height,
           margin: const EdgeInsets.only(top: 0.0),
           decoration: const BoxDecoration(
             //screen background color
@@ -238,7 +244,9 @@ class _MessagingState extends State<Messaging>
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColorDark,
+                          color: Theme
+                              .of(context)
+                              .primaryColorDark,
                         ),
                       ),
                     ),
@@ -256,17 +264,24 @@ class _MessagingState extends State<Messaging>
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColorDark,
+                          color: Theme
+                              .of(context)
+                              .primaryColorDark,
                         ),
                       ),
                     ),
                     Switch(
                       value: setOn,
                       inactiveThumbColor:
-                          Theme.of(context).primaryColorLight.withOpacity(.6),
-                      activeColor: Theme.of(context).primaryColor,
+                      Theme
+                          .of(context)
+                          .primaryColorLight
+                          .withOpacity(.6),
+                      activeColor: Theme
+                          .of(context)
+                          .primaryColor,
                       thumbIcon:
-                          MaterialStateProperty.resolveWith((Set states) {
+                      MaterialStateProperty.resolveWith((Set states) {
                         if (states.contains(MaterialState.disabled)) {
                           return const Icon(
                             Icons.close,
@@ -300,7 +315,10 @@ class _MessagingState extends State<Messaging>
                       },
                       icon: Icon(Icons.home,
                           color:
-                              Theme.of(context).primaryColor.withOpacity(.7)),
+                          Theme
+                              .of(context)
+                              .primaryColor
+                              .withOpacity(.7)),
                     ),
                   ],
                 ),
@@ -317,9 +335,15 @@ class _MessagingState extends State<Messaging>
                 ),
                 child: Container(
                   height: 40,
-                  width: MediaQuery.of(context).size.width / 1.4,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width / 1.4,
                   padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                  color: Theme.of(context).primaryColorLight.withOpacity(.4),
+                  color: Theme
+                      .of(context)
+                      .primaryColorLight
+                      .withOpacity(.4),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -329,7 +353,7 @@ class _MessagingState extends State<Messaging>
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) =>
-                                  const ViewAllTeachersMessages(),
+                              const ViewAllTeachersMessages(),
                             ),
                           );
                         },
@@ -339,7 +363,9 @@ class _MessagingState extends State<Messaging>
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColorDark,
+                            color: Theme
+                                .of(context)
+                                .primaryColorDark,
                           ),
                         ),
                       ),
@@ -351,7 +377,7 @@ class _MessagingState extends State<Messaging>
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) =>
-                                  const ViewAllTeachersTexts(),
+                              const ViewAllTeachersTexts(),
                             ),
                           );
                         },
@@ -361,7 +387,9 @@ class _MessagingState extends State<Messaging>
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColorDark,
+                            color: Theme
+                                .of(context)
+                                .primaryColorDark,
                           ),
                         ),
                       ),
@@ -397,7 +425,9 @@ class _MessagingState extends State<Messaging>
                     } else if (snapshot.connectionState ==
                         ConnectionState.waiting) {
                       return SpinKitChasingDots(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme
+                            .of(context)
+                            .primaryColor,
                       );
                     } else {
                       _documents = snapshot.data!.docs;
@@ -430,7 +460,8 @@ class _MessagingState extends State<Messaging>
                               }
                             },
                             background: Container(
-                              color: Theme.of(context)
+                              color: Theme
+                                  .of(context)
                                   .primaryColor
                                   .withOpacity(.6),
                               child: Row(
@@ -441,7 +472,9 @@ class _MessagingState extends State<Messaging>
                                     child: Icon(
                                       Icons.delete,
                                       color:
-                                          Theme.of(context).primaryColorLight,
+                                      Theme
+                                          .of(context)
+                                          .primaryColorLight,
                                     ),
                                   ),
                                 ],
@@ -498,8 +531,8 @@ class _MessagingState extends State<Messaging>
                             child: Container(
                               margin: const EdgeInsets.symmetric(
                                   vertical: 3, horizontal: 5),
-                              height: 500,
-                              color: Theme.of(context)
+                              color: Theme
+                                  .of(context)
                                   .primaryColorLight
                                   .withOpacity(.3),
                               child: Column(
@@ -507,15 +540,16 @@ class _MessagingState extends State<Messaging>
                                 children: [
                                   Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       CircleAvatar(
                                         child: Text(
                                           name.toString()[0],
                                           style:
-                                              textStyleText(context).copyWith(
+                                          textStyleText(context).copyWith(
                                             fontWeight: FontWeight.bold,
-                                            color: Theme.of(context)
+                                            color: Theme
+                                                .of(context)
                                                 .primaryColorLight,
                                           ),
                                         ),
@@ -525,18 +559,19 @@ class _MessagingState extends State<Messaging>
                                       ),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: [
                                           Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 name,
                                                 style: textStyleText(context)
                                                     .copyWith(
                                                   fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context)
+                                                  color: Theme
+                                                      .of(context)
                                                       .primaryColor,
                                                 ),
                                               ),
@@ -545,12 +580,13 @@ class _MessagingState extends State<Messaging>
                                                     dateAndTime),
                                                 style: textStyleText(context)
                                                     .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color: Theme.of(context)
-                                                            .primaryColor
-                                                            .withOpacity(.7),
-                                                        fontSize: 10),
+                                                    fontWeight:
+                                                    FontWeight.normal,
+                                                    color: Theme
+                                                        .of(context)
+                                                        .primaryColor
+                                                        .withOpacity(.7),
+                                                    fontSize: 10),
                                               ),
                                             ],
                                           ),
@@ -561,7 +597,8 @@ class _MessagingState extends State<Messaging>
                                               onPressed: () async {},
                                               icon: Icon(
                                                 Icons.circle,
-                                                color: Theme.of(context)
+                                                color: Theme
+                                                    .of(context)
                                                     .primaryColor
                                                     .withOpacity(.5),
                                               ),
@@ -575,11 +612,7 @@ class _MessagingState extends State<Messaging>
                                     height: 5,
                                   ),
                                   //removed sizedBo with height=400
-                                  hasNoImage
-                                      ? SpinKitChasingDots(
-                                          color: Theme.of(context).primaryColor,
-                                        )
-                                      : buildImage(document.id),
+                                  buildImage(imageURLFromFirebase!),
                                   SizedBox(
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -613,13 +646,17 @@ class _MessagingState extends State<Messaging>
             height: 50,
             child: FloatingActionButton(
               heroTag: "btn1",
-              backgroundColor: IconTheme.of(context).color,
+              backgroundColor: IconTheme
+                  .of(context)
+                  .color,
               onPressed: () {
                 showSheetToEdit();
               },
               child: Icon(
                 Icons.edit,
-                color: Theme.of(context).primaryColorLight,
+                color: Theme
+                    .of(context)
+                    .primaryColorLight,
               ),
             ),
           ),
@@ -631,13 +668,17 @@ class _MessagingState extends State<Messaging>
             height: 60,
             child: FloatingActionButton(
               heroTag: "btn2",
-              backgroundColor: IconTheme.of(context).color,
+              backgroundColor: IconTheme
+                  .of(context)
+                  .color,
               onPressed: () {
                 showSheetToEditWIthImage();
               },
               child: Icon(
                 Icons.camera,
-                color: Theme.of(context).primaryColorLight,
+                color: Theme
+                    .of(context)
+                    .primaryColorLight,
               ),
             ),
           ),
@@ -650,7 +691,10 @@ class _MessagingState extends State<Messaging>
   showSelectionForImage() {
     showModalBottomSheet(
       context: context,
-      barrierColor: Theme.of(context).primaryColor.withOpacity(.1),
+      barrierColor: Theme
+          .of(context)
+          .primaryColor
+          .withOpacity(.1),
       builder: (context) {
         return ClipRRect(
           borderRadius: const BorderRadius.only(
@@ -660,7 +704,9 @@ class _MessagingState extends State<Messaging>
             topRight: Radius.circular(50),
           ),
           child: Container(
-            color: Theme.of(context).primaryColorLight,
+            color: Theme
+                .of(context)
+                .primaryColorLight,
             child: Wrap(
               children: [
                 const SizedBox(
@@ -714,8 +760,14 @@ class _MessagingState extends State<Messaging>
             child: Container(
               padding: const EdgeInsets.only(top: 30),
               //color: Theme.of(context).primaryColorLight,
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
               margin: const EdgeInsets.only(top: 0.0),
               decoration: const BoxDecoration(
                 //screen background color
@@ -756,7 +808,9 @@ class _MessagingState extends State<Messaging>
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColorDark,
+                                    color: Theme
+                                        .of(context)
+                                        .primaryColorDark,
                                   ),
                                 ),
                               ),
@@ -774,7 +828,9 @@ class _MessagingState extends State<Messaging>
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColorDark,
+                                    color: Theme
+                                        .of(context)
+                                        .primaryColorDark,
                                   ),
                                 ),
                               ),
@@ -797,10 +853,14 @@ class _MessagingState extends State<Messaging>
                                   topRight: Radius.circular(50),
                                 ),
                                 child: Container(
-                                  color: Theme.of(context)
+                                  color: Theme
+                                      .of(context)
                                       .primaryColor
                                       .withOpacity(.7),
-                                  width: MediaQuery.of(context).size.width,
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width,
                                   height: 50,
                                   child: Center(
                                     child: Text(
@@ -809,7 +869,8 @@ class _MessagingState extends State<Messaging>
                                           fontSize: 18,
                                           fontWeight: FontWeight.w800,
                                           fontFamily: 'Apple SD Gothic Neo',
-                                          color: Theme.of(context)
+                                          color: Theme
+                                              .of(context)
                                               .primaryColorLight),
                                     ),
                                   ),
@@ -820,32 +881,34 @@ class _MessagingState extends State<Messaging>
                               ),
                               SingleChildScrollView(
                                 child: SizedBox(
-                                  height: 250,
-                                  width: MediaQuery.of(context).size.width,
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width,
                                   child: selectedFileName.isEmpty
                                       ? Column(
-                                          children: [
-                                            const Icon(
-                                              Icons.image,
-                                              size: 100,
-                                            ),
-                                            Center(
-                                              child: Text(
-                                                  "Upload an image first",
-                                                  textAlign: TextAlign.center,
-                                                  style: textStyleText(context)
-                                                      .copyWith(
-                                                    fontWeight: FontWeight.w600,
-                                                  )),
-                                            ),
-                                          ],
-                                        )
+                                    children: [
+                                      const Icon(
+                                        Icons.image,
+                                        size: 100,
+                                      ),
+                                      Center(
+                                        child: Text(
+                                            "Upload an image first",
+                                            textAlign: TextAlign.center,
+                                            style: textStyleText(context)
+                                                .copyWith(
+                                              fontWeight: FontWeight.w600,
+                                            )),
+                                      ),
+                                    ],
+                                  )
                                       : Center(
-                                          child: Image.file(File(file.path),
-                                              height: 320,
-                                              width: 320,
-                                              fit: BoxFit.cover),
-                                        ),
+                                    child: Image.file(File(file.path),
+                                        height: 320,
+                                        width: 320,
+                                        fit: BoxFit.cover),
+                                  ),
                                 ),
                               ),
                               const SizedBox(
@@ -863,7 +926,8 @@ class _MessagingState extends State<Messaging>
                                     hintText: "Caption",
                                     hintStyle: textStyleText(context).copyWith(
                                       fontWeight: FontWeight.w800,
-                                      color: Theme.of(context)
+                                      color: Theme
+                                          .of(context)
                                           .primaryColor
                                           .withOpacity(.7),
                                     ),
@@ -885,11 +949,11 @@ class _MessagingState extends State<Messaging>
                               ),
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
+                                const EdgeInsets.symmetric(vertical: 10),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  MainAxisAlignment.spaceEvenly,
                                   children: [
                                     SizedBox(
                                       child: OutlinedButton(
@@ -902,7 +966,8 @@ class _MessagingState extends State<Messaging>
                                           style: TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold,
-                                            color: Theme.of(context)
+                                            color: Theme
+                                                .of(context)
                                                 .primaryColorLight,
                                           ),
                                         ),
@@ -916,8 +981,9 @@ class _MessagingState extends State<Messaging>
                                             Fluttertoast.showToast(
                                                 msg: "Insert image and Text",
                                                 backgroundColor:
-                                                    Theme.of(context)
-                                                        .primaryColor);
+                                                Theme
+                                                    .of(context)
+                                                    .primaryColor);
                                           } else {
                                             setState(() {
                                               isLoading = true;
@@ -926,25 +992,26 @@ class _MessagingState extends State<Messaging>
                                             await _uploadFile();
                                             //upload data
                                             await _addDocumentWithImage(
-                                                    _controller.text,
-                                                    imageUrl,
-                                                    nameOfTeacher)
+                                                _controller.text,
+                                                imageUrl,
+                                                nameOfTeacher)
                                                 .then(
                                                   (value) =>
-                                                      snack("Sent", context),
-                                                )
+                                                  snack("Sent", context),
+                                            )
                                                 .then(
                                                   (value) =>
-                                                      sendNotificationToTopic(
-                                                          nameOfTeacher),
-                                                )
+                                                  sendNotificationToTopic(
+                                                      nameOfTeacher),
+                                            )
                                                 .whenComplete(
-                                                  () => Navigator.of(context)
+                                                  () =>
+                                                  Navigator.of(context)
                                                       .pushReplacement(
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  const Messaging())),
-                                                );
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                          const Messaging())),
+                                            );
                                             setState(() {
                                               isLoading = false;
                                             });
@@ -964,18 +1031,20 @@ class _MessagingState extends State<Messaging>
                                       style: buttonRound,
                                       child: isLoading
                                           ? SpinKitChasingDots(
-                                              color: Theme.of(context)
-                                                  .primaryColorLight,
-                                            )
+                                        color: Theme
+                                            .of(context)
+                                            .primaryColorLight,
+                                      )
                                           : Text(
-                                              "Send",
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: Theme.of(context)
-                                                    .primaryColorLight,
-                                              ),
-                                            ),
+                                        "Send",
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme
+                                              .of(context)
+                                              .primaryColorLight,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -1015,53 +1084,25 @@ class _MessagingState extends State<Messaging>
   //   overlay.insert(entry!);
   // }
 
-  Widget buildImage(String documentID) {
+  Widget buildImage(String imageURL) {
     return Builder(builder: (context) {
-      return GestureDetector(
-        onDoubleTapDown: (details) => tapDownDetails = details,
-        onDoubleTap: () {
-          final position = tapDownDetails!.localPosition;
-          const double scale = 1.3;
-          final x = -position.dx * (scale - 1);
-          final y = -position.dy * (scale - 1);
-
-          final zoomed = Matrix4.identity()
-            ..scale(scale)
-            ..translate(x, y)
-            ..scale(scale);
-          final value = transformController.value.isIdentity()
-              ? zoomed
-              : Matrix4.identity();
-          transformController.value = value;
-        },
-        child: InteractiveViewer(
-          key: ValueKey(documentID),
-          transformationController: transformController,
-          minScale: 1,
-          maxScale: 2,
-          clipBehavior: Clip.none,
-          panEnabled: false,
-          scaleEnabled: false,
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: Center(
-              child: Image.network(
-                imageURLFromFirebase!,
-                loadingBuilder: (context, child, progress) => progress == null
-                    ? child
-                    : const SizedBox(
-                        height: 400,
-                        width: 400,
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                height: 400,
-                width: 400,
-                fit: BoxFit.cover,
-                key: ValueKey(documentID),
+      return AspectRatio(
+        aspectRatio: 4/3,
+        child: InstaImageViewer(
+          backgroundColor: Theme.of(context).primaryColor.withOpacity(.4),
+          child: Image(
+            image: Image.network(
+                imageURL)
+                .image,
+            loadingBuilder: (context, child, progress) =>
+            progress == null
+                ? child
+                : const SizedBox(
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
             ),
+            fit: BoxFit.cover,
           ),
         ),
       );
@@ -1071,7 +1112,9 @@ class _MessagingState extends State<Messaging>
   _selectFile(bool imageFrom) async {
     // file variable stores the image from cam or gallery
     file = (await ImagePicker().pickImage(
-        source: imageFrom ? ImageSource.gallery : ImageSource.camera))!;
+        source: imageFrom ? ImageSource.gallery : ImageSource.camera,
+        preferredCameraDevice: CameraDevice.rear,
+    ))!;
 
     if (file != null) {
       setState(() {
@@ -1081,25 +1124,23 @@ class _MessagingState extends State<Messaging>
     }
   }
 
-  Future<void> _addDocumentWithImage(
-    String text,
-    String urlLink,
-    String teacherNameFromData,
-  ) async {
+  Future<void> _addDocumentWithImage(String text,
+      String urlLink,
+      String teacherNameFromData,) async {
     logger.i("add to document $urlLink");
     try {
       await FirebaseFirestore.instance
           .collection("messages")
           .add({
-            "text": text,
-            "timestamp": FieldValue.serverTimestamp(),
-            "imageURL": urlLink,
-            "nameOfTeacher": teacherNameFromData,
-            "userID": user!.uid,
-          })
+        "text": text,
+        "timestamp": FieldValue.serverTimestamp(),
+        "imageURL": urlLink,
+        "nameOfTeacher": teacherNameFromData,
+        "userID": user!.uid,
+      })
           .then(
             (value) => Fluttertoast.showToast(msg: "Data sent"),
-          )
+      )
           .whenComplete(() => Navigator.of(context).pop());
     } on Exception catch (e) {
       // TODO
@@ -1122,7 +1163,7 @@ class _MessagingState extends State<Messaging>
       );
 
       await uploadTask.whenComplete(
-        () => logger.i("Upload done"),
+            () => logger.i("Upload done"),
       );
       String imageUrlLocal = await ref.getDownloadURL();
 
@@ -1155,8 +1196,14 @@ class _MessagingState extends State<Messaging>
             child: Container(
               //color: Theme.of(context).primaryColorLight,
               // height: MediaQuery.of(context).size.height / 1.2,
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
               margin: const EdgeInsets.only(top: 0.0),
               decoration: const BoxDecoration(
                 //screen background color
@@ -1172,7 +1219,7 @@ class _MessagingState extends State<Messaging>
                   ),
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 20, right: 20, top: 40),
+                    const EdgeInsets.only(left: 20, right: 20, top: 40),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1191,7 +1238,9 @@ class _MessagingState extends State<Messaging>
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColorDark,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColorDark,
                             ),
                           ),
                         ),
@@ -1210,7 +1259,9 @@ class _MessagingState extends State<Messaging>
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColorDark,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColorDark,
                             ),
                           ),
                         ),
@@ -1234,8 +1285,14 @@ class _MessagingState extends State<Messaging>
                           ),
                           child: Container(
                             color:
-                                Theme.of(context).primaryColor.withOpacity(.7),
-                            width: MediaQuery.of(context).size.width,
+                            Theme
+                                .of(context)
+                                .primaryColor
+                                .withOpacity(.7),
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
                             height: 50,
                             child: Center(
                               child: Text(
@@ -1244,7 +1301,9 @@ class _MessagingState extends State<Messaging>
                                     fontSize: 18,
                                     fontWeight: FontWeight.w800,
                                     fontFamily: 'Apple SD Gothic Neo',
-                                    color: Theme.of(context).primaryColorLight),
+                                    color: Theme
+                                        .of(context)
+                                        .primaryColorLight),
                               ),
                             ),
                           ),
@@ -1260,7 +1319,8 @@ class _MessagingState extends State<Messaging>
                               hintText: "Message",
                               hintStyle: textStyleText(context).copyWith(
                                 fontWeight: FontWeight.w800,
-                                color: Theme.of(context)
+                                color: Theme
+                                    .of(context)
                                     .primaryColor
                                     .withOpacity(.7),
                               ),
@@ -1297,19 +1357,20 @@ class _MessagingState extends State<Messaging>
                                         isLoading = true;
                                       });
                                       await _addDocument(_controller.text,
-                                              nameOfTeacher.toString())
+                                          nameOfTeacher.toString())
                                           .then(
                                             (value) => snack("Sent", context),
-                                          )
+                                      )
                                           .whenComplete(
-                                            () => Navigator.of(context)
+                                            () =>
+                                            Navigator.of(context)
                                                 .pushReplacement(
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const ViewMyTextsForEditing(),
+                                                const ViewMyTextsForEditing(),
                                               ),
                                             ),
-                                          );
+                                      );
                                       sendNotificationToTopic(nameOfTeacher);
 
                                       setState(() {
@@ -1327,17 +1388,20 @@ class _MessagingState extends State<Messaging>
                                 style: buttonRound,
                                 child: isLoading
                                     ? SpinKitChasingDots(
-                                        color: Theme.of(context).primaryColor,
-                                      )
+                                  color: Theme
+                                      .of(context)
+                                      .primaryColor,
+                                )
                                     : Text(
-                                        "Send",
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .primaryColorDark,
-                                        ),
-                                      ),
+                                  "Send",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme
+                                        .of(context)
+                                        .primaryColorDark,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -1359,7 +1423,7 @@ class _MessagingState extends State<Messaging>
 
     //get data where data ID is equals to the current logged in user
     Query<Map<String, dynamic>> userQuery =
-        firestore.collection('userData').where('uid', isEqualTo: user!.uid);
+    firestore.collection('userData').where('uid', isEqualTo: user!.uid);
     userQuery.get().then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
       if (querySnapshot.size > 0) {
         DocumentSnapshot<Map<String, dynamic>> documentSnapshot =

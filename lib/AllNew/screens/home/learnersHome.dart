@@ -91,13 +91,14 @@ class _LearnerHomeState extends State<LearnerHome> {
   ///
   String _userSubject = '';
   String learnersName = "";
+  String learnersSecondName = "";
   String learnersEmail = "";
 
   @override
   void initState() {
     super.initState();
     ConnectionChecker.checkTimer();
-    _getCurrentUserFields(learnersName, learnersEmail);
+    _getCurrentUserFields(learnersName, learnersSecondName,learnersEmail);
   }
 
   @override
@@ -117,6 +118,14 @@ class _LearnerHomeState extends State<LearnerHome> {
             ),
           ),
           actions: [
+            // Download
+            loading? SpinKitChasingDots(
+              size: 13,
+              color: Theme.of(context).primaryColorLight,
+
+            ):const SizedBox(
+              child: Text(""),
+            ),
             PopupMenuButton(
               itemBuilder: (BuildContext context) =>
               <PopupMenuEntry>[
@@ -478,10 +487,10 @@ class _LearnerHomeState extends State<LearnerHome> {
               textAlign: TextAlign.center,
             ),
           ),
-          child: const TabBarView(
+          child: TabBarView(
             children: [
               //Tabs/Terms
-              LearnerViewAllMessages(),
+              LearnerViewAllMessages(loading: loading),
               LearnerViewAllTexts(),
             ],
           ),
@@ -527,7 +536,7 @@ class _LearnerHomeState extends State<LearnerHome> {
                 children: [
                   CircleAvatar(
                     child: Text(
-                      user!.email.toString()[0].toUpperCase(),
+                      user!.email.toString()[0].toUpperCase()??"",
                       style: const TextStyle(
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1,
@@ -539,7 +548,7 @@ class _LearnerHomeState extends State<LearnerHome> {
                   ),
                   Wrap(children: [
                     Text(
-                      learnersName.toString(),
+                      learnersSecondName.toString()??"",
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -611,7 +620,9 @@ class _LearnerHomeState extends State<LearnerHome> {
   }
 
   //get the field required for the current logged in user
-  Future<void> _getCurrentUserFields(String nameOfLeaner,
+  Future<void> _getCurrentUserFields(
+      String nameOfLeaner,
+      String secondNameOfLeaner,
       String emailOfLeaner,) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -625,15 +636,17 @@ class _LearnerHomeState extends State<LearnerHome> {
 
         //get the learners details
         nameOfLeaner = data!['name'].toString();
+        secondNameOfLeaner = data['secondName'].toString();
         emailOfLeaner = data['email'].toString();
 
         setState(() {
+          learnersSecondName = secondNameOfLeaner.toString();
           learnersName = nameOfLeaner.toString();
           learnersEmail = emailOfLeaner.toString();
         });
 
         logger.i("inside getField $learnersEmail");
-        logger.i("inside getField $learnersName");
+        logger.i("inside getField $learnersName\t$learnersSecondName");
       } else {
         print('No document found');
       }

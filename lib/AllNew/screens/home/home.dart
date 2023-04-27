@@ -227,6 +227,12 @@ class _HomeState extends State<Home> {
           ),
         ),
         actions: [
+          loading? SpinKitChasingDots(
+            color:Theme.of(context).primaryColorLight,
+            size: 15,
+          ):const SizedBox(
+            child: Text(""),
+          ),
           IconButton(
             onPressed: () {
               Navigator.of(context).pushReplacement(
@@ -363,7 +369,17 @@ class _HomeState extends State<Home> {
                               showDialogBox(),
                             ],
                           ));
+                        }else if (streamSnapshot.hasError) {
+                          return Text("Error: ${streamSnapshot.error}");
+                        } else if(!streamSnapshot.hasData || streamSnapshot.data == null ||
+                            streamSnapshot.data!.size <= 0){
+                          return Center(child: Text("No grade 9 list, No learner registered yet.",
+                            style: textStyleText(context).copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),),);
                         }
+
                         documents = streamSnapshot.data!.docs;
                         //todo Documents list added to filterTitle
                         if (searchText.isNotEmpty) {
@@ -520,19 +536,6 @@ class _HomeState extends State<Home> {
                                                             .doc(
                                                                 documents[index]
                                                                     .id);
-                                                    DocumentReference
-                                                        docRefUsers =
-                                                        FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                'learnersData')
-                                                            .doc(uidOfTeacher);
-                                                    bool docExists =
-                                                        await docRef.get().then(
-                                                            (docSnapshot) =>
-                                                                docSnapshot
-                                                                    .exists);
-
 
                                                     // check if the data is a Map
                                                     if (data is Map) {
@@ -540,7 +543,6 @@ class _HomeState extends State<Home> {
                                                       // check if the user subject exists in the Map
                                                       if (data.containsKey(
                                                           _userSubject)) {
-                                                        // user subject1 is already registered
                                                         Fluttertoast.showToast(
                                                             msg:
                                                                 "Already registered $_userSubject");
@@ -625,14 +627,6 @@ class _HomeState extends State<Home> {
                                                                 .doc(documents[
                                                                         index]
                                                                     .id);
-                                                        DocumentReference
-                                                            docRefUsers =
-                                                            FirebaseFirestore
-                                                                .instance
-                                                                .collection(
-                                                                    'userData')
-                                                                .doc(
-                                                                    uidOfTeacher);
 
                                                         bool docExists =
                                                             await docRef.get().then(
@@ -749,12 +743,7 @@ class _HomeState extends State<Home> {
                                                   loading = false;
                                                 });
                                               },
-                                              icon: loading
-                                                  ? const SpinKitChasingDots(
-                                                      color: Colors.purple,
-                                                      size: 15,
-                                                    )
-                                                  : Icon(
+                                              icon:Icon(
                                                       Icons.add,
                                                       size: 20,
                                                       key: ValueKey(documents[index].id),
@@ -804,7 +793,6 @@ class _HomeState extends State<Home> {
       String sNOfLearner,
       String gOfLearner,
       String eOfLearner, List<String> sOfLearner) {
-    bool isLoading = false;
     showModalBottomSheet(
       barrierColor: Theme.of(context).primaryColor.withOpacity(.1),
       isScrollControlled: true,
@@ -1140,7 +1128,7 @@ class _HomeState extends State<Home> {
 
         //get the learners details
         nameOfTeacherForDrawer = data!['name'].toString();
-        secondNameOfTeacherForDrawer = data!['secondName'].toString();
+        secondNameOfTeacherForDrawer = data['secondName'].toString();
         emailOfTeacherForDrawer = data['email'].toString();
         gradeOfTeacherDrawer = data['grade'].toString();
         // subject2OfTeacherForDrawer = data['subjects'][1].toString();
@@ -1268,7 +1256,7 @@ class NavigationDrawer extends StatelessWidget {
                     child: Wrap(
                       children: [
                         Text(
-                          teachersName[0].toString(),
+                          teachersSecondName[0].toString()??"",
                           style: textStyleText(context).copyWith(
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
@@ -1284,7 +1272,7 @@ class NavigationDrawer extends StatelessWidget {
                   Wrap(
                     children: [
                       Text(
-                        teachersName.toString(),
+                        teachersSecondName.toString()??"",
                         style: textStyleText(context).copyWith(
                           fontWeight: FontWeight.w700,
                           fontSize: 12,
@@ -1477,13 +1465,28 @@ class NavigationDrawer extends StatelessWidget {
           .signOut()
           .then((value) => SpinKitChasingDots(
                 color: Theme.of(context).primaryColor,
-              ))
-          .whenComplete(
-            () => Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const Authenticate())),
-          );
+              ));
+      await FirebaseAuth.instance
+          .signOut()
+          .then((value) => SpinKitChasingDots(
+        color: Theme.of(context).primaryColor,
+      ));
+      FirebaseAuth.instance
+          .authStateChanges()
+          .listen((User? user) {
+        if (user == null) {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const Authenticate()));
+        } else {
+          Fluttertoast.showToast(
+              backgroundColor: Theme.of(context).primaryColor,
+              msg: 'Could not log out, you are still signed in!');
+        }
+      });
     } catch (e) {
-      snack('Failed to Sign Out: $e', context);
+      Fluttertoast.showToast(
+          backgroundColor: Theme.of(context).primaryColor,
+          msg: 'Could not log out, you are still signed in!\n${e.toString()}');
     }
   }
 }

@@ -3,8 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:path_provider/path_provider.dart';
 import '../AllNew/model/ConnectionChecker.dart';
 import '../AllNew/shared/constants.dart';
@@ -21,6 +23,7 @@ class ViewAllTeachersMessages extends StatefulWidget {
 
 class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
   bool isLoading = false;
+  bool isVisible = false;
   double? progress = null;
   String status = "NotDownloaded";
 
@@ -72,6 +75,15 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
                         ),
                       ),
                     ),
+                    isLoading
+                        ? Visibility(
+                            visible: isVisible,
+                            child: SpinKitChasingDots(
+                              color: Theme.of(context).primaryColor,
+                              size: 15,
+                            ),
+                          )
+                        : const Text(""),
                     OutlinedButton(
                       onPressed: () async {
                         Navigator.of(context).pushReplacement(
@@ -136,7 +148,6 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
                           return Container(
                             margin: const EdgeInsets.symmetric(
                                 vertical: 3, horizontal: 5),
-                            height: 500,
                             color: Theme.of(context)
                                 .primaryColorLight
                                 .withOpacity(.3),
@@ -222,21 +233,12 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
                                             value: 0,
                                             child: Row(
                                               children: [
-                                                isLoading
-                                                    ? SizedBox(
-                                                        height: 15,
-                                                        width: 15,
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                          value: progress,
-                                                        ),
-                                                      )
-                                                    : Icon(
-                                                        Icons.download,
-                                                        color: Theme.of(context)
-                                                            .primaryColor
-                                                            .withOpacity(.7),
-                                                      ),
+                                                Icon(
+                                                  Icons.download,
+                                                  color: Theme.of(context)
+                                                      .primaryColor
+                                                      .withOpacity(.7),
+                                                ),
                                                 const SizedBox(
                                                   width: 7,
                                                 ),
@@ -283,30 +285,25 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
                                   height: 5,
                                 ),
                                 AspectRatio(
-                                  aspectRatio: 1,
-                                  child: Center(
-                                    child: isLoading
-                                        ? SpinKitChasingDots(
-                                            key: ValueKey(document.id),
-                                            size: 15,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          )
-                                        : Image.network(
-                                      imageURLFromFirebase,
-                                      loadingBuilder: (context, child, progress) => progress == null
-                                          ? child
-                                          :const SizedBox(
-                                        height: 400,
-                                        width: 400,
-                                        child: Center(
-                                          child: CircularProgressIndicator(),),
-                                      ),
-                                      height: 400,
-                                      width: 400,
+                                  aspectRatio: 4 / 3,
+                                  child: InstaImageViewer(
+                                    backgroundColor: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(.4),
+                                    child: Image(
+                                      image: Image.network(imageURLFromFirebase)
+                                          .image,
+                                      loadingBuilder:
+                                          (context, child, progress) =>
+                                              progress == null
+                                                  ? child
+                                                  : const SizedBox(
+                                                      child: Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
+                                                    ),
                                       fit: BoxFit.cover,
-                                      filterQuality: FilterQuality.high,
-                                      key: ValueKey(document.id),
                                     ),
                                   ),
                                 ),
@@ -336,47 +333,6 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
     );
   }
 
-  void _downloadButtonPressed(var imageURL) async {
-    setState(() {
-      progress = null;
-    });
-    final request = Request('GET', imageURL);
-    final StreamedResponse response = await Client().send(request);
-
-    final contentLength = response.contentLength;
-    setState(() {
-      progress = 0.01;
-      status = "Download started";
-    });
-
-    List<int> bytes = [];
-
-    final file = await _getFile(imageURL);
-
-    response.stream.listen(
-      (List<int> newBytes) {
-        bytes.addAll(newBytes);
-        final downloadLength = bytes.length;
-        setState(() {
-          progress = downloadLength.toDouble() / (contentLength ?? 1);
-          status = "Progess ${((progress ?? 0) * 100).toStringAsFixed(2)} %";
-        });
-        logger.i("progress $progress");
-      },
-      onDone: () async {
-        setState(() {
-          progress = 1;
-        });
-        await file.writeAsBytes(bytes);
-        debugPrint("download dinished");
-      },
-      onError: (e) {
-        debugPrint(e);
-      },
-      cancelOnError: true,
-    );
-  }
-
   Future<File> _getFile(String filename) async {
     final dir = await getTemporaryDirectory();
     return File("${dir.path}/$filename");
@@ -385,6 +341,7 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
   Future<void> selectedItem(
       BuildContext context, item, String imageURLFromFire) async {
     setState(() {
+      isVisible = true;
       isLoading = true;
     });
     switch (item) {
@@ -393,9 +350,9 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
           //TODO https://youtu.be/FcVADQsqEYk
           await GallerySaver.saveImage(imageURLFromFire, albumName: "E-Board")
               .then(
-            (value) =>
-            snack("Image saved to Pictures/E-board/.", context),
-
+            (value) =>  Fluttertoast.showToast(
+                backgroundColor: Colors.purple.shade500,
+                msg: "Image saved to you gallery. Pictures/E-Board"),
           );
           setState(() {
             isLoading = false;
@@ -403,9 +360,12 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
           //_downloadButtonPressed(imageURLFromFire);
         } catch (e) {
           setState(() {
+            isVisible = true;
             isLoading = false;
           });
-          snack("Could not download the image. Check your internet connection.", context);
+          Fluttertoast.showToast(
+              backgroundColor: Colors.purple.shade500,
+              msg: "Image cant be save. ${e.toString()}");
         }
 
         break;
@@ -413,20 +373,16 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
       case 1:
         try {
           if (imageURLFromFire.isEmpty || imageURLFromFire == "") {
-            print("cant share");
-            snack('There`s no url link found', context);
+            Fluttertoast.showToast(
+                backgroundColor: Colors.purple.shade500,
+                msg: "There's no URL link found");
           } else {
             await FlutterShare.share(
                 title: 'Image Link', linkUrl: imageURLFromFire);
           }
-          setState(() {
-            isLoading = false;
-          });
         } catch (e) {
-          setState(() {
-            isLoading = false;
-          });
-          snack("Could not download the image. Check your internet connection.", context);
+          snack("Could not download the image. Check your internet connection.",
+              context);
         }
 
         break;

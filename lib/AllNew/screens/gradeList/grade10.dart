@@ -175,12 +175,7 @@ class _Grade10State extends State<Grade10> {
 
   @override
   Widget build(BuildContext context) {
-    //disabled register button after registering learner
-    void disableButton(int index) {
-      setState(() {
-        isRegistered = true;
-      });
-    }
+
 
     void toggleVisibility() {
       setState(() {
@@ -342,7 +337,8 @@ class _Grade10State extends State<Grade10> {
                           return Text("Error: ${streamSnapshot.error}");
                         } else if(!streamSnapshot.hasData || streamSnapshot.data == null ||
                             streamSnapshot.data!.size <= 0){
-                          return Center(child: Text("No grade 10 list, No learner registered yet.",
+                          return Center(child: Text(
+                            "No grade 10 list available yet.",
                             style: textStyleText(context).copyWith(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
@@ -633,9 +629,6 @@ class _Grade10State extends State<Grade10> {
                                                           .get();
                                                       // Get the allSubjects map from the document data
                                                       final Map<String, dynamic>
-                                                      allSubjects =
-                                                      documentSnapshot[
-                                                      'allSubjects'];
 
                                                       // get the document data from firestore
                                                       DocumentSnapshot

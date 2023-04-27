@@ -38,7 +38,6 @@ class UserEditProfile {
 
   Future<void> addUser() {
     //get document ID
-    final documentID = userEditData.id;
     return userEditData
         .update({
           'email': email.trim().toLowerCase(), // John Doe
@@ -68,6 +67,8 @@ class _LearnersProfileState extends State<LearnersProfile> {
 
   bool isLoading = false;
   bool isLoadingVerify = true;
+  bool isVisible = false;
+
 
   TextEditingController editNameOfLearner = TextEditingController();
   TextEditingController editSecondNameOfLearner = TextEditingController();
@@ -78,8 +79,8 @@ class _LearnersProfileState extends State<LearnersProfile> {
   void initState() {
     super.initState();
     ConnectionChecker.checkTimer();
-    _getCurrentUserFields(learnersGrade, learnersEmail, learnersName,learnersSecondName,
-        learnersSubjects, documentIDinitial);
+    _getCurrentUserFields(learnersGrade, learnersEmail, learnersName,
+        learnersSecondName, learnersSubjects, documentIDinitial);
   }
 
   @override
@@ -195,6 +196,16 @@ class _LearnersProfileState extends State<LearnersProfile> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                labelText("Second Name"),
+                                labelText(learnersSecondName.toString()),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 6,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
                                 labelText("Email"),
                                 Wrap(
                                   children: [
@@ -277,54 +288,46 @@ class _LearnersProfileState extends State<LearnersProfile> {
                                   },
                                   child: const Text('Cancel'),
                                 ),
-                                isLoading
-                                    ? SpinKitChasingDots(
-                                        color: Theme.of(context).primaryColor,
-                                        size: 13,
-                                      )
-                                    : TextButton(
-                                        onPressed: () async {
-                                          setState(() {
-                                            isLoading = true;
-                                          });
-                                          try {
-                                            // TODO First delete my data in store
-                                            await _deleteMyDocumentWithData();
+                                TextButton(
+                                  onPressed: () async {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    try {
+                                      //  First delete my data in store
+                                      await _deleteMyDocumentWithData();
 
-                                            // TODO then delete my current account
-                                            await FirebaseAuth
-                                                .instance.currentUser!
-                                                .delete();
+                                      //then delete my current account
+                                      await FirebaseAuth.instance.currentUser!
+                                          .delete();
 
-                                            if (FirebaseAuth
-                                                    .instance.currentUser ==
-                                                null) {
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Authenticate()),
-                                              );
-                                            } else {
-                                              await FirebaseAuth.instance
-                                                  .signOut();
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Authenticate()),
-                                              );
-                                            }
-                                          } on Exception catch (e) {
-                                            snack(e.toString(), context);
-                                          }
+                                      if (FirebaseAuth.instance.currentUser ==
+                                          null) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Authenticate()),
+                                        );
+                                      } else {
+                                        await FirebaseAuth.instance.signOut();
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Authenticate()),
+                                        );
+                                      }
+                                    } on Exception catch (e) {
+                                      snack(e.toString(), context);
+                                    }
 
-                                          setState(() {
-                                            isLoading = false;
-                                          });
-                                        },
-                                        child: const Text('Delete'),
-                                      ),
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  },
+                                  child: const Text('Delete'),
+                                ),
                               ],
                               content: Text(
                                 "You are about to delete your account permanently and every data you created, it can't be retrieved after this action is fulfilled!.",
@@ -367,46 +370,52 @@ class _LearnersProfileState extends State<LearnersProfile> {
                           onPressed: () async {
                             signOut(context);
                           },
-                          child: isLoading
-                              ? SpinKitChasingDots(
-                                  color: Theme.of(context).primaryColorLight,
-                                  size: 13,
-                                )
-                              : Text(
-                                  "Sign Out",
-                                  style: textStyleText(context).copyWith(
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: 0),
-                                ),
+                          child: Text(
+                            "Sign Out",
+                            style: textStyleText(context).copyWith(
+                                color: Theme.of(context).primaryColorLight,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0),
+                          ),
                         ),
                       ),
                     ),
                     TextButton(
-                        onPressed: () async {
-                          bool verifiedUser = false;
-                          verifiedUser =
-                              FirebaseAuth.instance.currentUser!.emailVerified;
+                      onPressed: () async {
+                        bool verifiedUser = false;
+                        verifiedUser =
+                            FirebaseAuth.instance.currentUser!.emailVerified;
 
-                          var currentUser = FirebaseAuth.instance.currentUser;
-                          logger.e(currentUser);
-                          VerificationModel.checkEmailVerified();
-                          VerificationModel.sendVerificationEmail();
+                        var currentUser = FirebaseAuth.instance.currentUser;
+                        logger.e(currentUser);
+                        VerificationModel.checkEmailVerified();
+                        VerificationModel.sendVerificationEmail();
 
-                          if (verifiedUser == false) {
-                            setState(() {
-                              isLoadingVerify = true;
-                            });
-                          } else {
-                            snack("Verified", context);
-                          }
-                          //await _deleteMyDocumentWithData();
-                        },
-                        child: isLoadingVerify
-                            ? Text("Verify email")
-                            : Text("Get Data"))
+                        if (verifiedUser == false) {
+                          setState(() {
+                            isLoadingVerify = true;
+                          });
+                        } else {
+                          snack("Verified", context);
+                        }
+                        //await _deleteMyDocumentWithData();
+                      },
+                      child: isLoadingVerify
+                          ? Text("Verify email")
+                          : Text("Get Data"),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    isLoading
+                        ? SpinKitChasingDots(
+                            color: Theme.of(context).primaryColorLight,
+                            size: 14,
+                          )
+                        : const SizedBox(
+                            child: Text(""),
+                          ),
                   ],
                 ),
               ),
@@ -476,21 +485,19 @@ class _LearnersProfileState extends State<LearnersProfile> {
       if (querySnapshot.size > 0) {
         DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
             querySnapshot.docs.first;
-        Map<String, dynamic>? data = documentSnapshot.data();
+        // Map<String, dynamic>? data = documentSnapshot.data();
 
         //get the learners details
         subjectsOfLearner = documentSnapshot.get('subjects');
-
         nameOfLeaner = documentSnapshot.get('name').toString();
         secondNameOfLeaner = documentSnapshot.get('secondName').toString();
         emailOfLeaner = documentSnapshot.get('email').toString();
         gradeOfLearner = documentSnapshot.get('grade').toString();
         documentID = documentSnapshot.get('documentID').toString();
 
-
         setState(() {
           learnersName = nameOfLeaner.toString();
-          learnersSecondName = nameOfLeaner.toString();
+          learnersSecondName = secondNameOfLeaner.toString();
           learnersEmail = emailOfLeaner.toString();
           learnersGrade = gradeOfLearner.toString();
           learnersSubjects = subjectsOfLearner.toList();
@@ -512,24 +519,32 @@ class _LearnersProfileState extends State<LearnersProfile> {
 
   Future signOut(BuildContext context) async {
     setState(() {
-      isLoading = true;
+      isVisible = true;
     });
     try {
       await FirebaseAuth.instance
           .signOut()
           .then((value) => SpinKitChasingDots(
                 color: Theme.of(context).primaryColor,
-              ))
-          .whenComplete(
-            () => Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const Authenticate())),
-          );
+              ));
+      FirebaseAuth.instance
+          .authStateChanges()
+          .listen((User? user) {
+        if (user == null) {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const Authenticate()));
+        } else {
+          Fluttertoast.showToast(
+              backgroundColor: Theme.of(context).primaryColor,
+              msg: 'Could not log out, you are still signed in!');
+        }
+      });
     } catch (e) {
       logger.i(e.toString());
       snack("Failed to sign out", context);
     }
     setState(() {
-      isLoading = false;
+      isVisible = false;
     });
   }
 
@@ -555,290 +570,309 @@ class _LearnersProfileState extends State<LearnersProfile> {
               topLeft: Radius.circular(50),
               topRight: Radius.circular(50),
             ),
-            child: Container(
-              //color: Theme.of(context).primaryColorLight,
-              // height: MediaQuery.of(context).size.height / 1.2,
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(top: 0.0),
-              decoration: const BoxDecoration(
-                //screen background color
-                gradient: LinearGradient(
-                    colors: [Color(0x0fffffff), Color(0xE7791971)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight),
-              ),
-              child: SingleChildScrollView(
-                child: Column(children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, top: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        OutlinedButton(
-                          onPressed: () {
-                            setState(() {});
-                            Navigator.of(context).pop();
-                          },
-                          style: buttonRound,
-                          child: Text(
-                            "Discard",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColorDark,
-                            ),
-                          ),
-                        ),
-                      ],
+            child: SingleChildScrollView(
+              child: Container(
+                //color: Theme.of(context).primaryColorLight,
+                // height: MediaQuery.of(context).size.height / 1.2,
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.only(top: 0.0),
+                decoration: const BoxDecoration(
+                  //screen background color
+                  gradient: LinearGradient(
+                      colors: [Color(0x0fffffff), Color(0xE7791971)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(children: [
+                    const SizedBox(
+                      height: 10,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 25.0, vertical: 10),
-                    child: SingleChildScrollView(
-                      child: Column(children: [
-                        ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(50),
-                            bottomRight: Radius.circular(50),
-                            topLeft: Radius.circular(50),
-                            topRight: Radius.circular(50),
-                          ),
-                          child: Container(
-                            color:
-                                Theme.of(context).primaryColor.withOpacity(.7),
-                            width: MediaQuery.of(context).size.width,
-                            height: 50,
-                            child: Center(
-                              child: Text(
-                                "Want to change your details?",
-                                style: textStyleText(context).copyWith(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w800,
-                                    fontFamily: 'Apple SD Gothic Neo',
-                                    color: Theme.of(context).primaryColorLight),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 20, right: 20, top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          OutlinedButton(
+                            onPressed: () {
+                              setState(() {});
+                              Navigator.of(context).pop();
+                            },
+                            style: buttonRound,
+                            child: Text(
+                              "Discard",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).primaryColorDark,
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Center(
-                          child: Column(
-                            children: [
-                              TextFormField(
-                                controller: editNameOfLearner,
-                                decoration: textInputDecoration.copyWith(
-                                  hintText: "Name",
-                                  hintStyle: textStyleText(context).copyWith(
-                                    fontWeight: FontWeight.w800,
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(.7),
-                                  ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25.0, vertical: 10),
+                      child: SingleChildScrollView(
+                        child: Column(children: [
+                          ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(50),
+                              bottomRight: Radius.circular(50),
+                              topLeft: Radius.circular(50),
+                              topRight: Radius.circular(50),
+                            ),
+                            child: Container(
+                              color: Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(.7),
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              child: Center(
+                                child: Text(
+                                  "Want to change your details?",
+                                  style: textStyleText(context).copyWith(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w800,
+                                      fontFamily: 'Apple SD Gothic Neo',
+                                      color:
+                                          Theme.of(context).primaryColorLight),
                                 ),
-                                style: textStyleText(context),
-                                textAlign: TextAlign.center,
-                                autocorrect: true,
-                                textAlignVertical: TextAlignVertical.center,
-                                onSaved: (value) {
-                                  //Do something with the user input.
-                                  setState(() {
-                                    editNameOfLearner.text = value!;
-                                  });
-                                },
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              TextFormField(
-                                controller: editSecondNameOfLearner,
-                                decoration: textInputDecoration.copyWith(
-                                  hintText: "Second Name",
-                                  hintStyle: textStyleText(context).copyWith(
-                                    fontWeight: FontWeight.w800,
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(.7),
-                                  ),
-                                ),
-                                style: textStyleText(context),
-                                textAlign: TextAlign.center,
-                                autocorrect: true,
-                                textAlignVertical: TextAlignVertical.center,
-                                onSaved: (value) {
-                                  //Do something with the user input.
-                                  setState(() {
-                                    editSecondNameOfLearner.text = value!;
-                                  });
-                                },
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              TextFormField(
-                                controller: editEmailOfLearner,
-                                decoration: textInputDecoration.copyWith(
-                                  hintText: "email",
-                                  hintStyle: textStyleText(context).copyWith(
-                                    fontWeight: FontWeight.w800,
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(.7),
-                                  ),
-                                ),
-                                style: textStyleText(context),
-                                textAlign: TextAlign.center,
-                                autocorrect: true,
-                                textAlignVertical: TextAlignVertical.center,
-                                onSaved: (value) {
-                                  //Do something with the user input.
-                                  setState(() {
-                                    editEmailOfLearner.text = learnersEmail;
-                                  });
-                                },
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              TextFormField(
-                                controller: editGradeOfLearner,
-                                decoration: textInputDecoration.copyWith(
-                                  hintText: "Grade",
-                                  hintStyle: textStyleText(context).copyWith(
-                                    fontWeight: FontWeight.w800,
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(.7),
-                                  ),
-                                ),
-                                style: textStyleText(context),
-                                textAlign: TextAlign.center,
-                                autocorrect: true,
-                                textAlignVertical: TextAlignVertical.center,
-                                keyboardType: TextInputType.number,
-                                onSaved: (value) {
-                                  //Do something with the user input.
-                                  setState(() {
-                                    editGradeOfLearner.text = value!;
-                                  });
-                                },
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              isLoading
-                                  ? SpinKitChasingDots(
-                                      color: Theme.of(context).primaryColor,
-                                      size: 13,
-                                    )
-                                  : OutlinedButton(
-                                      onPressed: () async {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        try {
-                                          if (editNameOfLearner.text.isEmpty ||
-                                              editEmailOfLearner.text.isEmpty ||
-                                              editGradeOfLearner.text.isEmpty) {
-                                            snack(
-                                                "Insert data in the provided space above.",
-                                                context);
-                                          } else {
-                                            logger.e("We are here");
-                                            final CollectionReference
-                                                learnersCollection =
-                                                FirebaseFirestore.instance
-                                                    .collection('learnersData');
-                                            final DocumentReference
-                                                identityDocument =
-                                                learnersCollection
-                                                    .doc(documentIdEdit);
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Center(
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  controller: editNameOfLearner,
+                                  decoration: textInputDecoration.copyWith(
+                                    hintText: "Name",
+                                    hintStyle: textStyleText(context).copyWith(
+                                      fontWeight: FontWeight.w800,
+                                      color: Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(.7),
+                                    ),
+                                  ),
+                                  style: textStyleText(context),
+                                  textAlign: TextAlign.center,
+                                  autocorrect: true,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  onSaved: (value) {
+                                    //Do something with the user input.
+                                    setState(() {
+                                      editNameOfLearner.text = value!;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                TextFormField(
+                                  controller: editSecondNameOfLearner,
+                                  decoration: textInputDecoration.copyWith(
+                                    hintText: "Second Name",
+                                    hintStyle: textStyleText(context).copyWith(
+                                      fontWeight: FontWeight.w800,
+                                      color: Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(.7),
+                                    ),
+                                  ),
+                                  style: textStyleText(context),
+                                  textAlign: TextAlign.center,
+                                  autocorrect: true,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  onSaved: (value) {
+                                    //Do something with the user input.
+                                    setState(() {
+                                      editSecondNameOfLearner.text = value!;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                TextFormField(
+                                  controller: editEmailOfLearner,
+                                  decoration: textInputDecoration.copyWith(
+                                    hintText: "email",
+                                    hintStyle: textStyleText(context).copyWith(
+                                      fontWeight: FontWeight.w800,
+                                      color: Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(.7),
+                                    ),
+                                  ),
+                                  style: textStyleText(context),
+                                  textAlign: TextAlign.center,
+                                  autocorrect: true,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  onSaved: (value) {
+                                    //Do something with the user input.
+                                    setState(() {
+                                      editEmailOfLearner.text = learnersEmail;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                TextFormField(
+                                  controller: editGradeOfLearner,
+                                  decoration: textInputDecoration.copyWith(
+                                    hintText: "Grade",
+                                    hintStyle: textStyleText(context).copyWith(
+                                      fontWeight: FontWeight.w800,
+                                      color: Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(.7),
+                                    ),
+                                  ),
+                                  style: textStyleText(context),
+                                  textAlign: TextAlign.center,
+                                  autocorrect: true,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  keyboardType: TextInputType.number,
+                                  onSaved: (value) {
+                                    //Do something with the user input.
+                                    setState(() {
+                                      editGradeOfLearner.text = value!;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                OutlinedButton(
+                                        onPressed: () async {
+                                          setState(() {
+                                            isLoading = true;
+                                            isVisible = true;
+                                          });
+                                          final naviContext = Navigator.of(context);
 
-                                            await identityDocument.set({
-                                              'grade': editGradeOfLearner.text
-                                                  .toString(),
-                                              'name': editNameOfLearner.text.toString(),
-                                              'secondName': editSecondNameOfLearner.text.toString(),
-                                              'email': editEmailOfLearner.text
-                                                  .toString(),
-                                            }, SetOptions(merge: true)).then(
-                                              (value) => Fluttertoast.showToast(
+                                          try {
+                                            if (editNameOfLearner
+                                                    .text.isEmpty ||
+                                                editEmailOfLearner
+                                                    .text.isEmpty ||
+                                                editGradeOfLearner
+                                                    .text.isEmpty) {
+                                              snack(
+                                                  "Insert data in the provided space above.",
+                                                  context);
+                                            } else {
+                                              logger.e("We are here");
+                                              final CollectionReference
+                                                  learnersCollection =
+                                                  FirebaseFirestore.instance
+                                                      .collection(
+                                                          'learnersData');
+                                              final DocumentReference
+                                                  identityDocument =
+                                                  learnersCollection
+                                                      .doc(documentIdEdit);
+
+                                              await identityDocument.set({
+                                                'grade': editGradeOfLearner.text
+                                                    .toString(),
+                                                'name': editNameOfLearner.text
+                                                    .toString(),
+                                                'secondName':
+                                                    editSecondNameOfLearner.text
+                                                        .toString(),
+                                                'email': editEmailOfLearner.text
+                                                    .toString(),
+                                              }, SetOptions(merge: true)).then(
+                                                (value) => Fluttertoast.showToast(
+                                                    backgroundColor:
+                                                        Theme.of(context)
+                                                            .primaryColor,
+                                                    msg:
+                                                        "Edited Notifications"),
+                                              );
+                                              UserModel.getAllUserProfiles();
+                                              naviContext.pop();
+                                            //   showSheetToEditForResettingEmail(
+                                            //       editEmailOfLearner.text
+                                            //           .trim()
+                                            //           .toLowerCase());
+                                            }
+                                          } on FirebaseAuthException catch (e) {
+                                            if (e.code ==
+                                                'requires-recent-login') {
+                                              Fluttertoast.showToast(
                                                   backgroundColor:
                                                       Theme.of(context)
                                                           .primaryColor,
-                                                  msg: "Edited Notifications"),
-                                            );
-                                            UserModel.getAllUserProfiles();
-                                            Navigator.of(context).pop();
-                                            showSheetToEditForResettingEmail(
-                                                editEmailOfLearner.text
-                                                    .trim()
-                                                    .toLowerCase());
+                                                  msg:
+                                                      "Sign out before re-attempting");
+                                              logger.i(e);
+                                            } else if (e.code ==
+                                                'invalid-email') {
+                                              Fluttertoast.showToast(
+                                                  msg: 'Invalid email');
+                                            } else if (e.code ==
+                                                'email-already-in-use') {
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      'Email is already in use');
+                                            }
+                                          } on Exception catch (e) {
+                                            logger.e(e);
                                           }
-                                        } on FirebaseAuthException catch (e) {
-                                          if (e.code ==
-                                              'requires-recent-login') {
-                                            Fluttertoast.showToast(
-                                                backgroundColor:
-                                                    Theme.of(context)
-                                                        .primaryColor,
-                                                msg:
-                                                    "Sign out before re-attempting");
-                                            logger.i(e);
-                                          } else if (e.code ==
-                                              'invalid-email') {
-                                            Fluttertoast.showToast(
-                                                msg: 'Invalid email');
-                                          } else if (e.code ==
-                                              'email-already-in-use') {
-                                            Fluttertoast.showToast(
-                                                msg: 'Email is already in use');
-                                          }
-                                        } on Exception catch (e) {
-                                          logger.e(e);
-                                        }
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                      },
-                                      style: buttonRound,
-                                      child: Text(
-                                        "Update",
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .primaryColorDark,
+                                          setState(() {
+                                            isLoading = false;
+                                            isVisible = false;
+                                          });
+                                        },
+                                        style: buttonRound,
+                                        child: Text(
+                                          "Update",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context)
+                                                .primaryColorDark,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ]),
+                          isLoading? Visibility(
+                            visible: isVisible,
+                            child: SpinKitChasingDots(
+                              color: Theme.of(context).primaryColor,
+                              size: 13,
+                            ),
+                          ) : const Text(""),
+                        ]),
+                      ),
                     ),
-                  ),
-                ]),
+                  ]),
+                ),
               ),
             ),
           ),
@@ -996,21 +1030,21 @@ class _LearnersProfileState extends State<LearnersProfile> {
 
                                           await FirebaseAuth.instance
                                               .sendSignInLinkToEmail(
-                                                  email:
-                                                      editEmailOfLearner
-                                                          .text
-                                                          .trim()
-                                                          .toLowerCase(),
-                                                  actionCodeSettings: ActionCodeSettings(
-                                                      url:
-                                                          'https://example.firebaseapp.com/emailSignInLink',
-                                                      handleCodeInApp: true,
-                                                      iOSBundleId:null,
-                                                      androidPackageName:
-                                                          'com.example.levy',
-                                                      androidInstallApp: true,
-                                                      androidMinimumVersion:
-                                                          '16'));
+                                                  email: editEmailOfLearner.text
+                                                      .trim()
+                                                      .toLowerCase(),
+                                                  actionCodeSettings:
+                                                      ActionCodeSettings(
+                                                          url:
+                                                              'https://example.firebaseapp.com/emailSignInLink',
+                                                          handleCodeInApp: true,
+                                                          iOSBundleId: null,
+                                                          androidPackageName:
+                                                              'com.example.levy',
+                                                          androidInstallApp:
+                                                              true,
+                                                          androidMinimumVersion:
+                                                              '16'));
                                         }
                                       } on FirebaseAuthException catch (e) {
                                         if (e.code == 'requires-recent-login') {
