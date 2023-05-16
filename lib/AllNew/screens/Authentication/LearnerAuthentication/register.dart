@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
-import '../../../main.dart';
+import 'package:yueway/main.dart';
 import '../../../model/ConnectionChecker.dart';
 import '../../../shared/constants.dart';
 import '../Authenticate.dart';
@@ -14,7 +14,7 @@ Logger logger = Logger(printer: PrettyPrinter(colors: true));
 //A Model to grab and store data
 class User {
   final String email;
-  final String uid;
+  final uid;
   final String password;
   final String name;
   final String secondName;
@@ -110,7 +110,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
 
   //save the selected strings into these lists
   List<String> subjects = [];
-  List<String> teachersID = ["Not Applicable"];
+  List<String> teachersID = ["not applicable"];
 
   Map<String, dynamic> testsMarks = {};
   Map<String, dynamic> assignmentsMarks = {};
@@ -120,38 +120,35 @@ class _LearnerRegisterState extends State<LearnerRegister> {
 
   //List
   List<String> listItem = [
-    "Accounting",
-    "Afrikaans",
-    "Agriculture",
-    "Business Studies",
-    "CAT",
-    "Consumer Studies",
-    "English H Language",
-    "English S Language",
-    "Economic M S",
-    "Geography",
-    "History",
-    "Isizulu",
-    "Life Sciences",
-    "Life Orientation",
-    "Mathematics",
-    "Mathematics Lit.",
-    "Natural Sciences",
-    "Physical Sciences",
-    "Social Sciences",
-    "Siphedi",
-    "Sisotho",
-    "Technology",
-    "Tourism",
-    "Not applicable",
+    "arts and culture",
+    "accounting",
+    "afrikaans",
+    "agriculture",
+    "business studies",
+    "cat",
+    "consumer studies",
+    "economic m s",
+    "geography",
+    "history",
+    "isiZulu",
+    "life sciences",
+    "life orientation",
+    "natural sciences",
+    "physical sciences",
+    "social sciences",
+    "siphedi",
+    "sisotho",
+    "technology",
+    "tourism",
+    "not applicable",
   ];
   List<String> listMathematicsType = [
-    "Mathematics",
-    "Mathematics Lit.",
+    "mathematics",
+    "mathematics literacy",
   ];
   List<String> listEnglishType = [
-    "English H Language",
-    "English S Language",
+    "english home language",
+    "english second additional language",
   ];
 
   //Strings to store inputs from the user
@@ -542,11 +539,12 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                     dropdownItems = [];
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
+
                                                   dropdownItems.add(
                                                     DropdownMenuItem(
-                                                      value: doc['uid'] ?? "",
+                                                      value: doc['uid'],
                                                       child: Text(
-                                                        doc['name'] ?? "",
+                                                       " ${doc['secondName']} ${doc['name']}",
                                                         style: textStyleText(
                                                             context),
                                                       ),
@@ -656,7 +654,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                     DropdownMenuItem(
                                                       value: doc['uid'],
                                                       child: Text(
-                                                        doc['name'],
+                                                        " ${doc['secondName']} ${doc['name']}",
                                                         style: textStyleText(
                                                             context),
                                                       ),
@@ -768,7 +766,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                       DropdownMenuItem(
                                                         value: doc['uid'],
                                                         child: Text(
-                                                          doc['name'],
+                                                          " ${doc['secondName']} ${doc['name']}",
                                                           style: textStyleText(
                                                               context),
                                                         ),
@@ -884,7 +882,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                           DropdownMenuItem(
                                                             value: doc['uid'],
                                                             child: Text(
-                                                              doc['name'],
+                                                              " ${doc['secondName']} ${doc['name']}",
                                                               style:
                                                                   textStyleText(
                                                                       context),
@@ -1010,7 +1008,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                           DropdownMenuItem(
                                                             value: doc['uid'],
                                                             child: Text(
-                                                              doc['name'],
+                                                              " ${doc['secondName']} ${doc['name']}",
                                                               style:
                                                                   textStyleText(
                                                                       context),
@@ -1135,7 +1133,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                           DropdownMenuItem(
                                                             value: doc['uid'],
                                                             child: Text(
-                                                              doc['name'],
+                                                              " ${doc['secondName']} ${doc['name']}",
                                                               style:
                                                                   textStyleText(
                                                                       context),
@@ -1262,7 +1260,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                           DropdownMenuItem(
                                                             value: doc['uid'],
                                                             child: Text(
-                                                              doc['name'],
+                                                              " ${doc['secondName']} ${doc['name']}",
                                                               style:
                                                                   textStyleText(
                                                                       context),
@@ -1388,7 +1386,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                           DropdownMenuItem(
                                                             value: doc['uid'],
                                                             child: Text(
-                                                              doc['name'],
+                                                              " ${doc['secondName']} ${doc['name']}",
                                                               style:
                                                                   textStyleText(
                                                                       context),
@@ -1513,7 +1511,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                           DropdownMenuItem(
                                                             value: doc['uid'],
                                                             child: Text(
-                                                              doc['name'],
+                                                              " ${doc['secondName']} ${doc['name']}",
                                                               style:
                                                                   textStyleText(
                                                                       context),

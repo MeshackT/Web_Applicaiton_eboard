@@ -491,11 +491,11 @@ class _ViewMyTextsForEditingState extends State<ViewMyTextsForEditing> {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     //get data where data ID is equals to the current logged in user
-    Query<Map<String, dynamic>> userQuery =
+    var userQuery =
     firestore.collection('userData').where('uid', isEqualTo: user!.uid);
-    userQuery.get().then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+    userQuery.get().then((var querySnapshot) {
       if (querySnapshot.size > 0) {
-        DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        var documentSnapshot =
             querySnapshot.docs.first;
         Map<String, dynamic>? data = documentSnapshot.data();
         //get the subject of the teacher

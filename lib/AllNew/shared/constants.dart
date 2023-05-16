@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
 TextStyle textStyleText(BuildContext context) {
@@ -9,6 +11,8 @@ TextStyle textStyleText(BuildContext context) {
       letterSpacing: 1,
       color: Theme.of(context).primaryColor);
 }
+
+
 
 ButtonStyle buttonRound = OutlinedButton.styleFrom(
     shape: const RoundedRectangleBorder(
@@ -51,7 +55,39 @@ InputDecoration textInputDecoration = InputDecoration(
 final messengerKey = GlobalKey<ScaffoldMessengerState>();
 
 class Utils {
-//Tool Tip
+
+  static const mobileWidth = 700;
+
+  static showDownloading(BuildContext context, String title, String message){
+    return showCupertinoDialog<String>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: Text(
+          title,
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+
+        content:  Column(
+          children: [
+            Text(message,
+              style: textStyleText(context).copyWith(
+                  fontSize: 13),
+            ),
+            const SizedBox(height: 5,),
+            SpinKitChasingDots(
+              size: 16,
+              color: Theme.of(context).primaryColor,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  //Tool Tip
   static SizedBox toolTipMessage(String message, BuildContext context) {
     return SizedBox(
       width: 40,

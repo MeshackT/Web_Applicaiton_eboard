@@ -1,62 +1,48 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:logger/logger.dart';
+import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
 import 'package:yueway/AllNew/screens/wrapper.dart';
+
+Logger logger = Logger(printer: PrettyPrinter(colors: true));
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message)async {
+  await Firebase.initializeApp();
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+      // options: const FirebaseOptions(
+      //    apiKey: "AIzaSyALUsDsHtmbQrNOIuyl9Mr_zARl3rLGK34",
+      //   projectId: "ebase-3f858",
+      //   messagingSenderId: "231030944816",
+      //   appId: "1:231030944816:web:0aab9be3434afefb26e9f5",
+      //   storageBucket: 'ebase-3f858.appspot.com',
+      //
+      // ),
+  );
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
 }
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
-class MyApp extends StatelessWidget {
-
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  LocalNotificationService localNotificationService = LocalNotificationService();
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    Future<void> getPermission() async {
-      await Permission.photos.request();
-      await Permission.contacts.request();
-      await Permission.storage.request();
-      await Permission.notification.request();
-      // You can request multiple permissions at once.
-      Map<Permission, PermissionStatus> statuses = await [
-        Permission.photos,
-        Permission.phone,
-        Permission.storage,
-        Permission.notification,
-        //add more permission to request here.
-      ].request();
-      if (statuses[Permission.photos]!.isDenied) {
-        //check each permission status after.
-        //showToast("Permission Denied");
-        print("Permission Denied");
-      } else if (statuses[Permission.phone]!.isDenied) {
-        //check each permission status after.
-        //showToast("Permission Denied");
-        print("Permission Denied");
-      }else if (statuses[Permission.storage]!.isDenied) {
-        //check each permission status after.
-        //showToast("Permission Denied");
-        print("Permission Denied");
-      } else if (statuses[Permission.notification]!.isDenied) {
-        //check each permission status after.
-        //showToast("Permission Denied");
-        print("Permission Denied");
-      }else if (statuses[Permission.camera]!.isDenied) {
-        //check each permission status after.
-        //showToast("Permission Denied");
-        print("Permission Denied");
-      }else {
-        //showToast("Permission Granted");
-        print("Permission Granted");
-      }
-    }
-
 
     bool darkModeEnabled = false; // initial state of the switch
 
@@ -103,5 +89,22 @@ class MyApp extends StatelessWidget {
       home: const Wrapper(),
       //home: const Home(),
     );
+ }
+
+  @override
+  void initState() {
+    super.initState();
+    LocalNotificationService.initialize();
+    localNotificationService.getPermission();
+
+    // FirebaseMessaging.instance.getInitialMessage().then((event) {
+    //   if (event != null) {
+    //     final routeFromMessage = event.data["AllToSee"];
+    //     logger.e("THis is the route => $routeFromMessage");
+    //     Navigator.of(context).pushReplacement(routeFromMessage);
+    //     print("${event.notification!.title} ${event.notification!.body}");
+    //   }
+    //
+    // });
   }
 }

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
+import 'package:yueway/main.dart';
 import '../../../main.dart';
 import '../../../model/ConnectionChecker.dart';
 import '../../../shared/constants.dart';
@@ -385,10 +386,12 @@ class _LearnerSignInState extends State<LearnerSignIn> {
     setState(() {
       loading = true;
     });
+    final navContext =Navigator.of(context);
     try {
       bool userExists = false;
 
       UserCredential userCredential =
+
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.toLowerCase().trim(),
         password: password.trim(),
@@ -396,8 +399,8 @@ class _LearnerSignInState extends State<LearnerSignIn> {
       userExists = userCredential.user != null;
       //if user is not null, navigate
       if (userExists != null) {
-        print(userExists);
-        Navigator.of(context).pushReplacement(
+        //print(userExists);
+        navContext.pushReplacement(
             MaterialPageRoute(builder: (context) => const LearnerHome())
         );
         //else show a snack
@@ -417,11 +420,14 @@ class _LearnerSignInState extends State<LearnerSignIn> {
           loading = false;
         });
         return;
+      }else{
+        logger.i(error);
       }
       setState(() {
         loading = false;
       });
     } catch (error) {
+      logger.i(error);
       // Handle other types of errors
       switch (error) {
         case 'ERROR_INVALID_EMAIL':

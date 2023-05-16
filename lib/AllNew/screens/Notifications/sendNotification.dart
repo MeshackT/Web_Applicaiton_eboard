@@ -11,6 +11,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
 
 import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';
@@ -94,10 +95,10 @@ class _SendNotificationState extends State<SendNotification> {
   String _userSubject = '';
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  late StreamSubscription<QuerySnapshot> _subscription;
+  LocalNotificationService localNotificationService =
+  LocalNotificationService();
 
   String _deviceToken = "";
-  String topic = "";
   bool setOn = true;
   bool isLoading = false;
   String newGrade = "";
@@ -109,30 +110,12 @@ class _SendNotificationState extends State<SendNotification> {
     ConnectionChecker.checkTimer();
     _getUserField();
     _getDeviceToken();
-    _configureFirebaseListeners();
-    _loadSwitchState();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _subscription.cancel();
   }
-
-  Future<void> _loadSwitchState() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      setOn = prefs.getBool('my_switch_state') ?? false;
-    });
-  }
-
-  Future<void> _saveSwitchState(bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() async {
-      await prefs.setBool('my_switch_state', value);
-    });
-  }
-
   //get the token of the device
   void _getDeviceToken() async {
     _deviceToken = (await _firebaseMessaging.getToken())!;
@@ -146,98 +129,9 @@ class _SendNotificationState extends State<SendNotification> {
     }
   }
 
-  Future<void> showNotification(String title, String body) async {
-    var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
-        'your channel id', 'your channel name',
-        importance: Importance.max, priority: Priority.high, ticker: 'ticker');
-
-    var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics, iOS: null);
-
-    await FlutterLocalNotificationsPlugin()
-        .show(0, title, body, platformChannelSpecifics, payload: 'item x');
-  }
-
-  void _configureFirebaseListeners() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("Handling foreground message: ${message.data}");
-      String title = message.notification?.title ?? "New notification";
-      String body = message.notification?.body ?? "";
-      showNotification(title, body);
-    });
-
-    FirebaseMessaging.instance
-        .getToken()
-        .then((token) => print("Device token: $token"));
-
-    FirebaseMessaging.instance
-        .requestPermission(sound: true, badge: true, alert: true);
-  }
-
-  ///send to a topic
-  Future<void> sendNotificationToTopic(newGrade, newAbout) async {
-    logger.i("new data $newGrade $newAbout");
-
-    const String serverToken =
-        'AAAANcqEdDA:APA91bGdr_w0xw6MemCCrXGjcX8CPrUuHYieAvjOZiUNumG9LD2NDdo6SGI_UyN_pq5rQgSMGgaIfjqQzA6Z8XAfJ-Qls1a1PjM7qskltEOxEH3ObU1Wb0B3PlezTDMJJPnMS4DTrPZL';
-    const String url = 'https://fcm.googleapis.com/fcm/send';
-
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'key=$serverToken',
-    };
-
-    Map<String, dynamic> body = {
-      'notification': {
-        'title': "From: ${nameOfTeacher.toString()}",
-        'body': 'Subject: ${_subject.text}\n'
-            'Grade: ${newGrade.toString()}'
-            '\nAbout: ${newAbout.toString()}',
-      },
-      'priority': 'high',
-      'to': '/topics/${_subject.text}',
-    };
-    logger.i("send notifications to this subscriptions ${_subject.text}");
-
-    http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: json.encode(body),
-    );
-  }
-
-  void unSubscribeToTopicSwitch() async {
-    topic = _subject.text;
-
-    logger.i("unsubscribed to $topic");
-
-    try {
-      await FirebaseMessaging.instance.unsubscribeFromTopic(topic).whenComplete(
-            () => Fluttertoast.showToast(msg: "Unsubscribed to $topic"),
-          );
-    } catch (e) {
-      logger.i(e);
-    }
-  }
-
-  void subscribeToTopicSwitch() async {
-    topic = _subject.text;
-
-    logger.i("subscribed to $topic");
-    try {
-      await FirebaseMessaging.instance.subscribeToTopic(topic).whenComplete(
-            () => Fluttertoast.showToast(msg: "Subscribed to $topic"),
-          );
-    } catch (e) {
-      logger.i(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    // setState(() {
-    //   userSubject1 = _subject.text;
-    // });
+    String subjectTopic = nameOfTeacher;
     return DefaultTabController(
       length: 2,
       initialIndex: 0,
@@ -254,31 +148,8 @@ class _SendNotificationState extends State<SendNotification> {
           centerTitle: false,
           elevation: 0,
           actions: [
-            Switch(
-                value: setOn,
-                inactiveThumbColor:
-                    Theme.of(context).primaryColorLight.withOpacity(.6),
-                activeColor: Theme.of(context).primaryColor,
-                thumbIcon: MaterialStateProperty.resolveWith((Set states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return const Icon(
-                      Icons.close,
-                      color: Colors.grey,
-                    );
-                  }
-                  return null; // All other states will use the default thumbIcon.
-                }),
-                onChanged: (val) async {
-                  // Update the value of setOn
-                  if (!val) {
-                    subscribeToTopicSwitch();
-                    logger.i(val);
-                  } else {
-                    unSubscribeToTopicSwitch();
-                    logger.i(val);
-                  }
-                  _saveSwitchState(val);
-                }),
+            Utils.toolTipMessage("Send a message to learners privately.",
+                context),
             IconButton(
               onPressed: () {
                 Navigator.of(context).pushReplacement(
@@ -576,25 +447,23 @@ class _SendNotificationState extends State<SendNotification> {
                                       _descriptionController.text,
                                       _titleController.text,
                                       date);
+                                  //TODO add this to the database
                                   await userFeeds
-                                      .addFeed()
-                                      .then(
-                                        (value) => sendNotificationToTopic(
-                                            newGrade, newAbout),
-                                      )
-                                      .whenComplete(
-                                        () => snack("Notification sent", context),
-                                      );
-                                  logger.i(
-                                      "$nameOfTeacher ${_grade.text} ${_titleController.text}");
+                                      .addFeed();
+                                  //TODO send the notification afterwards
+                              localNotificationService.sendNotificationToTopicALlToSee(
+                                      "By $nameOfTeacher",
+                                  "For grade: ${_grade.text}\n${_subject.text}\n${_titleController.text}", userLoggedIn.toString());
 
-                                  _titleController.clear();
+                              //TODO set these controllers to empty
+                              _titleController.clear();
                                   _grade.clear();
                                   _descriptionController.clear();
                                 }
                                 setState(() {
                                   isLoading = false;
                                 });
+
                               } on Exception catch (e) {
                                 setState(() {
                                   isLoading = false;
@@ -604,7 +473,8 @@ class _SendNotificationState extends State<SendNotification> {
                             },
                             style: buttonRound,
                             child: isLoading?SpinKitChasingDots(
-                              color: Theme.of(context).primaryColor,
+                              color: Theme.of(context).primaryColorLight,
+                              size: 13,
                           ):Text(
                               "Send",
                               style: textStyleText(context).copyWith(
@@ -630,22 +500,22 @@ class _SendNotificationState extends State<SendNotification> {
 
   Future<void> _getUserField() async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    var userQuery =
+    firestore.collection('userData').where('uid', isEqualTo: user!.uid);
 
-    Query<Map<String, dynamic>> userQuery =
-        firestore.collection('userData').where('uid', isEqualTo: user!.uid);
-    userQuery.get().then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+    userQuery.get().then((var querySnapshot) {
       if (querySnapshot.size > 0) {
-        DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        var documentSnapshot =
             querySnapshot.docs.first;
         Map<String, dynamic>? data = documentSnapshot.data();
         //get the subject of the teacher
-        _userSubject = data?['subjects'][0] ?? '';
+        _userSubject = data['subjects'][0];
         // get the name field or empty string if it doesn't exist
-        nameOfTeacher = data?['secondName'] ?? '';
+        nameOfTeacher = data['secondName'];
         setState(() {
           _subject.text = _userSubject.toString();
           _userSubject = _userSubject.toString();
-          nameOfTeacher = data?['secondName'] ?? '';
+          nameOfTeacher = data['secondName'];
         });
         logger.i("inside getField ${_subject.text}");
         logger.i("inside getField $_userSubject");

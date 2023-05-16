@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -171,7 +173,7 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    Expanded(
+                                    Flexible(
                                       flex: 1,
                                       child: Row(
                                         crossAxisAlignment:
@@ -226,7 +228,8 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
                                       width: 40,
                                       height: 40,
                                       child: PopupMenuButton<int>(
-                                        color: Colors.white,
+                                        color: Theme.of(context).primaryColorLight,
+                                        icon: Icon(Icons.more_vert, color: Theme.of(context).primaryColor,),
                                         elevation: 5.0,
                                         itemBuilder: (context) => [
                                           PopupMenuItem<int>(
@@ -284,29 +287,49 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
                                 const SizedBox(
                                   height: 5,
                                 ),
-                                AspectRatio(
-                                  aspectRatio: 4 / 3,
-                                  child: InstaImageViewer(
-                                    backgroundColor: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(.4),
+                              InstaImageViewer(
+                                child: CachedNetworkImage(
+                                  imageUrl: imageURLFromFirebase,
+                                  placeholder: (context, url) => SizedBox(
+                                    height: 200,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: SpinKitChasingDots(
+                                      color: Theme.of(context).primaryColor,
+                                      size: 50,
+                                    ),
+                                  ),
+                                  cacheManager: CacheManager(
+                                    //this removes the image and re-downloads it after 7 days
+                                    Config(
+                                      'customCacheKey',
+                                      stalePeriod: const Duration(days: 7),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Center(
+                                    child: Icon(
+                                      Icons.error,
+                                      size: 100,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                  // imageBuilder: (context, imageProvider) => Container(
+                                  //   width: MediaQuery.of(context).size.width,
+                                  //   height: 350,
+                                  //   decoration: BoxDecoration(
+                                  //     image: DecorationImage(
+                                  //       image: imageProvider,
+                                  //       fit: BoxFit.cover,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  imageBuilder:(context, imageProvider) => Center(
                                     child: Image(
-                                      image: Image.network(imageURLFromFirebase)
-                                          .image,
-                                      loadingBuilder:
-                                          (context, child, progress) =>
-                                              progress == null
-                                                  ? child
-                                                  : const SizedBox(
-                                                      child: Center(
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      ),
-                                                    ),
-                                      fit: BoxFit.cover,
+                                      image: imageProvider,
+                                      fit: BoxFit.contain,
                                     ),
                                   ),
                                 ),
+                              ),
                                 SizedBox(
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -365,7 +388,7 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
           });
           Fluttertoast.showToast(
               backgroundColor: Colors.purple.shade500,
-              msg: "Image cant be save. ${e.toString()}");
+              msg: "Image can't be save. ${e.toString()}");
         }
 
         break;

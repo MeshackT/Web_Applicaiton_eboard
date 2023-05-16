@@ -210,7 +210,8 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
                                       width: 30,
                                       height: 40,
                                       child: PopupMenuButton<int>(
-                                        color: Colors.white,
+                                        color: Theme.of(context).primaryColorLight,
+                                        icon: Icon(Icons.more_vert, color: Theme.of(context).primaryColor,),
                                         elevation: 5.0,
                                         itemBuilder: (context) => [
                                           PopupMenuItem<int>(

@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
 import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';
 import '../home/learnersHome.dart';
@@ -38,13 +37,14 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
   String teacherName = "";
   String teacherGrade = "";
 
+  LocalNotificationService localNotificationService =
+  LocalNotificationService();
 
-
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final FirebaseMessaging _firebaseMessaging =
+      FirebaseMessaging.instance;
   String _deviceToken = "";
   String topic = "";
   bool setOn = true;
-  late StreamSubscription<QuerySnapshot> _subscription;
 
 
   @override
@@ -58,30 +58,12 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
     });
 
     _getDeviceToken();
-    _configureFirebaseListeners();
-    _loadSwitchState();
   }
   @override
   void dispose() {
     super.dispose();
-    _subscription.cancel();
   }
 
-
-
-  Future<void> _loadSwitchState() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      setOn = prefs.getBool('my_switch_state') ?? false;
-    });
-  }
-
-  Future<void> _saveSwitchState(bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() async {
-      await prefs.setBool('my_switch_state', value);
-    });
-  }
 
   //get the token of the device
   void _getDeviceToken() async {
@@ -95,90 +77,6 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
       logger.i("Device token is null.");
     }
   }
-
-  Future<void> showNotification(String title, String body) async {
-    var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
-        'your channel id', 'your channel name',
-        importance: Importance.max, priority: Priority.high, ticker: 'ticker');
-
-    var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics, iOS: null);
-
-    await FlutterLocalNotificationsPlugin()
-        .show(0, title, body, platformChannelSpecifics, payload: 'item x');
-  }
-
-  void _configureFirebaseListeners() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("Handling foreground message: ${message.data}");
-      String title = message.notification?.title ?? "New notification";
-      String body = message.notification?.body ?? "";
-      showNotification(title, body);
-    });
-
-    FirebaseMessaging.instance
-        .getToken()
-        .then((token) => print("Device token: $token"));
-
-    FirebaseMessaging.instance
-        .requestPermission(sound: true, badge: true, alert: true);
-  }
-
-
-  ///send to a topic
-  // Future<void> sendNotificationToTopic() async {
-  //   const String serverToken =
-  //       'AAAANcqEdDA:APA91bGdr_w0xw6MemCCrXGjcX8CPrUuHYieAvjOZiUNumG9LD2NDdo6SGI_UyN_pq5rQgSMGgaIfjqQzA6Z8XAfJ-Qls1a1PjM7qskltEOxEH3ObU1Wb0B3PlezTDMJJPnMS4DTrPZL';
-  //   const String url = 'https://fcm.googleapis.com/fcm/send';
-  //
-  //   Map<String, String> headers = {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': 'key=$serverToken',
-  //   };
-  //
-  //   Map<String, dynamic> body = {
-  //     'notification': {
-  //       'title': "From: ${nameOfTeacher.toString()}",
-  //       'body': 'Subject: ${_subject.text}\nAbout: ${_titleController.text}',
-  //     },
-  //     'priority': 'high',
-  //     'to': '/topics/${_subject.text}',
-  //   };
-  //   logger.i("send notifications to this subscriptions ${_subject.text}");
-  //
-  //   http.post(
-  //     Uri.parse(url),
-  //     headers: headers,
-  //     body: json.encode(body),
-  //   );
-  // }
-
-  void unSubscribeToTopicSwitch() async {
-    topic = widget.subject;
-
-    logger.i("unsubscribed to $topic");
-
-    try{
-      await FirebaseMessaging.instance.unsubscribeFromTopic(topic).whenComplete(() =>
-          Fluttertoast.showToast(msg: "Unsubscribed to $topic"),
-      );
-    }catch(e){
-      logger.i(e);
-    }
-  }
-  void subscribeToTopicSwitch() async {
-    topic = widget.subject;
-
-    logger.i("subscribed to $topic");
-    try{
-      await FirebaseMessaging.instance.subscribeToTopic(topic).whenComplete(() =>
-          Fluttertoast.showToast(msg: "Subscribed to $topic"),
-      );
-    }catch(e){
-      logger.i(e);
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -226,38 +124,6 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                         ),
                       ),
                     ),
-                    Switch(
-                      value: setOn,
-                      inactiveThumbColor: Theme.of(context).primaryColorLight.withOpacity(.6),
-                      activeColor: Theme.of(context).primaryColor,
-                      thumbIcon: MaterialStateProperty.resolveWith((Set states) {
-                        if (states.contains(MaterialState.disabled)) {
-                          return const Icon(
-                            Icons.close,
-                            color: Colors.grey,
-                          );
-                        }
-                        return null; // All other states will use the default thumbIcon.
-                      }),
-                      onChanged: (val) async {
-                        // Update the value of setOn
-                        try {
-                          // Update the value of setOn
-                          if (!val) {
-                            subscribeToTopicSwitch();
-                            logger.i(val);
-                          } else {
-                            unSubscribeToTopicSwitch();
-                            logger.i(val);
-                          }
-                          _saveSwitchState(val);
-
-                        } on Exception catch (e) {
-                          snack(e.toString(), context);
-                          logger.i(e);
-                        }
-                      },
-                    ),
                   ],
                 ),
                 Expanded(
@@ -265,6 +131,7 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                     child: StreamBuilder<QuerySnapshot>(
                       stream: feedCollection
                           .where('subject', isEqualTo: subjectOfTeacher)
+                          .orderBy("time", descending: true)
                           .snapshots(),
                       builder: (ctx, streamSnapshot) {
                         if (streamSnapshot.connectionState ==
@@ -332,7 +199,7 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                         return ListView.builder(
                           //reverse: true,
                           shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
+                          physics: const ScrollPhysics(parent: null),
                           itemCount: docs.length,
                           itemBuilder: (BuildContext context, int index) {
                             DocumentSnapshot document =
@@ -346,14 +213,15 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                                 "/${dateTime.year} | ${dateTime.hour}"
                                 ":${dateTime.minute}";
 
-                            return Column(children: [
+                            return Column(
+                                children: [
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 10),
                                 child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height:
-                                      MediaQuery.of(context).size.height / 3.3,
+                                  // width: MediaQuery.of(context).size.width,
+                                  // height:
+                                  //     MediaQuery.of(context).size.height / 3.3,
                                   decoration: BoxDecoration(
                                     color: Theme.of(context)
                                         .primaryColorLight
@@ -365,6 +233,8 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                                     ),
                                   ),
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       const SizedBox(
                                         height: 5,
@@ -489,19 +359,12 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                                           color: Theme.of(context).primaryColor,
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 75,
-                                        width: MediaQuery.of(context).size.width,
-                                        child: SingleChildScrollView(
-                                          scrollDirection: Axis.vertical,
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            child: Text(
-                                              documents[index].get("description"),
-                                              style: textStyleText(context),
-                                            ),
-                                          ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 10, right: 10, bottom: 10),
+                                        child: Text(
+                                          documents[index].get("description"),
+                                          style: textStyleText(context),
                                         ),
                                       ),
                                     ],

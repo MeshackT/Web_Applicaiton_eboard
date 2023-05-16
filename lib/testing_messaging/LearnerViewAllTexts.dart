@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 import '../AllNew/model/ConnectionChecker.dart';
 import '../AllNew/shared/constants.dart';
 
@@ -140,7 +139,8 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
                                             width: 30,
                                             height: 40,
                                             child: PopupMenuButton<int>(
-                                              color: Colors.white,
+                                              color: Theme.of(context).primaryColorLight,
+                                              icon: Icon(Icons.more_vert, color: Theme.of(context).primaryColor,),
                                               elevation: 5.0,
                                               itemBuilder: (context) => [
                                                 PopupMenuItem<int>(

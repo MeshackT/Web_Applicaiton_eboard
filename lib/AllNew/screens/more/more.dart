@@ -4,11 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yueway/AllNew/screens/Authentication/Authenticate.dart';
 import '../../shared/constants.dart';
 import '../home/home.dart';
 import 'feedbackclass.dart';
+
+Logger logger = Logger(printer: PrettyPrinter(colors: true));
+var user = FirebaseAuth.instance.currentUser;
 
 class More extends StatefulWidget {
   const More({Key? key}) : super(key: key);
@@ -19,6 +24,8 @@ class More extends StatefulWidget {
 
 class _MoreState extends State<More> {
   bool isLoading = false;
+  bool loader = false;
+
   String appName = "";
   String appVersion = "";
   String appBuildUpNumber = "";
@@ -75,54 +82,62 @@ class _MoreState extends State<More> {
                   ),
                   spaceVertical(),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    decoration: BoxDecoration(
-                      color:
-                          Theme.of(context).primaryColorLight.withOpacity(.4),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      decoration: BoxDecoration(
+                        color:
+                            Theme.of(context).primaryColorLight.withOpacity(.4),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: Text(
-                            "About ",
-                            style: textStyleText(context).copyWith(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 16,
-                              letterSpacing: 1,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 150,
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Text(
+                                    "About ",
+                                    style: textStyleText(context).copyWith(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 16,
+                                      letterSpacing: 1,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  child: Text(
+                                    "An electronic board for both learners and teacher."
+                                    " Send your notification as a teacher to learners."
+                                    " Get your notification feeds directly from the application.",
+                                    style: textStyleText(context).copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      letterSpacing: 1,
+                                      color: Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(.6),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
                             ),
-                            textAlign: TextAlign.center,
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          child: Text(
-                            "An electronic board for both learners and teacher."
-                            " Send your notification as a teacher to learners."
-                            " Get your notification feeds directly from the application.",
-                            style: textStyleText(context).copyWith(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                              letterSpacing: 1,
-                              color: Theme.of(context)
-                                  .primaryColor
-                                  .withOpacity(.6),
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                        ],
+                      )),
                   spaceVertical(),
                   Container(
-                    height: 120,
+                    height: 160,
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 10),
@@ -148,6 +163,7 @@ class _MoreState extends State<More> {
                         spaceVertical(),
                         InkWell(
                           onTap: () {
+                            //show sheet to share
                             showSheetToShare(context);
                           },
                           child: Container(
@@ -181,6 +197,31 @@ class _MoreState extends State<More> {
                             height: 30,
                             child: Text(
                               "Send us Feedback",
+                              textAlign: TextAlign.start,
+                              style: textStyleText(context).copyWith(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                letterSpacing: 1,
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.6),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            showSheetForAddingEnquiries(context);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 10),
+                            width: MediaQuery.of(context).size.width,
+                            height: 30,
+                            child: Text(
+                              "Add the details for enquiries",
                               textAlign: TextAlign.start,
                               style: textStyleText(context).copyWith(
                                 fontWeight: FontWeight.w500,
@@ -274,7 +315,248 @@ class _MoreState extends State<More> {
     );
   }
 
-  //TODO Show bottom Sheet To add Subject to the learner
+  //TODO Show bottom Sheet for Feedback
+  // showSheetToSendUsFeedback(BuildContext context) {
+  //   TextEditingController sendersName = TextEditingController();
+  //   TextEditingController sendersEmail = TextEditingController();
+  //   TextEditingController subject = TextEditingController();
+  //   TextEditingController message = TextEditingController();
+  //
+  //
+  //   showModalBottomSheet(
+  //     barrierColor: Theme.of(context).primaryColor.withOpacity(.1),
+  //     isScrollControlled: true,
+  //     enableDrag: true,
+  //     elevation: 1,
+  //     clipBehavior: Clip.antiAlias,
+  //     context: context,
+  //     builder: (context) {
+  //       return Wrap(
+  //         alignment: WrapAlignment.center,
+  //         children: [
+  //           SingleChildScrollView(
+  //             child: Container(
+  //               width: MediaQuery.of(context).size.width,
+  //               decoration: const BoxDecoration(
+  //                 //screen background color
+  //                 gradient: LinearGradient(
+  //                     colors: [Color(0x0fffffff), Color(0xE7791971)],
+  //                     begin: Alignment.topLeft,
+  //                     end: Alignment.bottomRight),
+  //               ),
+  //               child: Padding(
+  //                 padding:
+  //                 const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+  //                 child: SingleChildScrollView(
+  //                   child: Column(
+  //                     children: [
+  //                       Padding(
+  //                         padding: const EdgeInsets.symmetric(
+  //                             horizontal: 25.0, vertical: 3),
+  //                         child: Column(children: [
+  //                           ClipRRect(
+  //                             borderRadius: const BorderRadius.only(
+  //                               bottomLeft: Radius.circular(50),
+  //                               bottomRight: Radius.circular(50),
+  //                               topLeft: Radius.circular(50),
+  //                               topRight: Radius.circular(50),
+  //                             ),
+  //                             child: Container(
+  //                               color: Theme.of(context)
+  //                                   .primaryColor
+  //                                   .withOpacity(.7),
+  //                               width: MediaQuery.of(context).size.width,
+  //                               height: 50,
+  //                               child: Center(
+  //                                 child: Text(
+  //                                   style: textStyleText(context).copyWith(
+  //                                       fontSize: 15,
+  //                                       fontWeight: FontWeight.w700,
+  //                                       fontFamily: 'Apple SD Gothic Neo',
+  //                                       color:
+  //                                       Theme.of(context).primaryColorLight),
+  //                                   "Send us your feedback.",
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           ),
+  //                           const SizedBox(
+  //                             height: 20,
+  //                           ),
+  //                           TextFormField(
+  //                             controller: sendersName,
+  //                             maxLines: 1,
+  //                             decoration: textInputDecoration.copyWith(
+  //                               hintText: "Your name here...",
+  //                               hintStyle: textStyleText(context).copyWith(
+  //                                 fontWeight: FontWeight.w800,
+  //                                 color: Theme.of(context)
+  //                                     .primaryColor
+  //                                     .withOpacity(.7),
+  //                               ),
+  //                             ),
+  //                             style: textStyleText(context),
+  //                             textAlign: TextAlign.center,
+  //                             autocorrect: true,
+  //                             textAlignVertical: TextAlignVertical.center,
+  //                             onSaved: (value) {
+  //                               //Do something with the user input.
+  //                               sendersName.text = value!;
+  //                             },
+  //                           ),
+  //                           const SizedBox(
+  //                             height: 10,
+  //                           ),
+  //                           TextFormField(
+  //                             controller: sendersEmail,
+  //                             maxLines: 1,
+  //                             decoration: textInputDecoration.copyWith(
+  //                               hintText: "Your email here...",
+  //                               hintStyle: textStyleText(context).copyWith(
+  //                                 fontWeight: FontWeight.w800,
+  //                                 color: Theme.of(context)
+  //                                     .primaryColor
+  //                                     .withOpacity(.7),
+  //                               ),
+  //                             ),
+  //                             keyboardType: TextInputType.emailAddress,
+  //                             style: textStyleText(context),
+  //                             textAlign: TextAlign.center,
+  //                             autocorrect: true,
+  //                             textAlignVertical: TextAlignVertical.center,
+  //                             onSaved: (value) {
+  //                               //Do something with the user input.
+  //                               sendersEmail.text = value!;
+  //                             },
+  //                           ),
+  //                           const SizedBox(
+  //                             height: 10,
+  //                           ),
+  //                           TextFormField(
+  //                             controller: subject,
+  //                             decoration: textInputDecoration.copyWith(
+  //                               hintText: "Your subject/about here",
+  //                               hintStyle: textStyleText(context).copyWith(
+  //                                 fontWeight: FontWeight.w800,
+  //                                 color: Theme.of(context)
+  //                                     .primaryColor
+  //                                     .withOpacity(.7),
+  //                               ),
+  //                             ),
+  //                             keyboardType: TextInputType.text,
+  //                             style: textStyleText(context),
+  //                             textAlign: TextAlign.center,
+  //                             autocorrect: true,
+  //                             textAlignVertical: TextAlignVertical.center,
+  //                             onSaved: (value) {
+  //                               //Do something with the user input.
+  //                               subject.text = value!;
+  //                             },
+  //                           ),
+  //                           const SizedBox(
+  //                             height: 10,
+  //                           ),
+  //                           TextFormField(
+  //                             controller: message,
+  //                             maxLines: 4,
+  //                             decoration: textInputDecoration.copyWith(
+  //                               hintText: "Your message here...",
+  //                               hintStyle: textStyleText(context).copyWith(
+  //                                 fontWeight: FontWeight.w800,
+  //                                 color: Theme.of(context)
+  //                                     .primaryColor
+  //                                     .withOpacity(.7),
+  //                               ),
+  //                             ),
+  //                             keyboardType: TextInputType.text,
+  //                             style: textStyleText(context),
+  //                             textAlign: TextAlign.center,
+  //                             autocorrect: true,
+  //                             textAlignVertical: TextAlignVertical.center,
+  //                             onSaved: (value) {
+  //                               //Do something with the user input.
+  //                               message.text = value!;
+  //                             },
+  //                           ),
+  //                           const SizedBox(
+  //                             height: 10,
+  //                           ),
+  //                           Padding(
+  //                             padding: const EdgeInsets.symmetric(vertical: 10),
+  //                             child: Row(
+  //                               crossAxisAlignment: CrossAxisAlignment.center,
+  //                               mainAxisAlignment: MainAxisAlignment.center,
+  //                               children: [
+  //                                 OutlinedButton(
+  //                                   onPressed: () async {
+  //                                     final navContext = Navigator.of(context);
+  //                                     final themeContext = Theme.of(context);
+  //                                     bool loader = false;
+  //
+  //                                     if (sendersName.text.isEmpty ||
+  //                                         sendersEmail.text.isEmpty ||
+  //                                     subject.text.isEmpty ||
+  //                                     message.text.isEmpty) {
+  //                                       Fluttertoast.showToast(
+  //                                           backgroundColor:
+  //                                           themeContext.primaryColor,
+  //                                           msg: "Insert your details in the spaces provided");
+  //                                     } else {
+  //                                       setState(() {
+  //                                         loader = true;
+  //                                       });
+  //                                       Utils.showDownloading(
+  //                                           context,
+  //                                           "Sending your email.",
+  //                                           "Please wait a few seconds...");
+
+  //                                       ///TODO add these to the database
+  //                                       SendEmail.sendEmail(
+  //                                           name: sendersName.text.trim(),
+  //                                           email: sendersEmail.text.trim().toLowerCase(),
+  //                                           subject: subject.text.trim(),
+  //                                           message: message.text.trim());
+  //                                       setState(() {
+  //                                         loader = false;
+  //                                       });
+  //                                       Fluttertoast.showToast(
+  //                                           backgroundColor:
+  //                                           themeContext.primaryColor,
+  //                                           msg: "Email submitted");
+  //                                     }
+  //                                     sendersName.clear();
+  //                                     sendersEmail.clear();
+  //                                     message.clear();
+  //                                     subject.clear();
+  //                                     navContext.pop();
+  //                                   },
+  //                                   style: buttonRound,
+  //                                   child: Text(
+  //                                     "Submit",
+  //                                     style: TextStyle(
+  //                                       fontSize: 15,
+  //                                       fontWeight: FontWeight.bold,
+  //                                       color: Theme.of(context).primaryColorDark,
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           ),
+  //                         ]),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+//working
   showSheetToSendUsFeedback(BuildContext context) {
     //controllers
     TextEditingController nameOfSender = TextEditingController();
@@ -475,34 +757,315 @@ class _MoreState extends State<More> {
                               children: [
                                 OutlinedButton(
                                   onPressed: () async {
-                                    if (nameOfSender.text.isEmpty ||
-                                        emailOfSender.text.isEmpty ||
-                                        subjectOfSender.text.isEmpty ||
-                                        messageOfSender.text.isEmpty) {
-                                      snack("Insert your details and message",
-                                          context);
-                                    } else {
-                                      SendEmail.sendEmail(
-                                        name: nameOfSender.text,
-                                        message: messageOfSender.text,
-                                        subject: subjectOfSender.text,
-                                        email: emailOfSender.text,
-                                      );
+                                    setState(() {
+                                      loader = true;
+                                    });
+                                    Utils.showDownloading(
+                                        context,
+                                        "Sending your email.",
+                                        "Please wait a few seconds...");
+
+                                    //validate the inputs
+                                    try {
+                                      if (nameOfSender.text.isEmpty ||
+                                          emailOfSender.text.isEmpty ||
+                                          subjectOfSender.text.isEmpty ||
+                                          messageOfSender.text.isEmpty) {
+                                        snack("Insert your details and message",
+                                            context);
+                                      } else {
+
+                                        //send the message through an API from email JS email
+                                        SendEmail.sendEmail(
+                                          name: nameOfSender.text,
+                                          message: messageOfSender.text,
+                                          subject: subjectOfSender.text,
+                                          email: emailOfSender.text.trim().toLowerCase(),
+                                        );
+
+                                      }
+                                      // turn off the loader
+                                      setState(() {
+                                        loader = false;
+                                      });
+                                      //close the sheet
+                                      Navigator.of(context).pop();
+                                      //communicate the process after
                                       Fluttertoast.showToast(
                                           backgroundColor:
-                                              Theme.of(context).primaryColor,
+                                          Theme.of(context).primaryColor,
                                           msg:
-                                              "Thank you for your feedback, your email submitted.");
-                                      Navigator.of(context).pop();
+                                          "Thank you for your feedback, your email submitted.");
+
+                                      //clear the data in those textfields
+                                      nameOfSender.clear();
+                                      messageOfSender.clear();
+                                      subjectOfSender.clear();
+                                      emailOfSender.clear();
+                                    } on Exception catch (e) {
+                                      // TODO
+                                      Fluttertoast.showToast(
+                                          backgroundColor:
+                                          Theme.of(context).primaryColor,
+                                          msg:
+                                          "failed to send the feedback, please try again later");
+                                      logger.i(e);
                                     }
-                                    nameOfSender.clear();
-                                    messageOfSender.clear();
-                                    subjectOfSender.clear();
-                                    emailOfSender.clear();
                                   },
                                   style: buttonRound,
                                   child: Text(
                                     "Send",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).primaryColorDark,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ]),
+          ),
+        );
+      },
+    );
+  }
+
+  //TODO Enquiry  details hr/none teacher
+  showSheetForAddingEnquiries(BuildContext context) {
+    //controllers
+    TextEditingController emailForEnquiry = TextEditingController();
+    TextEditingController primaryContact = TextEditingController();
+    TextEditingController secondaryContact = TextEditingController();
+
+    showModalBottomSheet(
+      isScrollControlled: true,
+      barrierColor: Colors.transparent,
+      enableDrag: true,
+      elevation: 1,
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.only(top: 0.0),
+            decoration: const BoxDecoration(
+              //screen background color
+              gradient: LinearGradient(
+                  colors: [Color(0x0fffffff), Color(0xE7791971)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight),
+            ),
+            child: Column(children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: buttonRound,
+                      child: Text(
+                        "Discard",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25.0, vertical: 3),
+                        child: Column(children: [
+                          ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(50),
+                              bottomRight: Radius.circular(50),
+                              topLeft: Radius.circular(50),
+                              topRight: Radius.circular(50),
+                            ),
+                            child: Container(
+                              color: Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(.7),
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              child: Center(
+                                child: Text(
+                                  style: textStyleText(context).copyWith(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: 'Apple SD Gothic Neo',
+                                      color:
+                                          Theme.of(context).primaryColorLight),
+                                  "Enquiry details.",
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            controller: emailForEnquiry,
+                            maxLines: 1,
+                            decoration: textInputDecoration.copyWith(
+                              hintText: "Enquiry email here...",
+                              hintStyle: textStyleText(context).copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.7),
+                              ),
+                            ),
+                            style: textStyleText(context),
+                            textAlign: TextAlign.center,
+                            autocorrect: true,
+                            textAlignVertical: TextAlignVertical.center,
+                            onSaved: (value) {
+                              //Do something with the user input.
+                              emailForEnquiry.text = value!;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            controller: primaryContact,
+                            maxLines: 1,
+                            decoration: textInputDecoration.copyWith(
+                              hintText: "Primary contact",
+                              hintStyle: textStyleText(context).copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.7),
+                              ),
+                            ),
+                            keyboardType: TextInputType.number,
+                            style: textStyleText(context),
+                            textAlign: TextAlign.center,
+                            autocorrect: true,
+                            textAlignVertical: TextAlignVertical.center,
+                            onSaved: (value) {
+                              //Do something with the user input.
+                              primaryContact.text = value!;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            controller: secondaryContact,
+                            decoration: textInputDecoration.copyWith(
+                              hintText: "Secondary contact",
+                              hintStyle: textStyleText(context).copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.7),
+                              ),
+                            ),
+                            keyboardType: TextInputType.number,
+                            style: textStyleText(context),
+                            textAlign: TextAlign.center,
+                            autocorrect: true,
+                            textAlignVertical: TextAlignVertical.center,
+                            onSaved: (value) {
+                              //Do something with the user input.
+                              secondaryContact.text = value!;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                OutlinedButton(
+                                  onPressed: () async {
+                                    final navContext = Navigator.of(context);
+                                    final themeContext = Theme.of(context);
+                                    bool loader = false;
+
+                                    final CollectionReference
+                                        detailsForEnquiry = FirebaseFirestore
+                                            .instance
+                                            .collection('enquiryDetails');
+                                    final DocumentReference identityDocument =
+                                        detailsForEnquiry.doc(user!.uid);
+
+                                    if (emailForEnquiry.text.isEmpty ||
+                                        primaryContact.text.isEmpty) {
+                                      snack("Insert your details and message",
+                                          context);
+                                    } else {
+                                      setState(() {
+                                        loader = true;
+                                      });
+                                      Utils.showDownloading(
+                                          context,
+                                          "Updating enquiry details",
+                                          "Please wait a few seconds...");
+
+                                      ///TODO add these to the database
+                                      await identityDocument.set({
+                                        "emailForEnquiry": emailForEnquiry.text
+                                            .trim()
+                                            .toLowerCase(),
+                                        "primaryContact":
+                                            primaryContact.text.trim(),
+                                        "secondaryContact":
+                                            secondaryContact.text.trim() ?? "",
+                                        "userUID": user!.uid,
+                                      }, SetOptions(merge: true));
+
+                                      setState(() {
+                                        loader = false;
+                                      });
+                                      Fluttertoast.showToast(
+                                          backgroundColor:
+                                              themeContext.primaryColor,
+                                          msg: "Details updated");
+                                    }
+                                    primaryContact.clear();
+                                    secondaryContact.clear();
+                                    emailForEnquiry.clear();
+                                    navContext.pop();
+                                  },
+                                  style: buttonRound,
+                                  child: Text(
+                                    "Add",
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
@@ -658,6 +1221,7 @@ showSheetToShare(BuildContext context) {
     },
   );
 }
+/////end of enquire details
 
 spaceVertical() {
   return const SizedBox(

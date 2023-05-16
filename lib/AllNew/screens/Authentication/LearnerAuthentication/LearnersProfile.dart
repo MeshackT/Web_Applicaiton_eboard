@@ -288,45 +288,51 @@ class _LearnersProfileState extends State<LearnersProfile> {
                                   },
                                   child: const Text('Cancel'),
                                 ),
-                                TextButton(
-                                  onPressed: () async {
-                                    setState(() {
-                                      isLoading = true;
-                                    });
-                                    try {
-                                      //  First delete my data in store
-                                      await _deleteMyDocumentWithData();
+                                Builder(
+                                  builder: (context) {
+                                    return TextButton(
+                                      onPressed: () async {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        try {
+                                          //  First delete my data in store
+                                          await _deleteMyDocumentWithData();
 
-                                      //then delete my current account
-                                      await FirebaseAuth.instance.currentUser!
-                                          .delete();
+                                          //then delete my current account
+                                          await FirebaseAuth.instance.currentUser!
+                                              .delete();
 
-                                      if (FirebaseAuth.instance.currentUser ==
-                                          null) {
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Authenticate()),
-                                        );
-                                      } else {
-                                        await FirebaseAuth.instance.signOut();
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Authenticate()),
-                                        );
-                                      }
-                                    } on Exception catch (e) {
-                                      snack(e.toString(), context);
-                                    }
+                                          signOut(context);
 
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                  },
-                                  child: const Text('Delete'),
+                                          // if (FirebaseAuth.instance.currentUser ==
+                                          //     null) {
+                                          //   Navigator.pushReplacement(
+                                          //     (context),
+                                          //     MaterialPageRoute(
+                                          //         builder: (context) =>
+                                          //             const Authenticate()),
+                                          //   );
+                                          // } else {
+                                          //   await FirebaseAuth.instance.signOut().whenComplete(() =>
+                                          //       Navigator.pushReplacement(
+                                          //         (context),
+                                          //         MaterialPageRoute(
+                                          //             builder: (context) =>
+                                          //             const Authenticate()),
+                                          //       ),);
+                                          // }
+                                        } on Exception catch (e) {
+                                          snack(e.toString(), context);
+                                        }
+
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      },
+                                      child: const Text('Delete'),
+                                    );
+                                  }
                                 ),
                               ],
                               content: Text(
@@ -368,6 +374,7 @@ class _LearnersProfileState extends State<LearnersProfile> {
                         color: Theme.of(context).primaryColor,
                         child: TextButton(
                           onPressed: () async {
+                            //TODO CHeck the state of logged in user
                             signOut(context);
                           },
                           child: Text(
@@ -402,8 +409,8 @@ class _LearnersProfileState extends State<LearnersProfile> {
                         //await _deleteMyDocumentWithData();
                       },
                       child: isLoadingVerify
-                          ? Text("Verify email")
-                          : Text("Get Data"),
+                          ? const Text("Verify you email")
+                          : const Text("Email Verified"),
                     ),
                     const SizedBox(
                       height: 10,
@@ -446,13 +453,13 @@ class _LearnersProfileState extends State<LearnersProfile> {
   //TODO the document needed
   Future<void> _deleteMyDocumentWithData() async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
-    final Query<Map<String, dynamic>> userQuery =
+    var userQuery =
         firestore.collection('learnersData').where('uid', isEqualTo: user.uid);
     try {
-      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+      var querySnapshot =
           await userQuery.get();
       if (querySnapshot.size > 0) {
-        final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        var documentSnapshot =
             querySnapshot.docs.first;
         final String documentID = documentSnapshot.get('documentID');
         await FirebaseFirestore.instance
@@ -479,11 +486,11 @@ class _LearnersProfileState extends State<LearnersProfile> {
       String documentID) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    Query<Map<String, dynamic>> userQuery =
+    var userQuery =
         firestore.collection('learnersData').where('uid', isEqualTo: user.uid);
-    userQuery.get().then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+    userQuery.get().then((var querySnapshot) {
       if (querySnapshot.size > 0) {
-        DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        var documentSnapshot =
             querySnapshot.docs.first;
         // Map<String, dynamic>? data = documentSnapshot.data();
 
@@ -520,23 +527,22 @@ class _LearnersProfileState extends State<LearnersProfile> {
   Future signOut(BuildContext context) async {
     setState(() {
       isVisible = true;
+      isLoading = true;
     });
     try {
+
+      isLoading?Utils.showDownloading(context, "Signing Out",
+          "Waiting to sign out"):null;
+
       await FirebaseAuth.instance
-          .signOut()
-          .then((value) => SpinKitChasingDots(
-                color: Theme.of(context).primaryColor,
-              ));
+          .signOut();
       FirebaseAuth.instance
           .authStateChanges()
           .listen((User? user) {
         if (user == null) {
+          Navigator.of(context).pop();
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const Authenticate()));
-        } else {
-          Fluttertoast.showToast(
-              backgroundColor: Theme.of(context).primaryColor,
-              msg: 'Could not log out, you are still signed in!');
         }
       });
     } catch (e) {

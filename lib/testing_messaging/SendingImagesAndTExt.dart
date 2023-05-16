@@ -1,10 +1,7 @@
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../AllNew/model/ConnectionChecker.dart';
 import '../AllNew/screens/home/home.dart';
 import '../AllNew/shared/constants.dart';
@@ -22,7 +19,6 @@ class _TextNotificationsState extends State<TextNotifications> {
   String _deviceToken = "";
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
-  late StreamSubscription<QuerySnapshot> _subscription;
 
   //subscribe all to get notified
   String topic = "notifications";
@@ -32,21 +28,13 @@ class _TextNotificationsState extends State<TextNotifications> {
     super.initState();
     ConnectionChecker.checkTimer();
     _getDeviceToken();
-    _configureFirebaseListeners();
-    logger.i("This is the name of the topic: $topic");
   }
 
   @override
   void dispose() {
     super.dispose();
-    _subscription.cancel();
   }
 
-
-  Future<void> _saveSwitchState(bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('my_switch_state', value);
-  }
 
   //get the token of the device
   void _getDeviceToken() async {
@@ -59,35 +47,6 @@ class _TextNotificationsState extends State<TextNotifications> {
     } else {
       logger.i("Device token is null.");
     }
-  }
-
-  Future<void> showNotification(String title, String body) async {
-    var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
-        'your channel id', 'your channel name',
-        importance: Importance.max, priority: Priority.high, ticker: 'ticker');
-
-    var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics, iOS: null);
-
-    await FlutterLocalNotificationsPlugin()
-        .show(0, title, body, platformChannelSpecifics, payload: 'item x');
-  }
-
-  void _configureFirebaseListeners() {
-    //FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      String title = message.notification?.title ?? "New notification";
-      String body = message.notification?.body ?? "";
-      showNotification(title, body);
-    });
-
-    FirebaseMessaging.instance
-        .getToken()
-        .then((token) => print("Device token: $token"));
-
-    FirebaseMessaging.instance
-        .requestPermission(sound: true, badge: true, alert: true);
   }
 
   @override

@@ -3,12 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
+import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
+import 'package:yueway/AllNew/screens/home/learnersHome.dart';
 import '../../../testing_messaging/messaging.dart';
 import '../../shared/constants.dart';
 import '../Authentication/Authenticate.dart';
@@ -76,7 +79,7 @@ class _HomeState extends State<Home> {
   CollectionReference allLearnersCollection =
       FirebaseFirestore.instance.collection('learnersData');
   List<DocumentSnapshot> documents = [];
-
+  LocalNotificationService localNotificationService = LocalNotificationService();
   //////////////////////////////
   List<Map<dynamic, dynamic>> lists = [];
   final databaseReference =
@@ -113,12 +116,14 @@ class _HomeState extends State<Home> {
   bool isVisible = false;
   bool isRegistered = false;
   int selectedItemIndex = -1;
+  bool isAlertSet = false;
+
+
 
   //connectivity
   late StreamSubscription subscription;
   var isDeviceConnected = false;
   var isDeviceConnectedOnChange = false;
-  bool isAlertSet = false;
 
   void toggleVisibility() {
     setState(() {
@@ -144,9 +149,20 @@ class _HomeState extends State<Home> {
     super.initState();
     _getUserField();
     _getCurrentUserFields(teachersName,teachersSecondName, teachersEmail, teachersGrade);
+    //notification
+    // LocalNotificationService.initialize();
+    // localNotificationService.getPermission();
+    // Terminated State show message
+    // FirebaseMessaging.instance.getInitialMessage().then((event) {
+    //
+    // });
+    //
+
+
   }
 
-  getConnectivity() {
+  // function to request notifications permissions
+    getConnectivity() {
     try {
       subscription = Connectivity()
           .onConnectivityChanged
@@ -213,7 +229,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "All learners list",
+          "All learner's list",
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
@@ -328,6 +344,7 @@ class _HomeState extends State<Home> {
                     child: StreamBuilder(
                       stream: allLearnersCollection
                           .where('teachersID', arrayContains: user!.uid)
+
                           .snapshots(),
                       builder: (ctx, streamSnapshot) {
                         if (streamSnapshot.connectionState ==
@@ -373,7 +390,7 @@ class _HomeState extends State<Home> {
                           return Text("Error: ${streamSnapshot.error}");
                         } else if(!streamSnapshot.hasData || streamSnapshot.data == null ||
                             streamSnapshot.data!.size <= 0){
-                          return Center(child: Text("No grade 9 list, No learner registered yet.",
+                          return Center(child: Text("No list of learners yet.",
                             style: textStyleText(context).copyWith(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
@@ -547,6 +564,7 @@ class _HomeState extends State<Home> {
                                                             msg:
                                                                 "Already registered $_userSubject");
                                                         setState(() {
+                                                          isRegistered = true;
                                                           loading = false;
                                                         });
                                                         return;
@@ -557,6 +575,7 @@ class _HomeState extends State<Home> {
                                                             msg:
                                                                 "Already registered $teachersSubject2");
                                                         setState(() {
+                                                          isRegistered = true;
                                                           loading = false;
                                                         });
                                                         return;
@@ -746,12 +765,12 @@ class _HomeState extends State<Home> {
                                               icon:Icon(
                                                       Icons.add,
                                                       size: 20,
-                                                      key: ValueKey(documents[index].id),
+                                                      key: ValueKey(documents[index]),
                                                       color:
                                                           IconTheme.of(context)
                                                               .color!
                                                               .withOpacity(.7),
-                                                    ),
+                                                    )
                                             ),
                                           ],
                                         ),
@@ -1009,21 +1028,21 @@ class _HomeState extends State<Home> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
+          title: const Text(
             textAlign: TextAlign.center,
-            'Remove $userSubject?',
+            'Permanently Delete the learner',
             style: TextStyle(
-                color: Theme.of(context).primaryColor,
+                color: Colors.red,
                 fontSize: 20,
                 fontWeight: FontWeight.w700),
           ),
           content: Text(
             'This action will '
             'permanently '
-            'delete all marks stored for'
+            'delete the learners and will require re-registering'
             ' $userSubject for this learner, '
             'are you sure you '
-            'want to delete?',
+            'want to delete the learner?',
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: Theme.of(context).primaryColorDark.withOpacity(.70)),
@@ -1040,7 +1059,7 @@ class _HomeState extends State<Home> {
                         Navigator.of(context).pop();
                       },
                       child: Text(
-                        'Cancel',
+                        'Discard',
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                         ),
@@ -1068,7 +1087,7 @@ class _HomeState extends State<Home> {
                         }
                       },
                       child: Text(
-                        'Yes',
+                        'Proceed',
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                         ),
@@ -1086,17 +1105,17 @@ class _HomeState extends State<Home> {
 
   //Check if learners in the database have a subject based on the current logged in teacher
   Future<void> checkAllSubjects() async {
-    final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+    var snapshot = await FirebaseFirestore
         .instance
         .collection('learnersData')
         .where("allSubjects", arrayContains: _userSubject)
         .get();
 
-    final List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+    var documents =
         snapshot.docs;
 
     if (documents.isNotEmpty) {
-      for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+      for (var document
           in documents) {
         final String documentId = document.id;
         // Do something with the document that contains Mathematics in allSubjects
@@ -1118,16 +1137,16 @@ class _HomeState extends State<Home> {
   ) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    Query<Map<String, dynamic>> userQuery =
+    var userQuery =
         firestore.collection('userData').where('uid', isEqualTo: user!.uid);
-    userQuery.get().then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+    userQuery.get().then((var querySnapshot) {
       if (querySnapshot.size > 0) {
-        DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+      var documentSnapshot =
             querySnapshot.docs.first;
         Map<String, dynamic>? data = documentSnapshot.data();
 
         //get the learners details
-        nameOfTeacherForDrawer = data!['name'].toString();
+        nameOfTeacherForDrawer = data['name'].toString();
         secondNameOfTeacherForDrawer = data['secondName'].toString();
         emailOfTeacherForDrawer = data['email'].toString();
         gradeOfTeacherDrawer = data['grade'].toString();
@@ -1157,21 +1176,21 @@ class _HomeState extends State<Home> {
     //String? userId = FirebaseAuth.instance.currentUser?.uid;
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    Query<Map<String, dynamic>> userQuery =
+    var userQuery =
         firestore.collection('userData').where('uid', isEqualTo: user!.uid);
-    userQuery.get().then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+    userQuery.get().then((var querySnapshot) {
       if (querySnapshot.size > 0) {
-        DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        var documentSnapshot =
             querySnapshot.docs.first;
         Map<String, dynamic>? data = documentSnapshot.data();
         // get the subject 1 field or empty string if it doesn't exist
-        _userSubject = data?['subjects'][0] ?? '';
+        _userSubject = data['subjects'][0] ?? '';
         // get the subject 2 field or empty string if it doesn't exist
-        teachersSubject2 = data?['subjects'][1] ?? '';
+        teachersSubject2 = data['subjects'][1] ?? '';
         // get the name field or empty string if it doesn't exist
-        nameOfTeacher = data?['name'] ?? '';
+        nameOfTeacher = data['name'] ?? '';
 
-        uidOfTeacher = data?['documentID'] ?? '';
+        uidOfTeacher = data['documentID'] ?? '';
 
         logger.e("inside getting fields $_userSubject and $teachersSubject2");
       } else {
@@ -1181,13 +1200,13 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> loopAllSubjects() async {
-    final QuerySnapshot<Map<String, dynamic>> snapshot =
+    var snapshot =
         await FirebaseFirestore.instance.collection('learnersData').get();
 
-    final List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+    var documents =
         snapshot.docs;
 
-    for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+    for (var document
         in documents) {
       final List<dynamic> allSubjects = document.data()['allSubjects'];
       // Do something with the allSubjects array
@@ -1210,9 +1229,8 @@ class NavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 80),
+    return SafeArea(
+      child: SingleChildScrollView(
         child: Container(
           color: Theme.of(context).primaryColorLight,
           width: MediaQuery.of(context).size.width / 1.8,
@@ -1220,7 +1238,10 @@ class NavigationDrawer extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [buildHeader(context), buildMenueItems(context)],
+              children: [
+                buildHeader(context),
+                buildMenueItems(context),
+              ],
             ),
           ),
         ),
@@ -1245,7 +1266,7 @@ class NavigationDrawer extends StatelessWidget {
                   builder: (context) => const TeachersProfile()));
             },
             child: Container(
-              color: Theme.of(context).primaryColorDark.withOpacity(.6),
+              color: Theme.of(context).primaryColorDark.withOpacity(.8),
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.only(
                 top: MediaQuery.of(context).padding.top,
@@ -1253,6 +1274,7 @@ class NavigationDrawer extends StatelessWidget {
               child: Column(
                 children: [
                   CircleAvatar(
+                    backgroundColor: Theme.of(context).primaryColorLight,
                     child: Wrap(
                       children: [
                         Text(
@@ -1260,7 +1282,8 @@ class NavigationDrawer extends StatelessWidget {
                           style: textStyleText(context).copyWith(
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
-                            color: Theme.of(context).primaryColorLight,
+                            color: Theme.of(context).primaryColor
+                                .withOpacity(.8),
                           ),
                         ),
                       ],
@@ -1478,9 +1501,10 @@ class NavigationDrawer extends StatelessWidget {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const Authenticate()));
         } else {
-          Fluttertoast.showToast(
-              backgroundColor: Theme.of(context).primaryColor,
-              msg: 'Could not log out, you are still signed in!');
+          return;
+          // Fluttertoast.showToast(
+          //     backgroundColor: Theme.of(context).primaryColor,
+          //     msg: 'Could not log out, you are still signed in!');
         }
       });
     } catch (e) {

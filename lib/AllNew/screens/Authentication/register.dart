@@ -3,6 +3,8 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:yueway/main.dart';
 import '../../../verifyEmailPage.dart';
 import '../../main.dart';
 import '../../shared/constants.dart';
@@ -74,8 +76,8 @@ class _RegisterState extends State<Register> {
   String name = '';
   String secondName = '';
   String documentID = '';
-  String subject1 = '';
-  String subject2 = '';
+  // String subject1 = '';
+  // String subject2 = '';
   List<String> subjects = [];
   String role = "teacher";
   String code = '';
@@ -84,6 +86,38 @@ class _RegisterState extends State<Register> {
   String error = '';
   bool loading = false;
   bool passwordVisible = true;
+
+  String? selectedOption;
+  String? selectedOption1;
+
+  List<String> listItem = [
+    "arts and culture",
+    "accounting",
+    "afrikaans",
+    "agriculture",
+    "business studies",
+    "cat",
+    "consumer studies",
+    "economic m s",
+    "geography",
+    "history",
+    "isiZulu",
+    "life sciences",
+    "life orientation",
+    "natural sciences",
+    "physical sciences",
+    "social sciences",
+    "siphedi",
+    "sisotho",
+    "technology",
+    "tourism",
+    "english home language",
+    "english second additional language",
+    "mathematics",
+    "mathematics literacy",
+    "not applicable",
+  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -279,44 +313,120 @@ class _RegisterState extends State<Register> {
                             const SizedBox(
                               height: 10,
                             ),
-                            TextFormField(
-                              decoration: textInputDecoration.copyWith(
-                                  label: Text(
-                                    'Subject',
-                                    style: textStyleText(context),
+                            Container(
+                              padding: const EdgeInsets.only(left: 10),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColorLight.withOpacity(1),
+
+                                border: Border.all(
+                                  color: Colors.purple,
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              child: Column(
+                                children: [
+                                  DropdownButton(
+                                    isExpanded: false,
+                                    hint: Text(
+                                      "Select a subject",
+                                      style: textStyleText(context),
+                                    ),
+                                    //ValueChoose1
+                                    value: selectedOption1,
+                                    //listMathematics
+                                    items: listItem
+                                        .map<DropdownMenuItem<String>>(
+                                          (e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(
+                                          e,
+                                          style: textStyleText(
+                                              context),
+                                        ),
+                                      ),
+                                    )
+                                        .toList(),
+                                    onChanged: (String? value) {
+                                      setState(() {
+                                        selectedOption1 = value;
+                                        print(selectedOption1);
+                                      });
+                                    },
                                   ),
-                                  hintText: "Subject"),
-                              obscureText: false,
-                              validator: (val) {
-                                if (val!.length < 3) {
-                                  return "Invalid subject";
-                                }
-                                return null;
-                              },
-                              onChanged: (val) {
-                                setState(() {
-                                  subject1 = val;
-                                });
-                              },
+                                  DropdownButton(
+                                    isExpanded: false,
+                                    hint: Text(
+                                      "Optional Subject",
+                                      style: textStyleText(context),
+                                    ),
+                                    //ValueChoose1
+                                    value: selectedOption,
+                                    //listMathematics
+                                    items: listItem
+                                        .map<DropdownMenuItem<String>>(
+                                          (e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(
+                                          e,
+                                          style: textStyleText(
+                                              context),
+                                        ),
+                                      ),
+                                    )
+                                        .toList(),
+                                    onChanged: (String? value) {
+                                      setState(() {
+                                        selectedOption = value;
+                                        print(selectedOption);
+
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
-                            //subject1
                             const SizedBox(
-                              height: 20,
+                              height: 10,
                             ),
-                            TextFormField(
-                              decoration: textInputDecoration.copyWith(
-                                  label: Text(
-                                    'Additional Subject (Optional)',
-                                    style: textStyleText(context),
-                                  ),
-                                  hintText: "Subject"),
-                              obscureText: false,
-                              onChanged: (val) {
-                                setState(() {
-                                  subject2 = val;
-                                });
-                              },
-                            ),
+                            // TextFormField(
+                            //   decoration: textInputDecoration.copyWith(
+                            //       label: Text(
+                            //         'Subject',
+                            //         style: textStyleText(context),
+                            //       ),
+                            //       hintText: "Subject"),
+                            //   obscureText: false,
+                            //   validator: (val) {
+                            //     if (val!.length < 3) {
+                            //       return "Invalid subject";
+                            //     }
+                            //     return null;
+                            //   },
+                            //   onChanged: (val) {
+                            //     setState(() {
+                            //       subject1 = val;
+                            //     });
+                            //   },
+                            // ),
+                            //subject1
+                            // const SizedBox(
+                            //   height: 20,
+                            // ),
+                            // TextFormField(
+                            //   decoration: textInputDecoration.copyWith(
+                            //       label: Text(
+                            //         'Additional Subject (Optional)',
+                            //         style: textStyleText(context),
+                            //       ),
+                            //       hintText: "Subject"),
+                            //   obscureText: false,
+                            //   onChanged: (val) {
+                            //     setState(() {
+                            //       subject2 = val;
+                            //     });
+                            //   },
+                            // ),
 
                             const SizedBox(
                               height: 20,
@@ -420,7 +530,14 @@ class _RegisterState extends State<Register> {
                                           if (_formKey.currentState!
                                               .validate()) {
                                             //set this state when I press the button
-                                            signUp();
+                                            if(selectedOption1 == null ||
+                                                selectedOption == null ||
+                                                selectedOption1!.isEmpty ||
+                                            selectedOption!.isEmpty){
+                                              Fluttertoast.showToast(msg: "Select 'not applicable' if you are not teaching 2 subjects");
+                                            }else{
+                                              signUp();
+                                            }
                                           } else {
                                             setState(() {
                                               snack("Failed to register",
@@ -522,8 +639,8 @@ class _RegisterState extends State<Register> {
       //store user in a string/
       uid = userCurrent.toString();
 
-      subjects.add(subject1);
-      subjects.add(subject2);
+      subjects.add(selectedOption1.toString());
+      subjects.add(selectedOption.toString());
 
       //insert data using a class
       User _user = User(email.trim().toLowerCase(), uid, password.trim(),

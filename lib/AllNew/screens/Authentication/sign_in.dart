@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:yueway/AllNew/screens/Authentication/guestView.dart';
+import 'package:yueway/main.dart';
 
 import '../../main.dart';
 import '../../model/ConnectionChecker.dart';
@@ -52,6 +54,13 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    // LayoutBuilder(builder: (context, constraints) {
+    //   if (constraints.maxWidth < Utils.mobileWidth) {
+    //     return mobileBody;
+    //   } else {
+    //     return desktopBody;
+    //   }
+    // });
     return Scaffold(
       body: DoubleBackToCloseApp(
         snackBar: SnackBar(
@@ -383,7 +392,36 @@ class _SignInState extends State<SignIn> {
                             ),
                           ],
                         ),
-                      )),
+                      ),
+                  ),
+
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(50),
+                      bottomRight: Radius.circular(50),
+                      topRight: Radius.circular(50),
+                      topLeft: Radius.circular(50),
+                    ),
+                    child: SizedBox(
+                      width: 150,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: (){
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (context) => const GuestView(),
+                            ),
+                        );
+
+                        },
+                        child: Text("I am a guest", style: textStyleText(context).copyWith(
+                          color: Theme.of(context).primaryColorLight,
+                        ),),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                 ],
               ),
             ),
@@ -399,6 +437,7 @@ class _SignInState extends State<SignIn> {
       loading = true;
     });
 
+    final navContext = Navigator.of(context);
     try {
       // Check if user exists
       bool userExists = false;
@@ -410,7 +449,7 @@ class _SignInState extends State<SignIn> {
 
       // Navigate to the home screen if user exists
       if (userExists) {
-        Navigator.of(context).pushReplacement(
+        navContext.pushReplacement(
             MaterialPageRoute(builder: (context) => const Home())
         );
       }else if(!userExists){
@@ -446,8 +485,8 @@ class _SignInState extends State<SignIn> {
       loading = false;
     });
 
-    // Clear the login screen stack from the navigator
-    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    // Clear the login scren stack from the navigator
+     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 
 }

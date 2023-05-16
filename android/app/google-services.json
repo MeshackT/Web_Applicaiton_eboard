@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "231030944816",
+    "firebase_url": "https://ebase-3f858-default-rtdb.firebaseio.com",
     "project_id": "ebase-3f858",
     "storage_bucket": "ebase-3f858.appspot.com"
   },
@@ -29,35 +30,13 @@
             {
               "client_id": "231030944816-p97hta5fn1i6tavafmf4d3rp5ad3uv2o.apps.googleusercontent.com",
               "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:231030944816:android:7cd41331c74fd7bb26e9f5",
-        "android_client_info": {
-          "package_name": "com.example.untitled"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "231030944816-p97hta5fn1i6tavafmf4d3rp5ad3uv2o.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBZB39s8O_TjIgqVsKH_J1zmaRgRMbhSIk"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
+            },
             {
-              "client_id": "231030944816-p97hta5fn1i6tavafmf4d3rp5ad3uv2o.apps.googleusercontent.com",
-              "client_type": 3
+              "client_id": "231030944816-3ijq4jsd5s631uusojjeiql8t9rtvp1l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.eboard"
+              }
             }
           ]
         }

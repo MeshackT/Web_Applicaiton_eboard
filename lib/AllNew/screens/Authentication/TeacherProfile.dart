@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:yueway/AllNew/model/VerificationModel.dart';
 import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';
 import '../home/home.dart';
@@ -29,6 +30,7 @@ class _TeachersProfileState extends State<TeachersProfile> {
 
   bool isLoading = false;
   bool isEmptyData = false;
+  bool isLoadingVerify = false;
 
   TextEditingController editNameOfTeachers = TextEditingController();
   TextEditingController editSecondNameOfTeachers = TextEditingController();
@@ -178,16 +180,7 @@ class _TeachersProfileState extends State<TeachersProfile> {
                             const SizedBox(
                               height: 6,
                             ),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //   children: [
-                            //     labelText("Grade"),
-                            //     labelText(teachersGrade.toString()),
-                            //   ],
-                            // ),
-                            // const SizedBox(
-                            //   height: 6,
-                            // ),
+
                             Divider(
                               height: 7,
                               color: Theme.of(context).primaryColorLight,
@@ -302,6 +295,71 @@ class _TeachersProfileState extends State<TeachersProfile> {
                                         color: Theme.of(context).primaryColor),
                                   ),
                           ),
+
+
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(70),
+                        topLeft: Radius.circular(70),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 5),
+                        height: 40,
+                        color: Theme.of(context).primaryColor,
+                        child: TextButton(
+                          onPressed: () async {
+                            signOut(context);
+                          },
+                          child: Text(
+                            "Sign Out",
+                            style: textStyleText(context).copyWith(
+                                color: Theme.of(context).primaryColorLight,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        bool verifiedUser = false;
+                        verifiedUser =
+                            FirebaseAuth.instance.currentUser!.emailVerified;
+
+                        var currentUser = FirebaseAuth.instance.currentUser;
+                        logger.e(currentUser);
+                        VerificationModel.checkEmailVerified();
+                        VerificationModel.sendVerificationEmail();
+
+                        if (verifiedUser == false) {
+                          setState(() {
+                            isLoadingVerify = true;
+                          });
+                        } else {
+                          snack("Verified", context);
+                        }
+                        //await _deleteMyDocumentWithData();
+                      },
+                      child: isLoadingVerify
+                          ? const Text("Verify your email")
+                          : const Text("Email Verified"),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    isLoading
+                        ? SpinKitChasingDots(
+                      color: Theme.of(context).primaryColorLight,
+                      size: 14,
+                    )
+                        : const SizedBox(
+                      child: Text(""),
+                    ),
                   ],
                 ),
               ),
@@ -341,11 +399,11 @@ class _TeachersProfileState extends State<TeachersProfile> {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     try {
-      Query<Map<String, dynamic>> userQuery =
+      var userQuery =
           firestore.collection('userData').where('uid', isEqualTo: user.uid);
-      userQuery.get().then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+      userQuery.get().then((var querySnapshot) {
         if (querySnapshot.size > 0) {
-          DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+          var documentSnapshot =
               querySnapshot.docs.first;
           // Map<String, dynamic>? data = documentSnapshot.data();
 
@@ -398,21 +456,12 @@ class _TeachersProfileState extends State<TeachersProfile> {
           .then((value) => SpinKitChasingDots(
                 color: Theme.of(context).primaryColor,
               ));
-      await FirebaseAuth.instance
-          .signOut()
-          .then((value) => SpinKitChasingDots(
-        color: Theme.of(context).primaryColor,
-      ));
       FirebaseAuth.instance
           .authStateChanges()
           .listen((User? user) {
         if (user == null) {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const Authenticate()));
-        } else {
-          Fluttertoast.showToast(
-              backgroundColor: Theme.of(context).primaryColor,
-              msg: 'Could not log out, you are still signed in!');
         }
       });
 
@@ -757,16 +806,16 @@ class _TeachersProfileState extends State<TeachersProfile> {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     try {
-      Query<Map<String, dynamic>> userQuery = firestore
+      var userQuery = firestore
           .collection('learnersData')
           .where('subjects', arrayContains: teachersSubjects[0].toString());
 
-      userQuery.get().then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+      userQuery.get().then((var querySnapshot) {
         if (querySnapshot.size > 0) {
           logger.i("Data Found");
 
           querySnapshot.docs.forEach(
-              (DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
+              (var documentSnapshot) {
             //get the document reference
             DocumentReference documentReference =
                 firestore.collection('learnersData').doc(documentSnapshot.id);
@@ -799,16 +848,16 @@ class _TeachersProfileState extends State<TeachersProfile> {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     try {
-      Query<Map<String, dynamic>> userQuery = firestore
+      var userQuery = firestore
           .collection('learnersData')
           .where('teachersID', arrayContains: user.uid);
 
-      userQuery.get().then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+      userQuery.get().then((var querySnapshot) {
         if (querySnapshot.size > 0) {
           logger.i("Data Found");
 
           querySnapshot.docs.forEach(
-              (DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
+              (var documentSnapshot) {
             //get the document reference
             DocumentReference documentReference =
                 firestore.collection('learnersData').doc(documentSnapshot.id);

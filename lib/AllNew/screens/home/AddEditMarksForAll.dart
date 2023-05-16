@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
-
 import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';
 import '../gradeList/grade12.dart';

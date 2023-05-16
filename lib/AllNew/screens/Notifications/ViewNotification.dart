@@ -83,6 +83,7 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                   stream: feedCollection
                       .where('subject',
                       isEqualTo: widget.subjectOfTeacherPassed)
+                      .orderBy("time", descending: true)
                       .snapshots(),
                   builder: (ctx, streamSnapshot) {
                     if (streamSnapshot.connectionState ==
@@ -159,9 +160,9 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                     final List<QueryDocumentSnapshot> docs =
                         streamSnapshot.data!.docs;
                     return ListView.builder(
-                      reverse: true,
+                      // reverse: true,
                       shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
+                      physics: const ScrollPhysics(parent: null),
                       itemCount: docs.length,
                       itemBuilder: (BuildContext context, int index) {
                         //get the document index
@@ -283,15 +284,6 @@ class _ViewNotificationsState extends State<ViewNotifications> {
 
                                 },
                                 child: Container(
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width,
-                                  height:
-                                  MediaQuery
-                                      .of(context)
-                                      .size
-                                      .height / 3,
                                   decoration: BoxDecoration(
                                     color: Theme
                                         .of(context)
@@ -307,7 +299,10 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                   ),
                                   child: SingleChildScrollView(
                                     child: Column(
-                                      children: [
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .spaceBetween,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,                                      children: [
                                         const SizedBox(
                                           height: 5,
                                         ),
@@ -389,7 +384,7 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                                   ),
                                                   SizedBox(
                                                     width: 100,
-                                                    height:44,
+                                                    height:70,//changed
                                                     child: Row(
                                                       mainAxisAlignment:
                                                       MainAxisAlignment
@@ -451,9 +446,9 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                                     style:
                                                     textStyleText(context),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
+                                                  // const SizedBox(
+                                                  //   height: 5,
+                                                  // ),
                                                 ],
                                               ),
                                             ),
@@ -470,21 +465,16 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                                 .primaryColor,
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 70,
-                                          width:
-                                          MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width,
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            child: Text(
-                                              documents[index]
-                                                  .get("description"),
-                                              style: textStyleText(context),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10, right: 10, bottom: 10),
+                                          child: Text(
+                                            documents[index]
+                                                .get("description"),
+                                            style: textStyleText(context).copyWith(
+
                                             ),
+                                            textAlign: TextAlign.start,
                                           ),
                                         ),
                                       ],

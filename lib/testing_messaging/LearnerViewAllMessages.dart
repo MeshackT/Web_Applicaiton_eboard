@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -142,59 +144,60 @@ class _LearnerViewAllMessagesState extends State<LearnerViewAllMessages> {
 
                       var dateAndTime = document.get("timestamp");
 
-                      return Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 3, horizontal: 5),
-                        color: Theme
-                            .of(context)
-                            .primaryColorLight
-                            .withOpacity(.3),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                CircleAvatar(
-                                  child: Text(
-                                    name.toString()[0] ?? "",
-                                    style: textStyleText(context).copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color:
-                                      Theme
-                                          .of(context)
-                                          .primaryColorLight,
+                      return
+
+                        // name.toString()[0], name, onselect=imageFromFirebase
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 3, horizontal: 5),
+                          color: Theme.of(context)
+                              .primaryColorLight
+                              .withOpacity(.3),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  CircleAvatar(
+                                    child: Text(
+                                      name.toString()[0],
+                                      style: textStyleText(context).copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context)
+                                            .primaryColorLight,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            name ?? "",
-                                            style:
-                                            textStyleText(context).copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme
-                                                  .of(context)
-                                                  .primaryColor,
-                                            ),
-                                          ),
-                                          Row(
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Flexible(
+                                    flex: 1,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceBetween,
                                             children: [
+                                              Text(
+                                                name,
+                                                style: textStyleText(context)
+                                                    .copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
                                               Text(
                                                 Utils.formattedDate(
                                                     dateAndTime),
@@ -202,152 +205,338 @@ class _LearnerViewAllMessagesState extends State<LearnerViewAllMessages> {
                                                     .copyWith(
                                                     fontWeight:
                                                     FontWeight.normal,
-                                                    color: Theme
-                                                        .of(context)
+                                                    color: Theme.of(
+                                                        context)
                                                         .primaryColor
                                                         .withOpacity(.7),
                                                     fontSize: 10),
                                               ),
-                                              const SizedBox(width: 10,),
-
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                      width: MediaQuery
-                                          .of(context)
-                                          .size
-                                          .width /
-                                          2.1,
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 40,
-                                  height: 40,
-                                  child: PopupMenuButton<int>(
-                                    color: Colors.white,
-                                    elevation: 5.0,
-                                    itemBuilder: (context) =>
-                                    [
-                                      PopupMenuItem<int>(
-                                        value: 0,
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.download,
-                                              color: Theme
-                                                  .of(context)
-                                                  .primaryColor
-                                                  .withOpacity(.7),
-                                            ),
-                                            const SizedBox(
-                                              width: 7,
-                                            ),
-                                            Text(
-                                              "Download",
-                                              style: textStyleText(context)
-                                                  .copyWith(),
-                                            ),
-                                          ],
                                         ),
-                                      ),
-                                      const PopupMenuDivider(),
-                                      PopupMenuItem<int>(
-                                        value: 1,
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.share,
-                                              color: Theme
-                                                  .of(context)
-                                                  .primaryColor
-                                                  .withOpacity(.7),
-                                            ),
-                                            const SizedBox(
-                                              width: 7,
-                                            ),
-                                            Text(
-                                              "Share",
-                                              style: textStyleText(context)
-                                                  .copyWith(),
-                                            ),
-                                          ],
+                                        SizedBox(
+                                          height: 10,
+                                          width: MediaQuery.of(context)
+                                              .size
+                                              .width /
+                                              2.1,
                                         ),
-                                      ),
-                                    ],
-                                    onSelected: (item) =>
-                                        selectedItem(
-                                            context, item,
-                                            imageURLFromFirebase),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-
-                            AspectRatio(
-                              aspectRatio: 4/3,
-                              child: InstaImageViewer(
-                                backgroundColor: Theme.of(context).primaryColor.withOpacity(.4),
-                                child: Image(
-                                  image: Image.network(
-                                      imageURLFromFirebase)
-                                      .image,
-                                  loadingBuilder: (context, child, progress) =>
-                                        progress == null
-                                            ? child
-                                            : const SizedBox(
-                                          child: Center(
-                                            child: CircularProgressIndicator(),
+                                  SizedBox(
+                                    width: 40,
+                                    height: 40,
+                                    child: PopupMenuButton<int>(
+                                      color: Theme.of(context).primaryColorLight,
+                                      icon: Icon(Icons.more_vert, color: Theme.of(context).primaryColor,),
+                                      elevation: 5.0,
+                                      itemBuilder: (context) => [
+                                        PopupMenuItem<int>(
+                                          value: 0,
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.download,
+                                                color: Theme.of(context)
+                                                    .primaryColor
+                                                    .withOpacity(.7),
+                                              ),
+                                              const SizedBox(
+                                                width: 7,
+                                              ),
+                                              Text(
+                                                "Download",
+                                                style: textStyleText(context)
+                                                    .copyWith(),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                  fit: BoxFit.cover,
+                                        const PopupMenuDivider(),
+                                        PopupMenuItem<int>(
+                                          value: 1,
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.share,
+                                                color: Theme.of(context)
+                                                    .primaryColor
+                                                    .withOpacity(.7),
+                                              ),
+                                              const SizedBox(
+                                                width: 7,
+                                              ),
+                                              Text(
+                                                "Share",
+                                                style: textStyleText(context)
+                                                    .copyWith(),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                      onSelected: (item) => selectedItem(
+                                          context,
+                                          item,
+                                          imageURLFromFirebase),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              InstaImageViewer(
+                                child: CachedNetworkImage(
+                                  imageUrl: imageURLFromFirebase,
+                                  placeholder: (context, url) =>  SizedBox(
+                                    height: 200,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: SpinKitChasingDots(
+                                      color: Theme.of(context).primaryColor,
+                                      size: 50,
+                                    ),
+                                  ),
+                                  cacheManager: CacheManager(
+                                    //this removes the image and re-downloads it after 7 days
+                                    Config(
+                                      'customCacheKey',
+                                      stalePeriod: const Duration(days: 7),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => const Icon(
+                                    Icons.error,
+                                    size: 100,
+                                    color: Colors.red,
+                                  ),
+                                  // imageBuilder: (context, imageProvider) => Container(
+                                  //   width: MediaQuery.of(context).size.width,
+                                  //   height: 350,
+                                  //   decoration: BoxDecoration(
+                                  //     image: DecorationImage(
+                                  //       image: imageProvider,
+                                  //       fit: BoxFit.cover,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  imageBuilder:(context, imageProvider) => Center(
+                                    child: Image(
+                                      image: imageProvider,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                            // Center(
-                            //   child:
-                            //   AspectRatio(
-                            //     aspectRatio: 4/3,
-                            //     child: Image.network(
-                            //       imageURLFromFirebase,
-                            //       loadingBuilder: (context, child, progress) =>
-                            //       progress == null
-                            //           ? child
-                            //           : const SizedBox(
-                            //         // height: 400,
-                            //         // width: 400,
-                            //         child: Center(
-                            //           child: CircularProgressIndicator(),
-                            //         ),
-                            //       ),
-                            //       // height: 400,
-                            //       // width: 400,
-                            //       fit: BoxFit.contain,
-                            //       filterQuality: FilterQuality.high,
-                            //       key: ValueKey(document.id),
-                            //     ),
-                            //   ),
-                            // ),
-                            SizedBox(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 5),
-                                child: Text(
-                                  text,
-                                  style: textStyleText(context),
+                              SizedBox(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 5),
+                                  child: Text(
+                                    text,
+                                    style: textStyleText(context),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
+                            ],
+                          ),
+                        );
+                      //   Container(
+                      //   margin: const EdgeInsets.symmetric(
+                      //       vertical: 3, horizontal: 5),
+                      //   color: Theme
+                      //       .of(context)
+                      //       .primaryColorLight
+                      //       .withOpacity(.3),
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     children: [
+                      //       Row(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         mainAxisAlignment: MainAxisAlignment.start,
+                      //         children: [
+                      //           CircleAvatar(
+                      //             child: Text(
+                      //               name.toString()[0] ?? "",
+                      //               style: textStyleText(context).copyWith(
+                      //                 fontWeight: FontWeight.bold,
+                      //                 color:
+                      //                 Theme
+                      //                     .of(context)
+                      //                     .primaryColorLight,
+                      //               ),
+                      //             ),
+                      //           ),
+                      //           const SizedBox(
+                      //             width: 10,
+                      //           ),
+                      //           Row(
+                      //             crossAxisAlignment: CrossAxisAlignment.start,
+                      //             mainAxisAlignment:
+                      //             MainAxisAlignment.spaceBetween,
+                      //             children: [
+                      //               SizedBox(
+                      //                 child: Column(
+                      //                   crossAxisAlignment:
+                      //                   CrossAxisAlignment.start,
+                      //                   mainAxisAlignment:
+                      //                   MainAxisAlignment.spaceBetween,
+                      //                   children: [
+                      //                     Text(
+                      //                       name ?? "",
+                      //                       style:
+                      //                       textStyleText(context).copyWith(
+                      //                         fontWeight: FontWeight.bold,
+                      //                         color: Theme
+                      //                             .of(context)
+                      //                             .primaryColor,
+                      //                       ),
+                      //                     ),
+                      //                     Row(
+                      //                       children: [
+                      //                         Text(
+                      //                           Utils.formattedDate(
+                      //                               dateAndTime),
+                      //                           style: textStyleText(context)
+                      //                               .copyWith(
+                      //                               fontWeight:
+                      //                               FontWeight.normal,
+                      //                               color: Theme
+                      //                                   .of(context)
+                      //                                   .primaryColor
+                      //                                   .withOpacity(.7),
+                      //                               fontSize: 10),
+                      //                         ),
+                      //                         const SizedBox(width: 10,),
+                      //
+                      //                       ],
+                      //                     ),
+                      //                   ],
+                      //                 ),
+                      //               ),
+                      //               SizedBox(
+                      //                 height: 10,
+                      //                 width: MediaQuery
+                      //                     .of(context)
+                      //                     .size
+                      //                     .width /
+                      //                     2.1,
+                      //               ),
+                      //             ],
+                      //           ),
+                      //           SizedBox(
+                      //             width: 40,
+                      //             height: 40,
+                      //             child: PopupMenuButton<int>(
+                      //               color: Theme.of(context).primaryColorLight,
+                      //               elevation: 5.0,
+                      //               itemBuilder: (context) =>
+                      //               [
+                      //                 PopupMenuItem<int>(
+                      //                   value: 0,
+                      //                   child: Row(
+                      //                     children: [
+                      //                       Icon(
+                      //                         Icons.download,
+                      //                         color: Theme
+                      //                             .of(context)
+                      //                             .primaryColor
+                      //                             .withOpacity(.7),
+                      //                       ),
+                      //                       const SizedBox(
+                      //                         width: 7,
+                      //                       ),
+                      //                       Text(
+                      //                         "Download",
+                      //                         style: textStyleText(context)
+                      //                             .copyWith(),
+                      //                       ),
+                      //                     ],
+                      //                   ),
+                      //                 ),
+                      //                 const PopupMenuDivider(),
+                      //                 PopupMenuItem<int>(
+                      //                   value: 1,
+                      //                   child: Row(
+                      //                     children: [
+                      //                       Icon(
+                      //                         Icons.share,
+                      //                         color: Theme
+                      //                             .of(context)
+                      //                             .primaryColor
+                      //                             .withOpacity(.7),
+                      //                       ),
+                      //                       const SizedBox(
+                      //                         width: 7,
+                      //                       ),
+                      //                       Text(
+                      //                         "Share",
+                      //                         style: textStyleText(context)
+                      //                             .copyWith(),
+                      //                       ),
+                      //                     ],
+                      //                   ),
+                      //                 ),
+                      //               ],
+                      //               onSelected: (item) =>
+                      //                   selectedItem(
+                      //                       context, item,
+                      //                       imageURLFromFirebase),
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //       const SizedBox(
+                      //         height: 5,
+                      //       ),
+                      //
+                      //
+                      //     InstaImageViewer(
+                      //       child: CachedNetworkImage(
+                      //         imageUrl: imageURLFromFirebase,
+                      //         placeholder: (context, url) =>  SpinKitChasingDots(
+                      //           color: Theme.of(context).primaryColor,
+                      //           size: 25,
+                      //         ),
+                      //         cacheManager: CacheManager(
+                      //           //this removes the image and re-downloads it after 7 days
+                      //           Config(
+                      //             'customCacheKey',
+                      //             stalePeriod: const Duration(days: 7),
+                      //           ),
+                      //         ),
+                      //         errorWidget: (context, url, error) => const Icon(
+                      //           Icons.error,
+                      //           size: 100,
+                      //           color: Colors.red,
+                      //         ),
+                      //         imageBuilder: (context, imageProvider) => Container(
+                      //           width: MediaQuery.of(context).size.width,
+                      //           height: 350,
+                      //           decoration: BoxDecoration(
+                      //             image: DecorationImage(
+                      //               image: imageProvider,
+                      //               fit: BoxFit.cover,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //
+                      //
+                      //       SizedBox(
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.symmetric(
+                      //               vertical: 5, horizontal: 5),
+                      //           child: Text(
+                      //             text,
+                      //             style: textStyleText(context),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // );
                     },
                   );
                 }
@@ -372,13 +561,17 @@ class _LearnerViewAllMessagesState extends State<LearnerViewAllMessages> {
               .then((value) =>
               Fluttertoast.showToast(
                   backgroundColor: Colors.purple.shade500,
-                  msg: "Image saved to you gallery."));
+                  msg: "Image saved to you gallery. The directory Pictures/E-board."));
         } catch (e) {
-          logger.e("$e could not download image");
+          Fluttertoast.showToast(
+              backgroundColor: Colors.purple.shade500,
+              msg: "Could not download the image");
+
+    logger.e("$e could not download image");
           //snack(e.toString(), context);
         }
         setState(() {
-          isVisible = true;
+          isVisible = false;
           widget.loading = false;
         });
         break;

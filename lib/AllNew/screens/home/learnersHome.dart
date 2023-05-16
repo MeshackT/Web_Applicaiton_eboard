@@ -3,7 +3,11 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
+import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
+import 'package:yueway/AllNew/screens/more/LearnerMore.dart';
+import 'package:yueway/testing_messaging/LearnerViewDocument.dart';
 import '../../../testing_messaging/LearnerViewAllMessages.dart';
 import '../../../testing_messaging/LearnerViewAllTexts.dart';
 import '../../model/ConnectionChecker.dart';
@@ -17,7 +21,7 @@ import 'learnerViewMarks.dart';
 User? user = FirebaseAuth.instance.currentUser;
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
 final CollectionReference learnersRef =
-FirebaseFirestore.instance.collection('learnersData');
+    FirebaseFirestore.instance.collection('learnersData');
 
 class LearnerHome extends StatefulWidget {
   const LearnerHome({Key? key}) : super(key: key);
@@ -88,23 +92,29 @@ class _LearnerHomeState extends State<LearnerHome> {
   String termFourExamTwoMark = "";
 
   ///TODO end of term 4///
-  ///
   String _userSubject = '';
   String learnersName = "";
   String learnersSecondName = "";
   String learnersEmail = "";
+  LocalNotificationService localNotificationService =
+      LocalNotificationService();
 
   @override
   void initState() {
     super.initState();
     ConnectionChecker.checkTimer();
-    _getCurrentUserFields(learnersName, learnersSecondName,learnersEmail);
+    _getCurrentUserFields(learnersName, learnersSecondName, learnersEmail);
+    //notification
+    LocalNotificationService.initialize();
+    localNotificationService.getPermission();
+    // Terminated State show message
+
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
@@ -119,16 +129,16 @@ class _LearnerHomeState extends State<LearnerHome> {
           ),
           actions: [
             // Download
-            loading? SpinKitChasingDots(
-              size: 13,
-              color: Theme.of(context).primaryColorLight,
-
-            ):const SizedBox(
-              child: Text(""),
-            ),
+            loading
+                ? SpinKitChasingDots(
+                    size: 13,
+                    color: Theme.of(context).primaryColorLight,
+                  )
+                : const SizedBox(
+                    child: Text(""),
+                  ),
             PopupMenuButton(
-              itemBuilder: (BuildContext context) =>
-              <PopupMenuEntry>[
+              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
                 PopupMenuItem(
                   child: TextButton(
                     onPressed: () {
@@ -143,9 +153,7 @@ class _LearnerHomeState extends State<LearnerHome> {
                       children: [
                         Icon(
                           Icons.person,
-                          color: Theme
-                              .of(context)
-                              .primaryColor,
+                          color: Theme.of(context).primaryColor,
                           size: 12,
                         ),
                         const SizedBox(
@@ -168,15 +176,13 @@ class _LearnerHomeState extends State<LearnerHome> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                              const LearnerEditSubjects()));
+                                  const LearnerEditSubjects()));
                     },
                     child: Row(
                       children: [
                         Icon(
                           Icons.subject,
-                          color: Theme
-                              .of(context)
-                              .primaryColor,
+                          color: Theme.of(context).primaryColor,
                           size: 12,
                         ),
                         const SizedBox(
@@ -184,6 +190,32 @@ class _LearnerHomeState extends State<LearnerHome> {
                         ),
                         Text(
                           "Edit Subjects",
+                          style: textStyleText(context).copyWith(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                PopupMenuItem(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const LearnerMore()));
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.more_horiz_rounded,
+                          color: Theme.of(context).primaryColor,
+                          size: 12,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "More",
                           style: textStyleText(context).copyWith(
                             fontSize: 14,
                           ),
@@ -212,18 +244,14 @@ class _LearnerHomeState extends State<LearnerHome> {
                       children: [
                         loading
                             ? SpinKitChasingDots(
-                          color: Theme
-                              .of(context)
-                              .primaryColor,
-                          size: 12,
-                        )
+                                color: Theme.of(context).primaryColor,
+                                size: 12,
+                              )
                             : Icon(
-                          Icons.logout,
-                          color: Theme
-                              .of(context)
-                              .primaryColor,
-                          size: 12,
-                        ),
+                                Icons.logout,
+                                color: Theme.of(context).primaryColor,
+                                size: 12,
+                              ),
                         const SizedBox(
                           width: 10,
                         ),
@@ -241,26 +269,25 @@ class _LearnerHomeState extends State<LearnerHome> {
             )
           ],
           bottom: TabBar(
-            indicatorColor: Theme
-                .of(context)
-                .primaryColorLight,
-            indicatorWeight: 2,
+            indicatorColor: Theme.of(context).primaryColorLight,
+            indicatorWeight: 3,
             tabs: [
               Tab(
                 icon: Icon(
                   Icons.image,
-                  color: Theme
-                      .of(context)
-                      .primaryColorLight,
+                  color: Theme.of(context).primaryColorLight,
                   size: 12,
                 ),
                 //text: "Images",
               ),
               Tab(
                 icon: Icon(Icons.text_fields_sharp,
-                    size: 12, color: Theme
-                        .of(context)
-                        .primaryColorLight),
+                    size: 12, color: Theme.of(context).primaryColorLight),
+                //text: "Text",
+              ),
+              Tab(
+                icon: Icon(Icons.picture_as_pdf,
+                    size: 12, color: Theme.of(context).primaryColorLight),
                 //text: "Text",
               ),
             ],
@@ -272,17 +299,9 @@ class _LearnerHomeState extends State<LearnerHome> {
         extendBody: true,
         drawer: SafeArea(
           child: Container(
-            color: Theme
-                .of(context)
-                .primaryColorLight,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width / 1.4,
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
+            color: Theme.of(context).primaryColorLight,
+            width: MediaQuery.of(context).size.width / 1.4,
+            height: MediaQuery.of(context).size.height,
             child: Column(
               children: [
                 buildHeader(context),
@@ -306,9 +325,7 @@ class _LearnerHomeState extends State<LearnerHome> {
                             children: [
                               const Text("Waiting for the internet connection"),
                               SpinKitChasingDots(
-                                color: Theme
-                                    .of(context)
-                                    .primaryColor,
+                                color: Theme.of(context).primaryColor,
                               ),
                             ],
                           ),
@@ -325,9 +342,9 @@ class _LearnerHomeState extends State<LearnerHome> {
 
                       final DocumentSnapshot matchingDoc = matchingDocs.first;
                       final List<dynamic> subjectsList =
-                      matchingDoc['subjects'];
+                          matchingDoc['subjects'];
                       final Map<String, dynamic> subjectsMarksList =
-                      matchingDoc['allSubjects'];
+                          matchingDoc['allSubjects'];
 
                       return ListView.builder(
                         itemCount: subjectsList.length,
@@ -366,29 +383,31 @@ class _LearnerHomeState extends State<LearnerHome> {
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => LearnerViewMarks(
+                                              builder: (context) =>
+                                                  LearnerViewMarks(
                                                 indexMarks: indexMarks,
-                                                subjectName: _userSubject.toString(),
+                                                subjectName:
+                                                    _userSubject.toString(),
                                               ),
                                             ),
                                           );
                                         }
                                       });
-                                     if (!foundCatIndex) {
-                                      //this shows when the index has no marks
-                                      logger.e("List is Empty");
-                                      snack(
-                                          "No ${subjectsList[index]} marks found",
-                                          context);
-                                    }
+                                      if (!foundCatIndex) {
+                                        //this shows when the index has no marks
+                                        logger.e("List is Empty");
+                                        snack(
+                                            "No ${subjectsList[index]} marks found",
+                                            context);
+                                      }
                                     } else {
                                       snack(
                                           "No ${subjectsList[index]} marks found. No data inserted yet",
                                           context);
                                     }
                                   } else {
-                                    logger.e(
-                                        "Map is Empty, no subjects instead");
+                                    logger
+                                        .e("Map is Empty, no subjects instead");
                                     snack("There are no Subjects currently",
                                         context);
                                   }
@@ -413,21 +432,18 @@ class _LearnerHomeState extends State<LearnerHome> {
                                   child: ListTile(
                                     title: loading
                                         ? SpinKitChasingDots(
-                                      color:
-                                      Theme
-                                          .of(context)
-                                          .primaryColor,
-                                    )
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          )
                                         : Text(
-                                      subject,
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w900,
-                                          color: Theme
-                                              .of(context)
-                                              .primaryColorLight),
-                                    ),
+                                            subject,
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w900,
+                                                color: Theme.of(context)
+                                                    .primaryColorLight),
+                                          ),
                                   ),
                                 ),
                               ),
@@ -444,14 +460,8 @@ class _LearnerHomeState extends State<LearnerHome> {
                     topRight: Radius.circular(100),
                   ),
                   child: Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    color: Theme
-                        .of(context)
-                        .primaryColor
-                        .withOpacity(.2),
+                    width: MediaQuery.of(context).size.width,
+                    color: Theme.of(context).primaryColor.withOpacity(.2),
                     child: TextButton(
                       onPressed: () {
                         Navigator.pushReplacement(
@@ -475,29 +485,27 @@ class _LearnerHomeState extends State<LearnerHome> {
         ),
         body: DoubleBackToCloseApp(
           snackBar: SnackBar(
-            backgroundColor: Theme
-                .of(context)
-                .primaryColor
-                .withOpacity(1),
+            backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
             content: Text(
               'Tap back again to leave the application',
-              style: TextStyle(color: Theme
-                  .of(context)
-                  .primaryColorLight),
+              style: TextStyle(color: Theme.of(context).primaryColorLight),
               textAlign: TextAlign.center,
             ),
           ),
           child: TabBarView(
             children: [
-              //Tabs/Terms
+              //Tabs
               LearnerViewAllMessages(loading: loading),
-              LearnerViewAllTexts(),
+              const LearnerViewAllTexts(),
+              const LearnerViewDocuments(),
             ],
           ),
         ),
       ),
     );
   }
+
+  //profile view
   Widget buildHeader(BuildContext context) {
     return Column(
       children: [
@@ -518,29 +526,22 @@ class _LearnerHomeState extends State<LearnerHome> {
               logger.e(FirebaseAuth.instance.currentUser!.email);
             },
             child: Container(
-              color: Theme
-                  .of(context)
-                  .primaryColor
-                  .withOpacity(.40),
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
+              color: Theme.of(context).primaryColor.withOpacity(.80),
+              width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.only(
-                top: MediaQuery
-                    .of(context)
-                    .padding
-                    .top,
+                top: MediaQuery.of(context).padding.top,
               ),
               child: Column(
                 children: [
                   CircleAvatar(
+                    backgroundColor: Theme.of(context).primaryColorLight,
                     child: Text(
-                      user!.email.toString()[0].toUpperCase()??"",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1,
-                      ),
+                      user!.email.toString()[0].toUpperCase(),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1,
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(.8)),
                     ),
                   ),
                   const SizedBox(
@@ -548,13 +549,11 @@ class _LearnerHomeState extends State<LearnerHome> {
                   ),
                   Wrap(children: [
                     Text(
-                      learnersSecondName.toString()??"",
+                      learnersSecondName.toString(),
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
-                          color: Theme
-                              .of(context)
-                              .primaryColorLight),
+                          color: Theme.of(context).primaryColorLight),
                     ),
                   ]),
                   const SizedBox(
@@ -577,9 +576,7 @@ class _LearnerHomeState extends State<LearnerHome> {
                 style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w900,
-                    color: Theme
-                        .of(context)
-                        .primaryColor),
+                    color: Theme.of(context).primaryColor),
               ),
             ],
           ),
@@ -598,9 +595,7 @@ class _LearnerHomeState extends State<LearnerHome> {
           builder: (context) {
             return Center(
               child: SpinKitChasingDots(
-                color: Theme
-                    .of(context)
-                    .primaryColor,
+                color: Theme.of(context).primaryColor,
               ),
             );
           });
@@ -608,12 +603,11 @@ class _LearnerHomeState extends State<LearnerHome> {
           .signOut()
           .then(
             (value) => logger.i("signed out"),
-      )
+          )
           .whenComplete(
-            () =>
-            Navigator.pushReplacement(context,
+            () => Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const Authenticate())),
-      );
+          );
     } catch (e) {
       logger.i(e.toString());
     }
@@ -621,21 +615,21 @@ class _LearnerHomeState extends State<LearnerHome> {
 
   //get the field required for the current logged in user
   Future<void> _getCurrentUserFields(
-      String nameOfLeaner,
-      String secondNameOfLeaner,
-      String emailOfLeaner,) async {
+    String nameOfLeaner,
+    String secondNameOfLeaner,
+    String emailOfLeaner,
+  ) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    Query<Map<String, dynamic>> userQuery =
-    firestore.collection('learnersData').where('uid', isEqualTo: user!.uid);
-    userQuery.get().then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+    var userQuery =
+        firestore.collection('learnersData').where('uid', isEqualTo: user!.uid);
+    userQuery.get().then((var querySnapshot) {
       if (querySnapshot.size > 0) {
-        DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-            querySnapshot.docs.first;
+        var documentSnapshot = querySnapshot.docs.first;
         Map<String, dynamic>? data = documentSnapshot.data();
 
         //get the learners details
-        nameOfLeaner = data!['name'].toString();
+        nameOfLeaner = data['name'].toString();
         secondNameOfLeaner = data['secondName'].toString();
         emailOfLeaner = data['email'].toString();
 
@@ -648,7 +642,7 @@ class _LearnerHomeState extends State<LearnerHome> {
         logger.i("inside getField $learnersEmail");
         logger.i("inside getField $learnersName\t$learnersSecondName");
       } else {
-        print('No document found');
+        Fluttertoast.showToast(msg: "Couldn't load data, internet interacted");
       }
     }).catchError((error) => print('Failed to get document: $error'));
   }
