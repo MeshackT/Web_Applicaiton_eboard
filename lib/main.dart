@@ -14,16 +14,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message)async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-      // options: const FirebaseOptions(
-      //    apiKey: "AIzaSyALUsDsHtmbQrNOIuyl9Mr_zARl3rLGK34",
-      //   projectId: "ebase-3f858",
-      //   messagingSenderId: "231030944816",
-      //   appId: "1:231030944816:web:0aab9be3434afefb26e9f5",
-      //   storageBucket: 'ebase-3f858.appspot.com',
-      //
-      // ),
-  );
+  await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
 }
