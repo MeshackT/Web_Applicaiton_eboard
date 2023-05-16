@@ -88,14 +88,5 @@ class _MyAppState extends State<MyApp> {
     LocalNotificationService.initialize();
     localNotificationService.getPermission();
 
-    // FirebaseMessaging.instance.getInitialMessage().then((event) {
-    //   if (event != null) {
-    //     final routeFromMessage = event.data["AllToSee"];
-    //     logger.e("THis is the route => $routeFromMessage");
-    //     Navigator.of(context).pushReplacement(routeFromMessage);
-    //     print("${event.notification!.title} ${event.notification!.body}");
-    //   }
-    //
-    // });
   }
 }
