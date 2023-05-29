@@ -95,6 +95,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
   String? valueChoose7;
   String? valueChoose8;
   String? valueChoose9;
+  String? valueChoose10;
 
   //Strings used for Teachers Names selected
   String? valueTeacher1;
@@ -106,6 +107,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
   String? valueTeacher7;
   String? valueTeacher8;
   String? valueTeacher9;
+  String? valueTeacher10;
 
   //String? selectedValue;
 
@@ -1574,6 +1576,115 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                           ),
                                         ],
                                       ),
+                                      Wrap(
+                                        direction: Axis.horizontal,
+                                        alignment: WrapAlignment.spaceEvenly,
+                                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          //subject 2
+                                          DropdownButton(
+                                            isExpanded: false,
+                                            hint: Text(
+                                              "Select a subject",
+                                              style: textStyleText(context),
+                                            ),
+                                            value: valueChoose10,
+                                            items: listItem
+                                                .map<DropdownMenuItem<String>>(
+                                                  (e) => DropdownMenuItem(
+                                                    value: e,
+                                                    child: Text(
+                                                      e,
+                                                      style: textStyleText(
+                                                          context),
+                                                    ),
+                                                  ),
+                                                )
+                                                .toList(),
+                                            onChanged: (String? value) =>
+                                                setState(
+                                              () {
+                                                valueChoose10 = value;
+                                              },
+                                            ),
+                                          ),
+                                          //subject 2 ends
+                                          //Teachers name
+                                          StreamBuilder<QuerySnapshot>(
+                                              stream: teachersRegistered
+                                                  .snapshots(),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<QuerySnapshot>
+                                                      snapshot) {
+                                                if (!snapshot.hasData) {
+                                                  return Text(
+                                                    'No teacher yet',
+                                                    style:
+                                                        textStyleText(context),
+                                                  );
+                                                } else if (snapshot.hasData) {
+                                                  List<DropdownMenuItem<String>>
+                                                      dropdownItems = [];
+                                                  snapshot.data?.docs
+                                                      .forEach((doc) {
+                                                    dropdownItems.add(
+                                                      DropdownMenuItem(
+                                                        value: doc['uid'],
+                                                        child: Text(
+                                                          " ${doc['secondName']} ${doc['name']}",
+                                                          style: textStyleText(
+                                                              context),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  });
+                                                  dropdownItems.add(
+                                                    DropdownMenuItem(
+                                                      value: "N/A",
+                                                      child: Text(
+                                                        "Not Applicable",
+                                                        style: textStyleText(
+                                                            context),
+                                                      ),
+                                                    ),
+                                                  );
+                                                  return Column(
+                                                    children: [
+                                                      DropdownButton(
+                                                        hint: Text(
+                                                          "Teachers name",
+                                                          style: textStyleText(
+                                                              context),
+                                                        ),
+                                                        value: valueTeacher10,
+                                                        items: dropdownItems,
+                                                        onChanged: (newValue) {
+                                                          setState(() {
+                                                            valueTeacher10 =
+                                                                newValue;
+                                                          });
+                                                        },
+                                                      ),
+                                                      if (valueTeacher9 == null)
+                                                        const Text(
+                                                          "Please select a teachers name",
+                                                          style: TextStyle(
+                                                            color: Colors.red,
+                                                            fontSize: 12,
+                                                          ),
+                                                        ),
+                                                    ],
+                                                  );
+                                                } else {
+                                                  return Text(
+                                                      'Error retrieving names',
+                                                      style: textStyleText(
+                                                          context));
+                                                }
+                                              }),
+                                        ],
+                                      ),
+
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -1727,6 +1838,9 @@ class _LearnerRegisterState extends State<LearnerRegister> {
       subjects.add(valueChoose7!);
       subjects.add(valueChoose8!);
       subjects.add(valueChoose9!);
+      subjects.add(valueChoose10!);
+
+
 
       teachersID.add(valueTeacher1!);
       teachersID.add(valueTeacher2!);
@@ -1736,7 +1850,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
       teachersID.add(valueTeacher6!);
       teachersID.add(valueTeacher7!);
       teachersID.add(valueTeacher8!);
-      teachersID.add(valueTeacher9!);
+      teachersID.add(valueTeacher10!);
 
       User _user = User(
         email.trim().toLowerCase(),
