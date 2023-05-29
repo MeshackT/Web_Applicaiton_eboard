@@ -267,7 +267,8 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                         },
                         child: Text(
                           "Back",
-                          style: TextStyle(color: Theme.of(context).primaryColor),
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
                         ),
                       ),
                       OutlinedButton(
@@ -276,11 +277,13 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const LearnerViewPrivateDocuments()));
+                                  builder: (context) =>
+                                      const LearnerViewPrivateDocuments()));
                         },
                         child: Text(
                           "Documents",
-                          style: TextStyle(color: Theme.of(context).primaryColor),
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
                         ),
                       ),
                       OutlinedButton(
@@ -298,7 +301,8 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                         },
                         child: Text(
                           "Subject Notification",
-                          style: TextStyle(color: Theme.of(context).primaryColor),
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
                         ),
                       ),
                     ],

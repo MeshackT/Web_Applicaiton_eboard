@@ -44,14 +44,14 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyALUsDsHtmbQrNOIuyl9Mr_zARl3rLGK34',
-    appId: '1:231030944816:web:06c12e4f57a808a426e9f5',
+    apiKey: 'AIzayALUsDsHtmbQrNOIuyl9Mr_zARl3rLGK34',
+    appId: '1:231030944816:web:07f5bbb2a7ddbdee26e9f5',
     messagingSenderId: '231030944816',
     projectId: 'ebase-3f858',
     authDomain: 'ebase-3f858.firebaseapp.com',
     databaseURL: 'https://ebase-3f858-default-rtdb.firebaseio.com',
     storageBucket: 'ebase-3f858.appspot.com',
-    measurementId: 'G-LJYCE6MYMZ',
+    measurementId: 'G-EYXRE3102C',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -65,23 +65,25 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCXOHL_2zoRlLqWD_z0xoe_ZRiGLCLgrEQ',
-    appId: '1:231030944816:ios:d4272586c165b71926e9f5',
+    appId: '1:231030944816:ios:0def0c7f2f9f280d26e9f5',
     messagingSenderId: '231030944816',
     projectId: 'ebase-3f858',
     databaseURL: 'https://ebase-3f858-default-rtdb.firebaseio.com',
     storageBucket: 'ebase-3f858.appspot.com',
-    iosClientId: '231030944816-t5f4k5u3jtllhicc7l3aved0knm5vt3o.apps.googleusercontent.com',
+    iosClientId:
+        '231030944816-t5f4k5u3jtllhicc7l3aved0knm5vt3o.apps.googleusercontent.com',
     iosBundleId: 'com.example.levy',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyCXOHL_2zoRlLqWD_z0xoe_ZRiGLCLgrEQ',
-    appId: '1:231030944816:ios:bcc27b40f7abec3b26e9f5',
+    appId: '1:231030944816:ios:63cb913b690c95c826e9f5',
     messagingSenderId: '231030944816',
     projectId: 'ebase-3f858',
     databaseURL: 'https://ebase-3f858-default-rtdb.firebaseio.com',
     storageBucket: 'ebase-3f858.appspot.com',
-    iosClientId: '231030944816-3ijq4jsd5s631uusojjeiql8t9rtvp1l.apps.googleusercontent.com',
+    iosClientId:
+        '231030944816-3ijq4jsd5s631uusojjeiql8t9rtvp1l.apps.googleusercontent.com',
     iosBundleId: 'com.example.eboard',
   );
 }

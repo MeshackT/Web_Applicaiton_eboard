@@ -6,7 +6,7 @@ class UserModel {
     try {
       final List<User> users = [];
       final authSubscription =
-      _firebaseAuth.authStateChanges().listen((User? user) {
+          _firebaseAuth.authStateChanges().listen((User? user) {
         if (user != null) {
           users.add(user);
           print(user);

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import '../AllNew/model/ConnectionChecker.dart';
 import '../AllNew/shared/constants.dart';
 
@@ -11,7 +12,6 @@ class LearnerViewAllTexts extends StatefulWidget {
   @override
   State<LearnerViewAllTexts> createState() => _LearnerViewAllTextsState();
 }
-
 
 class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
   bool layoutIn = false;
@@ -50,7 +50,7 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
-                }  else if (!snapshot.hasData ||
+                } else if (!snapshot.hasData ||
                     snapshot.data == null ||
                     snapshot.data!.size <= 0) {
                   return Container(
@@ -98,9 +98,8 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
                       return Container(
                         margin: const EdgeInsets.symmetric(
                             vertical: 3, horizontal: 5),
-                        color: Theme.of(context)
-                            .primaryColorLight
-                            .withOpacity(.3),
+                        color:
+                            Theme.of(context).primaryColorLight.withOpacity(.3),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -108,11 +107,11 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
                               children: [
                                 CircleAvatar(
                                   child: Text(
-                                    name.toString()[0]??"",
+                                    name.toString()[0] ?? "",
                                     style: textStyleText(context).copyWith(
                                       fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .primaryColorLight,
+                                      color:
+                                          Theme.of(context).primaryColorLight,
                                     ),
                                   ),
                                 ),
@@ -123,24 +122,29 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
                                   child: Column(
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            name??"",
+                                            name ?? "",
                                             style:
-                                            textStyleText(context).copyWith(
+                                                textStyleText(context).copyWith(
                                               fontWeight: FontWeight.bold,
-                                              color:
-                                              Theme.of(context).primaryColor,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                             ),
                                           ),
                                           SizedBox(
                                             width: 30,
                                             height: 40,
                                             child: PopupMenuButton<int>(
-                                              color: Theme.of(context).primaryColorLight,
-                                              icon: Icon(Icons.more_vert, color: Theme.of(context).primaryColor,),
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
+                                              icon: Icon(
+                                                Icons.more_vert,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
                                               elevation: 5.0,
                                               itemBuilder: (context) => [
                                                 PopupMenuItem<int>(
@@ -158,18 +162,17 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
                                                       ),
                                                       Text(
                                                         "Share",
-                                                        style: textStyleText(context)
+                                                        style: textStyleText(
+                                                                context)
                                                             .copyWith(),
                                                       ),
                                                     ],
                                                   ),
                                                 ),
                                               ],
-                                              onSelected: (item) => selectedItem(
-                                                  context,
-                                                  item,
-                                                  name,
-                                                  text),
+                                              onSelected: (item) =>
+                                                  selectedItem(context, item,
+                                                      name, text),
                                             ),
                                           ),
                                         ],
@@ -180,12 +183,12 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
                                             Utils.formattedDate(dateAndTime),
                                             style: textStyleText(context)
                                                 .copyWith(
-                                                fontWeight:
-                                                FontWeight.normal,
-                                                color: Theme.of(context)
-                                                    .primaryColor
-                                                    .withOpacity(.7),
-                                                fontSize: 10),
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Theme.of(context)
+                                                        .primaryColor
+                                                        .withOpacity(.7),
+                                                    fontSize: 10),
                                           ),
                                           const SizedBox(
                                             width: 10,
@@ -194,19 +197,18 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
                                             formattedDateTime,
                                             style: textStyleText(context)
                                                 .copyWith(
-                                                fontWeight:
-                                                FontWeight.normal,
-                                                color: Theme.of(context)
-                                                    .primaryColor
-                                                    .withOpacity(.7),
-                                                fontSize: 10),
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Theme.of(context)
+                                                        .primaryColor
+                                                        .withOpacity(.7),
+                                                    fontSize: 10),
                                           )
                                         ],
                                       ),
                                     ],
                                   ),
                                 ),
-
                               ],
                             ),
                             const SizedBox(
@@ -215,9 +217,13 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 8, horizontal: 8),
-                              child: Text(
-                                text,
-                                style: textStyleText(context),
+                              child: Wrap(
+                                children: [
+                                  SelectableText(
+                                    text,
+                                    style: textStyleText(context),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -233,9 +239,10 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
       ),
     );
   }
+
   //TODO Show pop up button
   Future<void> selectedItem(
-      BuildContext context, item, String nameOfSender,String text) async {
+      BuildContext context, item, String nameOfSender, String text) async {
     switch (item) {
       case 0:
         try {
@@ -245,7 +252,9 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
           } else {
             print("can share $text");
             await FlutterShare.share(
-                title: "By $nameOfSender", text: text, chooserTitle: "By $nameOfSender");
+                title: "By $nameOfSender",
+                text: text,
+                chooserTitle: "By $nameOfSender");
           }
         } catch (e) {
           print(text);

@@ -1,16 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
 
 import '../../model/ConnectionChecker.dart';
@@ -96,7 +92,7 @@ class _SendNotificationState extends State<SendNotification> {
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   LocalNotificationService localNotificationService =
-  LocalNotificationService();
+      LocalNotificationService();
 
   String _deviceToken = "";
   bool setOn = true;
@@ -116,6 +112,7 @@ class _SendNotificationState extends State<SendNotification> {
   void dispose() {
     super.dispose();
   }
+
   //get the token of the device
   void _getDeviceToken() async {
     _deviceToken = (await _firebaseMessaging.getToken())!;
@@ -148,8 +145,8 @@ class _SendNotificationState extends State<SendNotification> {
           centerTitle: false,
           elevation: 0,
           actions: [
-            Utils.toolTipMessage("Send a message to learners privately.",
-                context),
+            Utils.toolTipMessage(
+                "Send a message to learners privately.", context),
             IconButton(
               onPressed: () {
                 Navigator.of(context).pushReplacement(
@@ -220,7 +217,6 @@ class _SendNotificationState extends State<SendNotification> {
           crossAxisAlignment: CrossAxisAlignment.center,
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            
             Expanded(
                 child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -238,10 +234,9 @@ class _SendNotificationState extends State<SendNotification> {
                           ),
                           Text(
                             title,
-                            style: textStyleText(context)
-                                .copyWith(fontSize: 16, fontWeight: FontWeight.bold),
+                            style: textStyleText(context).copyWith(
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                   
                           const SizedBox(
                             height: 15,
                           ),
@@ -427,12 +422,12 @@ class _SendNotificationState extends State<SendNotification> {
                                 String nameOfTeacherInput = nameOfTeacher;
                                 String subjectOfTeacher = _subject.text;
                                 String date = "";
-                                logger
-                                    .i("name of Teacher $nameOfTeacherInput and "
-                                        "subject Name $_userSubject");
+                                logger.i(
+                                    "name of Teacher $nameOfTeacherInput and "
+                                    "subject Name $_userSubject");
 
                                 setState(() {
-                                  isLoading =true;
+                                  isLoading = true;
                                   newGrade = _grade.text;
                                   newAbout = _titleController.text;
                                 });
@@ -448,22 +443,22 @@ class _SendNotificationState extends State<SendNotification> {
                                       _titleController.text,
                                       date);
                                   //TODO add this to the database
-                                  await userFeeds
-                                      .addFeed();
+                                  await userFeeds.addFeed();
                                   //TODO send the notification afterwards
-                              localNotificationService.sendNotificationToTopicALlToSee(
-                                      "By $nameOfTeacher",
-                                  "For grade: ${_grade.text}\n${_subject.text}\n${_titleController.text}", userLoggedIn.toString());
+                                  localNotificationService
+                                      .sendNotificationToTopicALlToSee(
+                                          "By $nameOfTeacher",
+                                          "For grade: ${_grade.text}\n${_subject.text}\n${_titleController.text}",
+                                          userLoggedIn.toString());
 
-                              //TODO set these controllers to empty
-                              _titleController.clear();
+                                  //TODO set these controllers to empty
+                                  _titleController.clear();
                                   _grade.clear();
                                   _descriptionController.clear();
                                 }
                                 setState(() {
                                   isLoading = false;
                                 });
-
                               } on Exception catch (e) {
                                 setState(() {
                                   isLoading = false;
@@ -472,16 +467,19 @@ class _SendNotificationState extends State<SendNotification> {
                               }
                             },
                             style: buttonRound,
-                            child: isLoading?SpinKitChasingDots(
-                              color: Theme.of(context).primaryColorLight,
-                              size: 13,
-                          ):Text(
-                              "Send",
-                              style: textStyleText(context).copyWith(
-                                  color: Theme.of(context).primaryColorLight,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16),
-                            ),
+                            child: isLoading
+                                ? SpinKitChasingDots(
+                                    color: Theme.of(context).primaryColorLight,
+                                    size: 13,
+                                  )
+                                : Text(
+                                    "Send",
+                                    style: textStyleText(context).copyWith(
+                                        color:
+                                            Theme.of(context).primaryColorLight,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  ),
                           ),
                         ],
                       ),
@@ -501,12 +499,11 @@ class _SendNotificationState extends State<SendNotification> {
   Future<void> _getUserField() async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     var userQuery =
-    firestore.collection('userData').where('uid', isEqualTo: user!.uid);
+        firestore.collection('userData').where('uid', isEqualTo: user!.uid);
 
     userQuery.get().then((var querySnapshot) {
       if (querySnapshot.size > 0) {
-        var documentSnapshot =
-            querySnapshot.docs.first;
+        var documentSnapshot = querySnapshot.docs.first;
         Map<String, dynamic>? data = documentSnapshot.data();
         //get the subject of the teacher
         _userSubject = data['subjects'][0];

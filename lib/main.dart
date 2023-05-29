@@ -1,3 +1,4 @@
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -5,17 +6,32 @@ import 'package:logger/logger.dart';
 import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
 import 'package:yueway/AllNew/screens/wrapper.dart';
 
+// Import the generated file
+import 'firebase_options.dart';
+
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
 
 @pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message)async {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    //   options: const FirebaseOptions(
+    //       apiKey: "AIzaSyALUsDsHtmbQrNOIuyl9Mr_zARl3rLGK34",
+    //       authDomain: "ebase-3f858.firebaseapp.com",
+    //       databaseURL: "https://ebase-3f858-default-rtdb.firebaseio.com",
+    //       projectId: "ebase-3f858",
+    //       storageBucket: "ebase-3f858.appspot.com",
+    //       messagingSenderId: "231030944816",
+    //       appId: "1:231030944816:web:07f5bbb2a7ddbdee26e9f5",
+    //       measurementId: "G-EYXRE3102C",
+    // ),
+  );
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await FastCachedImageConfig.init(clearCacheAfter: const Duration(days: 365));
   runApp(const MyApp());
 }
 
@@ -29,13 +45,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  LocalNotificationService localNotificationService = LocalNotificationService();
+  LocalNotificationService localNotificationService =
+      LocalNotificationService();
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
-    bool darkModeEnabled = false; // initial state of the switch
+    // initial state of the switch
+    bool darkModeEnabled = false;
 
     MaterialColor myColor = const MaterialColor(
       0xE7791971,
@@ -80,13 +97,11 @@ class _MyAppState extends State<MyApp> {
       home: const Wrapper(),
       //home: const Home(),
     );
- }
+  }
 
   @override
   void initState() {
     super.initState();
     LocalNotificationService.initialize();
-    localNotificationService.getPermission();
-
   }
 }

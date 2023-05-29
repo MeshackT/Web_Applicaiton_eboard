@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:yueway/AllNew/model/VerificationModel.dart';
+
 import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';
 import '../home/home.dart';
@@ -43,12 +44,10 @@ class _TeachersProfileState extends State<TeachersProfile> {
     super.initState();
     ConnectionChecker.checkTimer();
     _getCurrentUserFields(teachersGrade, teachersEmail, teachersName,
-        teachersSecondName,
-        teachersSubjects, documentIDInitial);
+        teachersSecondName, teachersSubjects, documentIDInitial);
     //no data is received
     logger.e(
         "$teachersSubjects\nafter getting the data initially\n $documentIDInitial");
-
   }
 
   @override
@@ -180,7 +179,6 @@ class _TeachersProfileState extends State<TeachersProfile> {
                             const SizedBox(
                               height: 6,
                             ),
-
                             Divider(
                               height: 7,
                               color: Theme.of(context).primaryColorLight,
@@ -295,8 +293,6 @@ class _TeachersProfileState extends State<TeachersProfile> {
                                         color: Theme.of(context).primaryColor),
                                   ),
                           ),
-
-
                     const SizedBox(
                       height: 20,
                     ),
@@ -354,12 +350,12 @@ class _TeachersProfileState extends State<TeachersProfile> {
                     ),
                     isLoading
                         ? SpinKitChasingDots(
-                      color: Theme.of(context).primaryColorLight,
-                      size: 14,
-                    )
+                            color: Theme.of(context).primaryColorLight,
+                            size: 14,
+                          )
                         : const SizedBox(
-                      child: Text(""),
-                    ),
+                            child: Text(""),
+                          ),
                   ],
                 ),
               ),
@@ -403,8 +399,7 @@ class _TeachersProfileState extends State<TeachersProfile> {
           firestore.collection('userData').where('uid', isEqualTo: user.uid);
       userQuery.get().then((var querySnapshot) {
         if (querySnapshot.size > 0) {
-          var documentSnapshot =
-              querySnapshot.docs.first;
+          var documentSnapshot = querySnapshot.docs.first;
           // Map<String, dynamic>? data = documentSnapshot.data();
 
           //get the learners details
@@ -430,15 +425,14 @@ class _TeachersProfileState extends State<TeachersProfile> {
             editSecondNameOfTeachers.text = teachersSecondName.toString();
           });
           //logger.i("inside getField $teachersGrade");
-          logger.e(
-              "inside the method\n $teachersEmail\n"
-                  "$teachersName"
-                  "$teachersSecondName"
-                  "$teachersSubjects"
-                  "${teachersSubjects.length}"
-                  "$documentIDInitial"
-                  " ${teachersSubjects[0]} "
-                  "${teachersSubjects[2]}");
+          logger.e("inside the method\n $teachersEmail\n"
+              "$teachersName"
+              "$teachersSecondName"
+              "$teachersSubjects"
+              "${teachersSubjects.length}"
+              "$documentIDInitial"
+              " ${teachersSubjects[0]} "
+              "${teachersSubjects[2]}");
         } else {
           logger.i('No document found');
         }
@@ -451,14 +445,10 @@ class _TeachersProfileState extends State<TeachersProfile> {
 
   Future signOut(BuildContext context) async {
     try {
-      await FirebaseAuth.instance
-          .signOut()
-          .then((value) => SpinKitChasingDots(
-                color: Theme.of(context).primaryColor,
-              ));
-      FirebaseAuth.instance
-          .authStateChanges()
-          .listen((User? user) {
+      await FirebaseAuth.instance.signOut().then((value) => SpinKitChasingDots(
+            color: Theme.of(context).primaryColor,
+          ));
+      FirebaseAuth.instance.authStateChanges().listen((User? user) {
         if (user == null) {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const Authenticate()));
@@ -712,21 +702,22 @@ class _TeachersProfileState extends State<TeachersProfile> {
                                         isLoading = true;
                                       });
                                       try {
-                                        if (
-                                        editNameOfTeachers.text.isEmpty ||
-                                        editSecondNameOfTeachers.text.isEmpty ||
+                                        if (editNameOfTeachers.text.isEmpty ||
+                                            editSecondNameOfTeachers
+                                                .text.isEmpty ||
                                             editEmailOfTeachers.text.isEmpty ||
                                             editS1OfTeachers.text.isEmpty) {
                                           snack(
                                               "Insert data in the provided space above.",
                                               context);
                                         } else {
-
                                           //await user.updateEmail(editEmailOfTeachers.text.trim().toLowerCase());
 
-                                          List<dynamic> editSubjects =[];
-                                          editSubjects.add(editS1OfTeachers.text);
-                                          editSubjects.add(editS2OfTeachers.text);
+                                          List<dynamic> editSubjects = [];
+                                          editSubjects
+                                              .add(editS1OfTeachers.text);
+                                          editSubjects
+                                              .add(editS2OfTeachers.text);
 
                                           final CollectionReference
                                               learnersCollection =
@@ -739,9 +730,12 @@ class _TeachersProfileState extends State<TeachersProfile> {
                                           await identityDocument
                                               .set({
                                                 'subjects': editSubjects,
-                                                'name': editNameOfTeachers.text.toString(),
-                                                'secondName': editSecondNameOfTeachers.text
+                                                'name': editNameOfTeachers.text
                                                     .toString(),
+                                                'secondName':
+                                                    editSecondNameOfTeachers
+                                                        .text
+                                                        .toString(),
                                                 'email': editEmailOfTeachers
                                                     .text
                                                     .toString(),
@@ -814,8 +808,7 @@ class _TeachersProfileState extends State<TeachersProfile> {
         if (querySnapshot.size > 0) {
           logger.i("Data Found");
 
-          querySnapshot.docs.forEach(
-              (var documentSnapshot) {
+          querySnapshot.docs.forEach((var documentSnapshot) {
             //get the document reference
             DocumentReference documentReference =
                 firestore.collection('learnersData').doc(documentSnapshot.id);
@@ -856,8 +849,7 @@ class _TeachersProfileState extends State<TeachersProfile> {
         if (querySnapshot.size > 0) {
           logger.i("Data Found");
 
-          querySnapshot.docs.forEach(
-              (var documentSnapshot) {
+          querySnapshot.docs.forEach((var documentSnapshot) {
             //get the document reference
             DocumentReference documentReference =
                 firestore.collection('learnersData').doc(documentSnapshot.id);

@@ -1,11 +1,8 @@
-
-class UserData{
+class UserData {
   String? uid;
   String? email;
 
-
   //UserData({required this.uid, required email});
-
 
   Map<String, dynamic> toMap() {
     return {
@@ -13,5 +10,4 @@ class UserData{
       'email': email,
     };
   }
-
 }

@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-
 class LearnersHome extends StatefulWidget {
   const LearnersHome({Key? key}) : super(key: key);
 
@@ -17,11 +16,10 @@ class _LearnersHomeState extends State<LearnersHome> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   CollectionReference allNoteCollection =
-  FirebaseFirestore.instance.collection('learnersData');
+      FirebaseFirestore.instance.collection('learnersData');
   List<DocumentSnapshot> documents = [];
 
   String searchText = '';
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +67,8 @@ class _LearnersHomeState extends State<LearnersHome> {
                             ConnectionState.waiting) {
                           return const Center(
                               child: SpinKitChasingDots(
-                                color: Colors.purple,
-                              ));
+                            color: Colors.purple,
+                          ));
                         }
                         documents = streamSnapshot.data!.docs;
                         //todo Documents list added to filterTitle
@@ -99,20 +97,18 @@ class _LearnersHomeState extends State<LearnersHome> {
                             String dateTime = documents[index]['grade'];
                             return ListTile(
                               contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 0.0),
+                                  const EdgeInsets.symmetric(horizontal: 0.0),
                               onTap: () {
                                 String dateTime = documents[index]['name'];
                                 print("Is $dateTime");
-
                               },
                               leading: CircleAvatar(
                                 backgroundColor: Colors.purple,
-                                child: Text(
-                                    documents[index]['name'][0]
-                                ),
+                                child: Text(documents[index]['name'][0]),
                               ),
                               title: Text(documents[index]['name']),
-                              subtitle: Text("Grade "+documents[index]['grade']),
+                              subtitle:
+                                  Text("Grade " + documents[index]['grade']),
                               trailing: IconButton(
                                 onPressed: () {
                                   allNoteCollection
@@ -181,7 +177,7 @@ class _LearnersHomeState extends State<LearnersHome> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
+        onPressed: () {
           if (_key.currentState!.validate()) {
             _key.currentState!.save();
             print("form submitted.");
@@ -192,7 +188,9 @@ class _LearnersHomeState extends State<LearnersHome> {
       ),
     );
   }
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snack(String message){
+
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snack(
+      String message) {
     return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message.toString()),
       duration: const Duration(seconds: 4),

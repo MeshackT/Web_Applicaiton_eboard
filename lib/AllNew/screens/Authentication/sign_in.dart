@@ -5,8 +5,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:yueway/AllNew/screens/Authentication/guestView.dart';
 import 'package:yueway/main.dart';
-
-import '../../main.dart';
 import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';
 import '../home/home.dart';
@@ -124,128 +122,66 @@ class _SignInState extends State<SignIn> {
                     ],
                   ),
                   Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 30),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                SizedBox(
-                                    height: 30,
-                                    child: Text("Are you a learner?",
-                                      style: textStyleText(context).copyWith(
-                                          color:
-                                          Theme.of(context).primaryColor,
-                                          fontWeight: FontWeight.w700),)),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const LearnerAuthenticate(),
-                                        ),
-                                      );
-                                    },
-                                    child: SizedBox(
-                                      height: 30,
-                                      child: Text(
-                                        "Click here!",
-                                        style: textStyleText(context).copyWith(
-                                            color:
-                                            Theme.of(context).primaryColorLight,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                    ))
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Facilitator',
-                                  style: textStyleText(context)
-                                      .copyWith(fontWeight: FontWeight.w700),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            TextFormField(
-                              decoration: textInputDecoration.copyWith(
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        passwordVisible = !passwordVisible;
-                                      });
-                                    },
-                                    icon: passwordVisible
-                                        ? Icon(
-                                            Icons.visibility,
-                                            color: IconTheme.of(context).color,
-                                          )
-                                        : Icon(
-                                            Icons.lock,
-                                            color: IconTheme.of(context).color,
-                                          ),
-                                  ),
-                                  label: Text(
-                                    'Code',
-                                    style: textStyleText(context),
-                                  ),
-                                  hintText: "Insert Code"),
-                              obscureText: passwordVisible,
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return "enter a code";
-                                } else if (codePassword != code) {
-                                  return "Incorrect code";
-                                }
-                                return null;
-                              },
-                              onChanged: (val) {
-                                setState(() {
-                                  code = val;
-                                });
-                              },
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            TextFormField(
-                              decoration: textInputDecoration.copyWith(
-                                hintText: "Email",
-                                hintStyle: textStyleText(context),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30.0, vertical: 30),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                  height: 30,
+                                  child: Text(
+                                    "Are you a learner?",
+                                    style: textStyleText(context).copyWith(
+                                        color: Theme.of(context).primaryColor,
+                                        fontWeight: FontWeight.w700),
+                                  )),
+                              const SizedBox(
+                                width: 10,
                               ),
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return "enter an email";
-                                } else if (!val.contains("@")) {
-                                  return "enter a correct email";
-                                }
-                                return null;
-                              },
-                              onChanged: (val) {
-                                setState(() {
-                                  email = val;
-                                });
-                              },
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            TextFormField(
-                              decoration: textInputDecoration.copyWith(
+                              InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LearnerAuthenticate(),
+                                      ),
+                                    );
+                                  },
+                                  child: SizedBox(
+                                    height: 30,
+                                    child: Text(
+                                      "Click here!",
+                                      style: textStyleText(context).copyWith(
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ))
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Facilitator',
+                                style: textStyleText(context)
+                                    .copyWith(fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            decoration: textInputDecoration.copyWith(
                                 suffixIcon: IconButton(
                                   onPressed: () {
                                     setState(() {
@@ -262,139 +198,201 @@ class _SignInState extends State<SignIn> {
                                           color: IconTheme.of(context).color,
                                         ),
                                 ),
-                                hintText: "Password",
-                                hintStyle: textStyleText(context),
+                                label: Text(
+                                  'Code',
+                                  style: textStyleText(context),
+                                ),
+                                hintText: "Insert Code"),
+                            obscureText: passwordVisible,
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return "enter a code";
+                              } else if (codePassword != code) {
+                                return "Incorrect code";
+                              }
+                              return null;
+                            },
+                            onChanged: (val) {
+                              setState(() {
+                                code = val;
+                              });
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            decoration: textInputDecoration.copyWith(
+                              hintText: "Email",
+                              hintStyle: textStyleText(context),
+                            ),
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return "enter an email";
+                              } else if (!val.contains("@")) {
+                                return "enter a correct email";
+                              }
+                              return null;
+                            },
+                            onChanged: (val) {
+                              setState(() {
+                                email = val;
+                              });
+                            },
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            decoration: textInputDecoration.copyWith(
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    passwordVisible = !passwordVisible;
+                                  });
+                                },
+                                icon: passwordVisible
+                                    ? Icon(
+                                        Icons.visibility,
+                                        color: IconTheme.of(context).color,
+                                      )
+                                    : Icon(
+                                        Icons.lock,
+                                        color: IconTheme.of(context).color,
+                                      ),
                               ),
-                              obscureText: passwordVisible,
-                              validator: (val) {
-                                if (val!.length < 6) {
-                                  return "enter a password greater than 5";
-                                }
-                                return null;
-                              },
-                              onChanged: (val) {
-                                setState(() {
-                                  password = val;
-                                });
-                              },
+                              hintText: "Password",
+                              hintStyle: textStyleText(context),
                             ),
-                            const SizedBox(
-                              height: 20,
+                            obscureText: passwordVisible,
+                            validator: (val) {
+                              if (val!.length < 6) {
+                                return "enter a password greater than 5";
+                              }
+                              return null;
+                            },
+                            onChanged: (val) {
+                              setState(() {
+                                password = val;
+                              });
+                            },
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                height: 30,
+                                child: Text(
+                                  "Forgot password?",
+                                  style: textStyleText(context).copyWith(
+                                      color:
+                                          Theme.of(context).primaryColorLight,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const Forgot(),
+                                      ),
+                                    );
+                                  },
+                                  child: SizedBox(
+                                    height: 30,
+                                    child: Text(
+                                      "Reset",
+                                      style: textStyleText(context).copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ))
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(70),
+                              topLeft: Radius.circular(70),
                             ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                SizedBox(
-                                  height: 30,
-                                  child: Text(
-                                    "Forgot password?",
-                                    style: textStyleText(context).copyWith(
+                            child: SizedBox(
+                              width: 120,
+                              child: MaterialButton(
+                                height: 60,
+                                onPressed: () async {
+                                  final navigatorContext =
+                                      Navigator.of(context);
+
+                                  //check if the form is validated
+                                  if (_formKey.currentState!.validate()) {
+                                    await signIn();
+                                  } else {
+                                    snack("Failed to Sign In", context);
+                                  }
+                                },
+                                color: Theme.of(context).primaryColor,
+                                child: loading
+                                    ? SpinKitChasingDots(
                                         color:
                                             Theme.of(context).primaryColorLight,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => const Forgot(),
-                                        ),
-                                      );
-                                    },
-                                    child: SizedBox(
-                                      height: 30,
-                                      child: Text(
-                                        "Reset",
+                                      )
+                                    : Text(
+                                        "Sign In",
                                         style: textStyleText(context).copyWith(
-                                            color:
-                                            Theme.of(context).primaryColor,
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
                                             fontWeight: FontWeight.w700),
                                       ),
-                                    ))
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(70),
-                                topLeft: Radius.circular(70),
                               ),
-                              child: SizedBox(
-                                width: 120,
-                                child: MaterialButton(
-                                  height: 60,
-                                  onPressed: () async {
-                                    final navigatorContext = Navigator.of(context);
-
-                                    //check if the form is validated
-                                    if (_formKey.currentState!.validate()) {
-                                      await signIn();
-                                    } else {
-                                      snack("Failed to Sign In", context);
-                                    }
-                                  },
-                                  color: Theme.of(context).primaryColor,
-                                  child: loading
-                                      ? SpinKitChasingDots(
-                                          color: Theme.of(context)
-                                              .primaryColorLight,
-                                        )
-                                      : Text(
-                                          "Sign In",
-                                    style: textStyleText(context).copyWith(
-                                        color:
-                                        Theme.of(context).primaryColorLight,
-                                        fontWeight: FontWeight.w700),
-                                        ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 6,
+                          ),
+                          ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(70),
+                              bottomRight: Radius.circular(70),
+                            ),
+                            child: SizedBox(
+                              width: 120,
+                              child: MaterialButton(
+                                height: 60,
+                                onPressed: () {
+                                  widget.toggleView();
+                                },
+                                color: Theme.of(context).primaryColor,
+                                child: Text(
+                                  "Sign Up",
+                                  style: textStyleText(context).copyWith(
+                                      color:
+                                          Theme.of(context).primaryColorLight,
+                                      fontWeight: FontWeight.w700),
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 6,
+                          ),
+                          Text(
+                            error,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 14,
                             ),
-                            ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(70),
-                                bottomRight: Radius.circular(70),
-                              ),
-                              child: SizedBox(
-                                width: 120,
-                                child: MaterialButton(
-                                  height: 60,
-                                  onPressed: () {
-                                    widget.toggleView();
-                                  },
-                                  color: Theme.of(context).primaryColor,
-                                  child: Text(
-                                    "Sign Up",
-                                    style: textStyleText(context).copyWith(
-                                        color:
-                                        Theme.of(context).primaryColorLight,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Text(
-                              error,
-                              style: const TextStyle(
-                                color: Colors.red,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
+                    ),
                   ),
-
                   ClipRRect(
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(50),
@@ -406,16 +404,19 @@ class _SignInState extends State<SignIn> {
                       width: 150,
                       height: 40,
                       child: ElevatedButton(
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (context) => const GuestView(),
+                            MaterialPageRoute(
+                              builder: (context) => const GuestView(),
                             ),
-                        );
-
+                          );
                         },
-                        child: Text("I am a guest", style: textStyleText(context).copyWith(
-                          color: Theme.of(context).primaryColorLight,
-                        ),),
+                        child: Text(
+                          "I am a guest",
+                          style: textStyleText(context).copyWith(
+                            color: Theme.of(context).primaryColorLight,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -441,7 +442,8 @@ class _SignInState extends State<SignIn> {
     try {
       // Check if user exists
       bool userExists = false;
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.trim().toLowerCase(),
         password: password.trim(),
       );
@@ -450,9 +452,8 @@ class _SignInState extends State<SignIn> {
       // Navigate to the home screen if user exists
       if (userExists) {
         navContext.pushReplacement(
-            MaterialPageRoute(builder: (context) => const Home())
-        );
-      }else if(!userExists){
+            MaterialPageRoute(builder: (context) => const Home()));
+      } else if (!userExists) {
         snack("Email doesn't exist.", context);
       } else {
         Fluttertoast.showToast(msg: 'Email account not registered');
@@ -462,7 +463,7 @@ class _SignInState extends State<SignIn> {
       if (e.code != 'user-not-found') {
         snack("Email not registered", context);
         return;
-      }else if (e.code != 'wrong-password'){
+      } else if (e.code != 'wrong-password') {
         snack("Wrong password", context);
       }
     } catch (error) {
@@ -486,7 +487,6 @@ class _SignInState extends State<SignIn> {
     });
 
     // Clear the login scren stack from the navigator
-     navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
-
 }

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,8 +13,9 @@ class SubjectNotifications extends StatefulWidget {
   List<dynamic> teachersIDS;
   List<dynamic> nameOfSubjects;
 
-  SubjectNotifications({Key? key, required this.teachersIDS,
-    required this.nameOfSubjects}) : super(key: key);
+  SubjectNotifications(
+      {Key? key, required this.teachersIDS, required this.nameOfSubjects})
+      : super(key: key);
 
   @override
   State<SubjectNotifications> createState() => _SubjectNotificationsState();
@@ -57,7 +57,6 @@ class _SubjectNotificationsState extends State<SubjectNotifications> {
     setState(() {
       //switchValues[index] = value;
       switchValuess[index] = value;
-
     });
 
     saveSwitchState(index, value);
@@ -74,7 +73,6 @@ class _SubjectNotificationsState extends State<SubjectNotifications> {
           backgroundColor: Theme.of(context).primaryColor, msg: "Unsubscribed");
     }
   }
-
 
   Future<void> loadSwitchStates() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -93,6 +91,7 @@ class _SubjectNotificationsState extends State<SubjectNotifications> {
     //await prefs.setBool(teachersID[index], value);
     await prefs.setBool(widget.teachersIDS[index], value);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,7 +131,7 @@ class _SubjectNotificationsState extends State<SubjectNotifications> {
                   ),
                   child: Container(
                     height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width/5,
+                    width: MediaQuery.of(context).size.width / 5,
                     color: Theme.of(context).primaryColor.withOpacity(.4),
                     child: SingleChildScrollView(
                       child: ListView.builder(
@@ -141,38 +140,43 @@ class _SubjectNotificationsState extends State<SubjectNotifications> {
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(
                             leading: Switch(
-                          inactiveThumbColor:
-                          Theme.of(context).primaryColorLight.withOpacity(.6),
-                          activeColor: Theme.of(context).primaryColorLight,
-                          thumbIcon: MaterialStateProperty.resolveWith((Set states) {
-                            if (states.contains(MaterialState.disabled)) {
-                              return const Icon(
-                                Icons.close,
-                                color: Colors.grey,
-                              );
-                            }
-                            return null; // All other states will use the default thumbIcon.
-                          }),
-                          value: switchValuess[index],
+                              inactiveThumbColor: Theme.of(context)
+                                  .primaryColorLight
+                                  .withOpacity(.6),
+                              activeColor: Theme.of(context).primaryColorLight,
+                              thumbIcon: MaterialStateProperty.resolveWith(
+                                  (Set states) {
+                                if (states.contains(MaterialState.disabled)) {
+                                  return const Icon(
+                                    Icons.close,
+                                    color: Colors.grey,
+                                  );
+                                }
+                                return null; // All other states will use the default thumbIcon.
+                              }),
+                              value: switchValuess[index],
                               onChanged: (value) {
                                 //toggleSwitch(index, value);
-                                if(switchValuess[index] = value){
-                                  localNotificationService.subscribeToTopicDevice(
-                                      widget.teachersIDS[index]);
+                                if (switchValuess[index] = value) {
+                                  localNotificationService
+                                      .subscribeToTopicDevice(
+                                          widget.teachersIDS[index]);
                                   Fluttertoast.showToast(
-                                      backgroundColor: Theme.of(context).primaryColor,
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
                                       msg: "subscribed");
-                                }else{
-                                  localNotificationService.unSubscribeToTopicDevice(
-                                      widget.teachersIDS[index]);
+                                } else {
+                                  localNotificationService
+                                      .unSubscribeToTopicDevice(
+                                          widget.teachersIDS[index]);
                                   Fluttertoast.showToast(
-                                      backgroundColor: Theme.of(context).primaryColor,
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
                                       msg: "unsubscribed");
                                 }
                                 logger.e("true or false => "
                                     "${switchValuess[index]} $value");
                                 setState(() {
-
                                   switchValuess[index] = value;
                                   saveSwitchState(index, value);
                                   print("${switchValuess[index]} "
@@ -202,8 +206,11 @@ class _SubjectNotificationsState extends State<SubjectNotifications> {
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
-                        title: Text(widget.nameOfSubjects[index], style:
-                        textStyleText(context).copyWith(fontSize: 14, fontWeight: FontWeight.bold),),
+                        title: Text(
+                          widget.nameOfSubjects[index],
+                          style: textStyleText(context).copyWith(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
                       );
                     },
                     itemCount: widget.nameOfSubjects.length,

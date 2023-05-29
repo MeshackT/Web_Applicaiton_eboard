@@ -12,8 +12,6 @@ TextStyle textStyleText(BuildContext context) {
       color: Theme.of(context).primaryColor);
 }
 
-
-
 ButtonStyle buttonRound = OutlinedButton.styleFrom(
     shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -55,10 +53,9 @@ InputDecoration textInputDecoration = InputDecoration(
 final messengerKey = GlobalKey<ScaffoldMessengerState>();
 
 class Utils {
-
   static const mobileWidth = 700;
 
-  static showDownloading(BuildContext context, String title, String message){
+  static showDownloading(BuildContext context, String title, String message) {
     return showCupertinoDialog<String>(
       context: context,
       builder: (BuildContext context) => CupertinoAlertDialog(
@@ -68,14 +65,15 @@ class Utils {
             color: Theme.of(context).primaryColor,
           ),
         ),
-
-        content:  Column(
+        content: Column(
           children: [
-            Text(message,
-              style: textStyleText(context).copyWith(
-                  fontSize: 13),
+            Text(
+              message,
+              style: textStyleText(context).copyWith(fontSize: 13),
             ),
-            const SizedBox(height: 5,),
+            const SizedBox(
+              height: 5,
+            ),
             SpinKitChasingDots(
               size: 16,
               color: Theme.of(context).primaryColor,
@@ -86,16 +84,13 @@ class Utils {
     );
   }
 
-
   //Tool Tip
   static SizedBox toolTipMessage(String message, BuildContext context) {
     return SizedBox(
       width: 40,
       height: 40,
       child: IconButton(
-        onPressed: () async {
-
-        },
+        onPressed: () async {},
         icon: const Icon(
           Icons.info,
           color: Colors.grey,

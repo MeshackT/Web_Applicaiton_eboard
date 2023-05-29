@@ -29,7 +29,6 @@ class _ViewMyTextsForEditingState extends State<ViewMyTextsForEditing> {
     _getCurrentUserData(nameOfTeacher);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -172,7 +171,7 @@ class _ViewMyTextsForEditingState extends State<ViewMyTextsForEditing> {
                                         width: 10,
                                       ),
                                       Flexible(
-                                        flex:1,
+                                        flex: 1,
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -221,7 +220,9 @@ class _ViewMyTextsForEditingState extends State<ViewMyTextsForEditing> {
                                           ],
                                         ),
                                       ),
-                                      Utils.toolTipMessage("Press and hold to edit or delete the message", context),
+                                      Utils.toolTipMessage(
+                                          "Press and hold to edit or delete the message",
+                                          context),
                                       SizedBox(
                                         width: 40,
                                         height: 40,
@@ -243,9 +244,13 @@ class _ViewMyTextsForEditingState extends State<ViewMyTextsForEditing> {
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8, vertical: 8),
-                                    child: Text(
-                                      text,
-                                      style: textStyleText(context),
+                                    child: Wrap(
+                                      children: [
+                                        SelectableText(
+                                          text,
+                                          style: textStyleText(context),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -441,8 +446,9 @@ class _ViewMyTextsForEditingState extends State<ViewMyTextsForEditing> {
                                   (user!.uid).toString()) {
                                 Fluttertoast.showToast(
                                     backgroundColor:
-                                    Theme.of(context).primaryColor,
-                                    msg: "Can't delete text not published by you");
+                                        Theme.of(context).primaryColor,
+                                    msg:
+                                        "Can't delete text not published by you");
                               } else {
                                 final CollectionReference learnersCollection =
                                     FirebaseFirestore.instance
@@ -462,7 +468,6 @@ class _ViewMyTextsForEditingState extends State<ViewMyTextsForEditing> {
                                             builder: (context) =>
                                                 const ViewMyTextsForEditing())));
                                 titleEdit.clear();
-
                               }
                             },
                             style: buttonRound,
@@ -487,16 +492,16 @@ class _ViewMyTextsForEditingState extends State<ViewMyTextsForEditing> {
       },
     );
   }
+
   Future<void> _getCurrentUserData(String userNameCurrent) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     //get data where data ID is equals to the current logged in user
     var userQuery =
-    firestore.collection('userData').where('uid', isEqualTo: user!.uid);
+        firestore.collection('userData').where('uid', isEqualTo: user!.uid);
     userQuery.get().then((var querySnapshot) {
       if (querySnapshot.size > 0) {
-        var documentSnapshot =
-            querySnapshot.docs.first;
+        var documentSnapshot = querySnapshot.docs.first;
         Map<String, dynamic>? data = documentSnapshot.data();
         //get the subject of the teacher
         // get the name field or empty string if it doesn't exist
@@ -505,8 +510,7 @@ class _ViewMyTextsForEditingState extends State<ViewMyTextsForEditing> {
         });
         //check if data exist and not empty
         logger.i("inside getField $userNameCurrent");
-      } else {
-      }
+      } else {}
     }).catchError((error) => print('Failed to get document: $error'));
   }
 }

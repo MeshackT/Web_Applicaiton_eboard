@@ -23,10 +23,10 @@ class ViewNotifications extends StatefulWidget {
 
 class _ViewNotificationsState extends State<ViewNotifications> {
   CollectionReference userFeeds =
-  FirebaseFirestore.instance.collection('feeds');
+      FirebaseFirestore.instance.collection('feeds');
   User? user = FirebaseAuth.instance.currentUser;
   final CollectionReference feedCollection =
-  FirebaseFirestore.instance.collection('feeds');
+      FirebaseFirestore.instance.collection('feeds');
 
   TextEditingController aboutEdit = TextEditingController();
   TextEditingController titleEdit = TextEditingController();
@@ -47,27 +47,16 @@ class _ViewNotificationsState extends State<ViewNotifications> {
   Widget build(BuildContext context) {
     return DoubleBackToCloseApp(
       snackBar: SnackBar(
-        backgroundColor: Theme
-            .of(context)
-            .primaryColor
-            .withOpacity(1),
+        backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
         content: Text(
           'Tap back again to leave the application',
-          style: TextStyle(color: Theme
-              .of(context)
-              .primaryColorLight),
+          style: TextStyle(color: Theme.of(context).primaryColorLight),
           textAlign: TextAlign.center,
         ),
       ),
       child: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
-        height: MediaQuery
-            .of(context)
-            .size
-            .height,
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           //screen background color
           gradient: LinearGradient(
@@ -82,7 +71,7 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                 child: StreamBuilder(
                   stream: feedCollection
                       .where('subject',
-                      isEqualTo: widget.subjectOfTeacherPassed)
+                          isEqualTo: widget.subjectOfTeacherPassed)
                       .orderBy("time", descending: true)
                       .snapshots(),
                   builder: (ctx, streamSnapshot) {
@@ -90,67 +79,51 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                         ConnectionState.waiting) {
                       return Center(
                           child: Column(
-                            children: [
-                              Text(
-                                'Waiting for Internet Connection',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme
-                                      .of(context)
-                                      .primaryColorDark,
-                                ),
-                              ),
-                              SpinKitChasingDots(
-                                color: Theme
-                                    .of(context)
-                                    .primaryColorDark,
-                                size: 15,
-                              ),
-                            ],
-                          ));
+                        children: [
+                          Text(
+                            'Waiting for Internet Connection',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                          ),
+                          SpinKitChasingDots(
+                            color: Theme.of(context).primaryColorDark,
+                            size: 15,
+                          ),
+                        ],
+                      ));
                     } else if (streamSnapshot.connectionState ==
                         ConnectionState.none) {
                       return Center(
                           child: Column(
-                            children: [
-                              Text(
-                                'No for Internet Connection',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme
-                                      .of(context)
-                                      .primaryColorDark,
-                                ),
-                              ),
-                              SpinKitChasingDots(
-                                color: Theme
-                                    .of(context)
-                                    .primaryColorDark,
-                                size: 15,
-                              ),
-                            ],
-                          ));
+                        children: [
+                          Text(
+                            'No for Internet Connection',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                          ),
+                          SpinKitChasingDots(
+                            color: Theme.of(context).primaryColorDark,
+                            size: 15,
+                          ),
+                        ],
+                      ));
                     } else if (streamSnapshot.data!.size == 0) {
                       return SizedBox(
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .height / 2,
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                        height: MediaQuery.of(context).size.height / 2,
+                        width: MediaQuery.of(context).size.width,
                         child: Center(
                           child: Text(
                             'No notifications yet',
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w800,
-                              color: Theme
-                                  .of(context)
-                                  .primaryColorDark,
+                              color: Theme.of(context).primaryColorDark,
                             ),
                           ),
                         ),
@@ -167,7 +140,7 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                       itemBuilder: (BuildContext context, int index) {
                         //get the document index
                         DocumentSnapshot document =
-                        streamSnapshot.data!.docs[index];
+                            streamSnapshot.data!.docs[index];
                         Timestamp timestamp = document.get("time");
 
                         DateTime dateTime = timestamp.toDate();
@@ -193,8 +166,7 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                 snack("Notification deleted", context);
                               },
                               background: Container(
-                                color: Theme
-                                    .of(context)
+                                color: Theme.of(context)
                                     .primaryColor
                                     .withOpacity(.6),
                                 child: Row(
@@ -205,9 +177,7 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                       child: Icon(
                                         Icons.delete,
                                         color:
-                                        Theme
-                                            .of(context)
-                                            .primaryColorLight,
+                                            Theme.of(context).primaryColorLight,
                                       ),
                                     ),
                                   ],
@@ -252,7 +222,7 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                 );
                               },
                               movementDuration:
-                              const Duration(milliseconds: 500),
+                                  const Duration(milliseconds: 500),
                               direction: DismissDirection.endToStart,
                               child: InkWell(
                                 onLongPress: () {
@@ -281,28 +251,25 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                     gradeEditTemp,
                                     documentIdEdit,
                                   );
-
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: Theme
-                                        .of(context)
+                                    color: Theme.of(context)
                                         .primaryColorLight
                                         .withOpacity(.4),
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(10)),
                                     border: Border.all(
-                                      color: Theme
-                                          .of(context)
-                                          .primaryColor,
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                   ),
                                   child: SingleChildScrollView(
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,                                      children: [
+                                          CrossAxisAlignment.start,
+                                      children: [
                                         const SizedBox(
                                           height: 5,
                                         ),
@@ -311,7 +278,7 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                               horizontal: 10),
                                           child: Row(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
                                                 documents[index].get("subject"),
@@ -330,30 +297,30 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                         ),
                                         Row(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Padding(
                                               padding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 10,
-                                                  vertical: 5),
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 5),
                                               child: Column(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     "Name of Teacher",
                                                     style:
-                                                    textStyleText(context)
-                                                        .copyWith(
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .bold),
+                                                        textStyleText(context)
+                                                            .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
                                                   ),
                                                   const SizedBox(
                                                     height: 5,
@@ -361,11 +328,11 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                                   Text(
                                                     "Grade",
                                                     style:
-                                                    textStyleText(context)
-                                                        .copyWith(
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .bold),
+                                                        textStyleText(context)
+                                                            .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
                                                   ),
                                                   const SizedBox(
                                                     height: 5,
@@ -373,33 +340,34 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                                   Text(
                                                     "Title",
                                                     style:
-                                                    textStyleText(context)
-                                                        .copyWith(
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .bold),
+                                                        textStyleText(context)
+                                                            .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
                                                   ),
                                                   const SizedBox(
                                                     height: 5,
                                                   ),
                                                   SizedBox(
                                                     width: 100,
-                                                    height:70,//changed
+                                                    height: 70, //changed
                                                     child: Row(
                                                       mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
+                                                          CrossAxisAlignment
+                                                              .center,
                                                       children: [
                                                         Text(
                                                           "About",
                                                           style: textStyleText(
-                                                              context)
+                                                                  context)
                                                               .copyWith(
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
                                                         ),
                                                         Utils.toolTipMessage(
                                                             "Press and hold to edit the message.\nScroll up if the about is not seen",
@@ -412,21 +380,21 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                             ),
                                             Padding(
                                               padding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 10,
-                                                  vertical: 5),
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 5),
                                               child: Column(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 crossAxisAlignment:
-                                                CrossAxisAlignment.end,
+                                                    CrossAxisAlignment.end,
                                                 children: [
                                                   Text(
                                                     documents[index]
                                                         .get("name"),
                                                     style:
-                                                    textStyleText(context),
+                                                        textStyleText(context),
                                                   ),
                                                   const SizedBox(
                                                     height: 5,
@@ -435,7 +403,7 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                                     documents[index]
                                                         .get("grade"),
                                                     style:
-                                                    textStyleText(context),
+                                                        textStyleText(context),
                                                   ),
                                                   const SizedBox(
                                                     height: 5,
@@ -444,7 +412,7 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                                     documents[index]
                                                         .get("title"),
                                                     style:
-                                                    textStyleText(context),
+                                                        textStyleText(context),
                                                   ),
                                                   // const SizedBox(
                                                   //   height: 5,
@@ -460,20 +428,16 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                           child: Divider(
                                             height: .5,
                                             color:
-                                            Theme
-                                                .of(context)
-                                                .primaryColor,
+                                                Theme.of(context).primaryColor,
                                           ),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               left: 10, right: 10, bottom: 10),
                                           child: Text(
-                                            documents[index]
-                                                .get("description"),
-                                            style: textStyleText(context).copyWith(
-
-                                            ),
+                                            documents[index].get("description"),
+                                            style: textStyleText(context)
+                                                .copyWith(),
                                             textAlign: TextAlign.start,
                                           ),
                                         ),
@@ -515,14 +479,8 @@ class _ViewNotificationsState extends State<ViewNotifications> {
       builder: (context) {
         return SafeArea(
           child: Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
             margin: const EdgeInsets.only(top: 10.0),
             child: SingleChildScrollView(
               child: Column(
@@ -541,15 +499,12 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                           ),
                           Center(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 80),
-                                child: Divider(
-                                  height: 1,
-                                  color: Theme
-                                      .of(context)
-                                      .primaryColor,
-                                ),
-                              )),
+                            padding: const EdgeInsets.symmetric(horizontal: 80),
+                            child: Divider(
+                              height: 1,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          )),
                           const SizedBox(
                             height: 10,
                           ),
@@ -569,17 +524,15 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                             controller: titleEdit,
                             decoration: InputDecoration(
                                 label: Padding(
-                                  padding:
+                              padding:
                                   const EdgeInsets.symmetric(vertical: 10.0),
-                                  child: Text(
-                                    "Title",
-                                    style: textStyleText(context).copyWith(
-                                      color: Theme
-                                          .of(context)
-                                          .primaryColor,
-                                    ),
-                                  ),
-                                )),
+                              child: Text(
+                                "Title",
+                                style: textStyleText(context).copyWith(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            )),
                             style: textStyleText(context),
                             textAlign: TextAlign.start,
                             autocorrect: true,
@@ -598,17 +551,15 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                             controller: gradeEdit,
                             decoration: InputDecoration(
                                 label: Padding(
-                                  padding:
+                              padding:
                                   const EdgeInsets.symmetric(vertical: 10.0),
-                                  child: Text(
-                                    "Grade",
-                                    style: textStyleText(context).copyWith(
-                                      color: Theme
-                                          .of(context)
-                                          .primaryColor,
-                                    ),
-                                  ),
-                                )),
+                              child: Text(
+                                "Grade",
+                                style: textStyleText(context).copyWith(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            )),
                             style: textStyleText(context),
                             keyboardType: TextInputType.number,
                             textAlign: TextAlign.start,
@@ -625,17 +576,15 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                             maxLines: 5,
                             decoration: InputDecoration(
                                 label: Padding(
-                                  padding:
+                              padding:
                                   const EdgeInsets.symmetric(vertical: 10.0),
-                                  child: Text(
-                                    "About",
-                                    style: textStyleText(context).copyWith(
-                                      color: Theme
-                                          .of(context)
-                                          .primaryColor,
-                                    ),
-                                  ),
-                                )),
+                              child: Text(
+                                "About",
+                                style: textStyleText(context).copyWith(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            )),
                             style: textStyleText(context),
                             textAlign: TextAlign.start,
                             textAlignVertical: TextAlignVertical.center,
@@ -668,35 +617,29 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                               Fluttertoast.showToast(
                                   msg: "waiting for update to complete.",
                                   backgroundColor:
-                                  Theme
-                                      .of(context)
-                                      .primaryColor);
+                                      Theme.of(context).primaryColor);
                               final CollectionReference learnersCollection =
-                              FirebaseFirestore.instance
-                                  .collection('feeds');
+                                  FirebaseFirestore.instance
+                                      .collection('feeds');
                               final DocumentReference identityDocument =
-                              learnersCollection.doc(documentIdEdit);
+                                  learnersCollection.doc(documentIdEdit);
                               await identityDocument
                                   .set({
-                                'grade': gradeEdit.text.toString(),
-                                'title': titleEdit.text.toString(),
-                                'description': aboutEdit.text.toString(),
-                              }, SetOptions(merge: true))
+                                    'grade': gradeEdit.text.toString(),
+                                    'title': titleEdit.text.toString(),
+                                    'description': aboutEdit.text.toString(),
+                                  }, SetOptions(merge: true))
                                   .then(
-                                    (value) =>
-                                    Fluttertoast.showToast(
+                                    (value) => Fluttertoast.showToast(
                                         backgroundColor:
-                                        Theme
-                                            .of(context)
-                                            .primaryColor,
+                                            Theme.of(context).primaryColor,
                                         msg: "Edited Notifications"),
-                              )
+                                  )
                                   .whenComplete(
-                                      () => Navigator.of(context).pop()
-                            );
+                                      () => Navigator.of(context).pop());
                             } on Exception catch (e) {
-                            // TODO
-                            Fluttertoast.showToast(msg: e.toString());
+                              // TODO
+                              Fluttertoast.showToast(msg: e.toString());
                             }
                           },
                           style: buttonRound,
@@ -705,9 +648,7 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
-                              color: Theme
-                                  .of(context)
-                                  .primaryColorDark,
+                              color: Theme.of(context).primaryColorDark,
                             ),
                           ),
                         ),
@@ -721,9 +662,7 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
-                              color: Theme
-                                  .of(context)
-                                  .primaryColorDark,
+                              color: Theme.of(context).primaryColorDark,
                             ),
                           ),
                         ),

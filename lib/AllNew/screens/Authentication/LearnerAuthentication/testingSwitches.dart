@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yueway/AllNew/screens/Authentication/LearnerAuthentication/EditSubjects.dart';
 import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
 
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
@@ -16,7 +14,7 @@ class TeacherListPage extends StatefulWidget {
   TeacherListPage({Key? key, required this.teachersIDS}) : super(key: key);
 
   @override
-   _TeacherListPageState createState() => _TeacherListPageState();
+  _TeacherListPageState createState() => _TeacherListPageState();
 }
 
 class _TeacherListPageState extends State<TeacherListPage> {
@@ -38,12 +36,12 @@ class _TeacherListPageState extends State<TeacherListPage> {
     //switchValues = List.generate(teachersID.length, (index) => false);
     switchValuess = List.generate(widget.teachersIDS.length, (index) => false);
     loadSwitchStates();
-   }
+  }
+
   void toggleSwitch(int index, bool value) {
     setState(() {
       //switchValues[index] = value;
       switchValuess[index] = value;
-
     });
 
     saveSwitchState(index, value);
@@ -60,7 +58,6 @@ class _TeacherListPageState extends State<TeacherListPage> {
           backgroundColor: Theme.of(context).primaryColor, msg: "Unsubscribed");
     }
   }
-
 
   Future<void> loadSwitchStates() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -79,6 +76,7 @@ class _TeacherListPageState extends State<TeacherListPage> {
     //await prefs.setBool(teachersID[index], value);
     await prefs.setBool(widget.teachersIDS[index], value);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,14 +105,19 @@ class _TeacherListPageState extends State<TeacherListPage> {
           //     },
           //   ),
           // ),
-          TextButton(onPressed: (){
-            logger.i(widget.teachersIDS.length);
-            logger.i(widget.teachersIDS[1]);
-            logger.i(widget.teachersIDS[2]);
-            logger.i(widget.teachersIDS[3]);
-
-          }, child: Text("Get the length of data"),),
-          const Divider(color: Colors.red, height: 5,),
+          TextButton(
+            onPressed: () {
+              logger.i(widget.teachersIDS.length);
+              logger.i(widget.teachersIDS[1]);
+              logger.i(widget.teachersIDS[2]);
+              logger.i(widget.teachersIDS[3]);
+            },
+            child: Text("Get the length of data"),
+          ),
+          const Divider(
+            color: Colors.red,
+            height: 5,
+          ),
           Expanded(
             flex: 3,
             child: Container(
@@ -132,11 +135,11 @@ class _TeacherListPageState extends State<TeacherListPage> {
                         onChanged: (value) {
                           //toggleSwitch(index, value);
 
-                          if(switchValuess[index] = value){
+                          if (switchValuess[index] = value) {
                             localNotificationService.subscribeToTopicDevice(
                                 widget.teachersIDS[index]);
                             Fluttertoast.showToast(msg: "subscribed");
-                          }else{
+                          } else {
                             localNotificationService.unSubscribeToTopicDevice(
                                 widget.teachersIDS[index]);
                             Fluttertoast.showToast(msg: "unsubscribed");
@@ -144,7 +147,6 @@ class _TeacherListPageState extends State<TeacherListPage> {
                           logger.e("true or false => "
                               "${switchValuess[index]} $value");
                           setState(() {
-
                             switchValuess[index] = value;
                             saveSwitchState(index, value);
                             print("${switchValuess[index]} "

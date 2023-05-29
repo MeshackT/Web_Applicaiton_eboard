@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -11,7 +10,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
-import 'package:yueway/AllNew/screens/home/learnersHome.dart';
 import '../../../testing_messaging/messaging.dart';
 import '../../shared/constants.dart';
 import '../Authentication/Authenticate.dart';
@@ -79,7 +77,8 @@ class _HomeState extends State<Home> {
   CollectionReference allLearnersCollection =
       FirebaseFirestore.instance.collection('learnersData');
   List<DocumentSnapshot> documents = [];
-  LocalNotificationService localNotificationService = LocalNotificationService();
+  LocalNotificationService localNotificationService =
+      LocalNotificationService();
   //////////////////////////////
   List<Map<dynamic, dynamic>> lists = [];
   final databaseReference =
@@ -118,8 +117,6 @@ class _HomeState extends State<Home> {
   int selectedItemIndex = -1;
   bool isAlertSet = false;
 
-
-
   //connectivity
   late StreamSubscription subscription;
   var isDeviceConnected = false;
@@ -147,22 +144,14 @@ class _HomeState extends State<Home> {
   void initState() {
     getConnectivity();
     super.initState();
+    localNotificationService.getPermission();
     _getUserField();
-    _getCurrentUserFields(teachersName,teachersSecondName, teachersEmail, teachersGrade);
-    //notification
-    // LocalNotificationService.initialize();
-    // localNotificationService.getPermission();
-    // Terminated State show message
-    // FirebaseMessaging.instance.getInitialMessage().then((event) {
-    //
-    // });
-    //
-
-
+    _getCurrentUserFields(
+        teachersName, teachersSecondName, teachersEmail, teachersGrade);
   }
 
   // function to request notifications permissions
-    getConnectivity() {
+  getConnectivity() {
     try {
       subscription = Connectivity()
           .onConnectivityChanged
@@ -243,20 +232,25 @@ class _HomeState extends State<Home> {
           ),
         ),
         actions: [
-          loading? SpinKitChasingDots(
-            color:Theme.of(context).primaryColorLight,
-            size: 15,
-          ):const SizedBox(
-            child: Text(""),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const Messaging()));
-            },
-            icon: Icon(
-              Icons.dynamic_feed,
-              color: Theme.of(context).primaryColorLight,
+          loading
+              ? SpinKitChasingDots(
+                  color: Theme.of(context).primaryColorLight,
+                  size: 15,
+                )
+              : const SizedBox(
+                  child: Text(""),
+                ),
+          Hero(
+            tag: "null",
+            child: IconButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const Messaging()));
+              },
+              icon: Icon(
+                Icons.dynamic_feed,
+                color: Theme.of(context).primaryColorLight,
+              ),
             ),
           )
         ],
@@ -288,8 +282,8 @@ class _HomeState extends State<Home> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 5),
                       child: Container(
-                        color:
-                            Theme.of(context).primaryColorLight.withOpacity(.8),
+                        // color:
+                        //     Theme.of(context).primaryColorLight.withOpacity(.8),
                         child: TextField(
                           controller: _searchController,
                           cursorColor: Theme.of(context).primaryColorDark,
@@ -344,7 +338,6 @@ class _HomeState extends State<Home> {
                     child: StreamBuilder(
                       stream: allLearnersCollection
                           .where('teachersID', arrayContains: user!.uid)
-
                           .snapshots(),
                       builder: (ctx, streamSnapshot) {
                         if (streamSnapshot.connectionState ==
@@ -386,15 +379,20 @@ class _HomeState extends State<Home> {
                               showDialogBox(),
                             ],
                           ));
-                        }else if (streamSnapshot.hasError) {
+                        } else if (streamSnapshot.hasError) {
                           return Text("Error: ${streamSnapshot.error}");
-                        } else if(!streamSnapshot.hasData || streamSnapshot.data == null ||
-                            streamSnapshot.data!.size <= 0){
-                          return Center(child: Text("No list of learners yet.",
-                            style: textStyleText(context).copyWith(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                            ),),);
+                        } else if (!streamSnapshot.hasData ||
+                            streamSnapshot.data == null ||
+                            streamSnapshot.data!.size <= 0) {
+                          return Center(
+                            child: Text(
+                              "No list of learners yet.",
+                              style: textStyleText(context).copyWith(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          );
                         }
 
                         documents = streamSnapshot.data!.docs;
@@ -415,229 +413,155 @@ class _HomeState extends State<Home> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: documents.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return InkWell(
-                              onLongPress: () async {
-                                String nameOfLearner =
-                                    documents[index].get("name");
-                                String secondNameOfLearner =
-                                    documents[index].get("secondName");
-                                String gradeOfLeaner =
-                                    documents[index].get("grade");
-                                String emailOfLearner =
-                                    documents[index].get("email");
-                                List<String> subjectsOfLeaner = [];
+                            return Hero(
+                              tag: "details",
+                              child: InkWell(
+                                onLongPress: () async {
+                                  String nameOfLearner =
+                                      documents[index].get("name");
+                                  String secondNameOfLearner =
+                                      documents[index].get("secondName");
+                                  String gradeOfLeaner =
+                                      documents[index].get("grade");
+                                  String emailOfLearner =
+                                      documents[index].get("email");
+                                  List<String> subjectsOfLeaner = [];
 
-                                var data = documents[index].get(("subjects"));
+                                  var data = documents[index].get(("subjects"));
 
-                                if (data is List) {
-                                  for (var item in data) {
-                                    subjectsOfLeaner.add(item);
+                                  if (data is List) {
+                                    for (var item in data) {
+                                      subjectsOfLeaner.add(item);
+                                    }
                                   }
-                                }
-                                subjectsOfLeaner.sort();
+                                  subjectsOfLeaner.sort();
 
-                                //TODO SHOW Sheet
-                                showSheetToEdit(
-                                    context,
-                                    nameOfLearner,
-                                    secondNameOfLearner,
-                                    gradeOfLeaner,
-                                    emailOfLearner,
-                                    subjectsOfLeaner);
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 3.0),
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10),
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                  ),
-                                  child: Container(
-                                    color: Theme.of(context)
-                                        .primaryColorLight
-                                        .withOpacity(.3),
-                                    child: ListTile(
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 0.0),
-                                      leading: CircleAvatar(
-                                        backgroundColor:
-                                            Theme.of(context).primaryColorDark,
-                                        child: Text(
-                                          documents[index]['name'][0],
-                                        ),
-                                      ),
-                                      title: Text(
-                                        documents[index]['name'],
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .primaryColorDark,
-                                        ),
-                                      ),
-                                      subtitle: Row(
-                                        children: [
-                                          Text(
-                                            "Grade  ${documents[index]['grade']}",
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .primaryColorDark
-                                                    .withOpacity(.7),
-                                                fontWeight: FontWeight.w700),
+                                  //TODO SHOW Sheet
+                                  showSheetToEdit(
+                                      context,
+                                      nameOfLearner,
+                                      secondNameOfLearner,
+                                      gradeOfLeaner,
+                                      emailOfLearner,
+                                      subjectsOfLeaner);
+                                },
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 3.0),
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10),
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                    ),
+                                    child: Container(
+                                      color: Theme.of(context)
+                                          .primaryColorLight
+                                          .withOpacity(.3),
+                                      child: ListTile(
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 0.0),
+                                        leading: CircleAvatar(
+                                          backgroundColor:
+                                              Theme.of(context).primaryColorDark,
+                                          child: Text(
+                                            documents[index]['name'][0],
                                           ),
-                                          Utils.toolTipMessage(
-                                              "Press and hold to view details",
-                                              context),
-                                        ],
-                                      ),
-                                      trailing: SizedBox(
-                                        width: 110,
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                        ),
+                                        title: Text(
+                                          documents[index]['name'],
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context)
+                                                .primaryColorDark,
+                                          ),
+                                        ),
+                                        subtitle: Row(
                                           children: [
-                                            IconButton(
-                                              onPressed: () {
-                                                showThis(documents[index].id,
-                                                    _userSubject);
-                                              },
-                                              icon: Icon(
-                                                Icons.delete,
-                                                size: 20,
-                                                color: Theme.of(context)
-                                                    .primaryColor
-                                                    .withOpacity(.6),
-                                              ),
+                                            Text(
+                                              "Grade  ${documents[index]['grade']}",
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColorDark
+                                                      .withOpacity(.7),
+                                                  fontWeight: FontWeight.w700),
                                             ),
-                                            // const SizedBox(
-                                            //   width: 10,
-                                            // ),
-                                            IconButton(
-                                              color: Colors.blue,
-                                              onPressed: () async {
-                                                _getUserField();
-                                                setState(() {
-                                                  _userSubject;
-                                                  nameOfTeacher;
-                                                  selectedItemIndex = index;
-                                                  loading = true;
-                                                });
-                                                logger.i(
-                                                    'User subject: $_userSubject User Name: $nameOfTeacher');
+                                            Utils.toolTipMessage(
+                                                "Press and hold to view details",
+                                                context),
+                                          ],
+                                        ),
+                                        trailing: SizedBox(
+                                          width: 110,
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              IconButton(
+                                                onPressed: () {
+                                                  showThis(documents[index].id,
+                                                      _userSubject);
+                                                },
+                                                icon: Icon(
+                                                  Icons.delete,
+                                                  size: 20,
+                                                  color: Theme.of(context)
+                                                      .primaryColor
+                                                      .withOpacity(.6),
+                                                ),
+                                              ),
+                                              // const SizedBox(
+                                              //   width: 10,
+                                              // ),
+                                              IconButton(
+                                                  color: Colors.blue,
+                                                  onPressed: () async {
+                                                    _getUserField();
+                                                    setState(() {
+                                                      _userSubject;
+                                                      nameOfTeacher;
+                                                      selectedItemIndex = index;
+                                                      loading = true;
+                                                    });
+                                                    logger.i(
+                                                        'User subject: $_userSubject User Name: $nameOfTeacher');
 
-                                                try {
-                                                  //get the documents data from firestore
-                                                  DocumentSnapshot snapshot = await FirebaseFirestore.instance
-                                                          .collection('learnersData').doc(documents[index].id).get();
-                                                  DocumentSnapshot
-                                                      snapshotTeacher =
-                                                      await FirebaseFirestore.instance.collection('userData').doc(uidOfTeacher).get();
+                                                    try {
+                                                      //get the documents data from firestore
+                                                      DocumentSnapshot snapshot =
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'learnersData')
+                                                              .doc(
+                                                                  documents[index]
+                                                                      .id)
+                                                              .get();
+                                                      DocumentSnapshot
+                                                          snapshotTeacher =
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'userData')
+                                                              .doc(uidOfTeacher)
+                                                              .get();
 
-                                                  if (snapshot.exists) {
-                                                    // go to the field in the document
-                                                    var data = snapshot.get(("allSubjects"));
-                                                    var dataSub1 = snapshotTeacher.get('subjects')[0];
-                                                    var dataSub2 = snapshotTeacher.get('subjects')[1];
+                                                      if (snapshot.exists) {
+                                                        // go to the field in the document
+                                                        var data = snapshot
+                                                            .get(("allSubjects"));
+                                                        var dataSub1 =
+                                                            snapshotTeacher.get(
+                                                                'subjects')[0];
+                                                        var dataSub2 =
+                                                            snapshotTeacher.get(
+                                                                'subjects')[1];
 
-                                                    DocumentReference docRef =
-                                                        FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                'learnersData')
-                                                            .doc(
-                                                                documents[index]
-                                                                    .id);
-
-                                                    // check if the data is a Map
-                                                    if (data is Map) {
-                                                      logger.e(data);
-                                                      // check if the user subject exists in the Map
-                                                      if (data.containsKey(
-                                                          _userSubject)) {
-                                                        Fluttertoast.showToast(
-                                                            msg:
-                                                                "Already registered $_userSubject");
-                                                        setState(() {
-                                                          isRegistered = true;
-                                                          loading = false;
-                                                        });
-                                                        return;
-                                                      } else if (data.containsKey(
-                                                          teachersSubject2)) {
-                                                        // user subject2 is already registered
-                                                        Fluttertoast.showToast(
-                                                            msg:
-                                                                "Already registered $teachersSubject2");
-                                                        setState(() {
-                                                          isRegistered = true;
-                                                          loading = false;
-                                                        });
-                                                        return;
-
-                                                        //if the array map doesnt have either then do this
-                                                      } else {
-                                                        // get these values from the database
-                                                        name = documents[index]
-                                                                ['name'] ??
-                                                            "";
-                                                        grade = documents[index]
-                                                                ['grade'] ??
-                                                            "";
-                                                        List<dynamic> subjectsIndex = documents[index]['subjects']??"";
-
-                                                        // add marks to a Map
-                                                        Map<String, dynamic>
-                                                            testsMarks = {
-                                                          'test1mark': "",
-                                                          'test2mark': "",
-                                                          'test3mark': "",
-                                                          'test4mark': ""
-                                                        };
-                                                        Map<String, dynamic>
-                                                            assignmentsMarks = {
-                                                          'assignment1mark': "",
-                                                          'assignment2mark': "",
-                                                          'assignment3mark': "",
-                                                          'assignment4mark': ""
-                                                        };
-                                                        Map<String, dynamic>
-                                                            examMarks = {
-                                                          'exam1mark': "",
-                                                          'exam2mark': ""
-                                                        };
-                                                        Map<String, dynamic>
-                                                            addAllMark = {
-                                                          "tests": testsMarks,
-                                                          "assignments":
-                                                              assignmentsMarks,
-                                                          "exams": examMarks
-                                                        };
-
-                                                        //add according to subject present
-                                                        Map<String, dynamic>
-                                                            finalMarks = {
-                                                          _userSubject:
-                                                              List.generate(
-                                                                  4,
-                                                                  (_) =>
-                                                                      addAllMark)
-                                                        };
-                                                        Map<String, dynamic>
-                                                            finalMarks2 = {
-                                                          teachersSubject2:
-                                                              List.generate(
-                                                                  4,
-                                                                  (_) =>
-                                                                      addAllMark)
-                                                        };
-
-                                                        // update the document with the new subject data
                                                         DocumentReference docRef =
                                                             FirebaseFirestore
                                                                 .instance
@@ -647,132 +571,250 @@ class _HomeState extends State<Home> {
                                                                         index]
                                                                     .id);
 
-                                                        bool docExists =
-                                                            await docRef.get().then(
-                                                                (docSnapshot) =>
+                                                        // check if the data is a Map
+                                                        if (data is Map) {
+                                                          logger.e(data);
+                                                          // check if the user subject exists in the Map
+                                                          if (data.containsKey(
+                                                              _userSubject)) {
+                                                            Fluttertoast.showToast(
+                                                                msg:
+                                                                    "Already registered $_userSubject");
+                                                            setState(() {
+                                                              isRegistered = true;
+                                                              loading = false;
+                                                            });
+                                                            return;
+                                                          } else if (data.containsKey(
+                                                              teachersSubject2)) {
+                                                            // user subject2 is already registered
+                                                            Fluttertoast.showToast(
+                                                                msg:
+                                                                    "Already registered $teachersSubject2");
+                                                            setState(() {
+                                                              isRegistered = true;
+                                                              loading = false;
+                                                            });
+                                                            return;
+
+                                                            //if the array map doesnt have either then do this
+                                                          } else {
+                                                            // get these values from the database
+                                                            name = documents[
+                                                                        index]
+                                                                    ['name'] ??
+                                                                "";
+                                                            grade = documents[
+                                                                        index]
+                                                                    ['grade'] ??
+                                                                "";
+                                                            List<dynamic>
+                                                                subjectsIndex =
+                                                                documents[index][
+                                                                        'subjects'] ??
+                                                                    "";
+
+                                                            // add marks to a Map
+                                                            Map<String, dynamic>
+                                                                testsMarks = {
+                                                              'test1mark': "",
+                                                              'test2mark': "",
+                                                              'test3mark': "",
+                                                              'test4mark': ""
+                                                            };
+                                                            Map<String, dynamic>
+                                                                assignmentsMarks =
+                                                                {
+                                                              'assignment1mark':
+                                                                  "",
+                                                              'assignment2mark':
+                                                                  "",
+                                                              'assignment3mark':
+                                                                  "",
+                                                              'assignment4mark':
+                                                                  ""
+                                                            };
+                                                            Map<String, dynamic>
+                                                                examMarks = {
+                                                              'exam1mark': "",
+                                                              'exam2mark': ""
+                                                            };
+                                                            Map<String, dynamic>
+                                                                addAllMark = {
+                                                              "tests": testsMarks,
+                                                              "assignments":
+                                                                  assignmentsMarks,
+                                                              "exams": examMarks
+                                                            };
+
+                                                            //add according to subject present
+                                                            Map<String, dynamic>
+                                                                finalMarks = {
+                                                              _userSubject:
+                                                                  List.generate(
+                                                                      4,
+                                                                      (_) =>
+                                                                          addAllMark)
+                                                            };
+                                                            Map<String, dynamic>
+                                                                finalMarks2 = {
+                                                              teachersSubject2:
+                                                                  List.generate(
+                                                                      4,
+                                                                      (_) =>
+                                                                          addAllMark)
+                                                            };
+
+                                                            // update the document with the new subject data
+                                                            DocumentReference
+                                                                docRef =
+                                                                FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'learnersData')
+                                                                    .doc(documents[
+                                                                            index]
+                                                                        .id);
+
+                                                            bool docExists = await docRef
+                                                                .get()
+                                                                .then((docSnapshot) =>
                                                                     docSnapshot
                                                                         .exists);
 
-                                                        if (snapshot.data() !=
-                                                                null &&
-                                                            docExists) {
-                                                          if ((docRef
-                                                                  .collection(
-                                                                      'learnersData')
-                                                                  .where(
-                                                                      'teachersID',
-                                                                      arrayContains:
-                                                                          user!
-                                                                              .uid) !=
-                                                              null)) {
-
-                                                            int index1 = subjectsIndex.indexOf(dataSub1);
-                                                            int index2 = subjectsIndex.indexOf(dataSub2);
-                                                            if (index1 != -1) {
-                                                              await docRef.update({
-                                                                'allSubjects': {
-                                                                  ...data,
-                                                                  ...finalMarks
-                                                                }
-                                                              }).catchError((error) =>
-                                                                  Fluttertoast
-                                                                      .showToast(
+                                                            if (snapshot.data() !=
+                                                                    null &&
+                                                                docExists) {
+                                                              if ((docRef
+                                                                      .collection(
+                                                                          'learnersData')
+                                                                      .where(
+                                                                          'teachersID',
+                                                                          arrayContains:
+                                                                              user!.uid) !=
+                                                                  null)) {
+                                                                int index1 =
+                                                                    subjectsIndex
+                                                                        .indexOf(
+                                                                            dataSub1);
+                                                                int index2 =
+                                                                    subjectsIndex
+                                                                        .indexOf(
+                                                                            dataSub2);
+                                                                if (index1 !=
+                                                                    -1) {
+                                                                  await docRef.update({
+                                                                    'allSubjects':
+                                                                        {
+                                                                      ...data,
+                                                                      ...finalMarks
+                                                                    }
+                                                                  }).catchError((error) =>
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                              msg:
+                                                                                  'Error updating Map field: $error'));
+                                                                  Fluttertoast.showToast(
+                                                                      backgroundColor:
+                                                                          Theme.of(context)
+                                                                              .primaryColor,
                                                                       msg:
-                                                                      'Error updating Map field: $error'));
-                                                              Fluttertoast.showToast(
-                                                                  backgroundColor: Theme.of(context).primaryColor,
-                                                                  msg: "Registering $_userSubject");
+                                                                          "Registering $_userSubject");
 
-                                                              logger.i("The index of '$dataSub1' in 'subjectsIndex' is $index.");
-                                                            } else if (index2 != -1) {
-                                                              await docRef.update({
-                                                                'allSubjects': {
-                                                                  ...data,
-                                                                  ...finalMarks2
-                                                                }
-                                                              }).catchError((error) =>
-                                                                  Fluttertoast
-                                                                      .showToast(
+                                                                  logger.i(
+                                                                      "The index of '$dataSub1' in 'subjectsIndex' is $index.");
+                                                                } else if (index2 !=
+                                                                    -1) {
+                                                                  await docRef.update({
+                                                                    'allSubjects':
+                                                                        {
+                                                                      ...data,
+                                                                      ...finalMarks2
+                                                                    }
+                                                                  }).catchError((error) =>
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                              msg:
+                                                                                  'Error updating Map field: $error'));
+                                                                  Fluttertoast.showToast(
+                                                                      backgroundColor:
+                                                                          Theme.of(context)
+                                                                              .primaryColor,
                                                                       msg:
-                                                                      'Error updating Map field: $error'));
-                                                              Fluttertoast.showToast(
-                                                                  backgroundColor: Theme.of(context).primaryColor,
-                                                                  msg: "Registering $dataSub1");
-                                                              logger.i("The index of '$dataSub2' in 'subjectsIndex' is $index.");
-                                                            }
-                                                            else {
-                                                              logger.i("'$dataSub1' was not found in 'subjectsIndex'.");
+                                                                          "Registering $dataSub1");
+                                                                  logger.i(
+                                                                      "The index of '$dataSub2' in 'subjectsIndex' is $index.");
+                                                                } else {
+                                                                  logger.i(
+                                                                      "'$dataSub1' was not found in 'subjectsIndex'.");
+                                                                  Fluttertoast.showToast(
+                                                                      msg: "Cannot register either of these subjects: "
+                                                                          "$teachersSubject2 & $_userSubject");
+                                                                }
+                                                              } else {
+                                                                Fluttertoast.showToast(
+                                                                    backgroundColor:
+                                                                        Theme.of(
+                                                                                context)
+                                                                            .primaryColor,
+                                                                    msg:
+                                                                        "You are not their teacher.");
+                                                                logger.e(
+                                                                    "You are not registered as their teacher");
+                                                              }
+                                                            } else {
                                                               Fluttertoast.showToast(
                                                                   msg:
-                                                                  "Cannot register either of these subjects: "
-                                                                      "$teachersSubject2 & $_userSubject");
+                                                                      "Learner registered already.");
+                                                              logger.i(
+                                                                  "Document already exists, leaner registered");
                                                             }
-
-
-
-                                                           } else {
-                                                            Fluttertoast.showToast(
-                                                                backgroundColor:
-                                                                    Theme.of(
-                                                                            context)
-                                                                        .primaryColor,
-                                                                msg:
-                                                                    "You are not their teacher.");
-                                                            logger.e(
-                                                                "You are not registered as their teacher");
                                                           }
                                                         } else {
-                                                          Fluttertoast.showToast(
-                                                              msg:
-                                                                  "Learner registered already.");
                                                           logger.i(
-                                                              "Document already exists, leaner registered");
+                                                              "field is Not a map");
                                                         }
+                                                      } else {
+                                                        // handle case where document does not exist
+                                                        logger.i(
+                                                            'Document does not exist');
                                                       }
-                                                    } else {
-                                                      logger.i(
-                                                          "field is Not a map");
+                                                    } catch (e) {
+                                                      logger.i(e);
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                            'Failed to Register a learner $e',
+                                                            style: const TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          backgroundColor:
+                                                              Colors.purple,
+                                                        ),
+                                                      );
+                                                      logger.i(documents[index]
+                                                          [user!.uid]);
                                                     }
-                                                  } else {
-                                                    // handle case where document does not exist
-                                                    logger.i(
-                                                        'Document does not exist');
-                                                  }
-                                                } catch (e) {
-                                                  logger.i(e);
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        'Failed to Register a learner $e',
-                                                        style: const TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      backgroundColor:
-                                                          Colors.purple,
-                                                    ),
-                                                  );
-                                                  logger.i(documents[index]
-                                                      [user!.uid]);
-                                                }
-                                                setState(() {
-                                                  loading = false;
-                                                });
-                                              },
-                                              icon:Icon(
-                                                      Icons.add,
-                                                      size: 20,
-                                                      key: ValueKey(documents[index]),
-                                                      color:
-                                                          IconTheme.of(context)
-                                                              .color!
-                                                              .withOpacity(.7),
-                                                    )
-                                            ),
-                                          ],
+                                                    setState(() {
+                                                      loading = false;
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.add,
+                                                    size: 20,
+                                                    key: ValueKey(
+                                                        documents[index]),
+                                                    color: IconTheme.of(context)
+                                                        .color!
+                                                        .withOpacity(.7),
+                                                  )),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -807,11 +849,8 @@ class _HomeState extends State<Home> {
   }
 
   //TODO Show bottom Sheet To add Subject to the learner
-  showSheetToEdit(BuildContext context,
-      String nOfLearner,
-      String sNOfLearner,
-      String gOfLearner,
-      String eOfLearner, List<String> sOfLearner) {
+  showSheetToEdit(BuildContext context, String nOfLearner, String sNOfLearner,
+      String gOfLearner, String eOfLearner, List<String> sOfLearner) {
     showModalBottomSheet(
       barrierColor: Theme.of(context).primaryColor.withOpacity(.1),
       isScrollControlled: true,
@@ -964,17 +1003,20 @@ class _HomeState extends State<Home> {
                                             .withOpacity(.70)),
                                   ),
                                 ),
-                                OutlinedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  style: buttonRound,
-                                  child: Text(
-                                    "Close",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).primaryColorDark,
+                                Hero(
+                                  tag: "details",
+                                  child: OutlinedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    style: buttonRound,
+                                    child: Text(
+                                      "Close",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).primaryColorDark,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -1032,9 +1074,7 @@ class _HomeState extends State<Home> {
             textAlign: TextAlign.center,
             'Permanently Delete the learner',
             style: TextStyle(
-                color: Colors.red,
-                fontSize: 20,
-                fontWeight: FontWeight.w700),
+                color: Colors.red, fontSize: 20, fontWeight: FontWeight.w700),
           ),
           content: Text(
             'This action will '
@@ -1105,18 +1145,15 @@ class _HomeState extends State<Home> {
 
   //Check if learners in the database have a subject based on the current logged in teacher
   Future<void> checkAllSubjects() async {
-    var snapshot = await FirebaseFirestore
-        .instance
+    var snapshot = await FirebaseFirestore.instance
         .collection('learnersData')
         .where("allSubjects", arrayContains: _userSubject)
         .get();
 
-    var documents =
-        snapshot.docs;
+    var documents = snapshot.docs;
 
     if (documents.isNotEmpty) {
-      for (var document
-          in documents) {
+      for (var document in documents) {
         final String documentId = document.id;
         // Do something with the document that contains Mathematics in allSubjects
         logger
@@ -1141,8 +1178,7 @@ class _HomeState extends State<Home> {
         firestore.collection('userData').where('uid', isEqualTo: user!.uid);
     userQuery.get().then((var querySnapshot) {
       if (querySnapshot.size > 0) {
-      var documentSnapshot =
-            querySnapshot.docs.first;
+        var documentSnapshot = querySnapshot.docs.first;
         Map<String, dynamic>? data = documentSnapshot.data();
 
         //get the learners details
@@ -1180,8 +1216,7 @@ class _HomeState extends State<Home> {
         firestore.collection('userData').where('uid', isEqualTo: user!.uid);
     userQuery.get().then((var querySnapshot) {
       if (querySnapshot.size > 0) {
-        var documentSnapshot =
-            querySnapshot.docs.first;
+        var documentSnapshot = querySnapshot.docs.first;
         Map<String, dynamic>? data = documentSnapshot.data();
         // get the subject 1 field or empty string if it doesn't exist
         _userSubject = data['subjects'][0] ?? '';
@@ -1203,11 +1238,9 @@ class _HomeState extends State<Home> {
     var snapshot =
         await FirebaseFirestore.instance.collection('learnersData').get();
 
-    var documents =
-        snapshot.docs;
+    var documents = snapshot.docs;
 
-    for (var document
-        in documents) {
+    for (var document in documents) {
       final List<dynamic> allSubjects = document.data()['allSubjects'];
       // Do something with the allSubjects array
       final Map<String, dynamic> newList = {};
@@ -1278,12 +1311,12 @@ class NavigationDrawer extends StatelessWidget {
                     child: Wrap(
                       children: [
                         Text(
-                          teachersSecondName[0].toString()??"",
+                          teachersSecondName[0].toString() ?? "",
                           style: textStyleText(context).copyWith(
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
-                            color: Theme.of(context).primaryColor
-                                .withOpacity(.8),
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(.8),
                           ),
                         ),
                       ],
@@ -1295,7 +1328,7 @@ class NavigationDrawer extends StatelessWidget {
                   Wrap(
                     children: [
                       Text(
-                        teachersSecondName.toString()??"",
+                        teachersSecondName.toString() ?? "",
                         style: textStyleText(context).copyWith(
                           fontWeight: FontWeight.w700,
                           fontSize: 12,
@@ -1484,19 +1517,13 @@ class NavigationDrawer extends StatelessWidget {
 
   Future sigOut(BuildContext context) async {
     try {
-      await FirebaseAuth.instance
-          .signOut()
-          .then((value) => SpinKitChasingDots(
-                color: Theme.of(context).primaryColor,
-              ));
-      await FirebaseAuth.instance
-          .signOut()
-          .then((value) => SpinKitChasingDots(
-        color: Theme.of(context).primaryColor,
-      ));
-      FirebaseAuth.instance
-          .authStateChanges()
-          .listen((User? user) {
+      await FirebaseAuth.instance.signOut().then((value) => SpinKitChasingDots(
+            color: Theme.of(context).primaryColor,
+          ));
+      await FirebaseAuth.instance.signOut().then((value) => SpinKitChasingDots(
+            color: Theme.of(context).primaryColor,
+          ));
+      FirebaseAuth.instance.authStateChanges().listen((User? user) {
         if (user == null) {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const Authenticate()));

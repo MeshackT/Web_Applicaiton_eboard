@@ -12,6 +12,7 @@ import 'package:yueway/AllNew/screens/gradeList/grade11.dart';
 import 'package:yueway/AllNew/screens/gradeList/grade8.dart';
 import 'package:yueway/AllNew/screens/gradeList/grade9.dart';
 import 'package:yueway/AllNew/screens/more/more.dart';
+
 import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';
 import '../Notifications/sendNotification.dart';
@@ -199,14 +200,15 @@ class _Grade12State extends State<Grade12> {
             ),
           ),
           actions: [
-            loading? SpinKitChasingDots(
-              color:Theme.of(context).primaryColorLight,
-              size: 15,
-            ):const SizedBox(
-              child: Text(""),
-            ),
+            loading
+                ? SpinKitChasingDots(
+                    color: Theme.of(context).primaryColorLight,
+                    size: 15,
+                  )
+                : const SizedBox(
+                    child: Text(""),
+                  ),
             IconButton(
-
               onPressed: () {
                 Navigator.pushReplacement(
                     context,
@@ -310,49 +312,54 @@ class _Grade12State extends State<Grade12> {
                               ConnectionState.waiting) {
                             return Center(
                                 child: Column(
-                                  children: [
-                                    Text(
-                                      'Waiting for Internet Connection',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: Theme.of(context).primaryColorDark,
-                                      ),
-                                    ),
-                                    SpinKitChasingDots(
-                                      color: Theme.of(context).primaryColorDark,
-                                      size: 15,
-                                    ),
-                                  ],
-                                ));
+                              children: [
+                                Text(
+                                  'Waiting for Internet Connection',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
+                                ),
+                                SpinKitChasingDots(
+                                  color: Theme.of(context).primaryColorDark,
+                                  size: 15,
+                                ),
+                              ],
+                            ));
                           } else if (streamSnapshot.connectionState ==
                               ConnectionState.none) {
                             return Center(
                                 child: Column(
-                                  children: [
-                                    Text(
-                                      'No for Internet Connection',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: Theme.of(context).primaryColorDark,
-                                      ),
-                                    ),
-                                    SpinKitChasingDots(
-                                      color: Theme.of(context).primaryColorDark,
-                                      size: 15,
-                                    ),
-                                  ],
-                                ));
-                          }else if (streamSnapshot.hasError) {
+                              children: [
+                                Text(
+                                  'No for Internet Connection',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
+                                ),
+                                SpinKitChasingDots(
+                                  color: Theme.of(context).primaryColorDark,
+                                  size: 15,
+                                ),
+                              ],
+                            ));
+                          } else if (streamSnapshot.hasError) {
                             return Text("Error: ${streamSnapshot.error}");
-                          } else if(!streamSnapshot.hasData || streamSnapshot.data == null ||
-                              streamSnapshot.data!.size <= 0){
-                            return Center(child: Text("No list of grade 12 learners yet.",
-                              style: textStyleText(context).copyWith(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                              ),),);
+                          } else if (!streamSnapshot.hasData ||
+                              streamSnapshot.data == null ||
+                              streamSnapshot.data!.size <= 0) {
+                            return Center(
+                              child: Text(
+                                "No list of grade 12 learners yet.",
+                                style: textStyleText(context).copyWith(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            );
                           }
 
                           documents = streamSnapshot.data!.docs;
@@ -375,7 +382,7 @@ class _Grade12State extends State<Grade12> {
                             itemBuilder: (BuildContext context, int index) {
                               return Padding(
                                 padding:
-                                const EdgeInsets.symmetric(vertical: 3.0),
+                                    const EdgeInsets.symmetric(vertical: 3.0),
                                 child: ClipRRect(
                                   borderRadius: const BorderRadius.only(
                                     bottomLeft: Radius.circular(10),
@@ -389,11 +396,11 @@ class _Grade12State extends State<Grade12> {
                                         .withOpacity(.3),
                                     child: ListTile(
                                       contentPadding:
-                                      const EdgeInsets.symmetric(
-                                          horizontal: 0.0),
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 0.0),
                                       leading: CircleAvatar(
                                         backgroundColor:
-                                        Theme.of(context).primaryColorDark,
+                                            Theme.of(context).primaryColorDark,
                                         child: Text(
                                           documents[index]['name'][0],
                                         ),
@@ -419,7 +426,7 @@ class _Grade12State extends State<Grade12> {
                                           ),
                                           Utils.toolTipMessage(
                                               "Remove the subject from this"
-                                                  " learner or add marks for the learner",
+                                              " learner or add marks for the learner",
                                               context),
                                         ],
                                       ),
@@ -427,117 +434,126 @@ class _Grade12State extends State<Grade12> {
                                         width: 120,
                                         child: Row(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                              CrossAxisAlignment.center,
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             IconButton(
                                               color: Colors.blue,
-                                              onPressed:(){
+                                              onPressed: () {
                                                 //show the dialog when you press delete
                                                 showDialog(
                                                   context: context,
-                                                  builder: (BuildContext
-                                                  context) {
+                                                  builder:
+                                                      (BuildContext context) {
                                                     return AlertDialog(
                                                       title: Text(
                                                         textAlign:
-                                                        TextAlign
-                                                            .center,
+                                                            TextAlign.center,
                                                         'Remove $_userSubject?',
                                                         style: TextStyle(
                                                             color: Theme.of(
-                                                                context)
+                                                                    context)
                                                                 .primaryColor,
-                                                            fontSize:
-                                                            20,
+                                                            fontSize: 20,
                                                             fontWeight:
-                                                            FontWeight
-                                                                .w700),
+                                                                FontWeight
+                                                                    .w700),
                                                       ),
                                                       content: Text(
                                                         'This action will '
-                                                            'permanently '
-                                                            'delete all marks stored for'
-                                                            ' $_userSubject for this learner, '
-                                                            'are you sure you '
-                                                            'want to delete?',
+                                                        'permanently '
+                                                        'delete all marks stored for'
+                                                        ' $_userSubject for this learner, '
+                                                        'are you sure you '
+                                                        'want to delete?',
                                                         textAlign:
-                                                        TextAlign
-                                                            .center,
+                                                            TextAlign.center,
                                                         style: TextStyle(
                                                             color: Theme.of(
-                                                                context)
+                                                                    context)
                                                                 .primaryColorDark
                                                                 .withOpacity(
-                                                                .70)),
+                                                                    .70)),
                                                       ),
                                                       actions: <Widget>[
                                                         Center(
                                                           child: Row(
                                                             mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
+                                                                MainAxisAlignment
+                                                                    .center,
                                                             children: [
                                                               SizedBox(
-                                                                width:
-                                                                120,
+                                                                width: 120,
                                                                 child:
-                                                                TextButton(
+                                                                    TextButton(
                                                                   onPressed:
                                                                       () {
-                                                                    Navigator.of(context).pop();
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
                                                                   },
-                                                                  child:
-                                                                  Text(
+                                                                  child: Text(
                                                                     'Cancel',
                                                                     style:
-                                                                    TextStyle(
-                                                                      color: Theme.of(context).primaryColor,
+                                                                        TextStyle(
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .primaryColor,
                                                                     ),
                                                                   ),
                                                                 ),
                                                               ),
                                                               SizedBox(
-                                                                width:
-                                                                120,
+                                                                width: 120,
                                                                 child:
-                                                                TextButton(
+                                                                    TextButton(
                                                                   onPressed:
                                                                       () async {
                                                                     //Delete the record
                                                                     final navContext =
-                                                                    Navigator.of(context);
-                                                                    var colorToast = Theme.of(context);
+                                                                        Navigator.of(
+                                                                            context);
+                                                                    var colorToast =
+                                                                        Theme.of(
+                                                                            context);
 
                                                                     try {
                                                                       //get the documents data from firestore
-                                                                      DocumentSnapshot snapshot = await FirebaseFirestore.instance
-                                                                          .collection('learnersData').doc(documents[index].id).get();
+                                                                      DocumentSnapshot snapshot = await FirebaseFirestore
+                                                                          .instance
+                                                                          .collection(
+                                                                              'learnersData')
+                                                                          .doc(documents[index]
+                                                                              .id)
+                                                                          .get();
 
-                                                                      if (snapshot.exists) {
-                                                                        logger.e(snapshot.get("allSubjects"));
+                                                                      if (snapshot
+                                                                          .exists) {
+                                                                        logger.e(
+                                                                            snapshot.get("allSubjects"));
 
                                                                         // go to the field in the document
-                                                                        var data = snapshot.get("allSubjects");
-
+                                                                        var data =
+                                                                            snapshot.get("allSubjects");
 
                                                                         // check if the data is a Map
-                                                                        if (data is Map) {
-                                                                          logger.e("is a map $_userSubject $_userSubject2");
+                                                                        if (data
+                                                                            is Map) {
+                                                                          logger
+                                                                              .e("is a map $_userSubject $_userSubject2");
                                                                           // check if the user subject exists in the Map
                                                                           if (data.containsKey(
                                                                               _userSubject)) {
-                                                                            var newIndex = data.containsKey(_userSubject).toString();
+                                                                            var newIndex =
+                                                                                data.containsKey(_userSubject).toString();
                                                                             logger.i("this is the index $newIndex");
-                                                                            FirebaseFirestore.instance.collection('learnersData')
-                                                                                .doc(documents[index].id).update({
+                                                                            FirebaseFirestore.instance.collection('learnersData').doc(documents[index].id).update({
                                                                               'allSubjects.$_userSubject': FieldValue.delete(),
                                                                             });
                                                                             Fluttertoast.showToast(
                                                                                 backgroundColor: colorToast.primaryColor,
-                                                                                msg:
-                                                                                "Learner is de-registered from doing $_userSubject");
+                                                                                msg: "Learner is de-registered from doing $_userSubject");
                                                                             logger.i("deleted $_userSubject");
                                                                             logger.e(snapshot.data());
                                                                             navContext.pop();
@@ -546,11 +562,12 @@ class _Grade12State extends State<Grade12> {
                                                                               loading = false;
                                                                             });
                                                                             return;
-                                                                          }else if (data.containsKey("$_userSubject2")) {
-                                                                            FirebaseFirestore.instance.collection('learnersData')
-                                                                                .doc(documents[index].id).update({
+                                                                          } else if (data
+                                                                              .containsKey("$_userSubject2")) {
+                                                                            FirebaseFirestore.instance.collection('learnersData').doc(documents[index].id).update({
                                                                               'allSubjects.$_userSubject2': FieldValue.delete(),
-                                                                            }).then((value) => Fluttertoast.showToast(msg: "deleted"));
+                                                                            }).then((value) =>
+                                                                                Fluttertoast.showToast(msg: "deleted"));
                                                                             logger.i("deleted $_userSubject2");
                                                                             Fluttertoast.showToast(
                                                                                 backgroundColor: colorToast.primaryColor,
@@ -561,16 +578,15 @@ class _Grade12State extends State<Grade12> {
                                                                               loading = false;
                                                                             });
                                                                             return;
-                                                                          }else{
+                                                                          } else {
                                                                             Fluttertoast.showToast(
                                                                                 backgroundColor: colorToast.primaryColor,
                                                                                 msg: "There is no subject registered");
                                                                             navContext.pop();
                                                                           }
-
                                                                         } else {
-                                                                          logger.i(
-                                                                              "field is Not a map");
+                                                                          logger
+                                                                              .i("field is Not a map");
                                                                         }
                                                                       } else {
                                                                         // handle case where document does not exist
@@ -578,32 +594,35 @@ class _Grade12State extends State<Grade12> {
                                                                             'Document does not exist');
                                                                       }
                                                                     } catch (e) {
-                                                                      logger.i(e);
-                                                                      ScaffoldMessenger.of(context)
+                                                                      logger
+                                                                          .i(e);
+                                                                      ScaffoldMessenger.of(
+                                                                              context)
                                                                           .showSnackBar(
                                                                         SnackBar(
-                                                                          content: Text(
+                                                                          content:
+                                                                              Text(
                                                                             'Failed to de-Register a learner ${e.toString()}',
-                                                                            style: const TextStyle(
-                                                                                fontSize: 16,
-                                                                                fontWeight:
-                                                                                FontWeight
-                                                                                    .bold),
+                                                                            style:
+                                                                                const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                                                           ),
                                                                           backgroundColor:
-                                                                          Colors.purple,
+                                                                              Colors.purple,
                                                                         ),
                                                                       );
-                                                                      logger.i(documents[index]
-                                                                      [user!.uid]);
+                                                                      logger.i(documents[
+                                                                              index]
+                                                                          [user!
+                                                                              .uid]);
                                                                     }
                                                                   },
-                                                                  child:
-                                                                  Text(
+                                                                  child: Text(
                                                                     'Yes',
                                                                     style:
-                                                                    TextStyle(
-                                                                      color: Theme.of(context).primaryColor,
+                                                                        TextStyle(
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .primaryColor,
                                                                     ),
                                                                   ),
                                                                 ),
@@ -619,8 +638,7 @@ class _Grade12State extends State<Grade12> {
                                               icon: Icon(
                                                 Icons.delete,
                                                 size: 25,
-                                                key: ValueKey(
-                                                    documents[index]),
+                                                key: ValueKey(documents[index]),
                                                 color: IconTheme.of(context)
                                                     .color!
                                                     .withOpacity(.6),
@@ -635,8 +653,7 @@ class _Grade12State extends State<Grade12> {
                                                         .keyboard_double_arrow_right,
                                                     size: 25,
                                                     key: widget.key,
-                                                    color:
-                                                    IconTheme.of(context)
+                                                    color: IconTheme.of(context)
                                                         .color!
                                                         .withOpacity(.7),
                                                   ),
@@ -648,113 +665,107 @@ class _Grade12State extends State<Grade12> {
                                                         context);
 
                                                     // get the document data from firestore
-                                                    DocumentSnapshot
-                                                    snapshot =
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection(
-                                                        'learnersData')
-                                                        .doc(documents[
-                                                    index]
-                                                        .id)
-                                                        .get();
+                                                    DocumentSnapshot snapshot =
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                'learnersData')
+                                                            .doc(
+                                                                documents[index]
+                                                                    .id)
+                                                            .get();
 
                                                     // check if the document exists
                                                     if (snapshot.exists) {
                                                       // get the allSubjects map from the document data
                                                       Map<String, dynamic>
-                                                      data = snapshot.get(
-                                                          "allSubjects");
+                                                          data = snapshot.get(
+                                                              "allSubjects");
                                                       // check if the data is a map
                                                       if (data is Map) {
                                                         bool foundCatIndex =
-                                                        false;
+                                                            false;
                                                         // for every key-value pair in the map
                                                         data.forEach(
-                                                                (key, value) {
-                                                              // if the key is equal to _userSubject
-                                                              if (key ==
-                                                                  _userSubject) {
-                                                                // index is present
-                                                                foundCatIndex =
+                                                            (key, value) {
+                                                          // if the key is equal to _userSubject
+                                                          if (key ==
+                                                              _userSubject) {
+                                                            // index is present
+                                                            foundCatIndex =
                                                                 true;
-                                                                Map<String,
-                                                                    dynamic>
-                                                                finalMarks =
-                                                                {};
-                                                                // store the teacherSubject here
-                                                                var teacherSubject =
-                                                                    value;
+                                                            Map<String, dynamic>
+                                                                finalMarks = {};
+                                                            // store the teacherSubject here
+                                                            var teacherSubject =
+                                                                value;
 
-                                                                finalMarks[
-                                                                _userSubject] =
-                                                                    teacherSubject;
-                                                                String
+                                                            finalMarks[
+                                                                    _userSubject] =
+                                                                teacherSubject;
+                                                            String
                                                                 documentIDToEdit =
-                                                                    documents[
-                                                                    index]
-                                                                        .id;
-                                                                logger.i(
-                                                                    "$finalMarks\n$documentIDToEdit\n$_userSubject");
-                                                                Navigator.of(
+                                                                documents[index]
+                                                                    .id;
+                                                            logger.i(
+                                                                "$finalMarks\n$documentIDToEdit\n$_userSubject");
+                                                            Navigator.of(
                                                                     context)
-                                                                    .pushReplacement(
-                                                                  MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
+                                                                .pushReplacement(
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
                                                                         AddEditForAll(
-                                                                          getMarksFromFirestore:
-                                                                          finalMarks,
-                                                                          subjectName:
-                                                                          _userSubject,
-                                                                          documentIDToEdit:
-                                                                          documentIDToEdit,
-                                                                        ),
-                                                                  ),
-                                                                );
-                                                                // do something with the 'CAT' data, such as print it
-                                                              } else if (key ==
-                                                                  _userSubject2) {
-                                                                // index is present
-                                                                foundCatIndex =
+                                                                  getMarksFromFirestore:
+                                                                      finalMarks,
+                                                                  subjectName:
+                                                                      _userSubject,
+                                                                  documentIDToEdit:
+                                                                      documentIDToEdit,
+                                                                ),
+                                                              ),
+                                                            );
+                                                            // do something with the 'CAT' data, such as print it
+                                                          } else if (key ==
+                                                              _userSubject2) {
+                                                            // index is present
+                                                            foundCatIndex =
                                                                 true;
-                                                                Map<String,
-                                                                    dynamic>
+                                                            Map<String, dynamic>
                                                                 finalMarks2 =
                                                                 {};
-                                                                // store the teacherSubject here
-                                                                var teacherSubject2 =
-                                                                    value;
+                                                            // store the teacherSubject here
+                                                            var teacherSubject2 =
+                                                                value;
 
-                                                                finalMarks2[
-                                                                _userSubject2] =
-                                                                    teacherSubject2;
-                                                                String
+                                                            finalMarks2[
+                                                                    _userSubject2] =
+                                                                teacherSubject2;
+                                                            String
                                                                 documentIDToEdit =
-                                                                    documents[
-                                                                    index]
-                                                                        .id;
-                                                                logger.i(
-                                                                    "$finalMarks2\n$documentIDToEdit\n$_userSubject2");
-                                                                Navigator.of(
+                                                                documents[index]
+                                                                    .id;
+                                                            logger.i(
+                                                                "$finalMarks2\n$documentIDToEdit\n$_userSubject2");
+                                                            Navigator.of(
                                                                     context)
-                                                                    .pushReplacement(
-                                                                  MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
+                                                                .pushReplacement(
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
                                                                         AddEditForAll(
-                                                                          getMarksFromFirestore:
-                                                                          finalMarks2,
-                                                                          subjectName:
-                                                                          _userSubject2,
-                                                                          documentIDToEdit:
-                                                                          documentIDToEdit,
-                                                                        ),
-                                                                  ),
-                                                                );
-                                                                // do something with the 'CAT' data, such as print it
-                                                              }
-                                                            });
+                                                                  getMarksFromFirestore:
+                                                                      finalMarks2,
+                                                                  subjectName:
+                                                                      _userSubject2,
+                                                                  documentIDToEdit:
+                                                                      documentIDToEdit,
+                                                                ),
+                                                              ),
+                                                            );
+                                                            // do something with the 'CAT' data, such as print it
+                                                          }
+                                                        });
                                                         // if the teacherSubject is not found
                                                         if (!foundCatIndex) {
                                                           // handle case where _userSubject index does not exist
@@ -770,7 +781,7 @@ class _Grade12State extends State<Grade12> {
                                                             'No $_userSubject index found');
                                                         Fluttertoast.showToast(
                                                             msg:
-                                                            "$_userSubject not found");
+                                                                "$_userSubject not found");
                                                       }
                                                     } else {
                                                       // handle case where document does not exist
@@ -778,7 +789,7 @@ class _Grade12State extends State<Grade12> {
                                                           'Document does not exist');
                                                       Fluttertoast.showToast(
                                                           msg:
-                                                          "No document found");
+                                                              "No document found");
                                                     }
                                                     setState(() {
                                                       loading = false;
@@ -791,11 +802,11 @@ class _Grade12State extends State<Grade12> {
                                                     Fluttertoast.showToast(
                                                       msg: e.toString(),
                                                       textColor: Theme.of(
-                                                          context)
+                                                              context)
                                                           .primaryColorLight,
                                                       backgroundColor:
-                                                      Theme.of(context)
-                                                          .primaryColor,
+                                                          Theme.of(context)
+                                                              .primaryColor,
                                                     );
                                                   }
                                                 }),

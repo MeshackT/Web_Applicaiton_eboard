@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -57,10 +58,9 @@ class _GuestViewState extends State<GuestView> {
             children: [
               Card(
                 elevation: 2,
-
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -84,40 +84,40 @@ class _GuestViewState extends State<GuestView> {
                       ),
                       isLoading
                           ? Visibility(
-                        visible: isVisible,
-                        child: SpinKitChasingDots(
-                          color: Theme.of(context).primaryColor,
-                          size: 15,
-                        ),
-                      )
+                              visible: isVisible,
+                              child: SpinKitChasingDots(
+                                color: Theme.of(context).primaryColor,
+                                size: 15,
+                              ),
+                            )
                           : const Text(""),
                       OutlinedButton(
                         onPressed: () async {
-                             showCupertinoDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) => CupertinoAlertDialog(
-                                title: Text(
-                                  "Contact us here",
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                ),
-                                actions: [
-
-                                  TextButton(
-                                    onPressed: () async {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                                content:  Text("$primaryContact\n$secondaryContact\n$emailAddress",
-                                  style: textStyleText(context).copyWith(
-                                    fontSize: 12),
+                          showCupertinoDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                CupertinoAlertDialog(
+                              title: Text(
+                                "Contact us here",
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
                                 ),
                               ),
-                            );
-
+                              actions: [
+                                TextButton(
+                                  onPressed: () async {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                              content: Text(
+                                "$primaryContact\n$secondaryContact\n$emailAddress",
+                                style: textStyleText(context)
+                                    .copyWith(fontSize: 12),
+                              ),
+                            ),
+                          );
                         },
                         style: buttonRound,
                         child: Text(
@@ -167,7 +167,7 @@ class _GuestViewState extends State<GuestView> {
                         itemBuilder: (BuildContext context, int index) {
                           DocumentSnapshot document = _documents[index];
                           var imageURLFromFirebase =
-                          (document.get("imageURL")).toString();
+                              (document.get("imageURL")).toString();
                           String text = document.get("text");
                           String name = document.get("nameOfTeacher");
 
@@ -203,17 +203,17 @@ class _GuestViewState extends State<GuestView> {
                                       flex: 1,
                                       child: Row(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           SizedBox(
                                             child: Column(
                                               crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                                  CrossAxisAlignment.start,
                                               mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Text(
                                                   "By The school",
@@ -229,13 +229,13 @@ class _GuestViewState extends State<GuestView> {
                                                       dateAndTime),
                                                   style: textStyleText(context)
                                                       .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.normal,
-                                                      color: Theme.of(
-                                                          context)
-                                                          .primaryColor
-                                                          .withOpacity(.7),
-                                                      fontSize: 10),
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor
+                                                              .withOpacity(.7),
+                                                          fontSize: 10),
                                                 ),
                                               ],
                                             ),
@@ -243,8 +243,8 @@ class _GuestViewState extends State<GuestView> {
                                           SizedBox(
                                             height: 10,
                                             width: MediaQuery.of(context)
-                                                .size
-                                                .width /
+                                                    .size
+                                                    .width /
                                                 2.1,
                                           ),
                                         ],
@@ -258,7 +258,8 @@ class _GuestViewState extends State<GuestView> {
                                 InstaImageViewer(
                                   child: CachedNetworkImage(
                                     imageUrl: imageURLFromFirebase,
-                                    placeholder: (context, url) =>  SpinKitChasingDots(
+                                    placeholder: (context, url) =>
+                                        SpinKitChasingDots(
                                       color: Theme.of(context).primaryColor,
                                       size: 25,
                                     ),
@@ -269,7 +270,8 @@ class _GuestViewState extends State<GuestView> {
                                         stalePeriod: const Duration(days: 7),
                                       ),
                                     ),
-                                    errorWidget: (context, url, error) => SizedBox(
+                                    errorWidget: (context, url, error) =>
+                                        SizedBox(
                                       height: 200,
                                       width: MediaQuery.of(context).size.width,
                                       child: SpinKitChasingDots(
@@ -286,14 +288,41 @@ class _GuestViewState extends State<GuestView> {
                                     //       fit: BoxFit.cover,
                                     //     ),
                                     //   ),
-                                    imageBuilder:(context, imageProvider) => Center(
+                                    imageBuilder: (context, imageProvider) =>
+                                        Center(
                                       child: Image(
                                         image: imageProvider,
                                         fit: BoxFit.contain,
                                       ),
                                     ),
-
                                   ),
+                                ),
+                                FastCachedImage(
+                                  url: imageURLFromFirebase,
+                                  fit: BoxFit.cover,
+                                  fadeInDuration: const Duration(seconds: 1),
+                                  errorBuilder:
+                                      (context, exception, stacktrace) {
+                                    return Text(stacktrace.toString());
+                                  },
+                                  loadingBuilder: (context, progress) {
+                                    return Container(
+                                      color: Theme.of(context).primaryColor,
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          if (progress.isDownloading &&
+                                              progress.totalBytes != null)
+                                            Text(
+                                                '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
+                                                style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .primaryColor)),
+
+                                        ],
+                                      ),
+                                    );
+                                  },
                                 ),
                                 SizedBox(
                                   child: Padding(
@@ -320,17 +349,16 @@ class _GuestViewState extends State<GuestView> {
       ),
     );
   }
+
   Future<void> _getUserField() async {
     // Get the current user's ID
     //String? userId = FirebaseAuth.instance.currentUser?.uid;
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    var userQuery =
-    firestore.collection('enquiryDetails');
+    var userQuery = firestore.collection('enquiryDetails');
     userQuery.get().then((var querySnapshot) {
       if (querySnapshot.size > 0) {
-        var documentSnapshot =
-            querySnapshot.docs.first;
+        var documentSnapshot = querySnapshot.docs.first;
         Map<String, dynamic>? data = documentSnapshot.data();
         // get the subject 1 field or empty string if it doesn't exist
         setState(() {
@@ -340,11 +368,9 @@ class _GuestViewState extends State<GuestView> {
           // get the name field or empty string if it doesn't exist
           secondaryContact = data['secondaryContact'];
         });
-
       } else {
         print('No document found');
       }
     }).catchError((error) => print('Failed to get document: $error'));
   }
 }
-

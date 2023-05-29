@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../shared/constants.dart';
-
-class VerificationModel{
+class VerificationModel {
   static Future checkEmailVerified() async {
     try {
       await FirebaseAuth.instance.currentUser!.reload();

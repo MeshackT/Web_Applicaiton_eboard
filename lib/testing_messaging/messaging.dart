@@ -6,10 +6,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -23,7 +23,6 @@ import '../AllNew/shared/constants.dart';
 import 'ViewAllTeachersMessages.dart';
 import 'ViewAllTeachersTexts.dart';
 import 'ViewMyTextsForEditing.dart';
-import 'package:uuid/uuid.dart';
 
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
 User? user = FirebaseAuth.instance.currentUser;
@@ -63,30 +62,10 @@ class _MessagingState extends State<Messaging>
   var imageUrl = "";
   var url = "";
 
+  XFile? _pickerImage;
+  Uint8List webImage = Uint8List(8);
+
   String nameOfTeacher = "";
-
-  //not used
-  Uuid uuid = const Uuid(options: {
-    'random': [
-      0x10,
-      0x91,
-      0x56,
-      0xbe,
-      0xc4,
-      0xfb,
-      0xc1,
-      0xea,
-      0x71,
-      0xb4,
-      0xef,
-      0xe1,
-      0x67,
-      0x1c,
-      0x58,
-      0x36
-    ]
-  });
-
   String? selectedOption;
 
   @override
@@ -95,14 +74,8 @@ class _MessagingState extends State<Messaging>
     ConnectionChecker.checkTimer();
     //get logged in user data
     _getCurrentUserData();
-    // save the state of subscription
   }
 
-  @override
-  void dispose() {
-    // _subscription.cancel();
-    super.dispose();
-  }
 
   Future<void> _addDocument(String text, String teacherNameFromData) async {
     try {
@@ -147,21 +120,24 @@ class _MessagingState extends State<Messaging>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    OutlinedButton(
-                      onPressed: () async {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const Home(),
+                    Hero(
+                      tag: "null",
+                      child: OutlinedButton(
+                        onPressed: () async {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const Home(),
+                            ),
+                          );
+                        },
+                        style: buttonRound,
+                        child: Text(
+                          "Back",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColorDark,
                           ),
-                        );
-                      },
-                      style: buttonRound,
-                      child: Text(
-                        "Back",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColorDark,
                         ),
                       ),
                     ),
@@ -183,7 +159,6 @@ class _MessagingState extends State<Messaging>
                         ),
                       ),
                     ),
-
                     IconButton(
                       onPressed: () {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -424,7 +399,7 @@ class _MessagingState extends State<Messaging>
                             },
                             movementDuration: const Duration(milliseconds: 500),
                             direction: DismissDirection.endToStart,
-                            child: Container(
+                            child: SizedBox(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -815,7 +790,8 @@ class _MessagingState extends State<Messaging>
                               SingleChildScrollView(
                                 child: SizedBox(
                                   width: MediaQuery.of(context).size.width,
-                                  child: selectedFileName.isEmpty
+                                  child:
+                                  selectedFileName.isEmpty
                                       ? Column(
                                           children: [
                                             GestureDetector(
@@ -836,8 +812,10 @@ class _MessagingState extends State<Messaging>
                                             ),
                                           ],
                                         )
-                                      : Center(
-                                          child: Image.file(File(file.path),
+                                      : kIsWeb? Image.memory(webImage, fit: BoxFit.cover,)
+                                      :Center(
+                                          child: Image.file(
+                                              File(file.path),
                                               height: 320,
                                               width: 320,
                                               fit: BoxFit.cover),
@@ -887,24 +865,6 @@ class _MessagingState extends State<Messaging>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    // SizedBox(
-                                    //   child: OutlinedButton(
-                                    //     onPressed: () async {
-                                    //       await showSelectionForImage();
-                                    //     },
-                                    //     style: buttonRound,
-                                    //     child: Text(
-                                    //       "Upload Image",
-                                    //       style: TextStyle(
-                                    //         fontSize: 15,
-                                    //         fontWeight: FontWeight.bold,
-                                    //         color: Theme
-                                    //             .of(context)
-                                    //             .primaryColorLight,
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    // ),
                                     OutlinedButton(
                                       onPressed: () async {
                                         final themeContext = Theme.of(context);
@@ -953,7 +913,6 @@ class _MessagingState extends State<Messaging>
                                                 picSend = false;
                                               });
                                               _controller.clear();
-
                                             } else {
                                               logger.i("set all to false");
                                               setState(() {
@@ -1252,8 +1211,12 @@ class _MessagingState extends State<Messaging>
                                               sendingToStore = true;
                                             });
 
-                                            sendingToStore?Utils.showDownloading(context, "Sending data",
-                                                "wait a few seconds..."):null;
+                                            sendingToStore
+                                                ? Utils.showDownloading(
+                                                    context,
+                                                    "Sending data",
+                                                    "wait a few seconds...")
+                                                : null;
 
                                             //upload data
                                             if (isUploading = true) {
@@ -1272,13 +1235,15 @@ class _MessagingState extends State<Messaging>
                                                     "nameOfTeacher":
                                                         nameOfTeacher,
                                                     "userID": user!.uid,
-                                                "publication": selectedOption,
-                                                  }).then((value) =>
-                                                  localNotificationService
-                                                      .sendNotificationToTopicALlToSee(
-                                                      "By $nameOfTeacher",
-                                                      _controller.text,
-                                                      subscribedTopicAll))
+                                                    "publication":
+                                                        selectedOption,
+                                                  })
+                                                  .then((value) =>
+                                                      localNotificationService
+                                                          .sendNotificationToTopicALlToSee(
+                                                              "By $nameOfTeacher",
+                                                              _controller.text,
+                                                              subscribedTopicAll))
                                                   .whenComplete(() =>
                                                       Navigator.of(context)
                                                           .pop());
@@ -1360,9 +1325,11 @@ class _MessagingState extends State<Messaging>
           placeholder: (context, url) => SizedBox(
             height: 200,
             width: MediaQuery.of(context).size.width,
-            child: SpinKitChasingDots(
-              color: Theme.of(context).primaryColor,
-              size: 50,
+            child: Center(
+              child: SpinKitChasingDots(
+                color: Theme.of(context).primaryColor,
+                size: 50,
+              ),
             ),
           ),
           cacheManager: CacheManager(
@@ -1375,20 +1342,10 @@ class _MessagingState extends State<Messaging>
           errorWidget: (context, url, error) => Center(
             child: Icon(
               Icons.error,
-              size: 100,
+              size: 150,
               color: Theme.of(context).primaryColor,
             ),
           ),
-          // imageBuilder: (context, imageProvider) => Container(
-          //   width: MediaQuery.of(context).size.width,
-          //   height: 350,
-          //   decoration: BoxDecoration(
-          //     image: DecorationImage(
-          //       image: imageProvider,
-          //       fit: BoxFit.cover,
-          //     ),
-          //   ),
-          // ),
           imageBuilder: (context, imageProvider) => Center(
             child: Image(
               image: imageProvider,
@@ -1400,7 +1357,7 @@ class _MessagingState extends State<Messaging>
     });
   }
 
-  //////////////TODO pick an image//////////////////
+  //////TODO pick an image . THis is used by mobile devices//////////////////
   _selectFile(bool imageFrom) async {
     // file variable stores the image from cam or gallery
     file = (await ImagePicker().pickImage(
@@ -1416,12 +1373,62 @@ class _MessagingState extends State<Messaging>
     }
   }
 
+
+  // _selectFile(bool imageFrom) async {
+  //   ImageSource? source;
+  //
+  //   if (Platform.isIOS || Platform.isAndroid) {
+  //     print("We are here: Mobile");
+  //     source = imageFrom ? ImageSource.gallery : ImageSource.camera;
+  //
+  //     if (source != null) {
+  //       final XFile? pickedFile = await ImagePicker().pickImage(
+  //         source: source,
+  //         preferredCameraDevice: CameraDevice.rear,
+  //       );
+  //
+  //       if (pickedFile != null) {
+  //         var file = XFile(pickedFile.path);
+  //         setState(() {
+  //           _pickerImage = file;
+  //           selectedFileName = file.path.split('/').last;
+  //         });
+  //         logger.i(selectedFileName);
+  //       }
+  //     }
+  //
+  //   }
+  //   else if(kIsWeb){
+  //     logger.e("We are here: Web");
+  //     ///////////////////////
+  //     final ImagePicker _picker = ImagePicker();
+  //     XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  //     if(image != null){
+  //       var f = await image.readAsBytes();
+  //       setState(() {
+  //         webImage = f;
+  //         _pickerImage = XFile("a");
+  //       });
+  //       logger.e("Show the picked image: \n$webImage");
+  //     }else{
+  //       print("No image has been picked");
+  //     }
+  //     ////////////////////////
+  //   }else{
+  //     print("Something went wrong");
+  //   }
+  //
+  //
+  // }
+
+
+
   /////////////TODO uploading Data image and collection to firebase
   Future<void> _addDocumentWithImage(
     String text,
     String urlLink,
     String teacherNameFromData,
-  ) async {
+      ) async {
     logger.i("add to document $urlLink");
     try {
       await FirebaseFirestore.instance.collection("messages").add({
@@ -1437,8 +1444,10 @@ class _MessagingState extends State<Messaging>
     }
   }
 
+  //Upload pdf for mobiles
   Future<void> uploadDocumentPDF() async {
     logger.i("add to document $url");
+    var navContext = Navigator.of(context);
     try {
       setState(() {
         isChanged = true;
@@ -1457,14 +1466,14 @@ class _MessagingState extends State<Messaging>
           .child('pdfs')
           .child("/$name.pdf");
 
-      isLoading?Utils.showDownloading(
-          context, "Uploading file", "Please wait a few seconds...")
-          :Navigator.of(context).pop();
+      isLoading
+          ? Utils.showDownloading(
+              context, "Uploading file", "Please wait a few seconds...")
+          : navContext.pop();
       UploadTask task = pdfFile.putData(file);
-      Navigator.of(context).pop;
+      navContext.pop;
       TaskSnapshot snapshot = await task;
-      setState(() {
-      });
+      setState(() {});
       url = await snapshot.ref.getDownloadURL();
     } on Exception catch (e) {
       logger.i(e);
@@ -1473,7 +1482,7 @@ class _MessagingState extends State<Messaging>
       isLoading = false;
       isChanged = false;
     });
-    Navigator.of(context).pop();
+    navContext.pop();
     print("$isLoading, $url");
   }
 
@@ -1536,31 +1545,7 @@ class _MessagingState extends State<Messaging>
   // }
   //
 
-  Future<void> _storePDFToFirestore(
-      String text, String teacherNameFromData) async {
-    final navContext = Navigator.of(context);
-
-    await FirebaseFirestore.instance
-        .collection("pdfs")
-        .add({
-          "text": text,
-          "timestamp": FieldValue.serverTimestamp(),
-          "fileUrl": url,
-          "nameOfTeacher": teacherNameFromData,
-          "userID": user!.uid,
-        })
-        .then(
-          (value) => Fluttertoast.showToast(msg: "Data pdf sent"),
-        )
-        .whenComplete(() => Navigator.of(context).pop());
-    navContext.pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const ViewDocuments(),
-      ),
-    );
-  }
-
-  //upload file in database storage
+  //upload image to database storage
   _uploadFile() async {
     try {
       firebase_storage.UploadTask uploadTask;
@@ -1576,10 +1561,7 @@ class _MessagingState extends State<Messaging>
         return;
       }
 
-      //convert the part to file ==> parameter cant be string
-      uploadTask = ref.putFile(
-        File(file.path),
-      );
+      uploadTask = ref.putFile(File(file.path));
 
       await uploadTask.whenComplete(
         () => logger.i("Upload done"),
@@ -1773,7 +1755,7 @@ class _MessagingState extends State<Messaging>
                                               "Wait a few seconds...")
                                           : null;
                                       await _addDocument(_controller.text,
-                                              nameOfTeacher.toString());
+                                          nameOfTeacher.toString());
                                       setState(() {
                                         isLoading = false;
                                         textSend = false;
@@ -1825,6 +1807,7 @@ class _MessagingState extends State<Messaging>
     );
   }
 
+  //get users data
   Future<void> _getCurrentUserData() async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 

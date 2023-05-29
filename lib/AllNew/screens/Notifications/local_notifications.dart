@@ -1,6 +1,6 @@
 import 'dart:convert';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
@@ -153,6 +153,7 @@ class LocalNotificationService {
     await Permission.storage.request();
     await Permission.notification.request();
 
+
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
       alert: true,
       badge: true,
@@ -203,7 +204,8 @@ class LocalNotificationService {
       LocalNotificationService.showNotificationOnForeground(event);
       if (event != null) {
         final routeFromMessage = event.data["AllToSee"];
-        print("onMessage ${event.notification!.title} ${event.notification!.body}");
+        print(
+            "onMessage ${event.notification!.title} ${event.notification!.body}");
       }
     });
 
@@ -211,7 +213,8 @@ class LocalNotificationService {
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       if (event != null) {
         final routeFromMessage = event.data["AllToSee"];
-        print("onMessageOpenApp ${event.notification!.title} ${event.notification!.body}");
+        print(
+            "onMessageOpenApp ${event.notification!.title} ${event.notification!.body}");
       }
     });
   }
@@ -242,11 +245,7 @@ class LocalNotificationService {
         message.notification!.body,
         notificationDetail,
         payload: message.data["allToSee"]);
-
   }
-
-
-
 
 //STEP 6
   ///Copied the token of the other device and sent the message

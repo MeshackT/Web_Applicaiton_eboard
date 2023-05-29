@@ -1,13 +1,12 @@
-import 'dart:async';
-import 'package:double_back_to_close_app/double_back_to_close_app.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
+
 import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';
 import '../home/learnersHome.dart';
@@ -17,7 +16,8 @@ Logger logger = Logger(printer: PrettyPrinter(colors: true));
 class LearnerViewNotifications extends StatefulWidget {
   final String subject;
 
-  const LearnerViewNotifications({Key? key,
+  const LearnerViewNotifications({
+    Key? key,
     required this.subject,
   }) : super(key: key);
 
@@ -38,14 +38,12 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
   String teacherGrade = "";
 
   LocalNotificationService localNotificationService =
-  LocalNotificationService();
+      LocalNotificationService();
 
-  final FirebaseMessaging _firebaseMessaging =
-      FirebaseMessaging.instance;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   String _deviceToken = "";
   String topic = "";
   bool setOn = true;
-
 
   @override
   void initState() {
@@ -54,16 +52,17 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
     setState(() {
       topic = subjectOfTeacher;
       subjectOfTeacher = widget.subject.toString();
-      logger.i("$teacherName this is the subject on notification $subjectOfTeacher notified? $setOn");
+      logger.i(
+          "$teacherName this is the subject on notification $subjectOfTeacher notified? $setOn");
     });
 
     _getDeviceToken();
   }
+
   @override
   void dispose() {
     super.dispose();
   }
-
 
   //get the token of the device
   void _getDeviceToken() async {
@@ -108,8 +107,8 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
                       child: OutlinedButton(
                         style: buttonRound,
                         onPressed: () {
@@ -120,7 +119,8 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                         },
                         child: Text(
                           "Back",
-                          style: TextStyle(color: Theme.of(context).primaryColor),
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
                         ),
                       ),
                     ),
@@ -138,7 +138,7 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                             ConnectionState.waiting) {
                           return Center(
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
@@ -159,8 +159,8 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                             ConnectionState.none) {
                           return Center(
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 'No Internet Connection',
@@ -176,22 +176,22 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                               ),
                             ],
                           ));
-                        }else if (streamSnapshot.data!.size == 0) {
+                        } else if (streamSnapshot.data!.size == 0) {
                           return Center(
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'No notifications yet',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).primaryColorDark,
-                                    ),
-                                  ),
-                                ],
-                              ));
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'No notifications yet',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
+                              ),
+                            ],
+                          ));
                         }
                         var documents = streamSnapshot.data!.docs;
                         final List<QueryDocumentSnapshot> docs =
@@ -213,8 +213,7 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                                 "/${dateTime.year} | ${dateTime.hour}"
                                 ":${dateTime.minute}";
 
-                            return Column(
-                                children: [
+                            return Column(children: [
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 10),
@@ -233,8 +232,10 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                                     ),
                                   ),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const SizedBox(
                                         height: 5,
@@ -248,8 +249,8 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                                           children: [
                                             Text(
                                               documents[index].get("subject"),
-                                              style:
-                                                  textStyleText(context).copyWith(
+                                              style: textStyleText(context)
+                                                  .copyWith(
                                                 letterSpacing: 1,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -272,7 +273,8 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                                                 horizontal: 10, vertical: 5),
                                             child: Column(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
@@ -321,7 +323,8 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                                                 horizontal: 10, vertical: 5),
                                             child: Column(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
                                               children: [
@@ -339,7 +342,7 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                                                 const SizedBox(
                                                   height: 5,
                                                 ),
-                                                Text(
+                                                SelectableText(
                                                   documents[index].get("title"),
                                                   style: textStyleText(context),
                                                 ),
@@ -362,9 +365,13 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             left: 10, right: 10, bottom: 10),
-                                        child: Text(
-                                          documents[index].get("description"),
-                                          style: textStyleText(context),
+                                        child: Wrap(
+                                          children: [
+                                            SelectableText(
+                                              documents[index].get("description"),
+                                              style: textStyleText(context),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ],

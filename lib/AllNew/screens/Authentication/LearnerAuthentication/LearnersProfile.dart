@@ -69,7 +69,6 @@ class _LearnersProfileState extends State<LearnersProfile> {
   bool isLoadingVerify = true;
   bool isVisible = false;
 
-
   TextEditingController editNameOfLearner = TextEditingController();
   TextEditingController editSecondNameOfLearner = TextEditingController();
   TextEditingController editGradeOfLearner = TextEditingController();
@@ -288,52 +287,50 @@ class _LearnersProfileState extends State<LearnersProfile> {
                                   },
                                   child: const Text('Cancel'),
                                 ),
-                                Builder(
-                                  builder: (context) {
-                                    return TextButton(
-                                      onPressed: () async {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        try {
-                                          //  First delete my data in store
-                                          await _deleteMyDocumentWithData();
+                                Builder(builder: (context) {
+                                  return TextButton(
+                                    onPressed: () async {
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      try {
+                                        //  First delete my data in store
+                                        await _deleteMyDocumentWithData();
 
-                                          //then delete my current account
-                                          await FirebaseAuth.instance.currentUser!
-                                              .delete();
+                                        //then delete my current account
+                                        await FirebaseAuth.instance.currentUser!
+                                            .delete();
 
-                                          signOut(context);
+                                        signOut(context);
 
-                                          // if (FirebaseAuth.instance.currentUser ==
-                                          //     null) {
-                                          //   Navigator.pushReplacement(
-                                          //     (context),
-                                          //     MaterialPageRoute(
-                                          //         builder: (context) =>
-                                          //             const Authenticate()),
-                                          //   );
-                                          // } else {
-                                          //   await FirebaseAuth.instance.signOut().whenComplete(() =>
-                                          //       Navigator.pushReplacement(
-                                          //         (context),
-                                          //         MaterialPageRoute(
-                                          //             builder: (context) =>
-                                          //             const Authenticate()),
-                                          //       ),);
-                                          // }
-                                        } on Exception catch (e) {
-                                          snack(e.toString(), context);
-                                        }
+                                        // if (FirebaseAuth.instance.currentUser ==
+                                        //     null) {
+                                        //   Navigator.pushReplacement(
+                                        //     (context),
+                                        //     MaterialPageRoute(
+                                        //         builder: (context) =>
+                                        //             const Authenticate()),
+                                        //   );
+                                        // } else {
+                                        //   await FirebaseAuth.instance.signOut().whenComplete(() =>
+                                        //       Navigator.pushReplacement(
+                                        //         (context),
+                                        //         MaterialPageRoute(
+                                        //             builder: (context) =>
+                                        //             const Authenticate()),
+                                        //       ),);
+                                        // }
+                                      } on Exception catch (e) {
+                                        snack(e.toString(), context);
+                                      }
 
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                      },
-                                      child: const Text('Delete'),
-                                    );
-                                  }
-                                ),
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                    },
+                                    child: const Text('Delete'),
+                                  );
+                                }),
                               ],
                               content: Text(
                                 "You are about to delete your account permanently and every data you created, it can't be retrieved after this action is fulfilled!.",
@@ -456,11 +453,9 @@ class _LearnersProfileState extends State<LearnersProfile> {
     var userQuery =
         firestore.collection('learnersData').where('uid', isEqualTo: user.uid);
     try {
-      var querySnapshot =
-          await userQuery.get();
+      var querySnapshot = await userQuery.get();
       if (querySnapshot.size > 0) {
-        var documentSnapshot =
-            querySnapshot.docs.first;
+        var documentSnapshot = querySnapshot.docs.first;
         final String documentID = documentSnapshot.get('documentID');
         await FirebaseFirestore.instance
             .collection('learnersData')
@@ -490,8 +485,7 @@ class _LearnersProfileState extends State<LearnersProfile> {
         firestore.collection('learnersData').where('uid', isEqualTo: user.uid);
     userQuery.get().then((var querySnapshot) {
       if (querySnapshot.size > 0) {
-        var documentSnapshot =
-            querySnapshot.docs.first;
+        var documentSnapshot = querySnapshot.docs.first;
         // Map<String, dynamic>? data = documentSnapshot.data();
 
         //get the learners details
@@ -530,15 +524,12 @@ class _LearnersProfileState extends State<LearnersProfile> {
       isLoading = true;
     });
     try {
+      isLoading
+          ? Utils.showDownloading(context, "Signing Out", "Waiting to sign out")
+          : null;
 
-      isLoading?Utils.showDownloading(context, "Signing Out",
-          "Waiting to sign out"):null;
-
-      await FirebaseAuth.instance
-          .signOut();
-      FirebaseAuth.instance
-          .authStateChanges()
-          .listen((User? user) {
+      await FirebaseAuth.instance.signOut();
+      FirebaseAuth.instance.authStateChanges().listen((User? user) {
         if (user == null) {
           Navigator.of(context).pop();
           Navigator.pushReplacement(context,
@@ -771,109 +762,100 @@ class _LearnersProfileState extends State<LearnersProfile> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 OutlinedButton(
-                                        onPressed: () async {
-                                          setState(() {
-                                            isLoading = true;
-                                            isVisible = true;
-                                          });
-                                          final naviContext = Navigator.of(context);
+                                  onPressed: () async {
+                                    setState(() {
+                                      isLoading = true;
+                                      isVisible = true;
+                                    });
+                                    final naviContext = Navigator.of(context);
 
-                                          try {
-                                            if (editNameOfLearner
-                                                    .text.isEmpty ||
-                                                editEmailOfLearner
-                                                    .text.isEmpty ||
-                                                editGradeOfLearner
-                                                    .text.isEmpty) {
-                                              snack(
-                                                  "Insert data in the provided space above.",
-                                                  context);
-                                            } else {
-                                              logger.e("We are here");
-                                              final CollectionReference
-                                                  learnersCollection =
-                                                  FirebaseFirestore.instance
-                                                      .collection(
-                                                          'learnersData');
-                                              final DocumentReference
-                                                  identityDocument =
-                                                  learnersCollection
-                                                      .doc(documentIdEdit);
+                                    try {
+                                      if (editNameOfLearner.text.isEmpty ||
+                                          editEmailOfLearner.text.isEmpty ||
+                                          editGradeOfLearner.text.isEmpty) {
+                                        snack(
+                                            "Insert data in the provided space above.",
+                                            context);
+                                      } else {
+                                        logger.e("We are here");
+                                        final CollectionReference
+                                            learnersCollection =
+                                            FirebaseFirestore.instance
+                                                .collection('learnersData');
+                                        final DocumentReference
+                                            identityDocument =
+                                            learnersCollection
+                                                .doc(documentIdEdit);
 
-                                              await identityDocument.set({
-                                                'grade': editGradeOfLearner.text
-                                                    .toString(),
-                                                'name': editNameOfLearner.text
-                                                    .toString(),
-                                                'secondName':
-                                                    editSecondNameOfLearner.text
-                                                        .toString(),
-                                                'email': editEmailOfLearner.text
-                                                    .toString(),
-                                              }, SetOptions(merge: true)).then(
-                                                (value) => Fluttertoast.showToast(
-                                                    backgroundColor:
-                                                        Theme.of(context)
-                                                            .primaryColor,
-                                                    msg:
-                                                        "Edited Notifications"),
-                                              );
-                                              UserModel.getAllUserProfiles();
-                                              naviContext.pop();
-                                            //   showSheetToEditForResettingEmail(
-                                            //       editEmailOfLearner.text
-                                            //           .trim()
-                                            //           .toLowerCase());
-                                            }
-                                          } on FirebaseAuthException catch (e) {
-                                            if (e.code ==
-                                                'requires-recent-login') {
-                                              Fluttertoast.showToast(
-                                                  backgroundColor:
-                                                      Theme.of(context)
-                                                          .primaryColor,
-                                                  msg:
-                                                      "Sign out before re-attempting");
-                                              logger.i(e);
-                                            } else if (e.code ==
-                                                'invalid-email') {
-                                              Fluttertoast.showToast(
-                                                  msg: 'Invalid email');
-                                            } else if (e.code ==
-                                                'email-already-in-use') {
-                                              Fluttertoast.showToast(
-                                                  msg:
-                                                      'Email is already in use');
-                                            }
-                                          } on Exception catch (e) {
-                                            logger.e(e);
-                                          }
-                                          setState(() {
-                                            isLoading = false;
-                                            isVisible = false;
-                                          });
-                                        },
-                                        style: buttonRound,
-                                        child: Text(
-                                          "Update",
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context)
-                                                .primaryColorDark,
-                                          ),
-                                        ),
-                                      ),
+                                        await identityDocument.set({
+                                          'grade': editGradeOfLearner.text
+                                              .toString(),
+                                          'name':
+                                              editNameOfLearner.text.toString(),
+                                          'secondName': editSecondNameOfLearner
+                                              .text
+                                              .toString(),
+                                          'email': editEmailOfLearner.text
+                                              .toString(),
+                                        }, SetOptions(merge: true)).then(
+                                          (value) => Fluttertoast.showToast(
+                                              backgroundColor: Theme.of(context)
+                                                  .primaryColor,
+                                              msg: "Edited Notifications"),
+                                        );
+                                        UserModel.getAllUserProfiles();
+                                        naviContext.pop();
+                                        //   showSheetToEditForResettingEmail(
+                                        //       editEmailOfLearner.text
+                                        //           .trim()
+                                        //           .toLowerCase());
+                                      }
+                                    } on FirebaseAuthException catch (e) {
+                                      if (e.code == 'requires-recent-login') {
+                                        Fluttertoast.showToast(
+                                            backgroundColor:
+                                                Theme.of(context).primaryColor,
+                                            msg:
+                                                "Sign out before re-attempting");
+                                        logger.i(e);
+                                      } else if (e.code == 'invalid-email') {
+                                        Fluttertoast.showToast(
+                                            msg: 'Invalid email');
+                                      } else if (e.code ==
+                                          'email-already-in-use') {
+                                        Fluttertoast.showToast(
+                                            msg: 'Email is already in use');
+                                      }
+                                    } on Exception catch (e) {
+                                      logger.e(e);
+                                    }
+                                    setState(() {
+                                      isLoading = false;
+                                      isVisible = false;
+                                    });
+                                  },
+                                  style: buttonRound,
+                                  child: Text(
+                                    "Update",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).primaryColorDark,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                          isLoading? Visibility(
-                            visible: isVisible,
-                            child: SpinKitChasingDots(
-                              color: Theme.of(context).primaryColor,
-                              size: 13,
-                            ),
-                          ) : const Text(""),
+                          isLoading
+                              ? Visibility(
+                                  visible: isVisible,
+                                  child: SpinKitChasingDots(
+                                    color: Theme.of(context).primaryColor,
+                                    size: 13,
+                                  ),
+                                )
+                              : const Text(""),
                         ]),
                       ),
                     ),

@@ -41,7 +41,6 @@ class _LearnerMoreState extends State<LearnerMore> {
   List<dynamic> teacherIDS = [];
   List<dynamic> nameOfSubject = [];
 
-
   void _load() async {
     PackageInfo _packageInfo = await PackageInfo.fromPlatform();
 
@@ -79,7 +78,7 @@ class _LearnerMoreState extends State<LearnerMore> {
   Future<void> _getCurrentUserFieldsSubscriptions() async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     var userQuery =
-    firestore.collection('learnersData').where('uid', isEqualTo: user.uid);
+        firestore.collection('learnersData').where('uid', isEqualTo: user.uid);
     try {
       var querySnapshot = await userQuery.get();
       if (querySnapshot.size > 0) {
@@ -185,7 +184,8 @@ class _LearnerMoreState extends State<LearnerMore> {
                                       builder: (context) =>
                                           SubjectNotifications(
                                             teachersIDS: teacherIDS,
-                                            nameOfSubjects: nameOfSubject,)));
+                                            nameOfSubjects: nameOfSubject,
+                                          )));
                               // showSheetForNotifications();
                               print("hi");
                             },
@@ -194,9 +194,11 @@ class _LearnerMoreState extends State<LearnerMore> {
                                 height: 30,
                                 //color: Colors.red,
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor.withOpacity(.5),
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(.5),
                                   borderRadius: const BorderRadius.all(
-                                      Radius.circular(4),
+                                    Radius.circular(4),
                                   ),
                                 ),
                                 child: Center(
@@ -204,8 +206,10 @@ class _LearnerMoreState extends State<LearnerMore> {
                                     "Change Subject Notifications",
                                     textAlign: TextAlign.start,
                                     style: textStyleText(context).copyWith(
-                                        fontWeight: FontWeight.bold, fontSize: 14,
-                                    color: Theme.of(context).primaryColorLight),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Theme.of(context)
+                                            .primaryColorLight),
                                   ),
                                 ),
                               ),
@@ -268,7 +272,6 @@ class _LearnerMoreState extends State<LearnerMore> {
                             const SizedBox(
                               width: 10,
                             ),
-
                             Text(
                               "Change Global Notifications",
                               style: textStyleText(context).copyWith(
@@ -286,7 +289,6 @@ class _LearnerMoreState extends State<LearnerMore> {
                             ),
                           ],
                         ),
-
                       ],
                     ),
                   ),

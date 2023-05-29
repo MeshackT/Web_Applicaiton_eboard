@@ -29,21 +29,17 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
       sendVerificationEmail();
       //VerificationModel.sendVerificationEmail();
 
-
-      timer = Timer.periodic(
-        const Duration(seconds: 3),
-        (_) {
-          checkEmailVerified();
-          //VerificationModel.checkEmailVerified();
-          // setState(() {
-          //   isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-          // });
-          if (isEmailVerified) {
-            timer?.cancel();
-          }
-          checkEmailVerified();
+      timer = Timer.periodic(const Duration(seconds: 3), (_) {
+        checkEmailVerified();
+        //VerificationModel.checkEmailVerified();
+        // setState(() {
+        //   isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+        // });
+        if (isEmailVerified) {
+          timer?.cancel();
         }
-      );
+        checkEmailVerified();
+      });
     }
   }
 
@@ -125,11 +121,13 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                                 await sendVerificationEmail();
                                 //await VerificationModel.sendVerificationEmail();
                                 Fluttertoast.showToast(
-                                    backgroundColor: Theme.of(context).primaryColor,
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
                                     msg: "Sent Email");
                               } catch (e) {
                                 Fluttertoast.showToast(
-                                    backgroundColor: Theme.of(context).primaryColor,
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
                                     msg: "Failed to send the email");
                               }
                               setState(() {
@@ -140,13 +138,13 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                             child: loading
                                 ? SpinKitChasingDots(
                                     color: Theme.of(context).primaryColorLight,
-                              size: 12,
-                            )
+                                    size: 12,
+                                  )
                                 : Text(
                                     "Verify",
                                     style: TextStyle(
-                                        color:
-                                            Theme.of(context).primaryColorLight),
+                                        color: Theme.of(context)
+                                            .primaryColorLight),
                                   ),
                           ),
                         ),
@@ -176,7 +174,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                         child: loading
                             ? SpinKitChasingDots(
                                 color: Theme.of(context).primaryColor,
-                          size: 13,
+                                size: 13,
                               )
                             : Text(
                                 "Wrong Account?",

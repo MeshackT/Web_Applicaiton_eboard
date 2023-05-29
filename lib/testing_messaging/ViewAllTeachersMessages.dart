@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +8,9 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'package:http/http.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:path_provider/path_provider.dart';
+
 import '../AllNew/model/ConnectionChecker.dart';
 import '../AllNew/shared/constants.dart';
 import 'ViewAllTeachersTexts.dart';
@@ -228,8 +229,12 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
                                       width: 40,
                                       height: 40,
                                       child: PopupMenuButton<int>(
-                                        color: Theme.of(context).primaryColorLight,
-                                        icon: Icon(Icons.more_vert, color: Theme.of(context).primaryColor,),
+                                        color:
+                                            Theme.of(context).primaryColorLight,
+                                        icon: Icon(
+                                          Icons.more_vert,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
                                         elevation: 5.0,
                                         itemBuilder: (context) => [
                                           PopupMenuItem<int>(
@@ -287,57 +292,61 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
                                 const SizedBox(
                                   height: 5,
                                 ),
-                              InstaImageViewer(
-                                child: CachedNetworkImage(
-                                  imageUrl: imageURLFromFirebase,
-                                  placeholder: (context, url) => SizedBox(
-                                    height: 200,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: SpinKitChasingDots(
-                                      color: Theme.of(context).primaryColor,
-                                      size: 50,
+                                InstaImageViewer(
+                                  child: CachedNetworkImage(
+                                    imageUrl: imageURLFromFirebase,
+                                    placeholder: (context, url) => SizedBox(
+                                      height: 200,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: SpinKitChasingDots(
+                                        color: Theme.of(context).primaryColor,
+                                        size: 50,
+                                      ),
                                     ),
-                                  ),
-                                  cacheManager: CacheManager(
-                                    //this removes the image and re-downloads it after 7 days
-                                    Config(
-                                      'customCacheKey',
-                                      stalePeriod: const Duration(days: 7),
+                                    cacheManager: CacheManager(
+                                      //this removes the image and re-downloads it after 7 days
+                                      Config(
+                                        'customCacheKey',
+                                        stalePeriod: const Duration(days: 7),
+                                      ),
                                     ),
-                                  ),
-                                  errorWidget: (context, url, error) => Center(
-                                    child: Icon(
-                                      Icons.error,
-                                      size: 100,
-                                      color: Theme.of(context).primaryColor,
+                                    errorWidget: (context, url, error) =>
+                                        Center(
+                                      child: Icon(
+                                        Icons.error,
+                                        size: 150,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                                     ),
-                                  ),
-                                  // imageBuilder: (context, imageProvider) => Container(
-                                  //   width: MediaQuery.of(context).size.width,
-                                  //   height: 350,
-                                  //   decoration: BoxDecoration(
-                                  //     image: DecorationImage(
-                                  //       image: imageProvider,
-                                  //       fit: BoxFit.cover,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  imageBuilder:(context, imageProvider) => Center(
-                                    child: Image(
-                                      image: imageProvider,
-                                      fit: BoxFit.contain,
+                                    // imageBuilder: (context, imageProvider) => Container(
+                                    //   width: MediaQuery.of(context).size.width,
+                                    //   height: 350,
+                                    //   decoration: BoxDecoration(
+                                    //     image: DecorationImage(
+                                    //       image: imageProvider,
+                                    //       fit: BoxFit.cover,
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    imageBuilder: (context, imageProvider) =>
+                                        Center(
+                                      child: Image(
+                                        image: imageProvider,
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                                SizedBox(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 5),
-                                    child: Text(
-                                      text,
-                                      style: textStyleText(context),
-                                    ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 5),
+                                  child: Wrap(
+                                    children: [
+                                      SelectableText(
+                                        text,
+                                        style: textStyleText(context),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -373,7 +382,7 @@ class _ViewAllTeachersMessagesState extends State<ViewAllTeachersMessages> {
           //TODO https://youtu.be/FcVADQsqEYk
           await GallerySaver.saveImage(imageURLFromFire, albumName: "E-Board")
               .then(
-            (value) =>  Fluttertoast.showToast(
+            (value) => Fluttertoast.showToast(
                 backgroundColor: Colors.purple.shade500,
                 msg: "Image saved to you gallery. Pictures/E-Board"),
           );

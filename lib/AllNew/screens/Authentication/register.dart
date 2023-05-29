@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:yueway/main.dart';
+
 import '../../../verifyEmailPage.dart';
-import '../../main.dart';
 import '../../shared/constants.dart';
 
 //A Model to grab and store data
@@ -117,7 +117,6 @@ class _RegisterState extends State<Register> {
     "mathematics literacy",
     "not applicable",
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -316,8 +315,9 @@ class _RegisterState extends State<Register> {
                             Container(
                               padding: const EdgeInsets.only(left: 10),
                               decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColorLight.withOpacity(1),
-
+                                color: Theme.of(context)
+                                    .primaryColorLight
+                                    .withOpacity(1),
                                 border: Border.all(
                                   color: Colors.purple,
                                   width: 2,
@@ -338,14 +338,13 @@ class _RegisterState extends State<Register> {
                                     items: listItem
                                         .map<DropdownMenuItem<String>>(
                                           (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(
-                                          e,
-                                          style: textStyleText(
-                                              context),
-                                        ),
-                                      ),
-                                    )
+                                            value: e,
+                                            child: Text(
+                                              e,
+                                              style: textStyleText(context),
+                                            ),
+                                          ),
+                                        )
                                         .toList(),
                                     onChanged: (String? value) {
                                       setState(() {
@@ -366,20 +365,18 @@ class _RegisterState extends State<Register> {
                                     items: listItem
                                         .map<DropdownMenuItem<String>>(
                                           (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(
-                                          e,
-                                          style: textStyleText(
-                                              context),
-                                        ),
-                                      ),
-                                    )
+                                            value: e,
+                                            child: Text(
+                                              e,
+                                              style: textStyleText(context),
+                                            ),
+                                          ),
+                                        )
                                         .toList(),
                                     onChanged: (String? value) {
                                       setState(() {
                                         selectedOption = value;
                                         print(selectedOption);
-
                                       });
                                     },
                                   ),
@@ -530,12 +527,14 @@ class _RegisterState extends State<Register> {
                                           if (_formKey.currentState!
                                               .validate()) {
                                             //set this state when I press the button
-                                            if(selectedOption1 == null ||
+                                            if (selectedOption1 == null ||
                                                 selectedOption == null ||
                                                 selectedOption1!.isEmpty ||
-                                            selectedOption!.isEmpty){
-                                              Fluttertoast.showToast(msg: "Select 'not applicable' if you are not teaching 2 subjects");
-                                            }else{
+                                                selectedOption!.isEmpty) {
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "Select 'not applicable' if you are not teaching 2 subjects");
+                                            } else {
                                               signUp();
                                             }
                                           } else {

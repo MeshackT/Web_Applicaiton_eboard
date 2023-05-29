@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
 import 'package:yueway/main.dart';
+
 import '../../../model/ConnectionChecker.dart';
 import '../../../shared/constants.dart';
 import '../Authenticate.dart';
@@ -539,12 +540,11 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                     dropdownItems = [];
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
-
                                                   dropdownItems.add(
                                                     DropdownMenuItem(
                                                       value: doc['uid'],
                                                       child: Text(
-                                                       " ${doc['secondName']} ${doc['name']}",
+                                                        " ${doc['secondName']} ${doc['name']}",
                                                         style: textStyleText(
                                                             context),
                                                       ),

@@ -1,20 +1,20 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:yueway/AllNew/screens/home/home.dart';
 import 'package:yueway/AllNew/shared/constants.dart';
 import 'package:yueway/testing_messaging/messaging.dart';
+import 'package:http/http.dart' as http;
 
 var user = FirebaseAuth.instance.currentUser!;
 
@@ -26,10 +26,15 @@ class ViewDocuments extends StatefulWidget {
 }
 
 class _ViewDocumentsState extends State<ViewDocuments> {
+  final TextEditingController _searchController = TextEditingController();
+
   bool isLoading = false;
   String nameOfTeacher = "";
   String storeUserPosterUID = "";
   bool isLoadingDelete = false;
+
+  String searchText = '';
+  List<DocumentSnapshot> _documents = [];
 
   @override
   void initState() {
@@ -37,7 +42,6 @@ class _ViewDocumentsState extends State<ViewDocuments> {
     super.initState();
     _getCurrentUserData();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +84,48 @@ class _ViewDocumentsState extends State<ViewDocuments> {
                         ),
                       ),
                     ),
-                    isLoading? SpinKitChasingDots(
-                      color:Theme.of(context).primaryColor,
-                      size: 15,
-                    ):const SizedBox(
-                      child: Text(""),
+                    isLoading
+                        ? SpinKitChasingDots(
+                            color: Theme.of(context).primaryColor,
+                            size: 16,
+                          )
+                        :
+                    SizedBox(
+                      width: 200,
+                      child: TextField(
+                        controller: _searchController,
+                        cursorColor: Theme.of(context).primaryColorDark,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColorDark,
+                                width: 1.0),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          contentPadding: const EdgeInsets.only(
+                            left: 15,
+                            bottom: 11,
+                            top: 11,
+                            right: 15,
+                          ),
+                          hintText: "Enter a name",
+                          hintStyle: TextStyle(
+                              color: Theme.of(context).primaryColorDark,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
+                          prefixIcon: const Icon(Icons.search),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            searchText = value;
+                          });
+                        },
+                      ),
                     ),
                     OutlinedButton(
                       onPressed: () async {
@@ -111,7 +152,7 @@ class _ViewDocumentsState extends State<ViewDocuments> {
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection("pdfs")
-                      .where("publication", isEqualTo: "Public")
+                      //.where("publication", isEqualTo: "Public")
                       .orderBy("timestamp", descending: true)
                       .snapshots(),
                   builder: (BuildContext context,
@@ -121,7 +162,9 @@ class _ViewDocumentsState extends State<ViewDocuments> {
                           child: Column(
                         children: [
                           Text("Error: ${snapshot.error}"),
-                          const SizedBox(height: 10,),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           SpinKitChasingDots(
                             color: Theme.of(context).primaryColor,
                             size: 17,
@@ -141,11 +184,13 @@ class _ViewDocumentsState extends State<ViewDocuments> {
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                        const SizedBox(height: 10,),
-                        SpinKitChasingDots(
-                          color: Theme.of(context).primaryColor,
-                          size: 17,
-                        ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SpinKitChasingDots(
+                              color: Theme.of(context).primaryColor,
+                              size: 17,
+                            ),
                           ],
                         ),
                       );
@@ -156,6 +201,15 @@ class _ViewDocumentsState extends State<ViewDocuments> {
                       );
                     } else {
                       var _documents = snapshot.data!.docs;
+                      if (searchText.isNotEmpty) {
+                        _documents = _documents.where((element) {
+                          return element
+                              .get('text')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchText.toLowerCase());
+                        }).toList();
+                      }
                       return ListView.builder(
                         itemCount: _documents.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -172,17 +226,6 @@ class _ViewDocumentsState extends State<ViewDocuments> {
                               " ${dateTime.hour}:${dateTime.minute}";
 
                           return GestureDetector(
-                            onLongPress: (){
-                              setState(() {
-                                isLoading = true;
-                              });
-                              downloadFiles(fileUrl, text).whenComplete(() =>
-                                  setState(() {
-                                    isLoading = false;
-                                  })
-                              );
-
-                            },
                             onTap: () {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
@@ -336,15 +379,20 @@ class _ViewDocumentsState extends State<ViewDocuments> {
                                                   Text(
                                                     "Delete PDF",
                                                     style:
-                                                    textStyleText(context)
-                                                        .copyWith(),
+                                                        textStyleText(context)
+                                                            .copyWith(),
                                                   ),
                                                 ],
                                               ),
                                             ),
                                           ],
                                           onSelected: (item) => selectedItem(
-                                              context, item, name, fileUrl, document.id, storeUserPosterUID),
+                                              context,
+                                              item,
+                                              name,
+                                              fileUrl,
+                                              document.id,
+                                              storeUserPosterUID),
                                         ),
                                       ),
                                     ],
@@ -377,12 +425,13 @@ class _ViewDocumentsState extends State<ViewDocuments> {
       ),
     );
   }
+
   Future<void> _getCurrentUserData() async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     //get data where data ID is equals to the current logged in user
     var userQuery =
-    firestore.collection('userData').where('uid', isEqualTo: user.uid);
+        firestore.collection('userData').where('uid', isEqualTo: user.uid);
     userQuery.get().then((var querySnapshot) {
       if (querySnapshot.size > 0) {
         var documentSnapshot = querySnapshot.docs.first;
@@ -392,7 +441,6 @@ class _ViewDocumentsState extends State<ViewDocuments> {
         setState(() {
           nameOfTeacher = data['secondName'];
           storeUserPosterUID = data['uid'];
-
         });
         //check if data exist and not empty
         print("inside getField $nameOfTeacher");
@@ -402,12 +450,14 @@ class _ViewDocumentsState extends State<ViewDocuments> {
     }).catchError((error) => print('Failed to get document: $error'));
   }
 
-
   //TODO Show pop up button
   Future<void> selectedItem(
-      BuildContext context, item, String nameOfSender, String fileUrlfile,
-      String documentIndexPdf, String userCurrentlyLogged) async {
-
+      BuildContext context,
+      item,
+      String nameOfSender,
+      String fileUrlfile,
+      String documentIndexPdf,
+      String userCurrentlyLogged) async {
     switch (item) {
       case 0:
         try {
@@ -429,56 +479,69 @@ class _ViewDocumentsState extends State<ViewDocuments> {
         break;
       case 1:
         try {
-         setState(() {
-           isLoading = true;
-         });
+          setState(() {
+            isLoading = true;
+          });
+          // isLoading
+          //     ? Utils.showDownloading(
+          //         context,
+          //         "Downloading PDF",
+          //         "Wait a few seconds"
+          //             " depending on your network")
+          //     : null;
 
-          // final directory = await getApplicationDocumentsDirectory();
-          // final myFolderPath = '${directory.path}/MyFiles';
-          //
-          // if (fileUrlfile.isEmpty || fileUrlfile == "") {
-          //   print("cant share");
-          //   snack('There`s no url link found', context);
-          // } else {
-          //   print("can download $fileUrlfile");
-          //   Fluttertoast.showToast(
-          //       backgroundColor: Theme.of(context).primaryColor,
-          //       msg: "Coming soon");
+          const Duration(milliseconds: 1500);
+          print("Started downloading");
+          // Download the PDF file
+          http.Response response = await http.get(Uri.parse(fileUrlfile));
+          Uint8List pdfBytes = response.bodyBytes;
 
-            // openFile(url: fileUrlfile);
-            // await FlutterDownloader.enqueue(
-            //   url: fileUrlfile,
-            //   savedDir: 'E-board/docs',
-            //   showNotification: true, // show download progress in status bar (for Android)
-            //   openFileFromNotification: true, // click on notification to open downloaded file (for Android)
-            // );
+          // Get the external storage directory
+          Directory? externalDir = await getExternalStorageDirectory();
+          if (externalDir == null) {
+            print('External storage directory not found');
+            return;
+          }
 
-              //downloadFiles(fileUrlfile, nameOfSender).whenComplete(() =>
-              //     print("Download Complete");
-          // }
+          // Create the e-board folder if it doesn't exist
+          String folderPath = '${externalDir.path}/e-board';
+          Directory folder = Directory(folderPath);
+          if (!await folder.exists()) {
+            await folder.create(recursive: true);
+          }
+
+          // Extract the file name from the URL
+          String fileName = fileUrlfile.split('/').last;
+
+          // Save the file to the e-board folder
+          String filePath = '$folderPath/$fileName';
+          File file = File(filePath);
+          await file.writeAsBytes(pdfBytes);
+          setState(() {
+            isLoading = false;
+          });
+          Fluttertoast.showToast(
+              msg: 'File downloaded and saved successfully at: $filePath');
+
 
         } catch (e) {
           print(fileUrlfile);
           snack(e.toString(), context);
         }
-        setState(() {
-          isLoading = false;
-        });
+
         break;
       case 2:
-
         try {
           Logger logger = Logger(
               printer: PrettyPrinter(
-                colors: true,
-              )
-          );
+            colors: true,
+          ));
           logger.e("Testing");
           setState(() {
             isLoadingDelete = true;
           });
-          if (userCurrentlyLogged == null && userCurrentlyLogged != storeUserPosterUID) {
-
+          if (userCurrentlyLogged == null &&
+              userCurrentlyLogged != storeUserPosterUID) {
             logger.i("cant do this");
             snack('Can\'t delete the post as you are not the poster', context);
             setState(() {
@@ -486,8 +549,10 @@ class _ViewDocumentsState extends State<ViewDocuments> {
             });
           } else {
             logger.i("can delete");
-            await FirebaseFirestore.instance.collection("pdfs")
-                .doc(documentIndexPdf).delete();
+            await FirebaseFirestore.instance
+                .collection("pdfs")
+                .doc(documentIndexPdf)
+                .delete();
             setState(() {
               isLoadingDelete = false;
             });
@@ -502,49 +567,48 @@ class _ViewDocumentsState extends State<ViewDocuments> {
   }
 }
 
-
-Future<String> downloadFiles(String url, String fileName) async {
-  HttpClient httpClient = HttpClient();
-  File file;
-  String filePath = '';
-  String myUrl = '';
-  final directory = await getApplicationDocumentsDirectory();
-  final myFolderPath = '${directory.path}/MyFiles';
-
+Future<void> downloadPDF(String fileUrl, BuildContext context) async {
   try {
-    // Check if MyFiles directory exists, if not create it
-    if (!Directory(myFolderPath).existsSync()) {
-      Directory(myFolderPath).createSync();
+    // Download the PDF file
+    http.Response response = await http.get(Uri.parse(fileUrl));
+    Uint8List pdfBytes = response.bodyBytes;
+
+    // Get the external storage directory
+    Directory? externalDir = await getExternalStorageDirectory();
+    if (externalDir == null) {
+      print('External storage directory not found');
+      return;
     }
 
-    myUrl = url+'/'+fileName;
-    var request = await httpClient.getUrl(Uri.parse(myUrl));
-    var response = await request.close();
-    if(response.statusCode == 200) {
-      var bytes = await consolidateHttpClientResponseBytes(response);
-      filePath = '$myFolderPath/$fileName';
-      file = File(filePath);
-      await file.writeAsBytes(bytes);
+    // Create the e-board folder if it doesn't exist
+    String folderPath = '${externalDir.path}/e-board';
+    Directory folder = Directory(folderPath);
+    if (!await folder.exists()) {
+      await folder.create(recursive: true);
     }
-    else {
-      filePath = 'Error code: ${response.statusCode}';
-      Fluttertoast.showToast(msg: filePath);
-    }
-  }
-  catch(ex){
-    filePath = 'Can not fetch url';
-    Fluttertoast.showToast(msg: filePath);
-  }
 
-  return filePath;
+    // Extract the file name from the URL
+    String fileName = fileUrl.split('/').last;
+
+    // Save the file to the e-board folder
+    String filePath = '$folderPath/$fileName';
+    File file = File(filePath);
+    await file.writeAsBytes(pdfBytes).whenComplete(() =>
+        Navigator.of(context));
+
+    Fluttertoast.showToast(
+        msg: 'File downloaded and saved successfully at: $filePath');
+  } catch (e) {
+    // Handle any errors that occur during the download and saving process
+    print('Error downloading file: $e');
+    Fluttertoast.showToast(msg: e.toString());
+  }
 }
 
-
-Future openFile({required String url, String? fileName}) async{
+Future openFile({required String url, String? fileName}) async {
   final file = await downloadFile(url, fileName!);
 
-
-  if(file == null){
+  if (file == null) {
     return;
   }
   print("Path: ${file.path}");
@@ -552,8 +616,7 @@ Future openFile({required String url, String? fileName}) async{
   openFile(url: file.path);
 }
 
-
-Future<File?> downloadFile(String url, String name) async{
+Future<File?> downloadFile(String url, String name) async {
   try {
     final appStorage = await getApplicationDocumentsDirectory();
     final file = File('${appStorage.path}/$name');
@@ -563,8 +626,7 @@ Future<File?> downloadFile(String url, String name) async{
       options: Options(
         responseType: ResponseType.bytes,
         followRedirects: false,
-        receiveTimeout: const Duration(days: 0, milliseconds: 0,
-            minutes: 0),
+        receiveTimeout: const Duration(days: 0, milliseconds: 0, minutes: 0),
       ),
     );
 
@@ -576,7 +638,6 @@ Future<File?> downloadFile(String url, String name) async{
     Fluttertoast.showToast(msg: e.toString());
   }
 }
-
 
 class View extends StatelessWidget {
   final PdfViewerController? pdfViewerController;
@@ -632,7 +693,6 @@ class View extends StatelessWidget {
         child: SfPdfViewer.network(
           url,
           controller: pdfViewerController,
-
         ),
       ),
     );

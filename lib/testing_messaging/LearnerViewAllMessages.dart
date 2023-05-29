@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -9,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:logger/logger.dart';
+
 import '../AllNew/model/ConnectionChecker.dart';
 import '../AllNew/shared/constants.dart';
 
@@ -38,14 +38,8 @@ class _LearnerViewAllMessagesState extends State<LearnerViewAllMessages> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery
-          .of(context)
-          .size
-          .height,
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.only(top: 0.0),
       decoration: const BoxDecoration(
         //screen background color
@@ -56,16 +50,17 @@ class _LearnerViewAllMessagesState extends State<LearnerViewAllMessages> {
       ),
       child: Column(
         children: [
-
-          widget.loading? SpinKitChasingDots(
-            color: Theme.of(context).primaryColor,
-            size: 15,
-          ):Visibility(
-            visible: isVisible,
-              child: const Padding(
-                padding:  EdgeInsets.symmetric(vertical: 1),
-                child:  Text(""),
-              )),
+          widget.loading
+              ? SpinKitChasingDots(
+                  color: Theme.of(context).primaryColor,
+                  size: 15,
+                )
+              : Visibility(
+                  visible: isVisible,
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 1),
+                    child: Text(""),
+                  )),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
@@ -83,14 +78,8 @@ class _LearnerViewAllMessagesState extends State<LearnerViewAllMessages> {
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight),
                     ),
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height,
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
                     child: Center(
                       child: Text("Error: ${snapshot.error}"),
                     ),
@@ -99,14 +88,8 @@ class _LearnerViewAllMessagesState extends State<LearnerViewAllMessages> {
                     snapshot.data == null ||
                     snapshot.data!.size <= 0) {
                   return Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height,
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
                     decoration: const BoxDecoration(
                       //screen background color
                       gradient: LinearGradient(
@@ -127,9 +110,7 @@ class _LearnerViewAllMessagesState extends State<LearnerViewAllMessages> {
                 } else if (snapshot.connectionState ==
                     ConnectionState.waiting) {
                   return SpinKitChasingDots(
-                    color: Theme
-                        .of(context)
-                        .primaryColor,
+                    color: Theme.of(context).primaryColor,
                   );
                 } else {
                   var _documents = snapshot.data!.docs;
@@ -138,7 +119,7 @@ class _LearnerViewAllMessagesState extends State<LearnerViewAllMessages> {
                     itemBuilder: (BuildContext context, int index) {
                       DocumentSnapshot document = _documents[index];
                       var imageURLFromFirebase =
-                      (document.get("imageURL")).toString();
+                          (document.get("imageURL")).toString();
                       String text = document.get("text");
                       String name = document.get("nameOfTeacher");
 
@@ -146,201 +127,203 @@ class _LearnerViewAllMessagesState extends State<LearnerViewAllMessages> {
 
                       return
 
-                        // name.toString()[0], name, onselect=imageFromFirebase
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 3, horizontal: 5),
-                          color: Theme.of(context)
-                              .primaryColorLight
-                              .withOpacity(.3),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  CircleAvatar(
-                                    child: Text(
-                                      name.toString()[0],
-                                      style: textStyleText(context).copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: Theme.of(context)
-                                            .primaryColorLight,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .spaceBetween,
-                                            children: [
-                                              Text(
-                                                name,
-                                                style: textStyleText(context)
-                                                    .copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                ),
-                                              ),
-                                              Text(
-                                                Utils.formattedDate(
-                                                    dateAndTime),
-                                                style: textStyleText(context)
-                                                    .copyWith(
-                                                    fontWeight:
-                                                    FontWeight.normal,
-                                                    color: Theme.of(
-                                                        context)
-                                                        .primaryColor
-                                                        .withOpacity(.7),
-                                                    fontSize: 10),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                          width: MediaQuery.of(context)
-                                              .size
-                                              .width /
-                                              2.1,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 40,
-                                    height: 40,
-                                    child: PopupMenuButton<int>(
-                                      color: Theme.of(context).primaryColorLight,
-                                      icon: Icon(Icons.more_vert, color: Theme.of(context).primaryColor,),
-                                      elevation: 5.0,
-                                      itemBuilder: (context) => [
-                                        PopupMenuItem<int>(
-                                          value: 0,
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.download,
-                                                color: Theme.of(context)
-                                                    .primaryColor
-                                                    .withOpacity(.7),
-                                              ),
-                                              const SizedBox(
-                                                width: 7,
-                                              ),
-                                              Text(
-                                                "Download",
-                                                style: textStyleText(context)
-                                                    .copyWith(),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const PopupMenuDivider(),
-                                        PopupMenuItem<int>(
-                                          value: 1,
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.share,
-                                                color: Theme.of(context)
-                                                    .primaryColor
-                                                    .withOpacity(.7),
-                                              ),
-                                              const SizedBox(
-                                                width: 7,
-                                              ),
-                                              Text(
-                                                "Share",
-                                                style: textStyleText(context)
-                                                    .copyWith(),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                      onSelected: (item) => selectedItem(
-                                          context,
-                                          item,
-                                          imageURLFromFirebase),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              InstaImageViewer(
-                                child: CachedNetworkImage(
-                                  imageUrl: imageURLFromFirebase,
-                                  placeholder: (context, url) =>  SizedBox(
-                                    height: 200,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: SpinKitChasingDots(
-                                      color: Theme.of(context).primaryColor,
-                                      size: 50,
-                                    ),
-                                  ),
-                                  cacheManager: CacheManager(
-                                    //this removes the image and re-downloads it after 7 days
-                                    Config(
-                                      'customCacheKey',
-                                      stalePeriod: const Duration(days: 7),
-                                    ),
-                                  ),
-                                  errorWidget: (context, url, error) => const Icon(
-                                    Icons.error,
-                                    size: 100,
-                                    color: Colors.red,
-                                  ),
-                                  // imageBuilder: (context, imageProvider) => Container(
-                                  //   width: MediaQuery.of(context).size.width,
-                                  //   height: 350,
-                                  //   decoration: BoxDecoration(
-                                  //     image: DecorationImage(
-                                  //       image: imageProvider,
-                                  //       fit: BoxFit.cover,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  imageBuilder:(context, imageProvider) => Center(
-                                    child: Image(
-                                      image: imageProvider,
-                                      fit: BoxFit.contain,
+                          // name.toString()[0], name, onselect=imageFromFirebase
+                          Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 3, horizontal: 5),
+                        color:
+                            Theme.of(context).primaryColorLight.withOpacity(.3),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                CircleAvatar(
+                                  child: Text(
+                                    name.toString()[0],
+                                    style: textStyleText(context).copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).primaryColorLight,
                                     ),
                                   ),
                                 ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              name,
+                                              style: textStyleText(context)
+                                                  .copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                            ),
+                                            Text(
+                                              Utils.formattedDate(dateAndTime),
+                                              style: textStyleText(context)
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color: Theme.of(context)
+                                                          .primaryColor
+                                                          .withOpacity(.7),
+                                                      fontSize: 10),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2.1,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: PopupMenuButton<int>(
+                                    color: Theme.of(context).primaryColorLight,
+                                    icon: Icon(
+                                      Icons.more_vert,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    elevation: 5.0,
+                                    itemBuilder: (context) => [
+                                      PopupMenuItem<int>(
+                                        value: 0,
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.download,
+                                              color: Theme.of(context)
+                                                  .primaryColor
+                                                  .withOpacity(.7),
+                                            ),
+                                            const SizedBox(
+                                              width: 7,
+                                            ),
+                                            Text(
+                                              "Download",
+                                              style: textStyleText(context)
+                                                  .copyWith(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const PopupMenuDivider(),
+                                      PopupMenuItem<int>(
+                                        value: 1,
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.share,
+                                              color: Theme.of(context)
+                                                  .primaryColor
+                                                  .withOpacity(.7),
+                                            ),
+                                            const SizedBox(
+                                              width: 7,
+                                            ),
+                                            Text(
+                                              "Share",
+                                              style: textStyleText(context)
+                                                  .copyWith(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                    onSelected: (item) => selectedItem(
+                                        context, item, imageURLFromFirebase),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            InstaImageViewer(
+                              child: CachedNetworkImage(
+                                imageUrl: imageURLFromFirebase,
+                                placeholder: (context, url) => SizedBox(
+                                  height: 200,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: SpinKitChasingDots(
+                                    color: Theme.of(context).primaryColor,
+                                    size: 50,
+                                  ),
+                                ),
+                                cacheManager: CacheManager(
+                                  //this removes the image and re-downloads it after 7 days
+                                  Config(
+                                    'customCacheKey',
+                                    stalePeriod: const Duration(days: 7),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Center(
+                                      child:  Icon(
+                                  Icons.error,
+                                  size: 150,
+                                  color: Colors.red,
+                                ),
+                                    ),
+                                // imageBuilder: (context, imageProvider) => Container(
+                                //   width: MediaQuery.of(context).size.width,
+                                //   height: 350,
+                                //   decoration: BoxDecoration(
+                                //     image: DecorationImage(
+                                //       image: imageProvider,
+                                //       fit: BoxFit.cover,
+                                //     ),
+                                //   ),
+                                // ),
+                                imageBuilder: (context, imageProvider) =>
+                                    Center(
+                                  child: Image(
+                                    image: imageProvider,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
                               ),
-                              SizedBox(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 5),
-                                  child: Text(
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 5),
+                              child: Wrap(
+                                children: [
+                                  SelectableText(
                                     text,
                                     style: textStyleText(context),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                        );
+                            ),
+                          ],
+                        ),
+                      );
                       //   Container(
                       //   margin: const EdgeInsets.symmetric(
                       //       vertical: 3, horizontal: 5),
@@ -557,17 +540,17 @@ class _LearnerViewAllMessagesState extends State<LearnerViewAllMessages> {
             widget.loading = true;
           });
           var albumName = "E-Board";
-          await GallerySaver.saveImage(imageUrl, albumName: albumName)
-              .then((value) =>
-              Fluttertoast.showToast(
+          await GallerySaver.saveImage(imageUrl, albumName: albumName).then(
+              (value) => Fluttertoast.showToast(
                   backgroundColor: Colors.purple.shade500,
-                  msg: "Image saved to you gallery. The directory Pictures/E-board."));
+                  msg:
+                      "Image saved to you gallery. The directory Pictures/E-board."));
         } catch (e) {
           Fluttertoast.showToast(
               backgroundColor: Colors.purple.shade500,
               msg: "Could not download the image");
 
-    logger.e("$e could not download image");
+          logger.e("$e could not download image");
           //snack(e.toString(), context);
         }
         setState(() {

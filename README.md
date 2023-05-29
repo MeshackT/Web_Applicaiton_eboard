@@ -4,13 +4,36 @@ Eboard
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This is a school feed application for teachers and learners.
 
-A few resources to get you started if this is your first Flutter project:
+Teachers get to send letters digitally to learners instead of printing out paper form of letters.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Messages can be sent to provide class taught by the teacher or it can be public.
+this application also enables pdf files to be share within the application.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+in order to share the pdf externally u do so using a link and the other end can view the link shared
+on web browsers.
+
+The main function of this application is to provide marks on a digital platform where they can be 
+accessed anywhere by the user.
+
+Authen tication, Notifications, Images, pdfs, Texts, sharing, downloading, and viewing capabilities.
+
+firebase deploy --only hosting:ebase-3f858
+
+<!--  <script>-->
+<!--    window.addEventListener('load', function(ev) {-->
+<!--      _flutter.loader.loadEntrypoint({-->
+<!--        serviceWorker: {-->
+<!--          serviceWorkerVersion: serviceWorkerVersion,-->
+<!--        },-->
+<!--        onEntrypointLoaded: function(engineInitializer) {-->
+<!--          engineInitializer.initializeEngine().then(function(appRunner) {-->
+<!--            appRunner.runApp();-->
+<!--          });-->
+<!--        }-->
+<!--      });-->
+<!--    });-->
+<!--  </script>-->
+
+[//]: # (gsutil cors set cors.json gs://ebase-3f858.appspot.com/)

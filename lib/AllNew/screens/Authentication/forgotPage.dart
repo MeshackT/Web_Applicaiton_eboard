@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:yueway/main.dart';
-
-import '../../main.dart';
 import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';
 import 'Authenticate.dart';
@@ -25,8 +23,8 @@ class _ForgotState extends State<Forgot> {
   void initState() {
     super.initState();
     ConnectionChecker.checkTimer();
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -221,8 +219,6 @@ class _ForgotState extends State<Forgot> {
       ),
     );
   }
-
-
 
   Future<void> forgotPassword() async {
     //set this state after I press the button

@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +13,8 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:yueway/AllNew/screens/home/home.dart';
 import 'package:yueway/AllNew/screens/home/learnersHome.dart';
 import 'package:yueway/AllNew/shared/constants.dart';
-import 'package:yueway/testing_messaging/LearnerViewDocument.dart';
+import 'package:http/http.dart' as http;
+
 
 User user = FirebaseAuth.instance.currentUser!;
 
@@ -19,10 +22,16 @@ class LearnerViewPrivateDocuments extends StatefulWidget {
   const LearnerViewPrivateDocuments({Key? key}) : super(key: key);
 
   @override
-  State<LearnerViewPrivateDocuments> createState() => _LearnerViewPrivateDocuments();
+  State<LearnerViewPrivateDocuments> createState() =>
+      _LearnerViewPrivateDocuments();
 }
 
 class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
+  final TextEditingController _searchController = TextEditingController();
+
+  bool isLoading = false;
+  String searchText = '';
+  List<DocumentSnapshot> _documents = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +51,7 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
             children: [
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -64,6 +73,53 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
                         ),
                       ),
                     ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    isLoading
+                        ? SpinKitChasingDots(
+                      color: Theme.of(context).primaryColor,
+                      size: 16,
+                    ):Container(
+                      width: 260,
+                      // color:
+                      // Theme.of(context).primaryColorLight.withOpacity(.8),
+                      child: TextField(
+                        controller: _searchController,
+                        cursorColor: Theme.of(context).primaryColorDark,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColorDark,
+                                width: 1.0),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          contentPadding: const EdgeInsets.only(
+                            left: 15,
+                            bottom: 11,
+                            top: 11,
+                            right: 15,
+                          ),
+                          hintText: "Enter a name",
+                          hintStyle: TextStyle(
+                              color: Theme.of(context).primaryColorDark,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
+                          prefixIcon: const Icon(Icons.search),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            searchText = value;
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 5,),
                   ],
                 ),
               ),
@@ -77,7 +133,7 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasError) {
+                    if  (snapshot.hasError) {
                       return Text("Error: ${snapshot.error}");
                     } else if (!snapshot.hasData ||
                         snapshot.data == null ||
@@ -98,6 +154,15 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
                       );
                     } else {
                       var _documents = snapshot.data!.docs;
+                      if (searchText.isNotEmpty) {
+                        _documents = _documents.where((element) {
+                          return element
+                              .get('text')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchText.toLowerCase());
+                        }).toList();
+                      }
                       return ListView.builder(
                         itemCount: _documents.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -145,7 +210,7 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
                                         flex: 1,
                                         child: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               text,
@@ -163,13 +228,13 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
                                                       dateAndTime),
                                                   style: textStyleText(context)
                                                       .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.normal,
-                                                      color: Theme.of(
-                                                          context)
-                                                          .primaryColor
-                                                          .withOpacity(.7),
-                                                      fontSize: 10),
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor
+                                                              .withOpacity(.7),
+                                                          fontSize: 10),
                                                 ),
                                                 const SizedBox(
                                                   width: 10,
@@ -178,13 +243,13 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
                                                   formattedDateTime,
                                                   style: textStyleText(context)
                                                       .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.normal,
-                                                      color: Theme.of(
-                                                          context)
-                                                          .primaryColor
-                                                          .withOpacity(.7),
-                                                      fontSize: 10),
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor
+                                                              .withOpacity(.7),
+                                                          fontSize: 10),
                                                 )
                                               ],
                                             ),
@@ -200,7 +265,7 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
                                           icon: Icon(
                                             Icons.more_vert,
                                             color:
-                                            Theme.of(context).primaryColor,
+                                                Theme.of(context).primaryColor,
                                           ),
                                           elevation: 5.0,
                                           itemBuilder: (context) => [
@@ -221,35 +286,35 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
                                                   Text(
                                                     "Share PDF",
                                                     style:
+                                                        textStyleText(context)
+                                                            .copyWith(),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            PopupMenuItem<int>(
+                                              value: 1,
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.download,
+                                                    color: Theme.of(context)
+                                                        .primaryColor
+                                                        .withOpacity(.7),
+                                                    size: 15,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    "Download PDF",
+                                                    style:
                                                     textStyleText(context)
                                                         .copyWith(),
                                                   ),
                                                 ],
                                               ),
                                             ),
-                                            // PopupMenuItem<int>(
-                                            //   value: 1,
-                                            //   child: Row(
-                                            //     children: [
-                                            //       Icon(
-                                            //         Icons.download,
-                                            //         color: Theme.of(context)
-                                            //             .primaryColor
-                                            //             .withOpacity(.7),
-                                            //         size: 15,
-                                            //       ),
-                                            //       const SizedBox(
-                                            //         width: 10,
-                                            //       ),
-                                            //       Text(
-                                            //         "Download PDF",
-                                            //         style:
-                                            //         textStyleText(context)
-                                            //             .copyWith(),
-                                            //       ),
-                                            //     ],
-                                            //   ),
-                                            // ),
                                           ],
                                           onSelected: (item) => selectedItem(
                                               context, item, name, fileUrl),
@@ -287,8 +352,8 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
   }
 
   //TODO Show pop up button
-  Future<void> selectedItem(
-      BuildContext context, item, String nameOfSender, String fileUrlfile) async {
+  Future<void> selectedItem(BuildContext context, item, String nameOfSender,
+      String fileUrlfile) async {
     switch (item) {
       case 0:
         try {
@@ -308,36 +373,66 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
           snack(e.toString(), context);
         }
         break;
-      // case 1:
-      //   try {
-      //     if (fileUrlfile.isEmpty || fileUrlfile == "") {
-      //       print("cant share");
-      //       snack('There`s no url link found', context);
-      //     } else {
-      //       print("can download $fileUrlfile");
-      //       openFile(url: fileUrlfile);
-      //
-      //     }
-      //   } catch (e) {
-      //     print(fileUrlfile);
-      //     snack(e.toString(), context);
-      //   }
-      //   break;
+      case 1:
+        try{
+          setState(() {
+            isLoading = true;
+          });
+          const Duration(milliseconds: 1500);
+          print("Started downloading");
+          // Download the PDF file
+          http.Response response = await http.get(Uri.parse(fileUrlfile));
+          Uint8List pdfBytes = response.bodyBytes;
+
+          // Get the external storage directory
+          Directory? externalDir = await getExternalStorageDirectory();
+          if (externalDir == null) {
+            print('External storage directory not found');
+            return;
+          }
+
+          // Create the e-board folder if it doesn't exist
+          String folderPath = '${externalDir.path}/e-board';
+          Directory folder = Directory(folderPath);
+          if (!await folder.exists()) {
+            await folder.create(recursive: true);
+          }
+
+          // Extract the file name from the URL
+          String fileName = fileUrlfile.split('/').last;
+
+          // Save the file to the e-board folder
+          String filePath = '$folderPath/$fileName';
+          File file = File(filePath);
+          await file.writeAsBytes(pdfBytes);
+          setState(() {
+            isLoading = false;
+          });
+          Fluttertoast.showToast(
+              msg: 'File downloaded and saved successfully at: $filePath');
+
+
+        } catch (e) {
+          print(fileUrlfile);
+          snack(e.toString(), context);
+        }
+        break;
     }
   }
 }
 
-Future openFile({required String url, String? fileName}) async{
+Future openFile({required String url, String? fileName}) async {
   final file = await downloadFile(url, fileName!);
 
-  if(file == null){
+  if (file == null) {
     return;
   }
   print("Path: ${file.path}");
 
   openFile(url: file.path);
 }
-Future<File?> downloadFile(String url, String name) async{
+
+Future<File?> downloadFile(String url, String name) async {
   try {
     final appStorage = await getApplicationDocumentsDirectory();
     final file = File('${appStorage.path}/$name');
@@ -347,8 +442,7 @@ Future<File?> downloadFile(String url, String name) async{
       options: Options(
         responseType: ResponseType.bytes,
         followRedirects: false,
-        receiveTimeout: const Duration(days: 0, milliseconds: 0,
-            minutes: 0),
+        receiveTimeout: const Duration(days: 0, milliseconds: 0, minutes: 0),
       ),
     );
 
@@ -360,7 +454,6 @@ Future<File?> downloadFile(String url, String name) async{
     Fluttertoast.showToast(msg: e.toString());
   }
 }
-
 
 class View extends StatelessWidget {
   final PdfViewerController? pdfViewerController;

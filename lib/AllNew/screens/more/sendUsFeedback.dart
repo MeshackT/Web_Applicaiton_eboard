@@ -23,7 +23,6 @@ class _SendUsFeedBackState extends State<SendUsFeedBack> {
       child: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-
         decoration: const BoxDecoration(
           //screen background color
           gradient: LinearGradient(

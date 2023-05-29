@@ -14,8 +14,8 @@ User? user = FirebaseAuth.instance.currentUser;
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
 
 class AddEditForAll extends StatefulWidget {
-   Map<String, dynamic> getMarksFromFirestore = {};
-   String subjectName = "";
+  Map<String, dynamic> getMarksFromFirestore = {};
+  String subjectName = "";
   String documentIDToEdit = "";
 
   AddEditForAll({
@@ -195,7 +195,6 @@ class _AddEditForAllState extends State<AddEditForAll> {
                             ),
                           ),
                         ),
-
                         Text(
                           "Add or edit marks for the learner",
                           style: textStyleText(context).copyWith(
@@ -502,7 +501,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                             await identityDocument.set({
                                                                               'allSubjects': allSubjects
                                                                             }, SetOptions(merge: true)).then(
-                                                                                  (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
                                                                             );
                                                                             logger.e(subjectData);
 
@@ -522,22 +521,29 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                 const Duration(seconds: 1),
                                                                           ));
                                                                         }
-                                                                      }
-                                                                      else {
+                                                                      } else {
                                                                         // handle case where teacherSubject index does not exist
                                                                         logger.i(
                                                                             'No $subjectName index found');
-                                                                        Fluttertoast.showToast(
-                                                                          backgroundColor: Theme.of(context).primaryColor
-                                                                        ,msg:"No $subjectName index found",);
+                                                                        Fluttertoast
+                                                                            .showToast(
+                                                                          backgroundColor:
+                                                                              Theme.of(context).primaryColor,
+                                                                          msg:
+                                                                              "No $subjectName index found",
+                                                                        );
                                                                       }
                                                                     } else {
                                                                       // handle case where document does not exist
                                                                       logger.i(
                                                                           'Document does not exist');
-                                                                      Fluttertoast.showToast(
-                                                                        backgroundColor: Theme.of(context).primaryColor
-                                                                        ,msg:"No $subjectName index found",);
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                        backgroundColor:
+                                                                            Theme.of(context).primaryColor,
+                                                                        msg:
+                                                                            "No $subjectName index found",
+                                                                      );
                                                                     }
                                                                   } catch (e) {
                                                                     logger.i(e);
@@ -546,11 +552,10 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                             msg:
                                                                                 e.toString());
                                                                   }
-                                                                  setState(
-                                                                          () {
-                                                                        loading =
+                                                                  setState(() {
+                                                                    loading =
                                                                         false;
-                                                                      });
+                                                                  });
                                                                 }),
                                                           ],
                                                         ),
@@ -769,25 +774,25 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       // go to the field in the document
                                                                       // check if the data is a Map
                                                                       if (allSubjects
-                                                                      is Map) {
+                                                                          is Map) {
                                                                         logger.e(
                                                                             "is a Map");
                                                                         bool
-                                                                        foundCatIndex =
-                                                                        false;
+                                                                            foundCatIndex =
+                                                                            false;
                                                                         // iterate over the keys of the map
                                                                         for (var key
-                                                                        in allSubjects.keys) {
+                                                                            in allSubjects.keys) {
                                                                           // if the key is the user's subject
                                                                           if (key ==
                                                                               subjectName) {
                                                                             // index is present
                                                                             foundCatIndex =
-                                                                            true;
+                                                                                true;
 
                                                                             // get the subject data from the map
                                                                             var subjectData =
-                                                                            allSubjects[key];
+                                                                                allSubjects[key];
                                                                             //logger.e(subjectData);
                                                                             logger.e(subjectData[0]["assignments"]);
 
@@ -805,7 +810,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                             await identityDocument.set({
                                                                               'allSubjects': allSubjects
                                                                             }, SetOptions(merge: true)).then(
-                                                                                  (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
                                                                             );
                                                                             logger.i(subjectData);
 
@@ -820,40 +825,46 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                           scaffoldContext
                                                                               .showSnackBar(SnackBar(
                                                                             content:
-                                                                            Text('Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                Text('Poor internet connection or the learner is not registered to do $subjectName'),
                                                                             duration:
-                                                                            const Duration(seconds: 1),
+                                                                                const Duration(seconds: 1),
                                                                           ));
                                                                         }
-                                                                      }
-                                                                      else {
+                                                                      } else {
                                                                         // handle case where teacherSubject index does not exist
                                                                         logger.i(
                                                                             'No $subjectName index found');
-                                                                        Fluttertoast.showToast(
-                                                                          backgroundColor: Theme.of(context).primaryColor
-                                                                          ,msg:"No $subjectName index found",);
+                                                                        Fluttertoast
+                                                                            .showToast(
+                                                                          backgroundColor:
+                                                                              Theme.of(context).primaryColor,
+                                                                          msg:
+                                                                              "No $subjectName index found",
+                                                                        );
                                                                       }
                                                                     } else {
                                                                       // handle case where document does not exist
                                                                       logger.i(
                                                                           'Document does not exist');
-                                                                      Fluttertoast.showToast(
-                                                                        backgroundColor: Theme.of(context).primaryColor
-                                                                        ,msg:"No $subjectName index found",);
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                        backgroundColor:
+                                                                            Theme.of(context).primaryColor,
+                                                                        msg:
+                                                                            "No $subjectName index found",
+                                                                      );
                                                                     }
                                                                   } catch (e) {
                                                                     logger.i(e);
                                                                     Fluttertoast
                                                                         .showToast(
-                                                                        msg:
-                                                                        e.toString());
+                                                                            msg:
+                                                                                e.toString());
                                                                   }
-                                                                  setState(
-                                                                          () {
-                                                                        loading =
+                                                                  setState(() {
+                                                                    loading =
                                                                         false;
-                                                                      });
+                                                                  });
                                                                 }),
                                                           ],
                                                         ),
@@ -993,25 +1004,25 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       // go to the field in the document
                                                                       // check if the data is a Map
                                                                       if (allSubjects
-                                                                      is Map) {
+                                                                          is Map) {
                                                                         logger.e(
                                                                             "is a Map");
                                                                         bool
-                                                                        foundCatIndex =
-                                                                        false;
+                                                                            foundCatIndex =
+                                                                            false;
                                                                         // iterate over the keys of the map
                                                                         for (var key
-                                                                        in allSubjects.keys) {
+                                                                            in allSubjects.keys) {
                                                                           // if the key is the user's subject
                                                                           if (key ==
                                                                               subjectName) {
                                                                             // index is present
                                                                             foundCatIndex =
-                                                                            true;
+                                                                                true;
 
                                                                             // get the subject data from the map
                                                                             var subjectData =
-                                                                            allSubjects[key];
+                                                                                allSubjects[key];
                                                                             //logger.e(subjectData);
                                                                             logger.e(subjectData[0]["exams"]);
 
@@ -1026,7 +1037,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                             await identityDocument.set({
                                                                               'allSubjects': allSubjects
                                                                             }, SetOptions(merge: true)).then(
-                                                                                  (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
                                                                             );
                                                                             logger.i(subjectData);
 
@@ -1041,40 +1052,46 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                           scaffoldContext
                                                                               .showSnackBar(SnackBar(
                                                                             content:
-                                                                            Text('Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                Text('Poor internet connection or the learner is not registered to do $subjectName'),
                                                                             duration:
-                                                                            const Duration(seconds: 1),
+                                                                                const Duration(seconds: 1),
                                                                           ));
                                                                         }
-                                                                      }
-                                                                      else {
+                                                                      } else {
                                                                         // handle case where teacherSubject index does not exist
                                                                         logger.i(
                                                                             'No $subjectName index found');
-                                                                        Fluttertoast.showToast(
-                                                                          backgroundColor: Theme.of(context).primaryColor
-                                                                          ,msg:"No $subjectName index found",);
+                                                                        Fluttertoast
+                                                                            .showToast(
+                                                                          backgroundColor:
+                                                                              Theme.of(context).primaryColor,
+                                                                          msg:
+                                                                              "No $subjectName index found",
+                                                                        );
                                                                       }
                                                                     } else {
                                                                       // handle case where document does not exist
                                                                       logger.i(
                                                                           'Document does not exist');
-                                                                      Fluttertoast.showToast(
-                                                                        backgroundColor: Theme.of(context).primaryColor
-                                                                        ,msg:"No $subjectName index found",);
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                        backgroundColor:
+                                                                            Theme.of(context).primaryColor,
+                                                                        msg:
+                                                                            "No $subjectName index found",
+                                                                      );
                                                                     }
                                                                   } catch (e) {
                                                                     logger.i(e);
                                                                     Fluttertoast
                                                                         .showToast(
-                                                                        msg:
-                                                                        e.toString());
+                                                                            msg:
+                                                                                e.toString());
                                                                   }
-                                                                  setState(
-                                                                          () {
-                                                                        loading =
+                                                                  setState(() {
+                                                                    loading =
                                                                         false;
-                                                                      });
+                                                                  });
                                                                 }),
                                                           ],
                                                         ),
@@ -1302,101 +1319,107 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                   });
                                                                   ////////////TODO Term 2 tests////////
 //check if the document exits
-                                                                      try {
-                                                                        ////////////TODO Add Term 1 tests marks////////
-                                                                        if (allSubjects !=
-                                                                            null) {
-                                                                          // go to the field in the document
-                                                                          // check if the data is a Map
-                                                                          if (allSubjects
+                                                                  try {
+                                                                    ////////////TODO Add Term 1 tests marks////////
+                                                                    if (allSubjects !=
+                                                                        null) {
+                                                                      // go to the field in the document
+                                                                      // check if the data is a Map
+                                                                      if (allSubjects
                                                                           is Map) {
-                                                                            logger.e(
-                                                                                "is a Map");
-                                                                            bool
+                                                                        logger.e(
+                                                                            "is a Map");
+                                                                        bool
                                                                             foundCatIndex =
                                                                             false;
-                                                                            // iterate over the keys of the map
-                                                                            for (var key
+                                                                        // iterate over the keys of the map
+                                                                        for (var key
                                                                             in allSubjects.keys) {
-                                                                              // if the key is the user's subject
-                                                                              if (key ==
-                                                                                  subjectName) {
-                                                                                // index is present
-                                                                                foundCatIndex =
+                                                                          // if the key is the user's subject
+                                                                          if (key ==
+                                                                              subjectName) {
+                                                                            // index is present
+                                                                            foundCatIndex =
                                                                                 true;
 
-                                                                                // get the subject data from the map
-                                                                                var subjectData =
+                                                                            // get the subject data from the map
+                                                                            var subjectData =
                                                                                 allSubjects[key];
-                                                                                logger.e(subjectData);
-                                                                                logger.i(subjectData[1]["tests"]);
+                                                                            logger.e(subjectData);
+                                                                            logger.i(subjectData[1]["tests"]);
 
-                                                                                // do something with the data, such as print it
-                                                                                //logger.i("$subjectName Found Subject: $subjectData");
+                                                                            // do something with the data, such as print it
+                                                                            //logger.i("$subjectName Found Subject: $subjectData");
 
-                                                                                // update the data
-                                                                                subjectData[1]["tests"]["test1mark"] =
-                                                                                    termTwoTestOneMark.text;
-                                                                                subjectData[1]["tests"]["test2mark"] =
-                                                                                    termTwoTestTwoMark.text;
-                                                                                subjectData[1]["tests"]["test3mark"] =
-                                                                                    termTwoTestThreeMark.text;
-                                                                                subjectData[1]["tests"]["test4mark"] =
-                                                                                    termTwoTestFourMark.text;
+                                                                            // update the data
+                                                                            subjectData[1]["tests"]["test1mark"] =
+                                                                                termTwoTestOneMark.text;
+                                                                            subjectData[1]["tests"]["test2mark"] =
+                                                                                termTwoTestTwoMark.text;
+                                                                            subjectData[1]["tests"]["test3mark"] =
+                                                                                termTwoTestThreeMark.text;
+                                                                            subjectData[1]["tests"]["test4mark"] =
+                                                                                termTwoTestFourMark.text;
 
-                                                                                // Update the "allSubjects" field with the modified map
-                                                                                await identityDocument.set({
-                                                                                  'allSubjects': allSubjects
-                                                                                }, SetOptions(merge: true)).then(
-                                                                                      (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
-                                                                                );
-                                                                                logger.e(subjectData);
+                                                                            // Update the "allSubjects" field with the modified map
+                                                                            await identityDocument.set({
+                                                                              'allSubjects': allSubjects
+                                                                            }, SetOptions(merge: true)).then(
+                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                            );
+                                                                            logger.e(subjectData);
 
-                                                                                break;
-                                                                              }
-                                                                            }
-                                                                            // if the user's subject is not found
-                                                                            if (!foundCatIndex) {
-                                                                              // handle case where subject index does not exist
-                                                                              logger
-                                                                                  .i('No $subjectName index found');
-                                                                              scaffoldContext
-                                                                                  .showSnackBar(SnackBar(
-                                                                                content:
-                                                                                Text('The learner is not registered to do $subjectName'),
-                                                                                duration:
-                                                                                const Duration(seconds: 1),
-                                                                              ));
-                                                                            }
+                                                                            break;
                                                                           }
-                                                                          else {
-                                                                            // handle case where teacherSubject index does not exist
-                                                                            logger.i(
-                                                                                'No $subjectName index found');
-                                                                            Fluttertoast.showToast(
-                                                                              backgroundColor: Theme.of(context).primaryColor
-                                                                              ,msg:"No $subjectName index found",);
-                                                                          }
-                                                                        } else {
-                                                                          // handle case where document does not exist
-                                                                          logger.i(
-                                                                              'Document does not exist');
-                                                                          Fluttertoast.showToast(
-                                                                            backgroundColor: Theme.of(context).primaryColor
-                                                                            ,msg:"No $subjectName index found",);
                                                                         }
-                                                                      } catch (e) {
-                                                                        logger.i(e);
+                                                                        // if the user's subject is not found
+                                                                        if (!foundCatIndex) {
+                                                                          // handle case where subject index does not exist
+                                                                          logger
+                                                                              .i('No $subjectName index found');
+                                                                          scaffoldContext
+                                                                              .showSnackBar(SnackBar(
+                                                                            content:
+                                                                                Text('The learner is not registered to do $subjectName'),
+                                                                            duration:
+                                                                                const Duration(seconds: 1),
+                                                                          ));
+                                                                        }
+                                                                      } else {
+                                                                        // handle case where teacherSubject index does not exist
+                                                                        logger.i(
+                                                                            'No $subjectName index found');
                                                                         Fluttertoast
                                                                             .showToast(
-                                                                            msg:
-                                                                            e.toString());
+                                                                          backgroundColor:
+                                                                              Theme.of(context).primaryColor,
+                                                                          msg:
+                                                                              "No $subjectName index found",
+                                                                        );
                                                                       }
-                                                                      setState(
-                                                                              () {
-                                                                            loading =
-                                                                            false;
-                                                                          });
+                                                                    } else {
+                                                                      // handle case where document does not exist
+                                                                      logger.i(
+                                                                          'Document does not exist');
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                        backgroundColor:
+                                                                            Theme.of(context).primaryColor,
+                                                                        msg:
+                                                                            "No $subjectName index found",
+                                                                      );
+                                                                    }
+                                                                  } catch (e) {
+                                                                    logger.i(e);
+                                                                    Fluttertoast
+                                                                        .showToast(
+                                                                            msg:
+                                                                                e.toString());
+                                                                  }
+                                                                  setState(() {
+                                                                    loading =
+                                                                        false;
+                                                                  });
                                                                 }),
                                                           ],
                                                         ),
@@ -1617,25 +1640,25 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       // go to the field in the document
                                                                       // check if the data is a Map
                                                                       if (allSubjects
-                                                                      is Map) {
+                                                                          is Map) {
                                                                         logger.e(
                                                                             "is a Map");
                                                                         bool
-                                                                        foundCatIndex =
-                                                                        false;
+                                                                            foundCatIndex =
+                                                                            false;
                                                                         // iterate over the keys of the map
                                                                         for (var key
-                                                                        in allSubjects.keys) {
+                                                                            in allSubjects.keys) {
                                                                           // if the key is the user's subject
                                                                           if (key ==
                                                                               subjectName) {
                                                                             // index is present
                                                                             foundCatIndex =
-                                                                            true;
+                                                                                true;
 
                                                                             // get the subject data from the map
                                                                             var subjectData =
-                                                                            allSubjects[key];
+                                                                                allSubjects[key];
                                                                             //logger.e(subjectData);
                                                                             logger.e(subjectData[1]["assignments"]);
 
@@ -1654,7 +1677,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                             await identityDocument.set({
                                                                               'allSubjects': allSubjects
                                                                             }, SetOptions(merge: true)).then(
-                                                                                  (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
                                                                             );
                                                                             logger.i(subjectData);
 
@@ -1669,40 +1692,46 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                           scaffoldContext
                                                                               .showSnackBar(SnackBar(
                                                                             content:
-                                                                            Text('Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                Text('Poor internet connection or the learner is not registered to do $subjectName'),
                                                                             duration:
-                                                                            const Duration(seconds: 1),
+                                                                                const Duration(seconds: 1),
                                                                           ));
                                                                         }
-                                                                      }
-                                                                      else {
+                                                                      } else {
                                                                         // handle case where teacherSubject index does not exist
                                                                         logger.i(
                                                                             'No $subjectName index found');
-                                                                        Fluttertoast.showToast(
-                                                                          backgroundColor: Theme.of(context).primaryColor
-                                                                          ,msg:"No $subjectName index found",);
+                                                                        Fluttertoast
+                                                                            .showToast(
+                                                                          backgroundColor:
+                                                                              Theme.of(context).primaryColor,
+                                                                          msg:
+                                                                              "No $subjectName index found",
+                                                                        );
                                                                       }
                                                                     } else {
                                                                       // handle case where document does not exist
                                                                       logger.i(
                                                                           'Document does not exist');
-                                                                      Fluttertoast.showToast(
-                                                                        backgroundColor: Theme.of(context).primaryColor
-                                                                        ,msg:"No $subjectName index found",);
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                        backgroundColor:
+                                                                            Theme.of(context).primaryColor,
+                                                                        msg:
+                                                                            "No $subjectName index found",
+                                                                      );
                                                                     }
                                                                   } catch (e) {
                                                                     logger.i(e);
                                                                     Fluttertoast
                                                                         .showToast(
-                                                                        msg:
-                                                                        e.toString());
+                                                                            msg:
+                                                                                e.toString());
                                                                   }
-                                                                  setState(
-                                                                          () {
-                                                                        loading =
+                                                                  setState(() {
+                                                                    loading =
                                                                         false;
-                                                                      });
+                                                                  });
                                                                 }),
                                                           ],
                                                         ),
@@ -1830,102 +1859,108 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       ),
                                                                 onPressed:
                                                                     () async {
-                                                                      setState(() {
-                                                                        loading =
+                                                                  setState(() {
+                                                                    loading =
                                                                         true;
-                                                                        subjectName =
-                                                                            widget
-                                                                                .subjectName;
-                                                                      });
-                                                                      ////////////TODO term 1 Exams ////////
-                                                                      try {
-                                                                        if (allSubjects !=
-                                                                            null) {
-                                                                          // go to the field in the document
-                                                                          // check if the data is a Map
-                                                                          if (allSubjects
+                                                                    subjectName =
+                                                                        widget
+                                                                            .subjectName;
+                                                                  });
+                                                                  ////////////TODO term 1 Exams ////////
+                                                                  try {
+                                                                    if (allSubjects !=
+                                                                        null) {
+                                                                      // go to the field in the document
+                                                                      // check if the data is a Map
+                                                                      if (allSubjects
                                                                           is Map) {
-                                                                            logger.e(
-                                                                                "is a Map");
-                                                                            bool
+                                                                        logger.e(
+                                                                            "is a Map");
+                                                                        bool
                                                                             foundCatIndex =
                                                                             false;
-                                                                            // iterate over the keys of the map
-                                                                            for (var key
+                                                                        // iterate over the keys of the map
+                                                                        for (var key
                                                                             in allSubjects.keys) {
-                                                                              // if the key is the user's subject
-                                                                              if (key ==
-                                                                                  subjectName) {
-                                                                                // index is present
-                                                                                foundCatIndex =
+                                                                          // if the key is the user's subject
+                                                                          if (key ==
+                                                                              subjectName) {
+                                                                            // index is present
+                                                                            foundCatIndex =
                                                                                 true;
 
-                                                                                // get the subject data from the map
-                                                                                var subjectData =
+                                                                            // get the subject data from the map
+                                                                            var subjectData =
                                                                                 allSubjects[key];
-                                                                                //logger.e(subjectData);
-                                                                                logger.e(subjectData[1]["exams"]);
+                                                                            //logger.e(subjectData);
+                                                                            logger.e(subjectData[1]["exams"]);
 
-                                                                                // do something with the data, such as print it
-                                                                                // update the data
-                                                                                subjectData[1]["exams"]["exam1mark"] =
-                                                                                    termTwoExamOneMark.text;
-                                                                                subjectData[1]["exams"]["exam2mark"] =
-                                                                                    termTwoExamTwoMark.text;
+                                                                            // do something with the data, such as print it
+                                                                            // update the data
+                                                                            subjectData[1]["exams"]["exam1mark"] =
+                                                                                termTwoExamOneMark.text;
+                                                                            subjectData[1]["exams"]["exam2mark"] =
+                                                                                termTwoExamTwoMark.text;
 
-                                                                                // Update the "allSubjects" field with the modified map
-                                                                                await identityDocument.set({
-                                                                                  'allSubjects': allSubjects
-                                                                                }, SetOptions(merge: true)).then(
-                                                                                      (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
-                                                                                );
-                                                                                logger.i(subjectData);
+                                                                            // Update the "allSubjects" field with the modified map
+                                                                            await identityDocument.set({
+                                                                              'allSubjects': allSubjects
+                                                                            }, SetOptions(merge: true)).then(
+                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                            );
+                                                                            logger.i(subjectData);
 
-                                                                                break;
-                                                                              }
-                                                                            }
-                                                                            // if the user's subject is not found
-                                                                            if (!foundCatIndex) {
-                                                                              // handle case where subject index does not exist
-                                                                              logger
-                                                                                  .i('No $subjectName index found');
-                                                                              scaffoldContext
-                                                                                  .showSnackBar(SnackBar(
-                                                                                content:
-                                                                                Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                duration:
-                                                                                const Duration(seconds: 1),
-                                                                              ));
-                                                                            }
+                                                                            break;
                                                                           }
-                                                                          else {
-                                                                            // handle case where teacherSubject index does not exist
-                                                                            logger.i(
-                                                                                'No $subjectName index found');
-                                                                            Fluttertoast.showToast(
-                                                                              backgroundColor: Theme.of(context).primaryColor
-                                                                              ,msg:"No $subjectName index found",);
-                                                                          }
-                                                                        } else {
-                                                                          // handle case where document does not exist
-                                                                          logger.i(
-                                                                              'Document does not exist');
-                                                                          Fluttertoast.showToast(
-                                                                            backgroundColor: Theme.of(context).primaryColor
-                                                                            ,msg:"No $subjectName index found",);
                                                                         }
-                                                                      } catch (e) {
-                                                                        logger.i(e);
+                                                                        // if the user's subject is not found
+                                                                        if (!foundCatIndex) {
+                                                                          // handle case where subject index does not exist
+                                                                          logger
+                                                                              .i('No $subjectName index found');
+                                                                          scaffoldContext
+                                                                              .showSnackBar(SnackBar(
+                                                                            content:
+                                                                                Text('Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                            duration:
+                                                                                const Duration(seconds: 1),
+                                                                          ));
+                                                                        }
+                                                                      } else {
+                                                                        // handle case where teacherSubject index does not exist
+                                                                        logger.i(
+                                                                            'No $subjectName index found');
                                                                         Fluttertoast
                                                                             .showToast(
-                                                                            msg:
-                                                                            e.toString());
+                                                                          backgroundColor:
+                                                                              Theme.of(context).primaryColor,
+                                                                          msg:
+                                                                              "No $subjectName index found",
+                                                                        );
                                                                       }
-                                                                      setState(
-                                                                              () {
-                                                                            loading =
-                                                                            false;
-                                                                          });
+                                                                    } else {
+                                                                      // handle case where document does not exist
+                                                                      logger.i(
+                                                                          'Document does not exist');
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                        backgroundColor:
+                                                                            Theme.of(context).primaryColor,
+                                                                        msg:
+                                                                            "No $subjectName index found",
+                                                                      );
+                                                                    }
+                                                                  } catch (e) {
+                                                                    logger.i(e);
+                                                                    Fluttertoast
+                                                                        .showToast(
+                                                                            msg:
+                                                                                e.toString());
+                                                                  }
+                                                                  setState(() {
+                                                                    loading =
+                                                                        false;
+                                                                  });
                                                                 }),
                                                           ],
                                                         ),
@@ -2161,25 +2196,25 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       // go to the field in the document
                                                                       // check if the data is a Map
                                                                       if (allSubjects
-                                                                      is Map) {
+                                                                          is Map) {
                                                                         logger.e(
                                                                             "is a Map");
                                                                         bool
-                                                                        foundCatIndex =
-                                                                        false;
+                                                                            foundCatIndex =
+                                                                            false;
                                                                         // iterate over the keys of the map
                                                                         for (var key
-                                                                        in allSubjects.keys) {
+                                                                            in allSubjects.keys) {
                                                                           // if the key is the user's subject
                                                                           if (key ==
                                                                               subjectName) {
                                                                             // index is present
                                                                             foundCatIndex =
-                                                                            true;
+                                                                                true;
 
                                                                             // get the subject data from the map
                                                                             var subjectData =
-                                                                            allSubjects[key];
+                                                                                allSubjects[key];
                                                                             logger.e(subjectData);
                                                                             logger.i(subjectData[2]["tests"]);
 
@@ -2200,7 +2235,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                             await identityDocument.set({
                                                                               'allSubjects': allSubjects
                                                                             }, SetOptions(merge: true)).then(
-                                                                                  (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
                                                                             );
                                                                             logger.e(subjectData);
 
@@ -2215,40 +2250,46 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                           scaffoldContext
                                                                               .showSnackBar(SnackBar(
                                                                             content:
-                                                                            Text('The learner is not registered to do $subjectName'),
+                                                                                Text('The learner is not registered to do $subjectName'),
                                                                             duration:
-                                                                            const Duration(seconds: 1),
+                                                                                const Duration(seconds: 1),
                                                                           ));
                                                                         }
-                                                                      }
-                                                                      else {
+                                                                      } else {
                                                                         // handle case where teacherSubject index does not exist
                                                                         logger.i(
                                                                             'No $subjectName index found');
-                                                                        Fluttertoast.showToast(
-                                                                          backgroundColor: Theme.of(context).primaryColor
-                                                                          ,msg:"No $subjectName index found",);
+                                                                        Fluttertoast
+                                                                            .showToast(
+                                                                          backgroundColor:
+                                                                              Theme.of(context).primaryColor,
+                                                                          msg:
+                                                                              "No $subjectName index found",
+                                                                        );
                                                                       }
                                                                     } else {
                                                                       // handle case where document does not exist
                                                                       logger.i(
                                                                           'Document does not exist');
-                                                                      Fluttertoast.showToast(
-                                                                        backgroundColor: Theme.of(context).primaryColor
-                                                                        ,msg:"No $subjectName index found",);
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                        backgroundColor:
+                                                                            Theme.of(context).primaryColor,
+                                                                        msg:
+                                                                            "No $subjectName index found",
+                                                                      );
                                                                     }
                                                                   } catch (e) {
                                                                     logger.i(e);
                                                                     Fluttertoast
                                                                         .showToast(
-                                                                        msg:
-                                                                        e.toString());
+                                                                            msg:
+                                                                                e.toString());
                                                                   }
-                                                                  setState(
-                                                                          () {
-                                                                        loading =
+                                                                  setState(() {
+                                                                    loading =
                                                                         false;
-                                                                      });
+                                                                  });
                                                                 }),
                                                           ],
                                                         ),
@@ -2469,25 +2510,25 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       // go to the field in the document
                                                                       // check if the data is a Map
                                                                       if (allSubjects
-                                                                      is Map) {
+                                                                          is Map) {
                                                                         logger.e(
                                                                             "is a Map");
                                                                         bool
-                                                                        foundCatIndex =
-                                                                        false;
+                                                                            foundCatIndex =
+                                                                            false;
                                                                         // iterate over the keys of the map
                                                                         for (var key
-                                                                        in allSubjects.keys) {
+                                                                            in allSubjects.keys) {
                                                                           // if the key is the user's subject
                                                                           if (key ==
                                                                               subjectName) {
                                                                             // index is present
                                                                             foundCatIndex =
-                                                                            true;
+                                                                                true;
 
                                                                             // get the subject data from the map
                                                                             var subjectData =
-                                                                            allSubjects[key];
+                                                                                allSubjects[key];
                                                                             //logger.e(subjectData);
                                                                             logger.e(subjectData[2]["assignments"]);
 
@@ -2506,7 +2547,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                             await identityDocument.set({
                                                                               'allSubjects': allSubjects
                                                                             }, SetOptions(merge: true)).then(
-                                                                                  (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
                                                                             );
                                                                             logger.i(subjectData);
 
@@ -2521,40 +2562,46 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                           scaffoldContext
                                                                               .showSnackBar(SnackBar(
                                                                             content:
-                                                                            Text('Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                Text('Poor internet connection or the learner is not registered to do $subjectName'),
                                                                             duration:
-                                                                            const Duration(seconds: 1),
+                                                                                const Duration(seconds: 1),
                                                                           ));
                                                                         }
-                                                                      }
-                                                                      else {
+                                                                      } else {
                                                                         // handle case where teacherSubject index does not exist
                                                                         logger.i(
                                                                             'No $subjectName index found');
-                                                                        Fluttertoast.showToast(
-                                                                          backgroundColor: Theme.of(context).primaryColor
-                                                                          ,msg:"No $subjectName index found",);
+                                                                        Fluttertoast
+                                                                            .showToast(
+                                                                          backgroundColor:
+                                                                              Theme.of(context).primaryColor,
+                                                                          msg:
+                                                                              "No $subjectName index found",
+                                                                        );
                                                                       }
                                                                     } else {
                                                                       // handle case where document does not exist
                                                                       logger.i(
                                                                           'Document does not exist');
-                                                                      Fluttertoast.showToast(
-                                                                        backgroundColor: Theme.of(context).primaryColor
-                                                                        ,msg:"No $subjectName index found",);
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                        backgroundColor:
+                                                                            Theme.of(context).primaryColor,
+                                                                        msg:
+                                                                            "No $subjectName index found",
+                                                                      );
                                                                     }
                                                                   } catch (e) {
                                                                     logger.i(e);
                                                                     Fluttertoast
                                                                         .showToast(
-                                                                        msg:
-                                                                        e.toString());
+                                                                            msg:
+                                                                                e.toString());
                                                                   }
-                                                                  setState(
-                                                                          () {
-                                                                        loading =
+                                                                  setState(() {
+                                                                    loading =
                                                                         false;
-                                                                      });
+                                                                  });
                                                                 }),
                                                           ],
                                                         ),
@@ -2688,96 +2735,103 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                   });
                                                                   ////////////TODO Term 3 exams////////
 //check if the document exits
-                                                                      ////////////TODO term 1 Exams ////////
-                                                                      try {
-                                                                        if (allSubjects !=
-                                                                            null) {
-                                                                          // go to the field in the document
-                                                                          // check if the data is a Map
-                                                                          if (allSubjects
+                                                                  ////////////TODO term 1 Exams ////////
+                                                                  try {
+                                                                    if (allSubjects !=
+                                                                        null) {
+                                                                      // go to the field in the document
+                                                                      // check if the data is a Map
+                                                                      if (allSubjects
                                                                           is Map) {
-                                                                            logger.e(
-                                                                                "is a Map");
-                                                                            bool
+                                                                        logger.e(
+                                                                            "is a Map");
+                                                                        bool
                                                                             foundCatIndex =
                                                                             false;
-                                                                            // iterate over the keys of the map
-                                                                            for (var key
+                                                                        // iterate over the keys of the map
+                                                                        for (var key
                                                                             in allSubjects.keys) {
-                                                                              // if the key is the user's subject
-                                                                              if (key ==
-                                                                                  subjectName) {
-                                                                                // index is present
-                                                                                foundCatIndex =
+                                                                          // if the key is the user's subject
+                                                                          if (key ==
+                                                                              subjectName) {
+                                                                            // index is present
+                                                                            foundCatIndex =
                                                                                 true;
 
-                                                                                // get the subject data from the map
-                                                                                var subjectData =
+                                                                            // get the subject data from the map
+                                                                            var subjectData =
                                                                                 allSubjects[key];
-                                                                                //logger.e(subjectData);
-                                                                                logger.e(subjectData[2]["exams"]);
+                                                                            //logger.e(subjectData);
+                                                                            logger.e(subjectData[2]["exams"]);
 
-                                                                                // do something with the data, such as print it
-                                                                                // update the data
-                                                                                subjectData[2]["exams"]["exam1mark"] =
-                                                                                    termThreeExamOneMark.text;
-                                                                                subjectData[2]["exams"]["exam2mark"] =
-                                                                                    termThreeExamTwoMark.text;
+                                                                            // do something with the data, such as print it
+                                                                            // update the data
+                                                                            subjectData[2]["exams"]["exam1mark"] =
+                                                                                termThreeExamOneMark.text;
+                                                                            subjectData[2]["exams"]["exam2mark"] =
+                                                                                termThreeExamTwoMark.text;
 
-                                                                                // Update the "allSubjects" field with the modified map
-                                                                                await identityDocument.set({
-                                                                                  'allSubjects': allSubjects
-                                                                                }, SetOptions(merge: true)).then(
-                                                                                      (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
-                                                                                );
-                                                                                logger.i(subjectData);
+                                                                            // Update the "allSubjects" field with the modified map
+                                                                            await identityDocument.set({
+                                                                              'allSubjects': allSubjects
+                                                                            }, SetOptions(merge: true)).then(
+                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                            );
+                                                                            logger.i(subjectData);
 
-                                                                                break;
-                                                                              }
-                                                                            }
-                                                                            // if the user's subject is not found
-                                                                            if (!foundCatIndex) {
-                                                                              // handle case where subject index does not exist
-                                                                              logger
-                                                                                  .i('No $subjectName index found');
-                                                                              scaffoldContext
-                                                                                  .showSnackBar(SnackBar(
-                                                                                backgroundColor: Theme.of(context).primaryColor,
-                                                                                content:
-                                                                                Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                duration:
-                                                                                const Duration(seconds: 1),
-                                                                              ));
-                                                                            }
+                                                                            break;
                                                                           }
-                                                                          else {
-                                                                            // handle case where teacherSubject index does not exist
-                                                                            logger.i(
-                                                                                'No $subjectName index found');
-                                                                            Fluttertoast.showToast(
-                                                                              backgroundColor: Theme.of(context).primaryColor
-                                                                              ,msg:"No $subjectName index found",);
-                                                                          }
-                                                                        } else {
-                                                                          // handle case where document does not exist
-                                                                          logger.i(
-                                                                              'Document does not exist');
-                                                                          Fluttertoast.showToast(
-                                                                            backgroundColor: Theme.of(context).primaryColor
-                                                                            ,msg:"No $subjectName index found",);
                                                                         }
-                                                                      } catch (e) {
-                                                                        logger.i(e);
+                                                                        // if the user's subject is not found
+                                                                        if (!foundCatIndex) {
+                                                                          // handle case where subject index does not exist
+                                                                          logger
+                                                                              .i('No $subjectName index found');
+                                                                          scaffoldContext
+                                                                              .showSnackBar(SnackBar(
+                                                                            backgroundColor:
+                                                                                Theme.of(context).primaryColor,
+                                                                            content:
+                                                                                Text('Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                            duration:
+                                                                                const Duration(seconds: 1),
+                                                                          ));
+                                                                        }
+                                                                      } else {
+                                                                        // handle case where teacherSubject index does not exist
+                                                                        logger.i(
+                                                                            'No $subjectName index found');
                                                                         Fluttertoast
                                                                             .showToast(
-                                                                            msg:
-                                                                            e.toString());
+                                                                          backgroundColor:
+                                                                              Theme.of(context).primaryColor,
+                                                                          msg:
+                                                                              "No $subjectName index found",
+                                                                        );
                                                                       }
-                                                                      setState(
-                                                                              () {
-                                                                            loading =
-                                                                            false;
-                                                                          });
+                                                                    } else {
+                                                                      // handle case where document does not exist
+                                                                      logger.i(
+                                                                          'Document does not exist');
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                        backgroundColor:
+                                                                            Theme.of(context).primaryColor,
+                                                                        msg:
+                                                                            "No $subjectName index found",
+                                                                      );
+                                                                    }
+                                                                  } catch (e) {
+                                                                    logger.i(e);
+                                                                    Fluttertoast
+                                                                        .showToast(
+                                                                            msg:
+                                                                                e.toString());
+                                                                  }
+                                                                  setState(() {
+                                                                    loading =
+                                                                        false;
+                                                                  });
                                                                 }),
                                                           ],
                                                         ),
@@ -3017,25 +3071,25 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       // go to the field in the document
                                                                       // check if the data is a Map
                                                                       if (allSubjects
-                                                                      is Map) {
+                                                                          is Map) {
                                                                         logger.e(
                                                                             "is a Map");
                                                                         bool
-                                                                        foundCatIndex =
-                                                                        false;
+                                                                            foundCatIndex =
+                                                                            false;
                                                                         // iterate over the keys of the map
                                                                         for (var key
-                                                                        in allSubjects.keys) {
+                                                                            in allSubjects.keys) {
                                                                           // if the key is the user's subject
                                                                           if (key ==
                                                                               subjectName) {
                                                                             // index is present
                                                                             foundCatIndex =
-                                                                            true;
+                                                                                true;
 
                                                                             // get the subject data from the map
                                                                             var subjectData =
-                                                                            allSubjects[key];
+                                                                                allSubjects[key];
                                                                             logger.e(subjectData);
                                                                             logger.i(subjectData[3]["tests"]);
 
@@ -3056,7 +3110,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                             await identityDocument.set({
                                                                               'allSubjects': allSubjects
                                                                             }, SetOptions(merge: true)).then(
-                                                                                  (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
                                                                             );
                                                                             logger.e(subjectData);
 
@@ -3071,40 +3125,46 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                           scaffoldContext
                                                                               .showSnackBar(SnackBar(
                                                                             content:
-                                                                            Text('The learner is not registered to do $subjectName'),
+                                                                                Text('The learner is not registered to do $subjectName'),
                                                                             duration:
-                                                                            const Duration(seconds: 1),
+                                                                                const Duration(seconds: 1),
                                                                           ));
                                                                         }
-                                                                      }
-                                                                      else {
+                                                                      } else {
                                                                         // handle case where teacherSubject index does not exist
                                                                         logger.i(
                                                                             'No $subjectName index found');
-                                                                        Fluttertoast.showToast(
-                                                                          backgroundColor: Theme.of(context).primaryColor
-                                                                          ,msg:"No $subjectName index found",);
+                                                                        Fluttertoast
+                                                                            .showToast(
+                                                                          backgroundColor:
+                                                                              Theme.of(context).primaryColor,
+                                                                          msg:
+                                                                              "No $subjectName index found",
+                                                                        );
                                                                       }
                                                                     } else {
                                                                       // handle case where document does not exist
                                                                       logger.i(
                                                                           'Document does not exist');
-                                                                      Fluttertoast.showToast(
-                                                                        backgroundColor: Theme.of(context).primaryColor
-                                                                        ,msg:"No $subjectName index found",);
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                        backgroundColor:
+                                                                            Theme.of(context).primaryColor,
+                                                                        msg:
+                                                                            "No $subjectName index found",
+                                                                      );
                                                                     }
                                                                   } catch (e) {
                                                                     logger.i(e);
                                                                     Fluttertoast
                                                                         .showToast(
-                                                                        msg:
-                                                                        e.toString());
+                                                                            msg:
+                                                                                e.toString());
                                                                   }
-                                                                  setState(
-                                                                          () {
-                                                                        loading =
+                                                                  setState(() {
+                                                                    loading =
                                                                         false;
-                                                                      });
+                                                                  });
                                                                 }),
                                                           ],
                                                         ),
@@ -3325,25 +3385,25 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       // go to the field in the document
                                                                       // check if the data is a Map
                                                                       if (allSubjects
-                                                                      is Map) {
+                                                                          is Map) {
                                                                         logger.e(
                                                                             "is a Map");
                                                                         bool
-                                                                        foundCatIndex =
-                                                                        false;
+                                                                            foundCatIndex =
+                                                                            false;
                                                                         // iterate over the keys of the map
                                                                         for (var key
-                                                                        in allSubjects.keys) {
+                                                                            in allSubjects.keys) {
                                                                           // if the key is the user's subject
                                                                           if (key ==
                                                                               subjectName) {
                                                                             // index is present
                                                                             foundCatIndex =
-                                                                            true;
+                                                                                true;
 
                                                                             // get the subject data from the map
                                                                             var subjectData =
-                                                                            allSubjects[key];
+                                                                                allSubjects[key];
                                                                             //logger.e(subjectData);
                                                                             logger.e(subjectData[3]["assignments"]);
 
@@ -3362,7 +3422,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                             await identityDocument.set({
                                                                               'allSubjects': allSubjects
                                                                             }, SetOptions(merge: true)).then(
-                                                                                  (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
                                                                             );
                                                                             logger.i(subjectData);
 
@@ -3377,40 +3437,46 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                           scaffoldContext
                                                                               .showSnackBar(SnackBar(
                                                                             content:
-                                                                            Text('Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                Text('Poor internet connection or the learner is not registered to do $subjectName'),
                                                                             duration:
-                                                                            const Duration(seconds: 1),
+                                                                                const Duration(seconds: 1),
                                                                           ));
                                                                         }
-                                                                      }
-                                                                      else {
+                                                                      } else {
                                                                         // handle case where teacherSubject index does not exist
                                                                         logger.i(
                                                                             'No $subjectName index found');
-                                                                        Fluttertoast.showToast(
-                                                                          backgroundColor: Theme.of(context).primaryColor
-                                                                          ,msg:"No $subjectName index found",);
+                                                                        Fluttertoast
+                                                                            .showToast(
+                                                                          backgroundColor:
+                                                                              Theme.of(context).primaryColor,
+                                                                          msg:
+                                                                              "No $subjectName index found",
+                                                                        );
                                                                       }
                                                                     } else {
                                                                       // handle case where document does not exist
                                                                       logger.i(
                                                                           'Document does not exist');
-                                                                      Fluttertoast.showToast(
-                                                                        backgroundColor: Theme.of(context).primaryColor
-                                                                        ,msg:"No $subjectName index found",);
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                        backgroundColor:
+                                                                            Theme.of(context).primaryColor,
+                                                                        msg:
+                                                                            "No $subjectName index found",
+                                                                      );
                                                                     }
                                                                   } catch (e) {
                                                                     logger.i(e);
                                                                     Fluttertoast
                                                                         .showToast(
-                                                                        msg:
-                                                                        e.toString());
+                                                                            msg:
+                                                                                e.toString());
                                                                   }
-                                                                  setState(
-                                                                          () {
-                                                                        loading =
+                                                                  setState(() {
+                                                                    loading =
                                                                         false;
-                                                                      });
+                                                                  });
                                                                 }),
                                                           ],
                                                         ),
@@ -3554,25 +3620,25 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       // go to the field in the document
                                                                       // check if the data is a Map
                                                                       if (allSubjects
-                                                                      is Map) {
+                                                                          is Map) {
                                                                         logger.e(
                                                                             "is a Map");
                                                                         bool
-                                                                        foundCatIndex =
-                                                                        false;
+                                                                            foundCatIndex =
+                                                                            false;
                                                                         // iterate over the keys of the map
                                                                         for (var key
-                                                                        in allSubjects.keys) {
+                                                                            in allSubjects.keys) {
                                                                           // if the key is the user's subject
                                                                           if (key ==
                                                                               subjectName) {
                                                                             // index is present
                                                                             foundCatIndex =
-                                                                            true;
+                                                                                true;
 
                                                                             // get the subject data from the map
                                                                             var subjectData =
-                                                                            allSubjects[key];
+                                                                                allSubjects[key];
                                                                             //logger.e(subjectData);
                                                                             logger.e(subjectData[3]["exams"]);
 
@@ -3587,7 +3653,7 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                             await identityDocument.set({
                                                                               'allSubjects': allSubjects
                                                                             }, SetOptions(merge: true)).then(
-                                                                                  (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
                                                                             );
                                                                             logger.i(subjectData);
 
@@ -3602,40 +3668,46 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                           scaffoldContext
                                                                               .showSnackBar(SnackBar(
                                                                             content:
-                                                                            Text('Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                Text('Poor internet connection or the learner is not registered to do $subjectName'),
                                                                             duration:
-                                                                            const Duration(seconds: 1),
+                                                                                const Duration(seconds: 1),
                                                                           ));
                                                                         }
-                                                                      }
-                                                                      else {
+                                                                      } else {
                                                                         // handle case where teacherSubject index does not exist
                                                                         logger.i(
                                                                             'No $subjectName index found');
-                                                                        Fluttertoast.showToast(
-                                                                          backgroundColor: Theme.of(context).primaryColor
-                                                                          ,msg:"No $subjectName index found",);
+                                                                        Fluttertoast
+                                                                            .showToast(
+                                                                          backgroundColor:
+                                                                              Theme.of(context).primaryColor,
+                                                                          msg:
+                                                                              "No $subjectName index found",
+                                                                        );
                                                                       }
                                                                     } else {
                                                                       // handle case where document does not exist
                                                                       logger.i(
                                                                           'Document does not exist');
-                                                                      Fluttertoast.showToast(
-                                                                        backgroundColor: Theme.of(context).primaryColor
-                                                                        ,msg:"No $subjectName index found",);
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                        backgroundColor:
+                                                                            Theme.of(context).primaryColor,
+                                                                        msg:
+                                                                            "No $subjectName index found",
+                                                                      );
                                                                     }
                                                                   } catch (e) {
                                                                     logger.i(e);
                                                                     Fluttertoast
                                                                         .showToast(
-                                                                        msg:
-                                                                        e.toString());
+                                                                            msg:
+                                                                                e.toString());
                                                                   }
-                                                                  setState(
-                                                                          () {
-                                                                        loading =
+                                                                  setState(() {
+                                                                    loading =
                                                                         false;
-                                                                      });
+                                                                  });
                                                                 }),
                                                           ],
                                                         ),

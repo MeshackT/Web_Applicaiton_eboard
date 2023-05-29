@@ -8,6 +8,7 @@ import 'package:logger/logger.dart';
 import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
 import 'package:yueway/AllNew/screens/more/LearnerMore.dart';
 import 'package:yueway/testing_messaging/LearnerViewDocument.dart';
+
 import '../../../testing_messaging/LearnerViewAllMessages.dart';
 import '../../../testing_messaging/LearnerViewAllTexts.dart';
 import '../../model/ConnectionChecker.dart';
@@ -105,10 +106,8 @@ class _LearnerHomeState extends State<LearnerHome> {
     ConnectionChecker.checkTimer();
     _getCurrentUserFields(learnersName, learnersSecondName, learnersEmail);
     //notification
-    LocalNotificationService.initialize();
-    localNotificationService.getPermission();
-    // Terminated State show message
-
+    // LocalNotificationService.initialize();
+    // localNotificationService.getPermission();
   }
 
   @override

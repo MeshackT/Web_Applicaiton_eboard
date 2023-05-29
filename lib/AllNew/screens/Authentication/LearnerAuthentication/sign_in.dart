@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
 import 'package:yueway/main.dart';
-import '../../../main.dart';
 import '../../../model/ConnectionChecker.dart';
 import '../../../shared/constants.dart';
 import '../../home/learnersHome.dart';
@@ -37,7 +36,6 @@ class _LearnerSignInState extends State<LearnerSignIn> {
   bool loading = false;
   bool passwordVisible = true;
 
-
   @override
   void initState() {
     super.initState();
@@ -49,24 +47,16 @@ class _LearnerSignInState extends State<LearnerSignIn> {
     return Scaffold(
       body: DoubleBackToCloseApp(
         snackBar: SnackBar(
-          backgroundColor: Theme
-              .of(context)
-              .primaryColor
-              .withOpacity(1),
+          backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
           content: Text(
             'Tap back again to leave the application',
-            style: TextStyle(color: Theme
-                .of(context)
-                .primaryColorLight),
+            style: TextStyle(color: Theme.of(context).primaryColorLight),
             textAlign: TextAlign.center,
           ),
         ),
         child: SafeArea(
           child: Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
+            height: MediaQuery.of(context).size.height,
             margin: const EdgeInsets.only(top: 0.0),
             decoration: const BoxDecoration(
               //screen background color
@@ -80,7 +70,7 @@ class _LearnerSignInState extends State<LearnerSignIn> {
                 children: [
                   Padding(
                     padding:
-                    const EdgeInsets.only(left: 20, right: 20, top: 10),
+                        const EdgeInsets.only(left: 20, right: 20, top: 10),
                     child: Center(
                       child: ClipRRect(
                         borderRadius: const BorderRadius.only(
@@ -92,13 +82,8 @@ class _LearnerSignInState extends State<LearnerSignIn> {
                           children: [
                             Container(
                               height: 180,
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width,
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
+                              width: MediaQuery.of(context).size.width,
+                              color: Theme.of(context).primaryColor,
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 50),
@@ -110,9 +95,7 @@ class _LearnerSignInState extends State<LearnerSignIn> {
                                       fontSize: 28,
                                       fontWeight: FontWeight.w800,
                                       color:
-                                      Theme
-                                          .of(context)
-                                          .primaryColorLight),
+                                          Theme.of(context).primaryColorLight),
                                 ),
                               ),
                             ),
@@ -137,9 +120,7 @@ class _LearnerSignInState extends State<LearnerSignIn> {
                                   child: Text(
                                     "Are you a facilitator?",
                                     style: textStyleText(context).copyWith(
-                                        color: Theme
-                                            .of(context)
-                                            .primaryColor,
+                                        color: Theme.of(context).primaryColor,
                                         fontWeight: FontWeight.w700),
                                   )),
                               const SizedBox(
@@ -151,7 +132,7 @@ class _LearnerSignInState extends State<LearnerSignIn> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                      const Authenticate(),
+                                          const Authenticate(),
                                     ),
                                   );
                                 },
@@ -161,9 +142,7 @@ class _LearnerSignInState extends State<LearnerSignIn> {
                                     "Click here!",
                                     style: textStyleText(context).copyWith(
                                         color:
-                                        Theme
-                                            .of(context)
-                                            .primaryColorLight,
+                                            Theme.of(context).primaryColorLight,
                                         fontWeight: FontWeight.w700),
                                   ),
                                 ),
@@ -219,17 +198,13 @@ class _LearnerSignInState extends State<LearnerSignIn> {
                                 },
                                 icon: passwordVisible
                                     ? Icon(
-                                  Icons.visibility,
-                                  color: IconTheme
-                                      .of(context)
-                                      .color,
-                                )
+                                        Icons.visibility,
+                                        color: IconTheme.of(context).color,
+                                      )
                                     : Icon(
-                                  Icons.lock,
-                                  color: IconTheme
-                                      .of(context)
-                                      .color,
-                                ),
+                                        Icons.lock,
+                                        color: IconTheme.of(context).color,
+                                      ),
                               ),
                               hintText: "Password",
                               hintStyle: textStyleText(context),
@@ -257,9 +232,7 @@ class _LearnerSignInState extends State<LearnerSignIn> {
                               Text(
                                 "Forgot password?",
                                 style: textStyleText(context).copyWith(
-                                    color: Theme
-                                        .of(context)
-                                        .primaryColorLight,
+                                    color: Theme.of(context).primaryColorLight,
                                     fontWeight: FontWeight.w700),
                               ),
                               const SizedBox(
@@ -271,16 +244,14 @@ class _LearnerSignInState extends State<LearnerSignIn> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                      const LearnerForgot(),
+                                          const LearnerForgot(),
                                     ),
                                   );
                                 },
                                 child: Text(
                                   "Reset",
                                   style: textStyleText(context).copyWith(
-                                      color: Theme
-                                          .of(context)
-                                          .primaryColor,
+                                      color: Theme.of(context).primaryColor,
                                       fontWeight: FontWeight.w700),
                                 ),
                               )
@@ -310,24 +281,19 @@ class _LearnerSignInState extends State<LearnerSignIn> {
                                     });
                                   }
                                 },
-                                color: Theme
-                                    .of(context)
-                                    .primaryColor,
+                                color: Theme.of(context).primaryColor,
                                 child: loading
                                     ? SpinKitChasingDots(
-                                  color:
-                                  Theme
-                                      .of(context)
-                                      .primaryColorLight,
-                                )
+                                        color:
+                                            Theme.of(context).primaryColorLight,
+                                      )
                                     : Text(
-                                  "Sign In",
-                                  style: textStyleText(context).copyWith(
-                                      color: Theme
-                                          .of(context)
-                                          .primaryColorLight,
-                                      fontWeight: FontWeight.w700),
-                                ),
+                                        "Sign In",
+                                        style: textStyleText(context).copyWith(
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
+                                            fontWeight: FontWeight.w700),
+                                      ),
                               ),
                             ),
                           ),
@@ -346,16 +312,12 @@ class _LearnerSignInState extends State<LearnerSignIn> {
                                 onPressed: () {
                                   widget.toggleView();
                                 },
-                                color: Theme
-                                    .of(context)
-                                    .primaryColor,
+                                color: Theme.of(context).primaryColor,
                                 child: Text(
                                   "Sign Up",
                                   style: textStyleText(context).copyWith(
                                       color:
-                                      Theme
-                                          .of(context)
-                                          .primaryColorLight,
+                                          Theme.of(context).primaryColorLight,
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 1),
                                 ),
@@ -386,13 +348,12 @@ class _LearnerSignInState extends State<LearnerSignIn> {
     setState(() {
       loading = true;
     });
-    final navContext =Navigator.of(context);
+    final navContext = Navigator.of(context);
     try {
       bool userExists = false;
 
       UserCredential userCredential =
-
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.toLowerCase().trim(),
         password: password.trim(),
       );
@@ -401,8 +362,7 @@ class _LearnerSignInState extends State<LearnerSignIn> {
       if (userExists != null) {
         //print(userExists);
         navContext.pushReplacement(
-            MaterialPageRoute(builder: (context) => const LearnerHome())
-        );
+            MaterialPageRoute(builder: (context) => const LearnerHome()));
         //else show a snack
       } else if (userExists == null) {
         snack("Email doesn't exist.", context);
@@ -420,7 +380,7 @@ class _LearnerSignInState extends State<LearnerSignIn> {
           loading = false;
         });
         return;
-      }else{
+      } else {
         logger.i(error);
       }
       setState(() {

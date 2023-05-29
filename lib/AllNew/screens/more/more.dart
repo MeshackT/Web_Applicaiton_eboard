@@ -6,8 +6,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yueway/AllNew/screens/Authentication/Authenticate.dart';
+
 import '../../shared/constants.dart';
 import '../home/home.dart';
 import 'feedbackclass.dart';
@@ -774,15 +774,15 @@ class _MoreState extends State<More> {
                                         snack("Insert your details and message",
                                             context);
                                       } else {
-
                                         //send the message through an API from email JS email
                                         SendEmail.sendEmail(
                                           name: nameOfSender.text,
                                           message: messageOfSender.text,
                                           subject: subjectOfSender.text,
-                                          email: emailOfSender.text.trim().toLowerCase(),
+                                          email: emailOfSender.text
+                                              .trim()
+                                              .toLowerCase(),
                                         );
-
                                       }
                                       // turn off the loader
                                       setState(() {
@@ -793,9 +793,9 @@ class _MoreState extends State<More> {
                                       //communicate the process after
                                       Fluttertoast.showToast(
                                           backgroundColor:
-                                          Theme.of(context).primaryColor,
+                                              Theme.of(context).primaryColor,
                                           msg:
-                                          "Thank you for your feedback, your email submitted.");
+                                              "Thank you for your feedback, your email submitted.");
 
                                       //clear the data in those textfields
                                       nameOfSender.clear();
@@ -806,9 +806,9 @@ class _MoreState extends State<More> {
                                       // TODO
                                       Fluttertoast.showToast(
                                           backgroundColor:
-                                          Theme.of(context).primaryColor,
+                                              Theme.of(context).primaryColor,
                                           msg:
-                                          "failed to send the feedback, please try again later");
+                                              "failed to send the feedback, please try again later");
                                       logger.i(e);
                                     }
                                   },

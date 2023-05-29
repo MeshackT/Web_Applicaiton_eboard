@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
 import 'package:yueway/main.dart';
-import '../../../main.dart';
 import '../../../model/ConnectionChecker.dart';
 import '../../../shared/constants.dart';
 import '../../home/learnersHome.dart';
@@ -141,7 +141,6 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
   // final user = FirebaseAuth.instance.currentUser;
   User? user = FirebaseAuth.instance.currentUser;
 
-
   @override
   Widget build(BuildContext context) {
     CollectionReference teachersRegistered =
@@ -258,14 +257,13 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                       items: listMathematicsType
                                           .map<DropdownMenuItem<String>>(
                                             (e) => DropdownMenuItem(
-                                          value: e,
-                                          child: Text(
-                                            e,
-                                            style: textStyleText(
-                                                context),
-                                          ),
-                                        ),
-                                      )
+                                              value: e,
+                                              child: Text(
+                                                e,
+                                                style: textStyleText(context),
+                                              ),
+                                            ),
+                                          )
                                           .toList(),
                                       onChanged: (String? value) {
                                         setState(() {
@@ -279,11 +277,10 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                       width: 20,
                                     ),
                                     StreamBuilder<QuerySnapshot>(
-                                      stream:
-                                      teachersRegistered.snapshots(),
+                                      stream: teachersRegistered.snapshots(),
                                       builder: (BuildContext context,
                                           AsyncSnapshot<QuerySnapshot>
-                                          snapshot) {
+                                              snapshot) {
                                         if (!snapshot.hasData) {
                                           return Text(
                                             'No teachers yet',
@@ -291,17 +288,14 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                           );
                                         } else if (snapshot.hasData) {
                                           List<DropdownMenuItem<String>>
-                                          dropdownItems = [];
-                                          snapshot.data?.docs
-                                              .forEach((doc) {
-
+                                              dropdownItems = [];
+                                          snapshot.data?.docs.forEach((doc) {
                                             dropdownItems.add(
                                               DropdownMenuItem(
                                                 value: doc['uid'],
                                                 child: Text(
                                                   " ${doc['secondName']} ${doc['name']}",
-                                                  style: textStyleText(
-                                                      context),
+                                                  style: textStyleText(context),
                                                 ),
                                               ),
                                             );
@@ -311,8 +305,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                               value: "N/A",
                                               child: Text(
                                                 "Not Applicable",
-                                                style: textStyleText(
-                                                    context),
+                                                style: textStyleText(context),
                                               ),
                                             ),
                                           );
@@ -321,8 +314,8 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                               DropdownButton(
                                                   hint: Text(
                                                     "Teachers name",
-                                                    style: textStyleText(
-                                                        context),
+                                                    style:
+                                                        textStyleText(context),
                                                   ),
                                                   //valueTeacher1
                                                   value: valueTeacher1,
@@ -330,8 +323,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                   onChanged: (newValue) {
                                                     setState(() {
                                                       //valueTeacher1
-                                                      valueTeacher1 =
-                                                          newValue;
+                                                      valueTeacher1 = newValue;
                                                     });
                                                   }),
                                               if (valueTeacher1 == null)
@@ -345,10 +337,8 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                             ],
                                           );
                                         } else {
-                                          return Text(
-                                              'Error retrieving names',
-                                              style:
-                                              textStyleText(context));
+                                          return Text('Error retrieving names',
+                                              style: textStyleText(context));
                                         }
                                       },
                                     ),
@@ -371,30 +361,27 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                       items: listEnglishType
                                           .map<DropdownMenuItem<String>>(
                                             (e) => DropdownMenuItem(
-                                          value: e,
-                                          child: Text(
-                                            e,
-                                            style: textStyleText(
-                                                context),
-                                          ),
-                                        ),
-                                      )
+                                              value: e,
+                                              child: Text(
+                                                e,
+                                                style: textStyleText(context),
+                                              ),
+                                            ),
+                                          )
                                           .toList(),
-                                      onChanged: (String? value) =>
-                                          setState(
-                                                () {
-                                              valueChoose2 = value;
-                                            },
-                                          ),
+                                      onChanged: (String? value) => setState(
+                                        () {
+                                          valueChoose2 = value;
+                                        },
+                                      ),
                                     ),
                                     //subject 2 ends
                                     //Teachers name
                                     StreamBuilder<QuerySnapshot>(
-                                      stream:
-                                      teachersRegistered.snapshots(),
+                                      stream: teachersRegistered.snapshots(),
                                       builder: (BuildContext context,
                                           AsyncSnapshot<QuerySnapshot>
-                                          snapshot) {
+                                              snapshot) {
                                         if (!snapshot.hasData) {
                                           return Text(
                                             'No teachers yet',
@@ -402,16 +389,14 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                           );
                                         } else if (snapshot.hasData) {
                                           List<DropdownMenuItem<String>>
-                                          dropdownItems = [];
-                                          snapshot.data?.docs
-                                              .forEach((doc) {
+                                              dropdownItems = [];
+                                          snapshot.data?.docs.forEach((doc) {
                                             dropdownItems.add(
                                               DropdownMenuItem(
                                                 value: doc['uid'],
                                                 child: Text(
                                                   " ${doc['secondName']} ${doc['name']}",
-                                                  style: textStyleText(
-                                                      context),
+                                                  style: textStyleText(context),
                                                 ),
                                               ),
                                             );
@@ -421,8 +406,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                               value: "N/A",
                                               child: Text(
                                                 "Not Applicable",
-                                                style: textStyleText(
-                                                    context),
+                                                style: textStyleText(context),
                                               ),
                                             ),
                                           );
@@ -431,15 +415,13 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                               DropdownButton(
                                                 hint: Text(
                                                   "Teachers name",
-                                                  style: textStyleText(
-                                                      context),
+                                                  style: textStyleText(context),
                                                 ),
                                                 value: valueTeacher2,
                                                 items: dropdownItems,
                                                 onChanged: (newValue) {
                                                   setState(() {
-                                                    valueTeacher2 =
-                                                    newValue!;
+                                                    valueTeacher2 = newValue!;
                                                   });
                                                 },
                                               ),
@@ -454,10 +436,8 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                             ],
                                           );
                                         } else {
-                                          return Text(
-                                              'Error retrieving names',
-                                              style:
-                                              textStyleText(context));
+                                          return Text('Error retrieving names',
+                                              style: textStyleText(context));
                                         }
                                       },
                                     ),
@@ -481,49 +461,44 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                       items: listItem
                                           .map<DropdownMenuItem<String>>(
                                             (e) => DropdownMenuItem(
-                                          value: e,
-                                          child: Text(
-                                            e,
-                                            style: textStyleText(
-                                                context),
-                                          ),
-                                        ),
-                                      )
+                                              value: e,
+                                              child: Text(
+                                                e,
+                                                style: textStyleText(context),
+                                              ),
+                                            ),
+                                          )
                                           .toList(),
-                                      onChanged: (String? value) =>
-                                          setState(
-                                                () {
-                                              valueChoose3 = value;
-                                            },
-                                          ),
+                                      onChanged: (String? value) => setState(
+                                        () {
+                                          valueChoose3 = value;
+                                        },
+                                      ),
                                     ),
                                     //subject 2 ends
                                     //Teachers name
                                     StreamBuilder<QuerySnapshot>(
-                                        stream: teachersRegistered
-                                            .snapshots(),
+                                        stream: teachersRegistered.snapshots(),
                                         builder: (BuildContext context,
                                             AsyncSnapshot<QuerySnapshot>
-                                            snapshot) {
+                                                snapshot) {
                                           if (!snapshot.hasData) {
                                             return Text(
                                               'No teachers yet',
-                                              style:
-                                              textStyleText(context),
+                                              style: textStyleText(context),
                                             );
                                           } else if (snapshot.hasData) {
                                             List<DropdownMenuItem<String>>
-                                            dropdownItems = [];
+                                                dropdownItems = [];
 
-                                            snapshot.data?.docs
-                                                .forEach((doc) {
+                                            snapshot.data?.docs.forEach((doc) {
                                               dropdownItems.add(
                                                 DropdownMenuItem(
                                                   value: doc['uid'],
                                                   child: Text(
                                                     " ${doc['secondName']} ${doc['name']}",
-                                                    style: textStyleText(
-                                                        context),
+                                                    style:
+                                                        textStyleText(context),
                                                   ),
                                                 ),
                                               );
@@ -533,8 +508,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                 value: "N/A",
                                                 child: Text(
                                                   "Not Applicable",
-                                                  style: textStyleText(
-                                                      context),
+                                                  style: textStyleText(context),
                                                 ),
                                               ),
                                             );
@@ -544,15 +518,14 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                 DropdownButton(
                                                   hint: Text(
                                                     "Teachers name",
-                                                    style: textStyleText(
-                                                        context),
+                                                    style:
+                                                        textStyleText(context),
                                                   ),
                                                   value: valueTeacher3,
                                                   items: dropdownItems,
                                                   onChanged: (newValue) {
                                                     setState(() {
-                                                      valueTeacher3 =
-                                                      newValue!;
+                                                      valueTeacher3 = newValue!;
                                                     });
                                                   },
                                                 ),
@@ -569,15 +542,13 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                           } else {
                                             return Text(
                                                 'Error retrieving names',
-                                                style: textStyleText(
-                                                    context));
+                                                style: textStyleText(context));
                                           }
                                           //subject3 end,
                                         }),
                                     Wrap(
                                       direction: Axis.horizontal,
-                                      alignment:
-                                      WrapAlignment.spaceEvenly,
+                                      alignment: WrapAlignment.spaceEvenly,
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         //subject 2
@@ -589,21 +560,19 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                           ),
                                           value: valueChoose4,
                                           items: listItem
-                                              .map<
-                                              DropdownMenuItem<
-                                                  String>>(
+                                              .map<DropdownMenuItem<String>>(
                                                 (e) => DropdownMenuItem(
-                                              value: e,
-                                              child: Text(
-                                                e,
-                                                style: textStyleText(
-                                                    context),
-                                              ),
-                                            ),
-                                          )
+                                                  value: e,
+                                                  child: Text(
+                                                    e,
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
+                                                ),
+                                              )
                                               .toList(),
                                           onChanged: (value) => setState(
-                                                () {
+                                            () {
                                               valueChoose4 = value;
                                             },
                                           ),
@@ -611,25 +580,19 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                         //subject 2 ends
                                         //Teachers name
                                         StreamBuilder<QuerySnapshot>(
-                                            stream: teachersRegistered
-                                                .snapshots(),
-                                            builder:
-                                                (BuildContext context,
-                                                AsyncSnapshot<
-                                                    QuerySnapshot>
-                                                snapshot) {
+                                            stream:
+                                                teachersRegistered.snapshots(),
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<QuerySnapshot>
+                                                    snapshot) {
                                               if (!snapshot.hasData) {
                                                 return Text(
                                                   'No teachers yet',
-                                                  style: textStyleText(
-                                                      context),
+                                                  style: textStyleText(context),
                                                 );
-                                              } else if (snapshot
-                                                  .hasData) {
-                                                List<
-                                                    DropdownMenuItem<
-                                                        String>>
-                                                dropdownItems = [];
+                                              } else if (snapshot.hasData) {
+                                                List<DropdownMenuItem<String>>
+                                                    dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
@@ -638,8 +601,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                       value: doc['uid'],
                                                       child: Text(
                                                         " ${doc['secondName']} ${doc['name']}",
-                                                        style:
-                                                        textStyleText(
+                                                        style: textStyleText(
                                                             context),
                                                       ),
                                                     ),
@@ -650,8 +612,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                     value: "N/A",
                                                     child: Text(
                                                       "Not Applicable",
-                                                      style:
-                                                      textStyleText(
+                                                      style: textStyleText(
                                                           context),
                                                     ),
                                                   ),
@@ -661,29 +622,23 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                     DropdownButton(
                                                       hint: Text(
                                                         "Teachers name",
-                                                        style:
-                                                        textStyleText(
+                                                        style: textStyleText(
                                                             context),
                                                       ),
-                                                      value:
-                                                      valueTeacher4,
-                                                      items:
-                                                      dropdownItems,
-                                                      onChanged:
-                                                          (newValue) {
+                                                      value: valueTeacher4,
+                                                      items: dropdownItems,
+                                                      onChanged: (newValue) {
                                                         setState(() {
                                                           valueTeacher4 =
                                                               newValue;
                                                         });
                                                       },
                                                     ),
-                                                    if (valueTeacher4 ==
-                                                        null)
+                                                    if (valueTeacher4 == null)
                                                       const Text(
                                                         "Please select a teachers name",
                                                         style: TextStyle(
-                                                          color:
-                                                          Colors.red,
+                                                          color: Colors.red,
                                                           fontSize: 12,
                                                         ),
                                                       ),
@@ -692,8 +647,8 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                               } else {
                                                 return Text(
                                                     'Error retrieving names',
-                                                    style: textStyleText(
-                                                        context));
+                                                    style:
+                                                        textStyleText(context));
                                               }
                                             }),
                                         //subject3 ends
@@ -702,8 +657,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                     //////////////////////new Streams////////
                                     Wrap(
                                       direction: Axis.horizontal,
-                                      alignment:
-                                      WrapAlignment.spaceEvenly,
+                                      alignment: WrapAlignment.spaceEvenly,
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         //subject 2
@@ -715,21 +669,19 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                           ),
                                           value: valueChoose5,
                                           items: listItem
-                                              .map<
-                                              DropdownMenuItem<
-                                                  String>>(
+                                              .map<DropdownMenuItem<String>>(
                                                 (e) => DropdownMenuItem(
-                                              value: e,
-                                              child: Text(
-                                                e,
-                                                style: textStyleText(
-                                                    context),
-                                              ),
-                                            ),
-                                          )
+                                                  value: e,
+                                                  child: Text(
+                                                    e,
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
+                                                ),
+                                              )
                                               .toList(),
                                           onChanged: (value) => setState(
-                                                () {
+                                            () {
                                               valueChoose5 = value;
                                             },
                                           ),
@@ -737,25 +689,19 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                         //subject 2 ends
                                         //Teachers name
                                         StreamBuilder<QuerySnapshot>(
-                                            stream: teachersRegistered
-                                                .snapshots(),
-                                            builder:
-                                                (BuildContext context,
-                                                AsyncSnapshot<
-                                                    QuerySnapshot>
-                                                snapshot) {
+                                            stream:
+                                                teachersRegistered.snapshots(),
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<QuerySnapshot>
+                                                    snapshot) {
                                               if (!snapshot.hasData) {
                                                 return Text(
                                                   'No Teacher',
-                                                  style: textStyleText(
-                                                      context),
+                                                  style: textStyleText(context),
                                                 );
-                                              } else if (snapshot
-                                                  .hasData) {
-                                                List<
-                                                    DropdownMenuItem<
-                                                        String>>
-                                                dropdownItems = [];
+                                              } else if (snapshot.hasData) {
+                                                List<DropdownMenuItem<String>>
+                                                    dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
@@ -764,8 +710,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                       value: doc['uid'],
                                                       child: Text(
                                                         " ${doc['secondName']} ${doc['name']}",
-                                                        style:
-                                                        textStyleText(
+                                                        style: textStyleText(
                                                             context),
                                                       ),
                                                     ),
@@ -776,8 +721,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                     value: "N/A",
                                                     child: Text(
                                                       "Not Applicable",
-                                                      style:
-                                                      textStyleText(
+                                                      style: textStyleText(
                                                           context),
                                                     ),
                                                   ),
@@ -787,29 +731,23 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                     DropdownButton(
                                                       hint: Text(
                                                         "Teachers name",
-                                                        style:
-                                                        textStyleText(
+                                                        style: textStyleText(
                                                             context),
                                                       ),
-                                                      value:
-                                                      valueTeacher5,
-                                                      items:
-                                                      dropdownItems,
-                                                      onChanged:
-                                                          (newValue) {
+                                                      value: valueTeacher5,
+                                                      items: dropdownItems,
+                                                      onChanged: (newValue) {
                                                         setState(() {
                                                           valueTeacher5 =
                                                               newValue;
                                                         });
                                                       },
                                                     ),
-                                                    if (valueTeacher5 ==
-                                                        null)
+                                                    if (valueTeacher5 == null)
                                                       const Text(
                                                         "Please select a teachers name",
                                                         style: TextStyle(
-                                                          color:
-                                                          Colors.red,
+                                                          color: Colors.red,
                                                           fontSize: 12,
                                                         ),
                                                       ),
@@ -818,8 +756,8 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                               } else {
                                                 return Text(
                                                     'Error retrieving names',
-                                                    style: textStyleText(
-                                                        context));
+                                                    style:
+                                                        textStyleText(context));
                                               }
                                             }),
                                         //subject3 ends
@@ -827,8 +765,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                     ),
                                     Wrap(
                                       direction: Axis.horizontal,
-                                      alignment:
-                                      WrapAlignment.spaceEvenly,
+                                      alignment: WrapAlignment.spaceEvenly,
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         //subject 2
@@ -840,21 +777,19 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                           ),
                                           value: valueChoose6,
                                           items: listItem
-                                              .map<
-                                              DropdownMenuItem<
-                                                  String>>(
+                                              .map<DropdownMenuItem<String>>(
                                                 (e) => DropdownMenuItem(
-                                              value: e,
-                                              child: Text(
-                                                e,
-                                                style: textStyleText(
-                                                    context),
-                                              ),
-                                            ),
-                                          )
+                                                  value: e,
+                                                  child: Text(
+                                                    e,
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
+                                                ),
+                                              )
                                               .toList(),
                                           onChanged: (value) => setState(
-                                                () {
+                                            () {
                                               valueChoose6 = value;
                                             },
                                           ),
@@ -862,25 +797,19 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                         //subject 2 ends
                                         //Teachers name
                                         StreamBuilder<QuerySnapshot>(
-                                            stream: teachersRegistered
-                                                .snapshots(),
-                                            builder:
-                                                (BuildContext context,
-                                                AsyncSnapshot<
-                                                    QuerySnapshot>
-                                                snapshot) {
+                                            stream:
+                                                teachersRegistered.snapshots(),
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<QuerySnapshot>
+                                                    snapshot) {
                                               if (!snapshot.hasData) {
                                                 return Text(
                                                   'No teacher yet',
-                                                  style: textStyleText(
-                                                      context),
+                                                  style: textStyleText(context),
                                                 );
-                                              } else if (snapshot
-                                                  .hasData) {
-                                                List<
-                                                    DropdownMenuItem<
-                                                        String>>
-                                                dropdownItems = [];
+                                              } else if (snapshot.hasData) {
+                                                List<DropdownMenuItem<String>>
+                                                    dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
@@ -889,8 +818,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                       value: doc['uid'],
                                                       child: Text(
                                                         " ${doc['secondName']} ${doc['name']}",
-                                                        style:
-                                                        textStyleText(
+                                                        style: textStyleText(
                                                             context),
                                                       ),
                                                     ),
@@ -901,8 +829,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                     value: "N/A",
                                                     child: Text(
                                                       "Not Applicable",
-                                                      style:
-                                                      textStyleText(
+                                                      style: textStyleText(
                                                           context),
                                                     ),
                                                   ),
@@ -912,29 +839,23 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                     DropdownButton(
                                                       hint: Text(
                                                         "Teachers name",
-                                                        style:
-                                                        textStyleText(
+                                                        style: textStyleText(
                                                             context),
                                                       ),
-                                                      value:
-                                                      valueTeacher6,
-                                                      items:
-                                                      dropdownItems,
-                                                      onChanged:
-                                                          (newValue) {
+                                                      value: valueTeacher6,
+                                                      items: dropdownItems,
+                                                      onChanged: (newValue) {
                                                         setState(() {
                                                           valueTeacher6 =
                                                               newValue;
                                                         });
                                                       },
                                                     ),
-                                                    if (valueTeacher6 ==
-                                                        null)
+                                                    if (valueTeacher6 == null)
                                                       const Text(
                                                         "Please select a teachers name",
                                                         style: TextStyle(
-                                                          color:
-                                                          Colors.red,
+                                                          color: Colors.red,
                                                           fontSize: 12,
                                                         ),
                                                       ),
@@ -943,8 +864,8 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                               } else {
                                                 return Text(
                                                     'Error retrieving names',
-                                                    style: textStyleText(
-                                                        context));
+                                                    style:
+                                                        textStyleText(context));
                                               }
                                             }),
                                         //subject3 ends
@@ -953,8 +874,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                     //      /////////////////////////////////////////////////////////////////////
                                     Wrap(
                                       direction: Axis.horizontal,
-                                      alignment:
-                                      WrapAlignment.spaceEvenly,
+                                      alignment: WrapAlignment.spaceEvenly,
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         //subject 2
@@ -966,48 +886,40 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                           ),
                                           value: valueChoose7,
                                           items: listItem
-                                              .map<
-                                              DropdownMenuItem<
-                                                  String>>(
+                                              .map<DropdownMenuItem<String>>(
                                                 (e) => DropdownMenuItem(
-                                              value: e,
-                                              child: Text(
-                                                e,
-                                                style: textStyleText(
-                                                    context),
-                                              ),
-                                            ),
-                                          )
+                                                  value: e,
+                                                  child: Text(
+                                                    e,
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
+                                                ),
+                                              )
                                               .toList(),
                                           onChanged: (String? value) =>
                                               setState(
-                                                    () {
-                                                  valueChoose7 = value;
-                                                },
-                                              ),
+                                            () {
+                                              valueChoose7 = value;
+                                            },
+                                          ),
                                         ),
                                         //subject 2 ends
                                         //Teachers name
                                         StreamBuilder<QuerySnapshot>(
-                                            stream: teachersRegistered
-                                                .snapshots(),
-                                            builder:
-                                                (BuildContext context,
-                                                AsyncSnapshot<
-                                                    QuerySnapshot>
-                                                snapshot) {
+                                            stream:
+                                                teachersRegistered.snapshots(),
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<QuerySnapshot>
+                                                    snapshot) {
                                               if (!snapshot.hasData) {
                                                 return Text(
                                                   'No teacher yet',
-                                                  style: textStyleText(
-                                                      context),
+                                                  style: textStyleText(context),
                                                 );
-                                              } else if (snapshot
-                                                  .hasData) {
-                                                List<
-                                                    DropdownMenuItem<
-                                                        String>>
-                                                dropdownItems = [];
+                                              } else if (snapshot.hasData) {
+                                                List<DropdownMenuItem<String>>
+                                                    dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
@@ -1016,8 +928,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                       value: doc['uid'],
                                                       child: Text(
                                                         " ${doc['secondName']} ${doc['name']}",
-                                                        style:
-                                                        textStyleText(
+                                                        style: textStyleText(
                                                             context),
                                                       ),
                                                     ),
@@ -1028,8 +939,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                     value: "N/A",
                                                     child: Text(
                                                       "Not Applicable",
-                                                      style:
-                                                      textStyleText(
+                                                      style: textStyleText(
                                                           context),
                                                     ),
                                                   ),
@@ -1039,29 +949,23 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                     DropdownButton(
                                                       hint: Text(
                                                         "Teachers name",
-                                                        style:
-                                                        textStyleText(
+                                                        style: textStyleText(
                                                             context),
                                                       ),
-                                                      value:
-                                                      valueTeacher7,
-                                                      items:
-                                                      dropdownItems,
-                                                      onChanged:
-                                                          (newValue) {
+                                                      value: valueTeacher7,
+                                                      items: dropdownItems,
+                                                      onChanged: (newValue) {
                                                         setState(() {
                                                           valueTeacher7 =
                                                               newValue;
                                                         });
                                                       },
                                                     ),
-                                                    if (valueTeacher7 ==
-                                                        null)
+                                                    if (valueTeacher7 == null)
                                                       const Text(
                                                         "Please select a teachers name",
                                                         style: TextStyle(
-                                                          color:
-                                                          Colors.red,
+                                                          color: Colors.red,
                                                           fontSize: 12,
                                                         ),
                                                       ),
@@ -1070,8 +974,8 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                               } else {
                                                 return Text(
                                                     'Error retrieving names',
-                                                    style: textStyleText(
-                                                        context));
+                                                    style:
+                                                        textStyleText(context));
                                               }
                                             }),
                                         //subject3 ends
@@ -1079,8 +983,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                     ),
                                     Wrap(
                                       direction: Axis.horizontal,
-                                      alignment:
-                                      WrapAlignment.spaceEvenly,
+                                      alignment: WrapAlignment.spaceEvenly,
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         //subject 2
@@ -1092,48 +995,40 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                           ),
                                           value: valueChoose8,
                                           items: listItem
-                                              .map<
-                                              DropdownMenuItem<
-                                                  String>>(
+                                              .map<DropdownMenuItem<String>>(
                                                 (e) => DropdownMenuItem(
-                                              value: e,
-                                              child: Text(
-                                                e,
-                                                style: textStyleText(
-                                                    context),
-                                              ),
-                                            ),
-                                          )
+                                                  value: e,
+                                                  child: Text(
+                                                    e,
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
+                                                ),
+                                              )
                                               .toList(),
                                           onChanged: (String? value) =>
                                               setState(
-                                                    () {
-                                                  valueChoose8 = value;
-                                                },
-                                              ),
+                                            () {
+                                              valueChoose8 = value;
+                                            },
+                                          ),
                                         ),
                                         //subject 2 ends
                                         //Teachers name
                                         StreamBuilder<QuerySnapshot>(
-                                            stream: teachersRegistered
-                                                .snapshots(),
-                                            builder:
-                                                (BuildContext context,
-                                                AsyncSnapshot<
-                                                    QuerySnapshot>
-                                                snapshot) {
+                                            stream:
+                                                teachersRegistered.snapshots(),
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<QuerySnapshot>
+                                                    snapshot) {
                                               if (!snapshot.hasData) {
                                                 return Text(
                                                   'No teacher yet',
-                                                  style: textStyleText(
-                                                      context),
+                                                  style: textStyleText(context),
                                                 );
-                                              } else if (snapshot
-                                                  .hasData) {
-                                                List<
-                                                    DropdownMenuItem<
-                                                        String>>
-                                                dropdownItems = [];
+                                              } else if (snapshot.hasData) {
+                                                List<DropdownMenuItem<String>>
+                                                    dropdownItems = [];
 
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
@@ -1142,8 +1037,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                       value: doc['uid'],
                                                       child: Text(
                                                         " ${doc['secondName']} ${doc['name']}",
-                                                        style:
-                                                        textStyleText(
+                                                        style: textStyleText(
                                                             context),
                                                       ),
                                                     ),
@@ -1154,8 +1048,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                     value: "N/A",
                                                     child: Text(
                                                       "Not Applicable",
-                                                      style:
-                                                      textStyleText(
+                                                      style: textStyleText(
                                                           context),
                                                     ),
                                                   ),
@@ -1165,29 +1058,23 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                     DropdownButton(
                                                       hint: Text(
                                                         "Teachers name",
-                                                        style:
-                                                        textStyleText(
+                                                        style: textStyleText(
                                                             context),
                                                       ),
-                                                      value:
-                                                      valueTeacher8,
-                                                      items:
-                                                      dropdownItems,
-                                                      onChanged:
-                                                          (newValue) {
+                                                      value: valueTeacher8,
+                                                      items: dropdownItems,
+                                                      onChanged: (newValue) {
                                                         setState(() {
                                                           valueTeacher8 =
                                                               newValue;
                                                         });
                                                       },
                                                     ),
-                                                    if (valueTeacher8 ==
-                                                        null)
+                                                    if (valueTeacher8 == null)
                                                       const Text(
                                                         "Please select a teachers name",
                                                         style: TextStyle(
-                                                          color:
-                                                          Colors.red,
+                                                          color: Colors.red,
                                                           fontSize: 12,
                                                         ),
                                                       ),
@@ -1196,8 +1083,8 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                               } else {
                                                 return Text(
                                                     'Error retrieving names',
-                                                    style: textStyleText(
-                                                        context));
+                                                    style:
+                                                        textStyleText(context));
                                               }
                                             }),
                                         //subject3 ends
@@ -1205,8 +1092,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                     ),
                                     Wrap(
                                       direction: Axis.horizontal,
-                                      alignment:
-                                      WrapAlignment.spaceEvenly,
+                                      alignment: WrapAlignment.spaceEvenly,
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         //subject 2
@@ -1218,48 +1104,40 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                           ),
                                           value: valueChoose9,
                                           items: listItem
-                                              .map<
-                                              DropdownMenuItem<
-                                                  String>>(
+                                              .map<DropdownMenuItem<String>>(
                                                 (e) => DropdownMenuItem(
-                                              value: e,
-                                              child: Text(
-                                                e,
-                                                style: textStyleText(
-                                                    context),
-                                              ),
-                                            ),
-                                          )
+                                                  value: e,
+                                                  child: Text(
+                                                    e,
+                                                    style:
+                                                        textStyleText(context),
+                                                  ),
+                                                ),
+                                              )
                                               .toList(),
                                           onChanged: (String? value) =>
                                               setState(
-                                                    () {
-                                                  valueChoose9 = value;
-                                                },
-                                              ),
+                                            () {
+                                              valueChoose9 = value;
+                                            },
+                                          ),
                                         ),
                                         //subject 2 ends
                                         //Teachers name
                                         StreamBuilder<QuerySnapshot>(
-                                            stream: teachersRegistered
-                                                .snapshots(),
-                                            builder:
-                                                (BuildContext context,
-                                                AsyncSnapshot<
-                                                    QuerySnapshot>
-                                                snapshot) {
+                                            stream:
+                                                teachersRegistered.snapshots(),
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<QuerySnapshot>
+                                                    snapshot) {
                                               if (!snapshot.hasData) {
                                                 return Text(
                                                   'No teacher yet',
-                                                  style: textStyleText(
-                                                      context),
+                                                  style: textStyleText(context),
                                                 );
-                                              } else if (snapshot
-                                                  .hasData) {
-                                                List<
-                                                    DropdownMenuItem<
-                                                        String>>
-                                                dropdownItems = [];
+                                              } else if (snapshot.hasData) {
+                                                List<DropdownMenuItem<String>>
+                                                    dropdownItems = [];
                                                 snapshot.data?.docs
                                                     .forEach((doc) {
                                                   dropdownItems.add(
@@ -1267,8 +1145,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                       value: doc['uid'],
                                                       child: Text(
                                                         " ${doc['secondName']} ${doc['name']}",
-                                                        style:
-                                                        textStyleText(
+                                                        style: textStyleText(
                                                             context),
                                                       ),
                                                     ),
@@ -1279,8 +1156,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                     value: "N/A",
                                                     child: Text(
                                                       "Not Applicable",
-                                                      style:
-                                                      textStyleText(
+                                                      style: textStyleText(
                                                           context),
                                                     ),
                                                   ),
@@ -1290,29 +1166,23 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                                     DropdownButton(
                                                       hint: Text(
                                                         "Teachers name",
-                                                        style:
-                                                        textStyleText(
+                                                        style: textStyleText(
                                                             context),
                                                       ),
-                                                      value:
-                                                      valueTeacher9,
-                                                      items:
-                                                      dropdownItems,
-                                                      onChanged:
-                                                          (newValue) {
+                                                      value: valueTeacher9,
+                                                      items: dropdownItems,
+                                                      onChanged: (newValue) {
                                                         setState(() {
                                                           valueTeacher9 =
                                                               newValue;
                                                         });
                                                       },
                                                     ),
-                                                    if (valueTeacher9 ==
-                                                        null)
+                                                    if (valueTeacher9 == null)
                                                       const Text(
                                                         "Please select a teachers name",
                                                         style: TextStyle(
-                                                          color:
-                                                          Colors.red,
+                                                          color: Colors.red,
                                                           fontSize: 12,
                                                         ),
                                                       ),
@@ -1321,8 +1191,8 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                               } else {
                                                 return Text(
                                                     'Error retrieving names',
-                                                    style: textStyleText(
-                                                        context));
+                                                    style:
+                                                        textStyleText(context));
                                               }
                                             }),
                                       ],
@@ -1477,7 +1347,6 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
     super.dispose();
   }
 
-
   Future updateSubjects(String documentIdCurrent) async {
     setState(() {
       loading = true;
@@ -1565,8 +1434,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
         firestore.collection('learnersData').where('uid', isEqualTo: user!.uid);
     userQuery.get().then((var querySnapshot) {
       if (querySnapshot.size > 0) {
-        var documentSnapshot =
-            querySnapshot.docs.first;
+        var documentSnapshot = querySnapshot.docs.first;
         Map<String, dynamic>? data = documentSnapshot.data();
 
         setState(() {

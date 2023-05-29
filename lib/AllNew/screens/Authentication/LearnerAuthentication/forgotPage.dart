@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:yueway/main.dart';
-import '../../../main.dart';
 import '../../../model/ConnectionChecker.dart';
 import '../../../shared/constants.dart';
 import '../Authenticate.dart';
@@ -24,8 +23,8 @@ class _LearnerForgotState extends State<LearnerForgot> {
   void initState() {
     super.initState();
     ConnectionChecker.checkTimer();
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,8 +79,7 @@ class _LearnerForgotState extends State<LearnerForgot> {
                                   style: textStyleText(context).copyWith(
                                     fontWeight: FontWeight.w900,
                                     fontSize: 26,
-                                    color:
-                                        Theme.of(context).primaryColorLight,
+                                    color: Theme.of(context).primaryColorLight,
                                   ),
                                 ),
                               ),
@@ -111,15 +109,15 @@ class _LearnerForgotState extends State<LearnerForgot> {
                                   hintStyle: textStyleText(context),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .primaryColorDark,
+                                        color:
+                                            Theme.of(context).primaryColorDark,
                                         width: 2.0),
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .primaryColorDark,
+                                        color:
+                                            Theme.of(context).primaryColorDark,
                                         width: 2.0),
                                     borderRadius: BorderRadius.circular(30),
                                   ),
@@ -149,11 +147,9 @@ class _LearnerForgotState extends State<LearnerForgot> {
                                       height: 30,
                                       child: Text(
                                         "Forgot password?",
-                                        style:
-                                            textStyleText(context).copyWith(
+                                        style: textStyleText(context).copyWith(
                                           fontWeight: FontWeight.w700,
-                                          color:
-                                              Theme.of(context).primaryColor,
+                                          color: Theme.of(context).primaryColor,
                                         ),
                                       )),
                                   const SizedBox(
@@ -225,8 +221,7 @@ class _LearnerForgotState extends State<LearnerForgot> {
                                             "Reset",
                                             style: textStyleText(context)
                                                 .copyWith(
-                                                    fontWeight:
-                                                        FontWeight.w700,
+                                                    fontWeight: FontWeight.w700,
                                                     color: Theme.of(context)
                                                         .primaryColorLight),
                                           ),

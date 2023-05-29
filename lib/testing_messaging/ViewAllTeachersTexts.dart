@@ -24,7 +24,6 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
   String titleEditTemp = "";
   String documentIdEdit = "";
 
-
   @override
   void initState() {
     super.initState();
@@ -76,8 +75,7 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
                       onPressed: () async {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) =>
-                                 ViewAllTeachersMessages(),
+                            builder: (context) => const ViewAllTeachersMessages(),
                           ),
                         );
                       },
@@ -104,15 +102,19 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
                       AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.hasError) {
                       return Text("Error: ${snapshot.error}");
-                    } else if(!snapshot.hasData || snapshot.data == null ||
-                        snapshot.data!.size <= 0){
-                      return Center(child: Text("No data sent yet.",
-                        style: textStyleText(context).copyWith(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                        ),),);
-                    }
-                    else if (snapshot.connectionState ==
+                    } else if (!snapshot.hasData ||
+                        snapshot.data == null ||
+                        snapshot.data!.size <= 0) {
+                      return Center(
+                        child: Text(
+                          "No data sent yet.",
+                          style: textStyleText(context).copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      );
+                    } else if (snapshot.connectionState ==
                         ConnectionState.waiting) {
                       return SpinKitChasingDots(
                         color: Theme.of(context).primaryColor,
@@ -158,7 +160,7 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
                                       width: 10,
                                     ),
                                     Expanded(
-                                      flex:1,
+                                      flex: 1,
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -168,15 +170,15 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
                                             style:
                                                 textStyleText(context).copyWith(
                                               fontWeight: FontWeight.bold,
-                                              color:
-                                                  Theme.of(context).primaryColor,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                             ),
                                           ),
                                           Row(
-
                                             children: [
                                               Text(
-                                                Utils.formattedDate(dateAndTime),
+                                                Utils.formattedDate(
+                                                    dateAndTime),
                                                 style: textStyleText(context)
                                                     .copyWith(
                                                         fontWeight:
@@ -205,13 +207,16 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
                                         ],
                                       ),
                                     ),
-
                                     SizedBox(
                                       width: 30,
                                       height: 40,
                                       child: PopupMenuButton<int>(
-                                        color: Theme.of(context).primaryColorLight,
-                                        icon: Icon(Icons.more_vert, color: Theme.of(context).primaryColor,),
+                                        color:
+                                            Theme.of(context).primaryColorLight,
+                                        icon: Icon(
+                                          Icons.more_vert,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
                                         elevation: 5.0,
                                         itemBuilder: (context) => [
                                           PopupMenuItem<int>(
@@ -238,13 +243,9 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
                                           ),
                                         ],
                                         onSelected: (item) => selectedItem(
-                                            context,
-                                            item,
-                                            name,
-                                            text),
+                                            context, item, name, text),
                                       ),
                                     ),
-
                                   ],
                                 ),
                                 const SizedBox(
@@ -253,9 +254,13 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8, vertical: 8),
-                                  child: Text(
-                                    text,
-                                    style: textStyleText(context),
+                                  child: Wrap(
+                                    children: [
+                                      SelectableText(
+                                        text,
+                                        style: textStyleText(context),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -276,7 +281,7 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
 
   //TODO Show pop up button
   Future<void> selectedItem(
-      BuildContext context, item, String nameOfSender,String text) async {
+      BuildContext context, item, String nameOfSender, String text) async {
     switch (item) {
       case 0:
         try {
@@ -286,7 +291,9 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
           } else {
             print("can share $text");
             await FlutterShare.share(
-                title: "By $nameOfSender", text: text, chooserTitle: "By $nameOfSender");
+                title: "By $nameOfSender",
+                text: text,
+                chooserTitle: "By $nameOfSender");
           }
         } catch (e) {
           print(text);
@@ -402,7 +409,7 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
                           hintStyle: textStyleText(context).copyWith(
                             fontWeight: FontWeight.w800,
                             color:
-                            Theme.of(context).primaryColor.withOpacity(.7),
+                                Theme.of(context).primaryColor.withOpacity(.7),
                           ),
                         ),
                         style: textStyleText(context),
@@ -433,21 +440,22 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
                                     context);
                               } else {
                                 final CollectionReference learnersCollection =
-                                FirebaseFirestore.instance.collection('messagesWithTextOnly');
+                                    FirebaseFirestore.instance
+                                        .collection('messagesWithTextOnly');
                                 final DocumentReference identityDocument =
-                                learnersCollection.doc(documentIdEdit);
+                                    learnersCollection.doc(documentIdEdit);
                                 await identityDocument
                                     .set({
-                                  'text': titleEdit.text.toString(),
-                                }, SetOptions(merge: true))
+                                      'text': titleEdit.text.toString(),
+                                    }, SetOptions(merge: true))
                                     .then(
                                       (value) => Fluttertoast.showToast(
-                                      backgroundColor: Theme.of(context).primaryColor,
-                                      msg: "Edited Notifications"),
-                                ).whenComplete(() =>
-                                null
-                                );
-                               }
+                                          backgroundColor:
+                                              Theme.of(context).primaryColor,
+                                          msg: "Edited Notifications"),
+                                    )
+                                    .whenComplete(() => null);
+                              }
                               titleEdit.clear();
                             },
                             style: buttonRound,
