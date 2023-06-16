@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
+import 'package:yueway/AllNew/screens/Notifications/DesktopNotifications/DesktopSendNotification.dart';
 import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
 
 import '../../model/ConnectionChecker.dart';
@@ -129,76 +130,82 @@ class _SendNotificationState extends State<SendNotification> {
   @override
   Widget build(BuildContext context) {
     String subjectTopic = nameOfTeacher;
-    return DefaultTabController(
-      length: 2,
-      initialIndex: 0,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              navigate(context);
-            },
-            icon: const Icon(Icons.arrow_back_rounded),
-          ),
-          title: const Text("Learner's notifications"),
-          titleSpacing: 2,
-          centerTitle: false,
-          elevation: 0,
-          actions: [
-            Utils.toolTipMessage(
-                "Send a message to learners privately.", context),
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const Home()));
-              },
-              icon: Icon(
-                Icons.home,
-                color: Theme.of(context).primaryColorLight,
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth < Utils.mobileWidth) {
+        return DefaultTabController(
+          length: 2,
+          initialIndex: 0,
+          child: Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  navigate(context);
+                },
+                icon: const Icon(Icons.arrow_back_rounded),
               ),
-            ),
-          ],
-          bottom: TabBar(
-            indicatorColor: Theme.of(context).primaryColorLight,
-            indicatorWeight: 2,
-            tabs: [
-              Tab(
-                icon: Icon(
-                  Icons.create,
-                  color: Theme.of(context).primaryColorLight,
-                  size: 15,
+              title: const Text("Learner's notifications"),
+              titleSpacing: 2,
+              centerTitle: false,
+              elevation: 0,
+              actions: [
+                Utils.toolTipMessage(
+                    "Send a message to learners privately.", context),
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => const Home()));
+                  },
+                  icon: Icon(
+                    Icons.home,
+                    color: Theme.of(context).primaryColorLight,
+                  ),
                 ),
-                text: "Create",
+              ],
+              bottom: TabBar(
+                indicatorColor: Theme.of(context).primaryColorLight,
+                indicatorWeight: 2,
+                tabs: [
+                  Tab(
+                    icon: Icon(
+                      Icons.create,
+                      color: Theme.of(context).primaryColorLight,
+                      size: 15,
+                    ),
+                    text: "Create",
+                  ),
+                  Tab(
+                    icon: Icon(Icons.mark_chat_unread,
+                        size: 15, color: Theme.of(context).primaryColorLight),
+                    text: "View",
+                  ),
+                ],
               ),
-              Tab(
-                icon: Icon(Icons.mark_chat_unread,
-                    size: 15, color: Theme.of(context).primaryColorLight),
-                text: "View",
+            ),
+            extendBodyBehindAppBar: false,
+            body: DoubleBackToCloseApp(
+              snackBar: SnackBar(
+                backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
+                content: Text(
+                  'Tap back again to leave the application',
+                  style: TextStyle(color: Theme.of(context).primaryColorLight),
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ],
-          ),
-        ),
-        extendBodyBehindAppBar: false,
-        body: DoubleBackToCloseApp(
-          snackBar: SnackBar(
-            backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
-            content: Text(
-              'Tap back again to leave the application',
-              style: TextStyle(color: Theme.of(context).primaryColorLight),
-              textAlign: TextAlign.center,
+              child: TabBarView(
+                children: [
+                  //Tabs/Terms
+                  buildPage("Create a Notification"),
+                  ViewNotifications(
+                      subjectOfTeacherPassed: _userSubject.toString()),
+                ],
+              ),
             ),
           ),
-          child: TabBarView(
-            children: [
-              //Tabs/Terms
-              buildPage("Create a Notification"),
-              ViewNotifications(
-                  subjectOfTeacherPassed: _userSubject.toString()),
-            ],
-          ),
-        ),
-      ),
-    );
+        );
+      } else {
+        return const DesktopSendNotification();
+      }
+    });
   }
 
   Widget buildPage(String title) {

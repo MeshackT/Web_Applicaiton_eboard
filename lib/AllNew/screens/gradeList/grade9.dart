@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -7,10 +6,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:yueway/AllNew/screens/Authentication/Authenticate.dart';
 import 'package:yueway/AllNew/screens/Authentication/TeacherProfile.dart';
+import 'package:yueway/AllNew/screens/gradeList/NavigationDrawerMobile.dart';
 import 'package:yueway/AllNew/screens/gradeList/grade10.dart';
 import 'package:yueway/AllNew/screens/gradeList/grade11.dart';
 import 'package:yueway/AllNew/screens/gradeList/grade12.dart';
 import 'package:yueway/AllNew/screens/gradeList/grade8.dart';
+import 'package:yueway/AllNew/screens/gradeList/registeredLearners/DesktopGrade9.dart';
 import 'package:yueway/AllNew/screens/more/more.dart';
 
 import '../../model/ConnectionChecker.dart';
@@ -189,43 +190,36 @@ class _Grade9State extends State<Grade9> {
       });
     }
 
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("Registered learner's"),
-          elevation: 0.0,
-          centerTitle: true,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(30),
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SendNotification()));
-              },
-              icon: Icon(
-                Icons.notification_add,
-                color: Theme.of(context).primaryColorLight,
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth < Utils.mobileWidth) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text("Registered learner's"),
+            elevation: 0.0,
+            centerTitle: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(30),
               ),
             ),
-          ],
-        ),
-        drawer: const NavigationDrawer(),
-        drawerScrimColor: Colors.transparent,
-        body: DoubleBackToCloseApp(
-          snackBar: SnackBar(
-            backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
-            content: Text(
-              'Tap back again to leave the application',
-              style: TextStyle(color: Theme.of(context).primaryColorLight),
-              textAlign: TextAlign.center,
-            ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SendNotification()));
+                },
+                icon: Icon(
+                  Icons.notification_add,
+                  color: Theme.of(context).primaryColorLight,
+                ),
+              ),
+            ],
           ),
-          child: Container(
+          drawer: const NavigationDrawerForALlMobile(),
+          drawerScrimColor: Colors.transparent,
+          body: Container(
             height: MediaQuery.of(context).size.height,
             margin: const EdgeInsets.only(top: 0.0),
             decoration: const BoxDecoration(
@@ -237,55 +231,44 @@ class _Grade9State extends State<Grade9> {
             ),
             child: Column(
               children: [
-                isVisible
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 5),
-                        child: TextField(
-                          controller: _searchController,
-                          cursorColor: Theme.of(context).primaryColorDark,
-                          keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColorDark,
-                                  width: 1.0),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            contentPadding: const EdgeInsets.only(
-                              left: 15,
-                              bottom: 11,
-                              top: 11,
-                              right: 15,
-                            ),
-                            hintText: "Enter a name",
-                            hintStyle: TextStyle(
-                                color: Theme.of(context).primaryColorDark,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1),
-                            prefixIcon: const Icon(Icons.search),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              searchText = value;
-                            });
-                          },
-                        ),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Text(
-                          "Search for a learner",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                              color: Theme.of(context).primaryColorDark),
-                        ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  child: TextField(
+                    controller: _searchController,
+                    cursorColor: Theme.of(context).primaryColorDark,
+                    keyboardType: TextInputType.name,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).primaryColorDark,
+                            width: 1.0),
+                        borderRadius: BorderRadius.circular(30),
                       ),
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      contentPadding: const EdgeInsets.only(
+                        left: 15,
+                        bottom: 11,
+                        top: 11,
+                        right: 15,
+                      ),
+                      hintText: "Enter a name",
+                      hintStyle: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1),
+                      prefixIcon: const Icon(Icons.search),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        searchText = value;
+                      });
+                    },
+                  ),
+                ),
                 //TODO add here
                 Expanded(
                   flex: 1,
@@ -632,7 +615,7 @@ class _Grade9State extends State<Grade9> {
                                                 key: ValueKey(documents[index]),
                                                 color: IconTheme.of(context)
                                                     .color!
-                                                    .withOpacity(.6),
+                                                    .withOpacity(.8),
                                               ),
                                             ),
                                             InkWell(
@@ -822,11 +805,11 @@ class _Grade9State extends State<Grade9> {
               ],
             ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: toggleVisibility,
-          child: const Icon(Icons.search),
-        ));
+        );
+      } else {
+        return const DesktopGrade9();
+      }
+    });
   }
 
   //get the field required for the current logged in user
@@ -918,15 +901,14 @@ class NavigationDrawer extends StatelessWidget {
               child: Column(
                 children: [
                   CircleAvatar(
+                    backgroundColor: Theme.of(context).primaryColorLight,
                     child: Wrap(
                       children: [
-                        Text(
-                          teachersSecondName[0].toString(),
-                          style: textStyleText(context).copyWith(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14,
-                            color: Theme.of(context).primaryColorLight,
-                          ),
+                        // extractedData ?
+                        Icon(
+                          Icons.person,
+                          size: 18,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ],
                     ),

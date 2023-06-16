@@ -522,19 +522,17 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                           ),
                           TextFormField(
                             controller: titleEdit,
-                            decoration: InputDecoration(
-                                label: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 10.0),
-                              child: Text(
-                                "Title",
-                                style: textStyleText(context).copyWith(
-                                  color: Theme.of(context).primaryColor,
-                                ),
+                            decoration: textInputDecoration.copyWith(
+                              hintText: "Short description",
+                              hintStyle: textStyleText(context).copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.7),
                               ),
-                            )),
+                            ),
                             style: textStyleText(context),
-                            textAlign: TextAlign.start,
+                            textAlign: TextAlign.center,
                             autocorrect: true,
                             textAlignVertical: TextAlignVertical.center,
                             onSaved: (value) {
@@ -549,20 +547,18 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                           ),
                           TextFormField(
                             controller: gradeEdit,
-                            decoration: InputDecoration(
-                                label: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 10.0),
-                              child: Text(
-                                "Grade",
-                                style: textStyleText(context).copyWith(
-                                  color: Theme.of(context).primaryColor,
-                                ),
+                            decoration: textInputDecoration.copyWith(
+                              hintText: "Grade intended",
+                              hintStyle: textStyleText(context).copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.7),
                               ),
-                            )),
+                            ),
                             style: textStyleText(context),
                             keyboardType: TextInputType.number,
-                            textAlign: TextAlign.start,
+                            textAlign: TextAlign.center,
                             textAlignVertical: TextAlignVertical.center,
                             onSaved: (value) {
                               //Do something with the user input.
@@ -571,22 +567,23 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                               });
                             },
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           TextFormField(
                             controller: aboutEdit,
                             maxLines: 5,
-                            decoration: InputDecoration(
-                                label: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 10.0),
-                              child: Text(
-                                "About",
-                                style: textStyleText(context).copyWith(
-                                  color: Theme.of(context).primaryColor,
-                                ),
+                            decoration: textInputDecoration.copyWith(
+                              hintText: "About",
+                              hintStyle: textStyleText(context).copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.7),
                               ),
-                            )),
+                            ),
                             style: textStyleText(context),
-                            textAlign: TextAlign.start,
+                            textAlign: TextAlign.center,
                             textAlignVertical: TextAlignVertical.center,
                             onSaved: (value) {
                               //Do something with the user input.

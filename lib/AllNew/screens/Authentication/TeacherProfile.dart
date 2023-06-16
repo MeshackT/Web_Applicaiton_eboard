@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:yueway/AllNew/model/VerificationModel.dart';
+import 'package:yueway/AllNew/screens/Authentication/DesktopAuthentication/DesktopTeacherProfile.dart';
 
 import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';
@@ -52,318 +53,332 @@ class _TeachersProfileState extends State<TeachersProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: DoubleBackToCloseApp(
-        snackBar: SnackBar(
-          backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
-          content: Text(
-            'Tap back again to leave the application',
-            style: TextStyle(color: Theme.of(context).primaryColorLight),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        child: SafeArea(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              //screen background color
-              gradient: LinearGradient(colors: [
-                const Color(0x00cccccc),
-                const Color(0xE6691971).withOpacity(.7)
-              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth < Utils.mobileWidth) {
+        return Scaffold(
+          body: DoubleBackToCloseApp(
+            snackBar: SnackBar(
+              backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
+              content: Text(
+                'Tap back again to leave the application',
+                style: TextStyle(color: Theme.of(context).primaryColorLight),
+                textAlign: TextAlign.center,
+              ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: SafeArea(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  //screen background color
+                  gradient: LinearGradient(colors: [
+                    const Color(0x00cccccc),
+                    const Color(0xE6691971).withOpacity(.7)
+                  ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                ),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: SingleChildScrollView(
+                    child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 1),
-                          child: OutlinedButton(
-                            style: buttonRound,
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Home()));
-                            },
-                            child: Text(
-                              "Back",
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 1),
-                          child: OutlinedButton(
-                            style: buttonRound,
-                            onPressed: () async {
-                              await showSheetToEditForProfile(
-                                teachersName,
-                                teachersSecondName,
-                                teachersEmail,
-                                teachersSubjects,
-                                documentIDInitial,
-                              );
-                            },
-                            child: Text(
-                              "Edit Profile",
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 6,
-                    ),
-                    Text(
-                      "My Profile",
-                      style: textStyleText(context).copyWith(
-                        fontWeight: FontWeight.w800,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(10),
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10),
-                        color: Theme.of(context).primaryColor.withOpacity(.1),
-                        child: Column(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                labelText("Name"),
-                                labelText(teachersName.toString()),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 6,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                labelText("Second Name"),
-                                labelText(teachersSecondName.toString()),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 6,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                labelText("Email"),
-                                labelText(teachersEmail.toString()),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 6,
-                            ),
-                            Divider(
-                              height: 7,
-                              color: Theme.of(context).primaryColorLight,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                labelText("Subjects"),
-                                const SizedBox(
-                                  height: 10,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 1),
+                              child: OutlinedButton(
+                                style: buttonRound,
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const Home()));
+                                },
+                                child: Text(
+                                  "Back",
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor),
                                 ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    labelText(teachersSubjects.join("\n")),
-                                  ],
-                                )
-                              ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 1),
+                              child: OutlinedButton(
+                                style: buttonRound,
+                                onPressed: () async {
+                                  await showSheetToEditForProfile(
+                                    teachersName,
+                                    teachersSecondName,
+                                    teachersEmail,
+                                    teachersSubjects,
+                                    documentIDInitial,
+                                  );
+                                },
+                                child: Text(
+                                  "Edit Profile",
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    isLoading
-                        ? SpinKitChasingDots(
-                            color: Theme.of(context).primaryColorLight,
-                            size: 12,
-                          )
-                        : OutlinedButton(
-                            style: buttonRound,
-                            onPressed: () async {
-                              showCupertinoDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    CupertinoAlertDialog(
-                                  title: Text(
-                                    "Delete my account?",
-                                    style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context, 'Cancel');
-                                      },
-                                      child: const Text('Cancel!'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () async {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        try {
-                                          // capture the context before the async operations
-                                          final scaffoldContext =
-                                              ScaffoldMessenger.of(context);
-                                          final navigatorContext =
-                                              Navigator.of(context);
-
-                                          await _deleteSubjectFromAllDocuments();
-                                          await _deleteIDFromAllDocuments();
-
-                                          FirebaseAuth.instance.currentUser!
-                                              .delete()
-                                              .then((value) {
-                                            signOut(context);
-                                          });
-                                          // use the captured context after the async operations
-                                          scaffoldContext.showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                  'Account deleted successfully.'),
-                                            ),
-                                          );
-
-                                          navigatorContext.pushReplacement(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const Authenticate(),
-                                            ),
-                                          );
-                                        } on Exception catch (e) {
-                                          snack(e.toString(), context);
-                                        }
-
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                      },
-                                      child: const Text('Delete!'),
-                                    ),
-                                  ],
-                                  content: const Text(
-                                      "You are about to delete your account permanently and it can't be retrieved!."),
-                                ),
-                              );
-                            },
-                            child: isLoading
-                                ? SpinKitChasingDots(
-                                    color: Theme.of(context).primaryColor,
-                                    size: 12,
-                                  )
-                                : Text(
-                                    "Delete my account permanently?",
-                                    style: TextStyle(
-                                        color: Theme.of(context).primaryColor),
-                                  ),
-                          ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(70),
-                        topLeft: Radius.circular(70),
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 5),
-                        height: 40,
-                        color: Theme.of(context).primaryColor,
-                        child: TextButton(
-                          onPressed: () async {
-                            signOut(context);
-                          },
-                          child: Text(
-                            "Sign Out",
-                            style: textStyleText(context).copyWith(
-                                color: Theme.of(context).primaryColorLight,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 0),
+                        const SizedBox(
+                          height: 6,
+                        ),
+                        Text(
+                          "My Profile",
+                          style: textStyleText(context).copyWith(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
                           ),
                         ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        bool verifiedUser = false;
-                        verifiedUser =
-                            FirebaseAuth.instance.currentUser!.emailVerified;
-
-                        var currentUser = FirebaseAuth.instance.currentUser;
-                        logger.e(currentUser);
-                        VerificationModel.checkEmailVerified();
-                        VerificationModel.sendVerificationEmail();
-
-                        if (verifiedUser == false) {
-                          setState(() {
-                            isLoadingVerify = true;
-                          });
-                        } else {
-                          snack("Verified", context);
-                        }
-                        //await _deleteMyDocumentWithData();
-                      },
-                      child: isLoadingVerify
-                          ? const Text("Verify your email")
-                          : const Text("Email Verified"),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    isLoading
-                        ? SpinKitChasingDots(
-                            color: Theme.of(context).primaryColorLight,
-                            size: 14,
-                          )
-                        : const SizedBox(
-                            child: Text(""),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(10),
+                            topLeft: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
                           ),
-                  ],
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(.1),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    labelText("Name"),
+                                    labelText(teachersName.toString()),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    labelText("Second Name"),
+                                    labelText(teachersSecondName.toString()),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    labelText("Email"),
+                                    labelText(teachersEmail.toString()),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                                Divider(
+                                  height: 7,
+                                  color: Theme.of(context).primaryColorLight,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    labelText("Subjects"),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        labelText(teachersSubjects.join("\n")),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        isLoading
+                            ? SpinKitChasingDots(
+                                color: Theme.of(context).primaryColorLight,
+                                size: 12,
+                              )
+                            : OutlinedButton(
+                                style: buttonRound,
+                                onPressed: () async {
+                                  showCupertinoDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        CupertinoAlertDialog(
+                                      title: Text(
+                                        "Delete my account?",
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context, 'Cancel');
+                                          },
+                                          child: const Text('Cancel!'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            try {
+                                              // capture the context before the async operations
+                                              final scaffoldContext =
+                                                  ScaffoldMessenger.of(context);
+                                              final navigatorContext =
+                                                  Navigator.of(context);
+
+                                              await _deleteSubjectFromAllDocuments();
+                                              await _deleteIDFromAllDocuments();
+
+                                              FirebaseAuth.instance.currentUser!
+                                                  .delete()
+                                                  .then((value) {
+                                                signOut(context);
+                                              });
+                                              // use the captured context after the async operations
+                                              scaffoldContext.showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'Account deleted successfully.'),
+                                                ),
+                                              );
+
+                                              navigatorContext.pushReplacement(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const Authenticate(),
+                                                ),
+                                              );
+                                            } on Exception catch (e) {
+                                              snack(e.toString(), context);
+                                            }
+
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                          },
+                                          child: const Text('Delete!'),
+                                        ),
+                                      ],
+                                      content: const Text(
+                                          "You are about to delete your account permanently and it can't be retrieved!."),
+                                    ),
+                                  );
+                                },
+                                child: isLoading
+                                    ? SpinKitChasingDots(
+                                        color: Theme.of(context).primaryColor,
+                                        size: 12,
+                                      )
+                                    : Text(
+                                        "Delete my account permanently?",
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                      ),
+                              ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(70),
+                            topLeft: Radius.circular(70),
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 5),
+                            height: 40,
+                            color: Theme.of(context).primaryColor,
+                            child: TextButton(
+                              onPressed: () async {
+                                signOut(context);
+                              },
+                              child: Text(
+                                "Sign Out",
+                                style: textStyleText(context).copyWith(
+                                    color: Theme.of(context).primaryColorLight,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            bool verifiedUser = false;
+                            verifiedUser = FirebaseAuth
+                                .instance.currentUser!.emailVerified;
+
+                            var currentUser = FirebaseAuth.instance.currentUser;
+                            logger.e(currentUser);
+                            VerificationModel.checkEmailVerified();
+                            VerificationModel.sendVerificationEmail();
+
+                            if (verifiedUser == false) {
+                              setState(() {
+                                isLoadingVerify = true;
+                              });
+                            } else {
+                              snack("Verified", context);
+                            }
+                            //await _deleteMyDocumentWithData();
+                          },
+                          child: isLoadingVerify
+                              ? const Text("Verify your email")
+                              : const Text("Email Verified"),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        isLoading
+                            ? SpinKitChasingDots(
+                                color: Theme.of(context).primaryColorLight,
+                                size: 14,
+                              )
+                            : const SizedBox(
+                                child: Text(""),
+                              ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
-    );
+        );
+      } else {
+        return const DesktopTeachersProfile();
+      }
+    });
   }
 
   Wrap labelText(String labelText) {

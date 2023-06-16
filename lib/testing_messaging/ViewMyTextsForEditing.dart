@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:yueway/testing_messaging/DesktopMessaging/DesktopViewMyTextsForEditing.dart';
+
 import '../AllNew/model/ConnectionChecker.dart';
 import '../AllNew/shared/constants.dart';
 import 'messaging.dart';
@@ -31,243 +33,256 @@ class _ViewMyTextsForEditingState extends State<ViewMyTextsForEditing> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.only(top: 0.0),
-          decoration: const BoxDecoration(
-            //screen background color
-            gradient: LinearGradient(
-                colors: [Color(0x0fffffff), Color(0xE7791971)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight),
-          ),
-          child: Column(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    OutlinedButton(
-                      onPressed: () async {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const Messaging(),
-                          ),
-                        );
-                      },
-                      style: buttonRound,
-                      child: Text(
-                        "Back",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                      ),
-                    ),
-                    OutlinedButton(
-                      onPressed: () async {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const Messaging(),
-                          ),
-                        );
-                      },
-                      style: buttonRound,
-                      child: Text(
-                        "Modify Images",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth < Utils.mobileWidth) {
+        return Scaffold(
+          body: SafeArea(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              margin: const EdgeInsets.only(top: 0.0),
+              decoration: const BoxDecoration(
+                //screen background color
+                gradient: LinearGradient(
+                    colors: [Color(0x0fffffff), Color(0xE7791971)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight),
               ),
-              Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection("messagesWithTextOnly")
-                      .orderBy("timestamp", descending: true)
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasError) {
-                      return Text("Error: ${snapshot.error}");
-                    } else if (!snapshot.hasData ||
-                        snapshot.data == null ||
-                        snapshot.data!.size <= 0) {
-                      return Center(
-                        child: Text(
-                          "No data sent yet.",
-                          style: textStyleText(context).copyWith(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        OutlinedButton(
+                          onPressed: () async {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const Messaging(),
+                              ),
+                            );
+                          },
+                          style: buttonRound,
+                          child: Text(
+                            "Back",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
                           ),
                         ),
-                      );
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return SpinKitChasingDots(
-                        color: Theme.of(context).primaryColor,
-                      );
-                    } else {
-                      var _documents = snapshot.data!.docs;
-                      return ListView.builder(
-                        itemCount: _documents.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          DocumentSnapshot document = _documents[index];
-                          String text = document.get("text");
-                          String name = document.get("nameOfTeacher");
-                          String teacherID = document.get("userID");
+                        OutlinedButton(
+                          onPressed: () async {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const Messaging(),
+                              ),
+                            );
+                          },
+                          style: buttonRound,
+                          child: Text(
+                            "Modify Images",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection("messagesWithTextOnly")
+                          .orderBy("timestamp", descending: true)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        } else if (!snapshot.hasData ||
+                            snapshot.data == null ||
+                            snapshot.data!.size <= 0) {
+                          return Center(
+                            child: Text(
+                              "No data sent yet.",
+                              style: textStyleText(context).copyWith(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          );
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return SpinKitChasingDots(
+                            color: Theme.of(context).primaryColor,
+                          );
+                        } else {
+                          var _documents = snapshot.data!.docs;
+                          return ListView.builder(
+                            itemCount: _documents.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              DocumentSnapshot document = _documents[index];
+                              String text = document.get("text");
+                              String name = document.get("nameOfTeacher");
+                              String teacherID = document.get("userID");
 
-                          var dateAndTime = document.get("timestamp");
-                          String documentIDCurrent = document.id;
+                              var dateAndTime = document.get("timestamp");
+                              String documentIDCurrent = document.id;
 
-                          Timestamp timestamp = document.get("timestamp");
-                          DateTime dateTime = timestamp.toDate();
-                          // convert timestamp to DateTime
-                          var formattedDateTime =
-                              " ${dateTime.hour}:${dateTime.minute}";
+                              Timestamp timestamp = document.get("timestamp");
+                              DateTime dateTime = timestamp.toDate();
+                              // convert timestamp to DateTime
+                              var formattedDateTime =
+                                  " ${dateTime.hour}:${dateTime.minute}";
 
-                          return InkWell(
-                            onLongPress: () {
-                              setState(() {
-                                titleEdit.text = text.toString();
-                              });
-                              showSheetToEdit(
-                                  text, documentIDCurrent, teacherID);
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 3, horizontal: 5),
-                              color: Theme.of(context)
-                                  .primaryColorLight
-                                  .withOpacity(.3),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
+                              return InkWell(
+                                onLongPress: () {
+                                  setState(() {
+                                    titleEdit.text = text.toString();
+                                  });
+                                  showSheetToEdit(
+                                      text, documentIDCurrent, teacherID);
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 3, horizontal: 5),
+                                  color: Theme.of(context)
+                                      .primaryColorLight
+                                      .withOpacity(.3),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      CircleAvatar(
-                                        child: Text(
-                                          name.toString()[0],
-                                          style:
-                                              textStyleText(context).copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context)
-                                                .primaryColorLight,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Flexible(
-                                        flex: 1,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              name,
+                                      Row(
+                                        children: [
+                                          CircleAvatar(
+                                            child: Text(
+                                              name.toString()[0],
                                               style: textStyleText(context)
                                                   .copyWith(
                                                 fontWeight: FontWeight.bold,
                                                 color: Theme.of(context)
-                                                    .primaryColor,
+                                                    .primaryColorLight,
                                               ),
                                             ),
-                                            Row(
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Flexible(
+                                            flex: 1,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  Utils.formattedDate(
-                                                      dateAndTime),
+                                                  name,
                                                   style: textStyleText(context)
                                                       .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColor
-                                                              .withOpacity(.7),
-                                                          fontSize: 10),
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                  ),
                                                 ),
-                                                const SizedBox(
-                                                  width: 10,
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      Utils.formattedDate(
+                                                          dateAndTime),
+                                                      style: textStyleText(
+                                                              context)
+                                                          .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor
+                                                                  .withOpacity(
+                                                                      .7),
+                                                              fontSize: 10),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                      formattedDateTime,
+                                                      style: textStyleText(
+                                                              context)
+                                                          .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor
+                                                                  .withOpacity(
+                                                                      .7),
+                                                              fontSize: 10),
+                                                    )
+                                                  ],
                                                 ),
-                                                Text(
-                                                  formattedDateTime,
-                                                  style: textStyleText(context)
-                                                      .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColor
-                                                              .withOpacity(.7),
-                                                          fontSize: 10),
-                                                )
                                               ],
+                                            ),
+                                          ),
+                                          Utils.toolTipMessage(
+                                              "Press and hold to edit or delete the message",
+                                              context),
+                                          SizedBox(
+                                            width: 40,
+                                            height: 40,
+                                            child: IconButton(
+                                              onPressed: () async {},
+                                              icon: Icon(
+                                                Icons.circle,
+                                                color: Theme.of(context)
+                                                    .primaryColor
+                                                    .withOpacity(.5),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 8),
+                                        child: Wrap(
+                                          children: [
+                                            SelectableText(
+                                              text,
+                                              style: textStyleText(context),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      Utils.toolTipMessage(
-                                          "Press and hold to edit or delete the message",
-                                          context),
-                                      SizedBox(
-                                        width: 40,
-                                        height: 40,
-                                        child: IconButton(
-                                          onPressed: () async {},
-                                          icon: Icon(
-                                            Icons.circle,
-                                            color: Theme.of(context)
-                                                .primaryColor
-                                                .withOpacity(.5),
-                                          ),
-                                        ),
-                                      ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 8),
-                                    child: Wrap(
-                                      children: [
-                                        SelectableText(
-                                          text,
-                                          style: textStyleText(context),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                ),
+                              );
+                            },
                           );
-                        },
-                      );
-                    }
-                  },
-                ),
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        );
+      } else {
+        return const DesktopViewMyTextsForEditing();
+      }
+    });
   }
 
   //TODO Show text edit sheet

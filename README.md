@@ -4,6 +4,8 @@ Eboard
 
 ## Getting Started
 
+"ebasehosting-751ee"
+
 This is a school feed application for teachers and learners.
 
 Teachers get to send letters digitally to learners instead of printing out paper form of letters.
@@ -37,3 +39,15 @@ firebase deploy --only hosting:ebase-3f858
 <!--  </script>-->
 
 [//]: # (gsutil cors set cors.json gs://ebase-3f858.appspot.com/)
+
+Deploy steps
+npm install -g firebase-tools
+firebase login
+firebase init
+yes
+(public) build/web
+(Single page) yes
+(GitHub host) no
+no
+flutter build web
+firebase deploy --only hosting

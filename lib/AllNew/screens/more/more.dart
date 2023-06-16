@@ -10,6 +10,7 @@ import 'package:yueway/AllNew/screens/Authentication/Authenticate.dart';
 
 import '../../shared/constants.dart';
 import '../home/home.dart';
+import 'DektopLayouts/DesktopMore.dart';
 import 'feedbackclass.dart';
 
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
@@ -25,6 +26,8 @@ class More extends StatefulWidget {
 class _MoreState extends State<More> {
   bool isLoading = false;
   bool loader = false;
+  var widthSize = 2.2;
+  var widthSize_1 = 1;
 
   String appName = "";
   String appVersion = "";
@@ -51,74 +54,141 @@ class _MoreState extends State<More> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-            //screen background color
-            gradient: LinearGradient(
-                colors: [Color(0x00cccccc), Color(0xE7791971)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  OutlinedButton(
-                    style: buttonRound,
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const Home()));
-                    },
-                    child: Text(
-                      "Back",
-                      style: TextStyle(color: Theme.of(context).primaryColor),
-                    ),
-                  ),
-                  spaceVertical(),
-                  Container(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      decoration: BoxDecoration(
-                        color:
-                            Theme.of(context).primaryColorLight.withOpacity(.4),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        border: Border.all(
-                          color: Theme.of(context).primaryColor,
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth < Utils.mobileWidth) {
+        return Scaffold(
+          body: SafeArea(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              decoration: const BoxDecoration(
+                //screen background color
+                gradient: LinearGradient(
+                    colors: [Color(0x00cccccc), Color(0xE7791971)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight),
+              ),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        OutlinedButton(
+                          style: buttonRound,
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => const Home()));
+                          },
+                          child: Text(
+                            "Back",
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor),
+                          ),
                         ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 150,
-                            width: MediaQuery.of(context).size.width,
+                        spaceVertical(),
+                        Container(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .primaryColorLight
+                                  .withOpacity(.4),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              border: Border.all(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Text(
-                                    "About ",
-                                    style: textStyleText(context).copyWith(
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 16,
-                                      letterSpacing: 1,
-                                    ),
-                                    textAlign: TextAlign.center,
+                                SizedBox(
+                                  height: 150,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 10),
+                                        child: Text(
+                                          "About ",
+                                          style:
+                                              textStyleText(context).copyWith(
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 16,
+                                            letterSpacing: 1,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 10),
+                                        child: Text(
+                                          "An electronic board for both learners and teacher."
+                                          " Send your notification as a teacher to learners."
+                                          " Get your notification feeds directly from the application.",
+                                          style:
+                                              textStyleText(context).copyWith(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                            letterSpacing: 1,
+                                            color: Theme.of(context)
+                                                .primaryColor
+                                                .withOpacity(.6),
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
+                              ],
+                            )),
+                        spaceVertical(),
+                        Container(
+                          height: 160,
+                          width: MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .primaryColorLight
+                                .withOpacity(.4),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Share with friends",
+                                style: textStyleText(context).copyWith(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 16,
+                                    letterSpacing: 1),
+                              ),
+                              spaceVertical(),
+                              InkWell(
+                                onTap: () {
+                                  //show sheet to share
+                                  showSheetToShare(context);
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(left: 10),
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 30,
                                   child: Text(
-                                    "An electronic board for both learners and teacher."
-                                    " Send your notification as a teacher to learners."
-                                    " Get your notification feeds directly from the application.",
+                                    "Share with friends",
+                                    textAlign: TextAlign.start,
                                     style: textStyleText(context).copyWith(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16,
@@ -127,436 +197,437 @@ class _MoreState extends State<More> {
                                           .primaryColor
                                           .withOpacity(.6),
                                     ),
-                                    textAlign: TextAlign.center,
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  showSheetToSendUsFeedback(context);
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(left: 10),
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 30,
+                                  child: Text(
+                                    "Send us Feedback",
+                                    textAlign: TextAlign.start,
+                                    style: textStyleText(context).copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      letterSpacing: 1,
+                                      color: Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(.6),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  showSheetForAddingEnquiries(context);
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(left: 10),
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 30,
+                                  child: Text(
+                                    "Add the details for enquiries",
+                                    textAlign: TextAlign.start,
+                                    style: textStyleText(context).copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      letterSpacing: 1,
+                                      color: Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(.6),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      )),
-                  spaceVertical(),
-                  Container(
-                    height: 160,
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
-                    decoration: BoxDecoration(
-                      color:
-                          Theme.of(context).primaryColorLight.withOpacity(.4),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Share with friends",
-                          style: textStyleText(context).copyWith(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 16,
-                              letterSpacing: 1),
                         ),
                         spaceVertical(),
                         InkWell(
-                          onTap: () {
-                            //show sheet to share
-                            showSheetToShare(context);
+                          onTap: () async {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            final navContext = Navigator.of(context);
+
+                            try {
+                              await FirebaseAuth.instance.signOut();
+                              navContext.pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => const Authenticate(),
+                                ),
+                              );
+                            } catch (e) {
+                              snack("Failed to sign out", context);
+                            }
+                            setState(() {
+                              isLoading = false;
+                            });
                           },
                           child: Container(
-                            margin: const EdgeInsets.only(left: 10),
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .primaryColorLight
+                                  .withOpacity(.4),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              border: Border.all(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
                             width: MediaQuery.of(context).size.width,
-                            height: 30,
-                            child: Text(
-                              "Share with friends",
-                              textAlign: TextAlign.start,
-                              style: textStyleText(context).copyWith(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                                letterSpacing: 1,
-                                color: Theme.of(context)
-                                    .primaryColor
-                                    .withOpacity(.6),
+                            height: 50,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 20, right: 20, top: 10),
+                              child: Text(
+                                "Sign Out",
+                                style: textStyleText(context).copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  letterSpacing: 1,
+                                  color: Colors.red,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            showSheetToSendUsFeedback(context);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.only(left: 10),
-                            width: MediaQuery.of(context).size.width,
-                            height: 30,
-                            child: Text(
-                              "Send us Feedback",
-                              textAlign: TextAlign.start,
-                              style: textStyleText(context).copyWith(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                                letterSpacing: 1,
-                                color: Theme.of(context)
-                                    .primaryColor
-                                    .withOpacity(.6),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            showSheetForAddingEnquiries(context);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.only(left: 10),
-                            width: MediaQuery.of(context).size.width,
-                            height: 30,
-                            child: Text(
-                              "Add the details for enquiries",
-                              textAlign: TextAlign.start,
-                              style: textStyleText(context).copyWith(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                                letterSpacing: 1,
-                                color: Theme.of(context)
-                                    .primaryColor
-                                    .withOpacity(.6),
-                              ),
-                            ),
-                          ),
+                        spaceVertical(),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: isLoading
+                              ? SpinKitChasingDots(
+                                  color: Theme.of(context).primaryColor,
+                                )
+                              : Text(
+                                  "App Name: $appName\nApp Version: $appVersion\nApp BuildNumber: $appBuildUpNumber\n$appPackage",
+                                  style: textStyleText(context).copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    letterSpacing: 1,
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(.6),
+                                  ),
+                                  textAlign: TextAlign.start,
+                                ),
                         ),
                       ],
                     ),
                   ),
-                  spaceVertical(),
-                  InkWell(
-                    onTap: () async {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      try {
-                        await FirebaseAuth.instance.signOut();
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const Authenticate(),
-                          ),
-                        );
-                      } catch (e) {
-                        snack("Failed to sign out", context);
-                      }
-                      setState(() {
-                        isLoading = false;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      decoration: BoxDecoration(
-                        color:
-                            Theme.of(context).primaryColorLight.withOpacity(.4),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 20, right: 20, top: 10),
-                        child: Text(
-                          "Sign Out",
-                          style: textStyleText(context).copyWith(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            letterSpacing: 1,
-                            color: Colors.red,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-                  spaceVertical(),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: isLoading
-                        ? SpinKitChasingDots(
-                            color: Theme.of(context).primaryColor,
-                          )
-                        : Text(
-                            "App Name: $appName\nApp Version: $appVersion\nApp BuildNumber: $appBuildUpNumber\n$appPackage",
-                            style: textStyleText(context).copyWith(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                              letterSpacing: 1,
-                              color: Theme.of(context)
-                                  .primaryColor
-                                  .withOpacity(.6),
-                            ),
-                            textAlign: TextAlign.start,
-                          ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      } else {
+        return const DesktopMore();
+      }
+    });
+  }
+
+  //TODO send FeedBack
+  desktopShowSheetToSendUsFeedback(BuildContext context) {
+    //controllers
+    TextEditingController nameOfSender = TextEditingController();
+    TextEditingController emailOfSender = TextEditingController();
+    TextEditingController messageOfSender = TextEditingController();
+    TextEditingController subjectOfSender = TextEditingController();
+
+    showModalBottomSheet(
+      isScrollControlled: true,
+      barrierColor: Colors.transparent,
+      enableDrag: true,
+      elevation: 1,
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.only(top: 0.0),
+            decoration: const BoxDecoration(
+              //screen background color
+              gradient: LinearGradient(
+                  colors: [Color(0x0fffffff), Color(0xE7791971)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight),
+            ),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Column(children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: buttonRound,
+                        child: Text(
+                          "Discard",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 25.0, vertical: 3),
+                          child: Column(children: [
+                            ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(50),
+                                bottomRight: Radius.circular(50),
+                                topLeft: Radius.circular(50),
+                                topRight: Radius.circular(50),
+                              ),
+                              child: Container(
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.7),
+                                width: MediaQuery.of(context).size.width,
+                                height: 50,
+                                child: Center(
+                                  child: Text(
+                                    "What's your feedback?",
+                                    style: textStyleText(context).copyWith(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: 'Apple SD Gothic Neo',
+                                        color: Theme.of(context)
+                                            .primaryColorLight),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              controller: nameOfSender,
+                              maxLines: 1,
+                              decoration: textInputDecoration.copyWith(
+                                hintText: "Your name here",
+                                hintStyle: textStyleText(context).copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(.7),
+                                ),
+                              ),
+                              style: textStyleText(context),
+                              textAlign: TextAlign.center,
+                              autocorrect: true,
+                              textAlignVertical: TextAlignVertical.center,
+                              onSaved: (value) {
+                                //Do something with the user input.
+                                nameOfSender.text = value!;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: emailOfSender,
+                              maxLines: 1,
+                              decoration: textInputDecoration.copyWith(
+                                hintText: "Your email here",
+                                hintStyle: textStyleText(context).copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(.7),
+                                ),
+                              ),
+                              style: textStyleText(context),
+                              textAlign: TextAlign.center,
+                              autocorrect: true,
+                              textAlignVertical: TextAlignVertical.center,
+                              onSaved: (value) {
+                                //Do something with the user input.
+                                emailOfSender.text = value!;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: subjectOfSender,
+                              maxLines: 1,
+                              decoration: textInputDecoration.copyWith(
+                                hintText: "Your subject here",
+                                hintStyle: textStyleText(context).copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(.7),
+                                ),
+                              ),
+                              style: textStyleText(context),
+                              textAlign: TextAlign.center,
+                              autocorrect: true,
+                              maxLength: 45,
+                              textAlignVertical: TextAlignVertical.center,
+                              onSaved: (value) {
+                                //Do something with the user input.
+                                subjectOfSender.text = value!;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: messageOfSender,
+                              maxLines: 4,
+                              decoration: textInputDecoration.copyWith(
+                                hintText: "Your message here",
+                                hintStyle: textStyleText(context).copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(.7),
+                                ),
+                              ),
+                              style: textStyleText(context),
+                              textAlign: TextAlign.center,
+                              autocorrect: true,
+                              textAlignVertical: TextAlignVertical.center,
+                              onSaved: (value) {
+                                //Do something with the user input.
+                                messageOfSender.text = value!;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  OutlinedButton(
+                                    onPressed: () async {
+                                      setState(() {
+                                        loader = true;
+                                      });
+                                      Utils.showDownloading(
+                                          context,
+                                          "Sending your email.",
+                                          "Please wait a few seconds...");
+
+                                      //validate the inputs
+                                      try {
+                                        if (nameOfSender.text.isEmpty ||
+                                            emailOfSender.text.isEmpty ||
+                                            subjectOfSender.text.isEmpty ||
+                                            messageOfSender.text.isEmpty) {
+                                          snack(
+                                              "Insert your details and message",
+                                              context);
+                                        } else {
+                                          //send the message through an API from email JS email
+                                          SendEmail.sendEmail(
+                                            name: nameOfSender.text,
+                                            message: messageOfSender.text,
+                                            subject: subjectOfSender.text,
+                                            email: emailOfSender.text
+                                                .trim()
+                                                .toLowerCase(),
+                                          );
+                                        }
+                                        // turn off the loader
+                                        setState(() {
+                                          loader = false;
+                                        });
+                                        //close the sheet
+                                        Navigator.of(context).pop();
+                                        //communicate the process after
+                                        Fluttertoast.showToast(
+                                            backgroundColor:
+                                                Theme.of(context).primaryColor,
+                                            msg:
+                                                "Thank you for your feedback, your email submitted.");
+
+                                        //clear the data in those textfields
+                                        nameOfSender.clear();
+                                        messageOfSender.clear();
+                                        subjectOfSender.clear();
+                                        emailOfSender.clear();
+                                      } on Exception catch (e) {
+                                        // TODO
+                                        Fluttertoast.showToast(
+                                            backgroundColor:
+                                                Theme.of(context).primaryColor,
+                                            msg:
+                                                "failed to send the feedback, please try again later");
+                                        logger.i(e);
+                                      }
+                                    },
+                                    style: buttonRound,
+                                    child: Text(
+                                      "Send",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            Theme.of(context).primaryColorDark,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ]),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ]),
+            ),
+          ),
+        );
+      },
     );
   }
 
-  //TODO Show bottom Sheet for Feedback
-  // showSheetToSendUsFeedback(BuildContext context) {
-  //   TextEditingController sendersName = TextEditingController();
-  //   TextEditingController sendersEmail = TextEditingController();
-  //   TextEditingController subject = TextEditingController();
-  //   TextEditingController message = TextEditingController();
-  //
-  //
-  //   showModalBottomSheet(
-  //     barrierColor: Theme.of(context).primaryColor.withOpacity(.1),
-  //     isScrollControlled: true,
-  //     enableDrag: true,
-  //     elevation: 1,
-  //     clipBehavior: Clip.antiAlias,
-  //     context: context,
-  //     builder: (context) {
-  //       return Wrap(
-  //         alignment: WrapAlignment.center,
-  //         children: [
-  //           SingleChildScrollView(
-  //             child: Container(
-  //               width: MediaQuery.of(context).size.width,
-  //               decoration: const BoxDecoration(
-  //                 //screen background color
-  //                 gradient: LinearGradient(
-  //                     colors: [Color(0x0fffffff), Color(0xE7791971)],
-  //                     begin: Alignment.topLeft,
-  //                     end: Alignment.bottomRight),
-  //               ),
-  //               child: Padding(
-  //                 padding:
-  //                 const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-  //                 child: SingleChildScrollView(
-  //                   child: Column(
-  //                     children: [
-  //                       Padding(
-  //                         padding: const EdgeInsets.symmetric(
-  //                             horizontal: 25.0, vertical: 3),
-  //                         child: Column(children: [
-  //                           ClipRRect(
-  //                             borderRadius: const BorderRadius.only(
-  //                               bottomLeft: Radius.circular(50),
-  //                               bottomRight: Radius.circular(50),
-  //                               topLeft: Radius.circular(50),
-  //                               topRight: Radius.circular(50),
-  //                             ),
-  //                             child: Container(
-  //                               color: Theme.of(context)
-  //                                   .primaryColor
-  //                                   .withOpacity(.7),
-  //                               width: MediaQuery.of(context).size.width,
-  //                               height: 50,
-  //                               child: Center(
-  //                                 child: Text(
-  //                                   style: textStyleText(context).copyWith(
-  //                                       fontSize: 15,
-  //                                       fontWeight: FontWeight.w700,
-  //                                       fontFamily: 'Apple SD Gothic Neo',
-  //                                       color:
-  //                                       Theme.of(context).primaryColorLight),
-  //                                   "Send us your feedback.",
-  //                                 ),
-  //                               ),
-  //                             ),
-  //                           ),
-  //                           const SizedBox(
-  //                             height: 20,
-  //                           ),
-  //                           TextFormField(
-  //                             controller: sendersName,
-  //                             maxLines: 1,
-  //                             decoration: textInputDecoration.copyWith(
-  //                               hintText: "Your name here...",
-  //                               hintStyle: textStyleText(context).copyWith(
-  //                                 fontWeight: FontWeight.w800,
-  //                                 color: Theme.of(context)
-  //                                     .primaryColor
-  //                                     .withOpacity(.7),
-  //                               ),
-  //                             ),
-  //                             style: textStyleText(context),
-  //                             textAlign: TextAlign.center,
-  //                             autocorrect: true,
-  //                             textAlignVertical: TextAlignVertical.center,
-  //                             onSaved: (value) {
-  //                               //Do something with the user input.
-  //                               sendersName.text = value!;
-  //                             },
-  //                           ),
-  //                           const SizedBox(
-  //                             height: 10,
-  //                           ),
-  //                           TextFormField(
-  //                             controller: sendersEmail,
-  //                             maxLines: 1,
-  //                             decoration: textInputDecoration.copyWith(
-  //                               hintText: "Your email here...",
-  //                               hintStyle: textStyleText(context).copyWith(
-  //                                 fontWeight: FontWeight.w800,
-  //                                 color: Theme.of(context)
-  //                                     .primaryColor
-  //                                     .withOpacity(.7),
-  //                               ),
-  //                             ),
-  //                             keyboardType: TextInputType.emailAddress,
-  //                             style: textStyleText(context),
-  //                             textAlign: TextAlign.center,
-  //                             autocorrect: true,
-  //                             textAlignVertical: TextAlignVertical.center,
-  //                             onSaved: (value) {
-  //                               //Do something with the user input.
-  //                               sendersEmail.text = value!;
-  //                             },
-  //                           ),
-  //                           const SizedBox(
-  //                             height: 10,
-  //                           ),
-  //                           TextFormField(
-  //                             controller: subject,
-  //                             decoration: textInputDecoration.copyWith(
-  //                               hintText: "Your subject/about here",
-  //                               hintStyle: textStyleText(context).copyWith(
-  //                                 fontWeight: FontWeight.w800,
-  //                                 color: Theme.of(context)
-  //                                     .primaryColor
-  //                                     .withOpacity(.7),
-  //                               ),
-  //                             ),
-  //                             keyboardType: TextInputType.text,
-  //                             style: textStyleText(context),
-  //                             textAlign: TextAlign.center,
-  //                             autocorrect: true,
-  //                             textAlignVertical: TextAlignVertical.center,
-  //                             onSaved: (value) {
-  //                               //Do something with the user input.
-  //                               subject.text = value!;
-  //                             },
-  //                           ),
-  //                           const SizedBox(
-  //                             height: 10,
-  //                           ),
-  //                           TextFormField(
-  //                             controller: message,
-  //                             maxLines: 4,
-  //                             decoration: textInputDecoration.copyWith(
-  //                               hintText: "Your message here...",
-  //                               hintStyle: textStyleText(context).copyWith(
-  //                                 fontWeight: FontWeight.w800,
-  //                                 color: Theme.of(context)
-  //                                     .primaryColor
-  //                                     .withOpacity(.7),
-  //                               ),
-  //                             ),
-  //                             keyboardType: TextInputType.text,
-  //                             style: textStyleText(context),
-  //                             textAlign: TextAlign.center,
-  //                             autocorrect: true,
-  //                             textAlignVertical: TextAlignVertical.center,
-  //                             onSaved: (value) {
-  //                               //Do something with the user input.
-  //                               message.text = value!;
-  //                             },
-  //                           ),
-  //                           const SizedBox(
-  //                             height: 10,
-  //                           ),
-  //                           Padding(
-  //                             padding: const EdgeInsets.symmetric(vertical: 10),
-  //                             child: Row(
-  //                               crossAxisAlignment: CrossAxisAlignment.center,
-  //                               mainAxisAlignment: MainAxisAlignment.center,
-  //                               children: [
-  //                                 OutlinedButton(
-  //                                   onPressed: () async {
-  //                                     final navContext = Navigator.of(context);
-  //                                     final themeContext = Theme.of(context);
-  //                                     bool loader = false;
-  //
-  //                                     if (sendersName.text.isEmpty ||
-  //                                         sendersEmail.text.isEmpty ||
-  //                                     subject.text.isEmpty ||
-  //                                     message.text.isEmpty) {
-  //                                       Fluttertoast.showToast(
-  //                                           backgroundColor:
-  //                                           themeContext.primaryColor,
-  //                                           msg: "Insert your details in the spaces provided");
-  //                                     } else {
-  //                                       setState(() {
-  //                                         loader = true;
-  //                                       });
-  //                                       Utils.showDownloading(
-  //                                           context,
-  //                                           "Sending your email.",
-  //                                           "Please wait a few seconds...");
-
-  //                                       ///TODO add these to the database
-  //                                       SendEmail.sendEmail(
-  //                                           name: sendersName.text.trim(),
-  //                                           email: sendersEmail.text.trim().toLowerCase(),
-  //                                           subject: subject.text.trim(),
-  //                                           message: message.text.trim());
-  //                                       setState(() {
-  //                                         loader = false;
-  //                                       });
-  //                                       Fluttertoast.showToast(
-  //                                           backgroundColor:
-  //                                           themeContext.primaryColor,
-  //                                           msg: "Email submitted");
-  //                                     }
-  //                                     sendersName.clear();
-  //                                     sendersEmail.clear();
-  //                                     message.clear();
-  //                                     subject.clear();
-  //                                     navContext.pop();
-  //                                   },
-  //                                   style: buttonRound,
-  //                                   child: Text(
-  //                                     "Submit",
-  //                                     style: TextStyle(
-  //                                       fontSize: 15,
-  //                                       fontWeight: FontWeight.bold,
-  //                                       color: Theme.of(context).primaryColorDark,
-  //                                     ),
-  //                                   ),
-  //                                 ),
-  //                               ],
-  //                             ),
-  //                           ),
-  //                         ]),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
-//working
+  //TODO Desktop showFeedBack
   showSheetToSendUsFeedback(BuildContext context) {
     //controllers
     TextEditingController nameOfSender = TextEditingController();

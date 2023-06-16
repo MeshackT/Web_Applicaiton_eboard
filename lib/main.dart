@@ -6,9 +6,6 @@ import 'package:logger/logger.dart';
 import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
 import 'package:yueway/AllNew/screens/wrapper.dart';
 
-// Import the generated file
-import 'firebase_options.dart';
-
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
 
 @pragma('vm:entry-point')
@@ -19,16 +16,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    //   options: const FirebaseOptions(
-    //       apiKey: "AIzaSyALUsDsHtmbQrNOIuyl9Mr_zARl3rLGK34",
-    //       authDomain: "ebase-3f858.firebaseapp.com",
-    //       databaseURL: "https://ebase-3f858-default-rtdb.firebaseio.com",
-    //       projectId: "ebase-3f858",
-    //       storageBucket: "ebase-3f858.appspot.com",
-    //       messagingSenderId: "231030944816",
-    //       appId: "1:231030944816:web:07f5bbb2a7ddbdee26e9f5",
-    //       measurementId: "G-EYXRE3102C",
-    // ),
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyALUsDsHtmbQrNOIuyl9Mr_zARl3rLGK34",
+      authDomain: "ebase-3f858.firebaseapp.com",
+      databaseURL: "https://ebase-3f858-default-rtdb.firebaseio.com",
+      projectId: "ebase-3f858",
+      storageBucket: "ebase-3f858.appspot.com",
+      messagingSenderId: "231030944816",
+      appId: "1:231030944816:web:07f5bbb2a7ddbdee26e9f5",
+      measurementId: "G-EYXRE3102C",
+    ),
   );
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await FastCachedImageConfig.init(clearCacheAfter: const Duration(days: 365));
@@ -74,6 +71,7 @@ class _MyAppState extends State<MyApp> {
       primarySwatch: myColor,
       primaryColorDark: const Color(0xE7791971),
       primaryColorLight: Colors.white,
+      canvasColor: Colors.white,
       fontFamily: 'Poppins',
       iconTheme: const IconThemeData(
         color: Color(0xE7791971),
