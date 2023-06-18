@@ -1,6 +1,7 @@
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
@@ -10,25 +11,43 @@ Logger logger = Logger(printer: PrettyPrinter(colors: true));
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp(
+  //   options: const FirebaseOptions(
+  //     apiKey: "AIzaSyALUsDsHtmbQrNOIuyl9Mr_zARl3rLGK34",
+  //     authDomain: "ebase-3f858.firebaseapp.com",
+  //     databaseURL: "https://ebase-3f858-default-rtdb.firebaseio.com",
+  //     projectId: "ebase-3f858",
+  //     storageBucket: "ebase-3f858.appspot.com",
+  //     messagingSenderId: "231030944816",
+  //     appId: "1:231030944816:web:07f5bbb2a7ddbdee26e9f5",
+  //   ),
+  // );
 }
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: "AIzaSyALUsDsHtmbQrNOIuyl9Mr_zARl3rLGK34",
-      authDomain: "ebase-3f858.firebaseapp.com",
-      databaseURL: "https://ebase-3f858-default-rtdb.firebaseio.com",
-      projectId: "ebase-3f858",
-      storageBucket: "ebase-3f858.appspot.com",
-      messagingSenderId: "231030944816",
-      appId: "1:231030944816:web:07f5bbb2a7ddbdee26e9f5",
-      measurementId: "G-EYXRE3102C",
-    ),
-  );
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: "AIzaSyALUsDsHtmbQrNOIuyl9Mr_zARl3rLGK34",
+        authDomain: "ebase-3f858.firebaseapp.com",
+        databaseURL: "https://ebase-3f858-default-rtdb.firebaseio.com",
+        projectId: "ebase-3f858",
+        storageBucket: "ebase-3f858.appspot.com",
+        messagingSenderId: "231030944816",
+        appId: "1:231030944816:web:07f5bbb2a7ddbdee26e9f5",
+      ),
+    );
+    //TODO initialize firebase and background messages
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  } catch (e) {
+    if (kDebugMode) {
+      print("Firebase initialization failed: $e");
+    }
+  }
+
   await FastCachedImageConfig.init(clearCacheAfter: const Duration(days: 365));
+
   runApp(const MyApp());
 }
 

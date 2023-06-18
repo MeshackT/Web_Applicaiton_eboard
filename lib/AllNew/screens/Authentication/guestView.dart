@@ -174,143 +174,197 @@ class _GuestViewState extends State<GuestView> {
 
                               var dateAndTime = document.get("timestamp");
 
-                              return Container(
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 3, horizontal: 5),
-                                color: Theme.of(context)
-                                    .primaryColorLight
-                                    .withOpacity(.3),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        CircleAvatar(
-                                          child: Text(
-                                            "S",
-                                            style:
-                                                textStyleText(context).copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context)
-                                                  .primaryColorLight,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Flexible(
-                                          flex: 1,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                              return ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                ),
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 3, horizontal: 5),
+                                  color: Theme.of(context)
+                                      .primaryColorLight
+                                      .withOpacity(.3),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Stack(
+                                        alignment: Alignment.topLeft,
+                                        children: [
+                                          Stack(
+                                            alignment: Alignment.bottomLeft,
                                             children: [
-                                              SizedBox(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      "By The school",
-                                                      style:
-                                                          textStyleText(context)
-                                                              .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Theme.of(context)
-                                                            .primaryColor,
-                                                      ),
+                                              InstaImageViewer(
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      imageURLFromFirebase,
+                                                  placeholder: (context, url) =>
+                                                      SpinKitChasingDots(
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                    size: 25,
+                                                  ),
+                                                  cacheManager: CacheManager(
+                                                    //this removes the image and re-downloads it after 7 days
+                                                    Config(
+                                                      'customCacheKey',
+                                                      stalePeriod:
+                                                          const Duration(
+                                                              days: 7),
                                                     ),
-                                                    Text(
-                                                      Utils.formattedDate(
-                                                          dateAndTime),
-                                                      style: textStyleText(
-                                                              context)
-                                                          .copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal,
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .primaryColor
-                                                                  .withOpacity(
-                                                                      .7),
-                                                              fontSize: 10),
+                                                  ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          SizedBox(
+                                                    height: 200,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: SpinKitChasingDots(
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                      size: 100,
                                                     ),
-                                                  ],
+                                                  ),
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Center(
+                                                    child: Image(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.contain,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    2.1,
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    InstaImageViewer(
-                                      child: CachedNetworkImage(
-                                        imageUrl: imageURLFromFirebase,
-                                        placeholder: (context, url) =>
-                                            SpinKitChasingDots(
-                                          color: Theme.of(context).primaryColor,
-                                          size: 25,
-                                        ),
-                                        cacheManager: CacheManager(
-                                          //this removes the image and re-downloads it after 7 days
-                                          Config(
-                                            'customCacheKey',
-                                            stalePeriod:
-                                                const Duration(days: 7),
+                                          Container(
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
+                                            padding: const EdgeInsets.only(
+                                              top: 5,
+                                            ),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                CircleAvatar(
+                                                  child: Text(
+                                                    "S",
+                                                    style:
+                                                        textStyleText(context)
+                                                            .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Theme.of(context)
+                                                          .primaryColorLight,
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Flexible(
+                                                  flex: 1,
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        margin: const EdgeInsets
+                                                            .only(
+                                                          top: 5,
+                                                        ),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              "By The school",
+                                                              style:
+                                                                  textStyleText(
+                                                                          context)
+                                                                      .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor,
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              Utils.formattedDate(
+                                                                  dateAndTime),
+                                                              style: textStyleText(context).copyWith(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .primaryColor
+                                                                      .withOpacity(
+                                                                          .7),
+                                                                  fontSize: 10),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 10,
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width /
+                                                            2.1,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        errorWidget: (context, url, error) =>
-                                            SizedBox(
-                                          height: 200,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          child: SpinKitChasingDots(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            size: 100,
-                                          ),
-                                        ),
-                                        imageBuilder:
-                                            (context, imageProvider) => Center(
-                                          child: Image(
-                                            image: imageProvider,
-                                            fit: BoxFit.contain,
+                                        ],
+                                      ),
+                                      Container(
+                                        color: Theme.of(context)
+                                            .primaryColorLight
+                                            .withOpacity(.8),
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5, horizontal: 5),
+                                          child: SelectableText(
+                                            text,
+                                            style: textStyleText(context).copyWith(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w900,
+                                                fontFamily:
+                                                    'Hiragino Kaku Gothic ProN'),
+                                            textAlign: TextAlign.center,
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 5, horizontal: 5),
-                                        child: SelectableText(
-                                          text,
-                                          style: textStyleText(context),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               );
                             },

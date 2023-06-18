@@ -374,31 +374,25 @@ class _ViewDocumentsState extends State<ViewDocuments> {
                                                 ),
                                                 PopupMenuItem<int>(
                                                   value: 1,
-                                                  child: Visibility(
-                                                    visible: kIsWeb
-                                                        ? webDisplay
-                                                        : !webDisplay,
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.download,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColor
-                                                              .withOpacity(.7),
-                                                          size: 15,
-                                                        ),
-                                                        const SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Text(
-                                                          "Download PDF",
-                                                          style: textStyleText(
-                                                                  context)
-                                                              .copyWith(),
-                                                        ),
-                                                      ],
-                                                    ),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.download,
+                                                        color: Theme.of(context)
+                                                            .primaryColor
+                                                            .withOpacity(.7),
+                                                        size: 15,
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                        "Download PDF",
+                                                        style: textStyleText(
+                                                                context)
+                                                            .copyWith(),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                                 PopupMenuItem<int>(

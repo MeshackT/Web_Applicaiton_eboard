@@ -125,203 +125,244 @@ class _LearnerViewAllMessagesState extends State<LearnerViewAllMessages> {
 
                       var dateAndTime = document.get("timestamp");
 
-                      return
-
-                          // name.toString()[0], name, onselect=imageFromFirebase
-                          Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 3, horizontal: 5),
-                        color:
-                            Theme.of(context).primaryColorLight.withOpacity(.3),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                CircleAvatar(
-                                  child: Text(
-                                    name.toString()[0],
-                                    style: textStyleText(context).copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                      return ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(10),
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 3, horizontal: 5),
+                          color: Theme.of(context)
+                              .primaryColorLight
+                              .withOpacity(.3),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Stack(
+                                alignment: Alignment.topLeft,
+                                children: [
+                                  Stack(
+                                    alignment: Alignment.bottomLeft,
                                     children: [
-                                      SizedBox(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              name,
-                                              style: textStyleText(context)
-                                                  .copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                              ),
+                                      InstaImageViewer(
+                                        child: CachedNetworkImage(
+                                          imageUrl: imageURLFromFirebase,
+                                          placeholder: (context, url) =>
+                                              SizedBox(
+                                            height: 200,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: SpinKitChasingDots(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              size: 50,
                                             ),
-                                            Text(
-                                              Utils.formattedDate(dateAndTime),
-                                              style: textStyleText(context)
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.normal,
+                                          ),
+                                          cacheManager: CacheManager(
+                                            //this removes the image and re-downloads it after 7 days
+                                            Config(
+                                              'customCacheKey',
+                                              stalePeriod:
+                                                  const Duration(days: 7),
+                                            ),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              const Center(
+                                            child: Icon(
+                                              Icons.error,
+                                              size: 150,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Center(
+                                            child: Image(
+                                              image: imageProvider,
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Theme.of(context)
+                                            .primaryColorLight
+                                            .withOpacity(.8),
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5, horizontal: 5),
+                                          child: SelectableText(
+                                            text,
+                                            style: textStyleText(context).copyWith(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w900,
+                                                fontFamily:
+                                                    'Hiragino Kaku Gothic ProN'),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    color: Theme.of(context).primaryColorLight,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        CircleAvatar(
+                                          child: Text(
+                                            name.toString()[0],
+                                            style:
+                                                textStyleText(context).copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Flexible(
+                                          flex: 1,
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      name,
+                                                      style:
+                                                          textStyleText(context)
+                                                              .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      Utils.formattedDate(
+                                                          dateAndTime),
+                                                      style: textStyleText(
+                                                              context)
+                                                          .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor
+                                                                  .withOpacity(
+                                                                      .7),
+                                                              fontSize: 10),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.1,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 40,
+                                          height: 40,
+                                          child: PopupMenuButton<int>(
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
+                                            icon: Icon(
+                                              Icons.more_vert,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                            elevation: 5.0,
+                                            itemBuilder: (context) => [
+                                              PopupMenuItem<int>(
+                                                value: 0,
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.download,
                                                       color: Theme.of(context)
                                                           .primaryColor
                                                           .withOpacity(.7),
-                                                      fontSize: 10),
-                                            ),
-                                          ],
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 7,
+                                                    ),
+                                                    Text(
+                                                      "Download",
+                                                      style:
+                                                          textStyleText(context)
+                                                              .copyWith(),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const PopupMenuDivider(),
+                                              PopupMenuItem<int>(
+                                                value: 1,
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.share,
+                                                      color: Theme.of(context)
+                                                          .primaryColor
+                                                          .withOpacity(.7),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 7,
+                                                    ),
+                                                    Text(
+                                                      "Share",
+                                                      style:
+                                                          textStyleText(context)
+                                                              .copyWith(),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                            onSelected: (item) => selectedItem(
+                                                context,
+                                                item,
+                                                imageURLFromFirebase),
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                2.1,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 40,
-                                  height: 40,
-                                  child: PopupMenuButton<int>(
-                                    color: Theme.of(context).primaryColorLight,
-                                    icon: Icon(
-                                      Icons.more_vert,
-                                      color: Theme.of(context).primaryColor,
+                                      ],
                                     ),
-                                    elevation: 5.0,
-                                    itemBuilder: (context) => [
-                                      PopupMenuItem<int>(
-                                        value: 0,
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.download,
-                                              color: Theme.of(context)
-                                                  .primaryColor
-                                                  .withOpacity(.7),
-                                            ),
-                                            const SizedBox(
-                                              width: 7,
-                                            ),
-                                            Text(
-                                              "Download",
-                                              style: textStyleText(context)
-                                                  .copyWith(),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const PopupMenuDivider(),
-                                      PopupMenuItem<int>(
-                                        value: 1,
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.share,
-                                              color: Theme.of(context)
-                                                  .primaryColor
-                                                  .withOpacity(.7),
-                                            ),
-                                            const SizedBox(
-                                              width: 7,
-                                            ),
-                                            Text(
-                                              "Share",
-                                              style: textStyleText(context)
-                                                  .copyWith(),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                    onSelected: (item) => selectedItem(
-                                        context, item, imageURLFromFirebase),
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            InstaImageViewer(
-                              child: CachedNetworkImage(
-                                imageUrl: imageURLFromFirebase,
-                                placeholder: (context, url) => SizedBox(
-                                  height: 200,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: SpinKitChasingDots(
-                                    color: Theme.of(context).primaryColor,
-                                    size: 50,
-                                  ),
-                                ),
-                                cacheManager: CacheManager(
-                                  //this removes the image and re-downloads it after 7 days
-                                  Config(
-                                    'customCacheKey',
-                                    stalePeriod: const Duration(days: 7),
-                                  ),
-                                ),
-                                errorWidget: (context, url, error) =>
-                                    const Center(
-                                      child:  Icon(
-                                  Icons.error,
-                                  size: 150,
-                                  color: Colors.red,
-                                ),
-                                    ),
-                                // imageBuilder: (context, imageProvider) => Container(
-                                //   width: MediaQuery.of(context).size.width,
-                                //   height: 350,
-                                //   decoration: BoxDecoration(
-                                //     image: DecorationImage(
-                                //       image: imageProvider,
-                                //       fit: BoxFit.cover,
-                                //     ),
-                                //   ),
-                                // ),
-                                imageBuilder: (context, imageProvider) =>
-                                    Center(
-                                  child: Image(
-                                    image: imageProvider,
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 5),
-                              child: Wrap(
-                                children: [
-                                  SelectableText(
-                                    text,
-                                    style: textStyleText(context),
+                                  const SizedBox(
+                                    height: 5,
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                       //   Container(

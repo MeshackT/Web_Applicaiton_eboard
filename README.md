@@ -51,3 +51,12 @@ yes
 no
 flutter build web
 firebase deploy --only hosting
+
+17 June 2023
+changes...
+Removed initializing since there where two.
+
+changed the 
+<!--  <base href="$FLUTTER_BASE_HREF">-->
+changed TO
+  <base href="/"> works okay apparently

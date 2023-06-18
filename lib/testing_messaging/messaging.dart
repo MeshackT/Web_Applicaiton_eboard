@@ -429,93 +429,198 @@ class _MessagingState extends State<Messaging>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                      Stack(
+                                        alignment: Alignment.topLeft,
                                         children: [
-                                          CircleAvatar(
-                                            child: Text(
-                                              name.toString()[0],
-                                              style: textStyleText(context)
-                                                  .copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                color: Theme.of(context)
-                                                    .primaryColorLight,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                          Stack(
+                                            alignment: Alignment.bottomCenter,
                                             children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    name,
-                                                    style:
-                                                        textStyleText(context)
-                                                            .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                              InstaImageViewer(
+                                                child: CachedNetworkImage(
+                                                  imageUrl: imageURLFromFirebase
+                                                      .toString(),
+                                                  placeholder: (context, url) =>
+                                                      Center(
+                                                    child: SpinKitChasingDots(
                                                       color: Theme.of(context)
                                                           .primaryColor,
+                                                      size: 200,
                                                     ),
                                                   ),
-                                                  Text(
-                                                    Utils.formattedDate(
-                                                        dateAndTime),
-                                                    style: textStyleText(context)
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor
-                                                                .withOpacity(
-                                                                    .7),
-                                                            fontSize: 10),
+                                                  cacheManager: CacheManager(
+                                                    //this removes the image and re-downloads it after 7 days
+                                                    Config(
+                                                      'customCacheKey',
+                                                      stalePeriod:
+                                                          const Duration(
+                                                              days: 120),
+                                                    ),
                                                   ),
-                                                ],
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          SizedBox(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .height,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: SpinKitChasingDots(
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                      size: 200,
+                                                    ),
+                                                  ),
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Center(
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(10),
+                                                      ),
+                                                      child: Image(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.contain,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
-                                              SizedBox(
-                                                width: 40,
-                                                height: 40,
-                                                child: IconButton(
-                                                  onPressed: () async {},
-                                                  icon: Icon(
-                                                    Icons.circle,
-                                                    color: Theme.of(context)
-                                                        .primaryColor
-                                                        .withOpacity(.5),
+                                              Container(
+                                                color: Theme.of(context)
+                                                    .primaryColorLight
+                                                    .withOpacity(.8),
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 5),
+                                                  child: Wrap(
+                                                    children: [
+                                                      SelectableText(
+                                                        text,
+                                                        style: textStyleText(
+                                                                context)
+                                                            .copyWith(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w900,
+                                                                fontFamily:
+                                                                    'Hiragino Kaku Gothic ProN'),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ),
                                             ],
                                           ),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              CircleAvatar(
+                                                child: Text(
+                                                  name.toString()[0],
+                                                  style: textStyleText(context)
+                                                      .copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context)
+                                                        .primaryColorLight,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        name,
+                                                        style: textStyleText(
+                                                                context)
+                                                            .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        Utils.formattedDate(
+                                                            dateAndTime),
+                                                        style: textStyleText(
+                                                                context)
+                                                            .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor
+                                                                    .withOpacity(
+                                                                        .7),
+                                                                fontSize: 10),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    width: 40,
+                                                    height: 40,
+                                                    child: IconButton(
+                                                      onPressed: () async {},
+                                                      icon: Icon(
+                                                        Icons.circle,
+                                                        color: Theme.of(context)
+                                                            .primaryColor
+                                                            .withOpacity(.5),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
                                       //removed sizedBo with height=400
-                                      buildImage(imageURLFromFirebase!,
-                                          _documents[index].id),
-                                      SizedBox(
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 5, vertical: 2),
-                                          child: Text(
-                                            text,
-                                            style: textStyleText(context),
-                                          ),
-                                        ),
-                                      ),
+                                      // buildImage(imageURLFromFirebase!,
+                                      //     _documents[index].id),
+                                      // SizedBox(
+                                      //   child: Padding(
+                                      //     padding: const EdgeInsets.symmetric(
+                                      //         horizontal: 5, vertical: 2),
+                                      //     child: Text(
+                                      //       text,
+                                      //       style: textStyleText(context),
+                                      //     ),
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                 ),
