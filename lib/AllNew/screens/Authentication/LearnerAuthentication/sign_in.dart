@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
 import 'package:yueway/main.dart';
+
 import '../../../model/ConnectionChecker.dart';
 import '../../../shared/constants.dart';
 import '../../home/learnersHome.dart';
@@ -262,8 +263,8 @@ class _LearnerSignInState extends State<LearnerSignIn> {
                           ),
                           ClipRRect(
                             borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(70),
-                              topLeft: Radius.circular(70),
+                              topRight: Radius.circular(100),
+                              topLeft: Radius.circular(100),
                             ),
                             child: SizedBox(
                               width: 120,

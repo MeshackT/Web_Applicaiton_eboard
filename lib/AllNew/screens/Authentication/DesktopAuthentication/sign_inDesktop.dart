@@ -336,8 +336,8 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                               ),
                               ClipRRect(
                                 borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(70),
-                                  topLeft: Radius.circular(70),
+                                  topRight: Radius.circular(500),
+                                  topLeft: Radius.circular(500),
                                 ),
                                 child: SizedBox(
                                   width: 120,
@@ -377,8 +377,8 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                               ),
                               ClipRRect(
                                 borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(70),
-                                  bottomRight: Radius.circular(70),
+                                  bottomLeft: Radius.circular(500),
+                                  bottomRight: Radius.circular(500),
                                 ),
                                 child: SizedBox(
                                   width: 120,

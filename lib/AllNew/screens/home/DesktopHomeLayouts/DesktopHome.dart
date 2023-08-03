@@ -225,7 +225,7 @@ class _DesktopHomeLayoutState extends State<DesktopHomeLayout> {
         return Scaffold(
           appBar: AppBar(
             title: const Text(
-              "All learner's list Desktop",
+              "All learner's list",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),

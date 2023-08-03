@@ -174,8 +174,8 @@ class _DesktopForgotState extends State<DesktopForgot> {
                                   ),
                                   ClipRRect(
                                     borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(70),
-                                      bottomRight: Radius.circular(70),
+                                      bottomLeft: Radius.circular(100),
+                                      bottomRight: Radius.circular(100),
                                     ),
                                     child: SizedBox(
                                       width: 120,

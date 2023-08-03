@@ -309,8 +309,8 @@ class _TeachersProfileState extends State<TeachersProfile> {
                         ),
                         ClipRRect(
                           borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(70),
-                            topLeft: Radius.circular(70),
+                            topRight: Radius.circular(100),
+                            topLeft: Radius.circular(100),
                           ),
                           child: Container(
                             padding: const EdgeInsets.symmetric(

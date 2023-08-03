@@ -474,8 +474,8 @@ class _RegisterState extends State<Register> {
                                   children: [
                                     ClipRRect(
                                       borderRadius: const BorderRadius.only(
-                                        topRight: Radius.circular(70),
-                                        topLeft: Radius.circular(70),
+                                        topRight: Radius.circular(1000),
+                                        topLeft: Radius.circular(1000),
                                       ),
                                       child: SizedBox(
                                         width: 120,
@@ -527,8 +527,8 @@ class _RegisterState extends State<Register> {
                                     ),
                                     ClipRRect(
                                       borderRadius: const BorderRadius.only(
-                                        bottomLeft: Radius.circular(70),
-                                        bottomRight: Radius.circular(70),
+                                        bottomLeft: Radius.circular(1000),
+                                        bottomRight: Radius.circular(1000),
                                       ),
                                       child: SizedBox(
                                         width: 120,

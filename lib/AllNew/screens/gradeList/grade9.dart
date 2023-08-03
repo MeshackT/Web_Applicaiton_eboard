@@ -239,15 +239,29 @@ class _Grade9State extends State<Grade9> {
                     cursorColor: Theme.of(context).primaryColorDark,
                     keyboardType: TextInputType.name,
                     decoration: InputDecoration(
-                      border: InputBorder.none,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).primaryColorDark,
+                            width: 1.0),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Theme.of(context).primaryColorDark,
                             width: 1.0),
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).primaryColorDark,
+                            width: 1.0),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.red, width: 1.0),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                       disabledBorder: InputBorder.none,
                       contentPadding: const EdgeInsets.only(
                         left: 15,
@@ -798,10 +812,6 @@ class _Grade9State extends State<Grade9> {
                     ),
                   ),
                 ),
-                Container(
-                  color: Colors.transparent,
-                  height: 80,
-                ),
               ],
             ),
           ),
@@ -995,7 +1005,7 @@ class NavigationDrawer extends StatelessWidget {
                 color: IconTheme.of(context).color,
               ),
               title: Text(
-                "Grade 9",
+                "Grade 12",
                 style: TextStyle(
                     color: Theme.of(context).primaryColorDark,
                     fontWeight: FontWeight.w700),

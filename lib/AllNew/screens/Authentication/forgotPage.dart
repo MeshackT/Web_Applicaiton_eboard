@@ -64,8 +64,8 @@ class _ForgotState extends State<Forgot> {
                           borderRadius: const BorderRadius.only(
                             bottomLeft: Radius.circular(0),
                             bottomRight: Radius.circular(0),
-                            topRight: Radius.circular(280),
-                            topLeft: Radius.circular(280),
+                            topRight: Radius.circular(1000),
+                            topLeft: Radius.circular(1000),
                           ),
                           child: Container(
                             height: MediaQuery.of(context).size.height / 5,
@@ -73,7 +73,7 @@ class _ForgotState extends State<Forgot> {
                             color: Theme.of(context).primaryColor,
                             child: Padding(
                               padding:
-                                  const EdgeInsets.only(top: 50, bottom: 50),
+                                  const EdgeInsets.only(top: 30, bottom: 50),
                               child: Center(
                                 child: Text(
                                   "Facilitator\nReset Password",
@@ -144,10 +144,10 @@ class _ForgotState extends State<Forgot> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
-                                        "Forgot password?",
+                                        "Have an account?",
                                         style: textStyleText(context).copyWith(
-                                            color: Theme.of(context)
-                                                .primaryColorLight),
+                                            color:
+                                                Theme.of(context).primaryColor),
                                       ),
                                       const SizedBox(
                                         width: 10,
@@ -177,8 +177,8 @@ class _ForgotState extends State<Forgot> {
                                   ),
                                   ClipRRect(
                                     borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(70),
-                                      bottomRight: Radius.circular(70),
+                                      bottomLeft: Radius.circular(500),
+                                      bottomRight: Radius.circular(500),
                                     ),
                                     child: SizedBox(
                                       width: 120,
