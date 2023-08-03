@@ -485,7 +485,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   //==============================================//
-                                  //====================== Row one ================//
+                                  //====================== TODO Row one ================//
                                   SizedBox(
                                     child: Column(children: [
                                       Wrap(
@@ -717,7 +717,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                         alignment: WrapAlignment.spaceEvenly,
                                         //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          //subject 2
+                                          //subject 3
                                           DropdownButton(
                                             isExpanded: false,
                                             hint: Text(
@@ -827,7 +827,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                 WrapAlignment.spaceEvenly,
                                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              //subject 2
+                                              //subject 4
                                               DropdownButton(
                                                 isExpanded: false,
                                                 hint: Text(
@@ -953,7 +953,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                 WrapAlignment.spaceEvenly,
                                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              //subject 2
+                                              //subject 5
                                               DropdownButton(
                                                 isExpanded: false,
                                                 hint: Text(
@@ -1078,7 +1078,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                 WrapAlignment.spaceEvenly,
                                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              //subject 2
+                                              //subject 6
                                               DropdownButton(
                                                 isExpanded: false,
                                                 hint: Text(
@@ -1204,7 +1204,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                 WrapAlignment.spaceEvenly,
                                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              //subject 2
+                                              //subject 7
                                               DropdownButton(
                                                 isExpanded: false,
                                                 hint: Text(
@@ -1330,7 +1330,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                 WrapAlignment.spaceEvenly,
                                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              //subject 2
+                                              //subject 8
                                               DropdownButton(
                                                 isExpanded: false,
                                                 hint: Text(
@@ -1456,7 +1456,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                                 WrapAlignment.spaceEvenly,
                                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              //subject 2
+                                              //subject 9
                                               DropdownButton(
                                                 isExpanded: false,
                                                 hint: Text(
@@ -1581,7 +1581,7 @@ class _LearnerRegisterState extends State<LearnerRegister> {
                                         alignment: WrapAlignment.spaceEvenly,
                                         //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          //subject 2
+                                          //subject 10
                                           DropdownButton(
                                             isExpanded: false,
                                             hint: Text(
@@ -1839,8 +1839,6 @@ class _LearnerRegisterState extends State<LearnerRegister> {
       subjects.add(valueChoose8!);
       subjects.add(valueChoose9!);
       subjects.add(valueChoose10!);
-
-
 
       teachersID.add(valueTeacher1!);
       teachersID.add(valueTeacher2!);

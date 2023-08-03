@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
 import 'package:yueway/main.dart';
+
 import '../../../model/ConnectionChecker.dart';
 import '../../../shared/constants.dart';
 import '../../home/learnersHome.dart';
@@ -247,7 +248,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                   alignment: WrapAlignment.spaceEvenly,
                                   //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    //subject 2
+                                    //subject 1
                                     DropdownButton(
                                       isExpanded: false,
                                       hint: Text(
@@ -454,7 +455,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                   alignment: WrapAlignment.spaceEvenly,
                                   //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    //subject 2
+                                    //subject 3
                                     DropdownButton(
                                       isExpanded: false,
                                       hint: Text(
@@ -556,7 +557,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                       alignment: WrapAlignment.spaceEvenly,
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        //subject 2
+                                        //subject 4
                                         DropdownButton(
                                           isExpanded: false,
                                           hint: Text(
@@ -665,7 +666,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                       alignment: WrapAlignment.spaceEvenly,
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        //subject 2
+                                        //subject 5
                                         DropdownButton(
                                           isExpanded: false,
                                           hint: Text(
@@ -774,7 +775,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                       alignment: WrapAlignment.spaceEvenly,
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        //subject 2
+                                        //subject 6
                                         DropdownButton(
                                           isExpanded: false,
                                           hint: Text(
@@ -883,7 +884,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                       alignment: WrapAlignment.spaceEvenly,
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        //subject 2
+                                        //subject 7
                                         DropdownButton(
                                           isExpanded: false,
                                           hint: Text(
@@ -993,7 +994,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                       alignment: WrapAlignment.spaceEvenly,
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        //subject 2
+                                        //subject 8
                                         DropdownButton(
                                           isExpanded: false,
                                           hint: Text(
@@ -1103,7 +1104,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                       alignment: WrapAlignment.spaceEvenly,
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        //subject 2
+                                        //subject 9
                                         DropdownButton(
                                           isExpanded: false,
                                           hint: Text(
@@ -1211,7 +1212,7 @@ class _LearnerEditSubjectsState extends State<LearnerEditSubjects> {
                                       alignment: WrapAlignment.spaceEvenly,
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        //subject 2
+                                        //subject 10
                                         DropdownButton(
                                           isExpanded: false,
                                           hint: Text(

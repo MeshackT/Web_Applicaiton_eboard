@@ -452,22 +452,6 @@ class LearnerView extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
         ),
         title: const Text("View PDF"),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => const Messaging(),
-                ),
-              );
-            },
-            icon: Icon(
-              Icons.home,
-              size: 25,
-              color: Theme.of(context).primaryColorLight,
-            ),
-          ),
-        ],
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,

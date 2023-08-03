@@ -113,395 +113,406 @@ class _LearnerHomeState extends State<LearnerHome> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
-      initialIndex: 0,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("What's new?"),
-          titleSpacing: 2,
-          centerTitle: false,
-          elevation: 0,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(30),
-            ),
-          ),
-          actions: [
-            // Download
-            loading
-                ? SpinKitChasingDots(
-                    size: 13,
-                    color: Theme.of(context).primaryColorLight,
-                  )
-                : const SizedBox(
-                    child: Text(""),
-                  ),
-            PopupMenuButton(
-              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                PopupMenuItem(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LearnersProfile(),
-                        ),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.person,
-                          color: Theme.of(context).primaryColor,
-                          size: 12,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "My Profile",
-                          style: textStyleText(context).copyWith(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                PopupMenuItem(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const LearnerEditSubjects()));
-                    },
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.subject,
-                          color: Theme.of(context).primaryColor,
-                          size: 12,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Edit Subjects",
-                          style: textStyleText(context).copyWith(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                PopupMenuItem(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const LearnerMore()));
-                    },
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.more_horiz_rounded,
-                          color: Theme.of(context).primaryColor,
-                          size: 12,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "More",
-                          style: textStyleText(context).copyWith(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                PopupMenuItem(
-                  child: TextButton(
-                    onPressed: () async {
-                      try {
-                        setState(() {
-                          loading == true;
-                        });
-                        sigOut(context);
-                        sigOut(context);
-                      } on Exception catch (e) {
-                        setState(() {
-                          loading == false;
-                        });
-                        snack(e.toString(), context);
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        loading
-                            ? SpinKitChasingDots(
-                                color: Theme.of(context).primaryColor,
-                                size: 12,
-                              )
-                            : Icon(
-                                Icons.logout,
-                                color: Theme.of(context).primaryColor,
-                                size: 12,
-                              ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Log Out",
-                          style: textStyleText(context).copyWith(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-          bottom: TabBar(
-            indicatorColor: Theme.of(context).primaryColorLight,
-            indicatorWeight: 3,
-            tabs: [
-              Tab(
-                icon: Icon(
-                  Icons.image,
-                  color: Theme.of(context).primaryColorLight,
-                  size: 12,
-                ),
-                //text: "Images",
-              ),
-              Tab(
-                icon: Icon(Icons.text_fields_sharp,
-                    size: 12, color: Theme.of(context).primaryColorLight),
-                //text: "Text",
-              ),
-              Tab(
-                icon: Icon(Icons.picture_as_pdf,
-                    size: 12, color: Theme.of(context).primaryColorLight),
-                //text: "Text",
-              ),
-            ],
-          ),
-        ),
-        extendBodyBehindAppBar: false,
-        drawerScrimColor: Colors.transparent,
-        endDrawerEnableOpenDragGesture: true,
-        extendBody: true,
-        drawer: SafeArea(
-          child: Container(
-            color: Theme.of(context).primaryColorLight,
-            width: MediaQuery.of(context).size.width / 1.4,
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              children: [
-                buildHeader(context),
-                Expanded(
-                  flex: 1,
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: learnersRef
-                        .where('uid', isEqualTo: user!.uid)
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        return Center(
-                          child: Text('Error: ${snapshot.error}'),
-                        );
-                      }
+        length: 3,
+        initialIndex: 0,
+        child: Scaffold(
+          //body: extendBodyBehindAppBar: false,
+          drawerScrimColor: Colors.transparent,
+          endDrawerEnableOpenDragGesture: true,
+          extendBody: true,
+          drawer: SafeArea(
+            child: Container(
+              color: Theme.of(context).primaryColorLight,
+              width: MediaQuery.of(context).size.width / 1.4,
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                children: [
+                  buildHeader(context),
+                  Expanded(
+                    flex: 1,
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: learnersRef
+                          .where('uid', isEqualTo: user!.uid)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text('Error: ${snapshot.error}'),
+                          );
+                        }
 
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: Column(
-                            children: [
-                              const Text("Waiting for the internet connection"),
-                              SpinKitChasingDots(
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-
-                      final List<QueryDocumentSnapshot> matchingDocs =
-                          snapshot.data!.docs;
-                      if (matchingDocs.isEmpty) {
-                        return const Center(
-                          child: Text('No matching documents found.'),
-                        );
-                      }
-
-                      final DocumentSnapshot matchingDoc = matchingDocs.first;
-                      final List<dynamic> subjectsList =
-                          matchingDoc['subjects'];
-                      final Map<String, dynamic> subjectsMarksList =
-                          matchingDoc['allSubjects'];
-
-                      return ListView.builder(
-                        itemCount: subjectsList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final String subject = subjectsList[index];
-                          return ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(0),
-                              bottomRight: Radius.circular(100),
-                              topLeft: Radius.circular(0),
-                              topRight: Radius.circular(100),
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: Column(
+                              children: [
+                                const Text(
+                                    "Waiting for the internet connection"),
+                                SpinKitChasingDots(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ],
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 5),
-                              child: InkWell(
-                                onTap: () async {
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  //check if the document is not empty and get the data
-                                  if (subjectsMarksList != null) {
-                                    //check if the data is a List
-                                    if (subjectsMarksList is Map) {
-                                      //initially the subject is no found
-                                      bool foundCatIndex = false;
-                                      subjectsMarksList.forEach((key, value) {
-                                        if (key == subjectsList[index]) {
-                                          //if the subject is found
-                                          foundCatIndex = true;
-                                          //add the marks to this new local Map
-                                          Map<String, dynamic> indexMarks = {};
-                                          _userSubject = subjectsList[index];
-                                          indexMarks[_userSubject] = value;
-                                          // logger.i("$_userSubject\n${ indexMarks[_userSubject] = value}");
+                          );
+                        }
 
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  LearnerViewMarks(
-                                                indexMarks: indexMarks,
-                                                subjectName:
-                                                    _userSubject.toString(),
+                        final List<QueryDocumentSnapshot> matchingDocs =
+                            snapshot.data!.docs;
+                        if (matchingDocs.isEmpty) {
+                          return const Center(
+                            child: Text('No matching documents found.'),
+                          );
+                        }
+
+                        final DocumentSnapshot matchingDoc = matchingDocs.first;
+                        final List<dynamic> subjectsList =
+                            matchingDoc['subjects'];
+                        final Map<String, dynamic> subjectsMarksList =
+                            matchingDoc['allSubjects'];
+
+                        return ListView.builder(
+                          itemCount: subjectsList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final String subject = subjectsList[index];
+                            return ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(0),
+                                bottomRight: Radius.circular(100),
+                                topLeft: Radius.circular(0),
+                                topRight: Radius.circular(100),
+                              ),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    //check if the document is not empty and get the data
+                                    if (subjectsMarksList != null) {
+                                      //check if the data is a List
+                                      if (subjectsMarksList is Map) {
+                                        //initially the subject is no found
+                                        bool foundCatIndex = false;
+                                        subjectsMarksList.forEach((key, value) {
+                                          if (key == subjectsList[index]) {
+                                            //if the subject is found
+                                            foundCatIndex = true;
+                                            //add the marks to this new local Map
+                                            Map<String, dynamic> indexMarks =
+                                                {};
+                                            _userSubject = subjectsList[index];
+                                            indexMarks[_userSubject] = value;
+                                            // logger.i("$_userSubject\n${ indexMarks[_userSubject] = value}");
+
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    LearnerViewMarks(
+                                                  indexMarks: indexMarks,
+                                                  subjectName:
+                                                      _userSubject.toString(),
+                                                ),
                                               ),
-                                            ),
-                                          );
+                                            );
+                                          }
+                                        });
+                                        if (!foundCatIndex) {
+                                          //this shows when the index has no marks
+                                          logger.e("List is Empty");
+                                          snack(
+                                              "No ${subjectsList[index]} marks found",
+                                              context);
                                         }
-                                      });
-                                      if (!foundCatIndex) {
-                                        //this shows when the index has no marks
-                                        logger.e("List is Empty");
+                                      } else {
                                         snack(
-                                            "No ${subjectsList[index]} marks found",
+                                            "No ${subjectsList[index]} marks found. No data inserted yet",
                                             context);
                                       }
                                     } else {
-                                      snack(
-                                          "No ${subjectsList[index]} marks found. No data inserted yet",
+                                      logger.e(
+                                          "Map is Empty, no subjects instead");
+                                      snack("There are no Subjects currently",
                                           context);
                                     }
-                                  } else {
-                                    logger
-                                        .e("Map is Empty, no subjects instead");
-                                    snack("There are no Subjects currently",
-                                        context);
-                                  }
 
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    //screen background color
-                                    gradient: LinearGradient(
-                                        colors: [
-                                          const Color(0xffcccccc),
-                                          const Color(0xE6691971)
-                                              .withOpacity(.7)
-                                        ],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight),
-                                  ),
-                                  //color: Theme.of(context).primaryColor,
-                                  child: ListTile(
-                                    title: loading
-                                        ? SpinKitChasingDots(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          )
-                                        : Text(
-                                            subject,
-                                            textAlign: TextAlign.right,
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w900,
-                                                color: Theme.of(context)
-                                                    .primaryColorLight),
-                                          ),
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      //screen background color
+                                      gradient: LinearGradient(
+                                          colors: [
+                                            const Color(0xffcccccc),
+                                            const Color(0xE6691971)
+                                                .withOpacity(.7)
+                                          ],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight),
+                                    ),
+                                    //color: Theme.of(context).primaryColor,
+                                    child: ListTile(
+                                      title: loading
+                                          ? SpinKitChasingDots(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            )
+                                          : Text(
+                                              subject,
+                                              textAlign: TextAlign.right,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w900,
+                                                  color: Theme.of(context)
+                                                      .primaryColorLight),
+                                            ),
+                                    ),
                                   ),
                                 ),
                               ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(100),
+                      topRight: Radius.circular(100),
+                    ),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      color: Theme.of(context).primaryColor.withOpacity(.2),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LearnerEditSubjects(),
                             ),
                           );
                         },
-                      );
-                    },
-                  ),
-                ),
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(100),
-                    topRight: Radius.circular(100),
-                  ),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Theme.of(context).primaryColor.withOpacity(.2),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LearnerEditSubjects(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "Edit Subjects",
-                        style: textStyleText(context).copyWith(
-                            fontSize: 14, fontWeight: FontWeight.bold),
+                        child: Text(
+                          "Edit Subjects",
+                          style: textStyleText(context).copyWith(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
+                ],
+              ),
+            ),
+          ),
+          body: NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverAppBar(
+                floating: true,
+                snap: true,
+                title: const Text("What's new?"),
+                titleSpacing: 2,
+                centerTitle: false,
+                elevation: 0,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(30),
+                  ),
                 ),
-              ],
-            ),
-          ),
-        ),
-        body: DoubleBackToCloseApp(
-          snackBar: SnackBar(
-            backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
-            content: Text(
-              'Tap back again to leave the application',
-              style: TextStyle(color: Theme.of(context).primaryColorLight),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          child: TabBarView(
-            children: [
-              //Tabs
-              LearnerViewAllMessages(loading: loading),
-              const LearnerViewAllTexts(),
-              const LearnerViewDocuments(),
+                actions: [
+                  // Download
+                  loading
+                      ? SpinKitChasingDots(
+                          size: 13,
+                          color: Theme.of(context).primaryColorLight,
+                        )
+                      : const SizedBox(
+                          child: Text(""),
+                        ),
+                  PopupMenuButton(
+                    itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                      PopupMenuItem(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LearnersProfile(),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.person,
+                                color: Theme.of(context).primaryColor,
+                                size: 12,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "My Profile",
+                                style: textStyleText(context).copyWith(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const LearnerEditSubjects()));
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.subject,
+                                color: Theme.of(context).primaryColor,
+                                size: 12,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Edit Subjects",
+                                style: textStyleText(context).copyWith(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => const LearnerMore()));
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.more_horiz_rounded,
+                                color: Theme.of(context).primaryColor,
+                                size: 12,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "More",
+                                style: textStyleText(context).copyWith(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        child: TextButton(
+                          onPressed: () async {
+                            try {
+                              setState(() {
+                                loading == true;
+                              });
+                              sigOut(context);
+                              sigOut(context);
+                            } on Exception catch (e) {
+                              setState(() {
+                                loading == false;
+                              });
+                              snack(e.toString(), context);
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              loading
+                                  ? SpinKitChasingDots(
+                                      color: Theme.of(context).primaryColor,
+                                      size: 12,
+                                    )
+                                  : Icon(
+                                      Icons.logout,
+                                      color: Theme.of(context).primaryColor,
+                                      size: 12,
+                                    ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Log Out",
+                                style: textStyleText(context).copyWith(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+                bottom: TabBar(
+                  indicatorColor: Theme.of(context).primaryColorLight,
+                  indicatorWeight: 3,
+                  tabs: [
+                    Tab(
+                      icon: Icon(
+                        Icons.image,
+                        color: Theme.of(context).primaryColorLight,
+                        size: 12,
+                      ),
+                      //text: "Images",
+                    ),
+                    Tab(
+                      icon: Icon(Icons.text_fields_sharp,
+                          size: 12, color: Theme.of(context).primaryColorLight),
+                      //text: "Text",
+                    ),
+                    Tab(
+                      icon: Icon(Icons.picture_as_pdf,
+                          size: 12, color: Theme.of(context).primaryColorLight),
+                      //text: "Text",
+                    ),
+                  ],
+                ),
+              ),
             ],
+            body: DoubleBackToCloseApp(
+              snackBar: SnackBar(
+                backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
+                content: Text(
+                  'Tap back again to leave the application',
+                  style: TextStyle(color: Theme.of(context).primaryColorLight),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              child: TabBarView(
+                children: [
+                  //Tabs
+                  LearnerViewAllMessages(loading: loading),
+                  const LearnerViewAllTexts(),
+                  const LearnerViewDocuments(),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   //profile view

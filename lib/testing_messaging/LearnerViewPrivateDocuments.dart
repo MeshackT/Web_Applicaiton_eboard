@@ -3,18 +3,18 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:yueway/AllNew/screens/home/home.dart';
 import 'package:yueway/AllNew/screens/home/learnersHome.dart';
 import 'package:yueway/AllNew/shared/constants.dart';
-import 'package:http/http.dart' as http;
-
 
 User user = FirebaseAuth.instance.currentUser!;
 
@@ -78,48 +78,51 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
                     ),
                     isLoading
                         ? SpinKitChasingDots(
-                      color: Theme.of(context).primaryColor,
-                      size: 16,
-                    ):Container(
-                      width: 260,
-                      // color:
-                      // Theme.of(context).primaryColorLight.withOpacity(.8),
-                      child: TextField(
-                        controller: _searchController,
-                        cursorColor: Theme.of(context).primaryColorDark,
-                        keyboardType: TextInputType.name,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).primaryColorDark,
-                                width: 1.0),
-                            borderRadius: BorderRadius.circular(30),
+                            color: Theme.of(context).primaryColor,
+                            size: 16,
+                          )
+                        : Container(
+                            width: 260,
+                            // color:
+                            // Theme.of(context).primaryColorLight.withOpacity(.8),
+                            child: TextField(
+                              controller: _searchController,
+                              cursorColor: Theme.of(context).primaryColorDark,
+                              keyboardType: TextInputType.name,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColorDark,
+                                      width: 1.0),
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                contentPadding: const EdgeInsets.only(
+                                  left: 15,
+                                  bottom: 11,
+                                  top: 11,
+                                  right: 15,
+                                ),
+                                hintText: "Enter a name",
+                                hintStyle: TextStyle(
+                                    color: Theme.of(context).primaryColorDark,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1),
+                                prefixIcon: const Icon(Icons.search),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  searchText = value;
+                                });
+                              },
+                            ),
                           ),
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          contentPadding: const EdgeInsets.only(
-                            left: 15,
-                            bottom: 11,
-                            top: 11,
-                            right: 15,
-                          ),
-                          hintText: "Enter a name",
-                          hintStyle: TextStyle(
-                              color: Theme.of(context).primaryColorDark,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1),
-                          prefixIcon: const Icon(Icons.search),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            searchText = value;
-                          });
-                        },
-                      ),
+                    const SizedBox(
+                      height: 5,
                     ),
-                    const SizedBox(height: 5,),
                   ],
                 ),
               ),
@@ -133,7 +136,7 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if  (snapshot.hasError) {
+                    if (snapshot.hasError) {
                       return Text("Error: ${snapshot.error}");
                     } else if (!snapshot.hasData ||
                         snapshot.data == null ||
@@ -309,8 +312,8 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
                                                   Text(
                                                     "Download PDF",
                                                     style:
-                                                    textStyleText(context)
-                                                        .copyWith(),
+                                                        textStyleText(context)
+                                                            .copyWith(),
                                                   ),
                                                 ],
                                               ),
@@ -374,7 +377,7 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
         }
         break;
       case 1:
-        try{
+        try {
           setState(() {
             isLoading = true;
           });
@@ -410,8 +413,6 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
           });
           Fluttertoast.showToast(
               msg: 'File downloaded and saved successfully at: $filePath');
-
-
         } catch (e) {
           print(fileUrlfile);
           snack(e.toString(), context);
@@ -465,54 +466,60 @@ class View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("URL Link SHows here: $url");
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => const LearnerViewPrivateDocuments(),
-              ),
-            );
-          },
-          icon: const Icon(Icons.arrow_back),
+    return DoubleBackToCloseApp(
+      snackBar: SnackBar(
+        backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
+        content: Text(
+          'Tap back again to leave the application',
+          style: TextStyle(color: Theme.of(context).primaryColorLight),
+          textAlign: TextAlign.center,
         ),
-        title: const Text("View PDF"),
-        actions: [
-          IconButton(
+      ),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (context) => const Home(),
+                  builder: (context) => const LearnerViewPrivateDocuments(),
                 ),
               );
             },
-            icon: Icon(
-              Icons.home,
-              size: 25,
-              color: Theme.of(context).primaryColorLight,
-            ),
+            icon: const Icon(Icons.arrow_back),
           ),
-        ],
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        margin: const EdgeInsets.only(top: 0.0),
-        decoration: const BoxDecoration(
-          //screen background color
-          gradient: LinearGradient(
-              colors: [Color(0x0fffffff), Color(0xE7791971)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight),
+          title: const Text("View PDF"),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const Home(),
+                  ),
+                );
+              },
+              icon: Icon(
+                Icons.home,
+                size: 25,
+                color: Theme.of(context).primaryColorLight,
+              ),
+            ),
+          ],
         ),
-        child: SfPdfViewer.network(
-          enableTextSelection: true,
-          enableDocumentLinkAnnotation: true,
-          enableHyperlinkNavigation: true,
-          enableDoubleTapZooming: true,
-          url,
-          controller: pdfViewerController,
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.only(top: 0.0),
+          decoration: const BoxDecoration(
+            //screen background color
+            gradient: LinearGradient(
+                colors: [Color(0x0fffffff), Color(0xE7791971)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight),
+          ),
+          child: SfPdfViewer.network(
+            url,
+            controller: pdfViewerController,
+          ),
         ),
       ),
     );
