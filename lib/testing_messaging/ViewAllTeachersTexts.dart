@@ -1,11 +1,11 @@
+// import 'package:share_plus/share_plus.dart';
+import 'package:Eboard/testing_messaging/DesktopMessaging/DesktopViewAllTeachersTexts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:yueway/testing_messaging/DesktopMessaging/DesktopViewAllTeachersTexts.dart';
 
 import '../AllNew/model/ConnectionChecker.dart';
 import '../AllNew/shared/constants.dart';
@@ -312,7 +312,7 @@ class _ViewAllTeachersTextsState extends State<ViewAllTeachersTexts> {
       case 0:
         try {
           if (kIsWeb) {
-            Share.share(text);
+            // Share.share(text);
           } else {
             if (text.isEmpty || text == "") {
               print("cant share");

@@ -1,4 +1,4 @@
-package com.example.levy;
+package com.meshacknkosi.eboard;
 
 import io.flutter.embedding.android.FlutterActivity;
 

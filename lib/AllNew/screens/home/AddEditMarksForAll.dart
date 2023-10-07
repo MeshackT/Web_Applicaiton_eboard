@@ -33,7 +33,7 @@ class AddEditForAll extends StatefulWidget {
 class _AddEditForAllState extends State<AddEditForAll> {
   //get the collection of the document
   final CollectionReference learnersCollection =
-      FirebaseFirestore.instance.collection('learnersData');
+  FirebaseFirestore.instance.collection('learnersData');
 
   //how to uses these boxes 40 times without duplicate?
   //////////////////////////////////////////////////////////
@@ -148,15 +148,18 @@ class _AddEditForAllState extends State<AddEditForAll> {
   @override
   Widget build(BuildContext context) {
     final DocumentReference identityDocument =
-        learnersCollection.doc(widget.documentIDToEdit);
+    learnersCollection.doc(widget.documentIDToEdit);
     var scaffoldContext = ScaffoldMessenger.of(context);
 
     return LayoutBuilder(
-        builder: (context, constraints){
-          if(constraints.maxWidth < Utils.mobileWidth){
+        builder: (context, constraints) {
+          if (constraints.maxWidth < Utils.mobileWidth) {
             return Scaffold(
               body: Container(
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height,
                 margin: const EdgeInsets.only(top: 0.0),
                 decoration: const BoxDecoration(
                   //screen background color
@@ -168,8 +171,14 @@ class _AddEditForAllState extends State<AddEditForAll> {
                 child: SafeArea(
                   child: Center(
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height,
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -189,7 +198,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).primaryColorDark,
+                                      color: Theme
+                                          .of(context)
+                                          .primaryColorDark,
                                     ),
                                   ),
                                 ),
@@ -214,13 +225,21 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                 stream: identityDocument.snapshots(),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                  if (snapshot.hasData && snapshot.data!.exists) {
-                                    var allSubjects = snapshot.data!.get('allSubjects');
+                                  if (snapshot.hasData &&
+                                      snapshot.data!.exists) {
+                                    var allSubjects = snapshot.data!.get(
+                                        'allSubjects');
                                     //var allSubjects = snapshot.data!["allSubjects"];
 
                                     return SizedBox(
-                                      height: MediaQuery.of(context).size.height,
-                                      width: MediaQuery.of(context).size.width,
+                                      height: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .height,
+                                      width: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width,
                                       child: SingleChildScrollView(
                                         child: Padding(
                                           padding: const EdgeInsets.only(
@@ -230,7 +249,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                             title: Text(
                                               "Add marks For every Term",
                                               style: TextStyle(
-                                                  color: Theme.of(context)
+                                                  color: Theme
+                                                      .of(context)
                                                       .primaryColorDark,
                                                   fontWeight: FontWeight.w700,
                                                   fontSize: 16),
@@ -244,14 +264,17 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     title: Text(
                                                       "Term One",
                                                       style: TextStyle(
-                                                          color: Theme.of(context)
+                                                          color: Theme
+                                                              .of(context)
                                                               .primaryColorDark,
-                                                          fontWeight: FontWeight.w700,
+                                                          fontWeight: FontWeight
+                                                              .w700,
                                                           fontSize: 16),
                                                     ),
                                                     children: [
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -259,7 +282,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Test Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -280,7 +304,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test Mark 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -295,13 +320,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       TextInputType
                                                                           .number,
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       testOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
-                                                                          testOneMark.text =
+                                                                          testOneMark
+                                                                              .text =
                                                                           value!;
                                                                         });
                                                                       },
@@ -320,7 +348,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test Mark 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -332,13 +361,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       testTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
-                                                                          testTwoMark.text =
+                                                                          testTwoMark
+                                                                              .text =
                                                                           value!;
                                                                         });
                                                                       },
@@ -354,7 +386,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test Mark 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -369,10 +402,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       TextInputType
                                                                           .number,
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       testThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           testThreeMark
@@ -392,7 +427,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test Mark 4",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -407,10 +443,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       testFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           testFourMark
@@ -440,8 +478,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -461,14 +503,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -479,29 +523,52 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         // get the subject data from the map
                                                                                         var subjectData =
                                                                                         allSubjects[key];
-                                                                                        logger.e(subjectData);
-                                                                                        logger.i(subjectData[0]["tests"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData[0]["tests"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         //logger.i("$subjectName Found Subject: $subjectData");
 
                                                                                         // update the data
                                                                                         subjectData[0]["tests"]["test1mark"] =
-                                                                                            testOneMark.text;
+                                                                                            testOneMark
+                                                                                                .text;
                                                                                         subjectData[0]["tests"]["test2mark"] =
-                                                                                            testTwoMark.text;
+                                                                                            testTwoMark
+                                                                                                .text;
                                                                                         subjectData[0]["tests"]["test3mark"] =
-                                                                                            testThreeMark.text;
+                                                                                            testThreeMark
+                                                                                                .text;
                                                                                         subjectData[0]["tests"]["test4mark"] =
-                                                                                            testFourMark.text;
+                                                                                            testFourMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.e(subjectData);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -510,45 +577,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('The learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'The learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -563,7 +645,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -571,7 +654,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Assignment Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -590,7 +674,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -605,10 +690,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       assignmentOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           assignmentOneMark
@@ -632,7 +719,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -644,10 +732,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       assignmentTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           assignmentTwoMark
@@ -671,7 +761,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -683,10 +774,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       assignmentThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           assignmentThreeMark
@@ -710,7 +803,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 4",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -722,10 +816,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       assignmentFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           assignmentFourMark
@@ -748,15 +844,21 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         MaterialButton(
                                                                             child: loading
                                                                                 ? SpinKitChasingDots(
-                                                                              color: Theme.of(context)
+                                                                              color: Theme
+                                                                                  .of(
+                                                                                  context)
                                                                                   .primaryColor,
                                                                             )
                                                                                 : Text(
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -773,14 +875,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -792,25 +896,46 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[0]["assignments"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[0]["assignments"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[0]["assignments"]["assignment1mark"] =
-                                                                                            assignmentOneMark.text;
+                                                                                            assignmentOneMark
+                                                                                                .text;
                                                                                         subjectData[0]["assignments"]["assignment2mark"] =
-                                                                                            assignmentTwoMark.text;
+                                                                                            assignmentTwoMark
+                                                                                                .text;
                                                                                         subjectData[0]["assignments"]["assignment3mark"] =
-                                                                                            assignmentThreeMark.text;
+                                                                                            assignmentThreeMark
+                                                                                                .text;
                                                                                         subjectData[0]["assignments"]["assignment4mark"] =
-                                                                                            assignmentFourMark.text;
+                                                                                            assignmentFourMark
+                                                                                                .text;
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -819,45 +944,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -872,7 +1012,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -880,7 +1021,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Exam Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -901,7 +1043,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -913,13 +1056,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       examOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
-                                                                          examOneMark.text =
+                                                                          examOneMark
+                                                                              .text =
                                                                           value!;
                                                                         });
                                                                       },
@@ -938,7 +1084,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -950,13 +1097,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       examTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
-                                                                          examTwoMark.text =
+                                                                          examTwoMark
+                                                                              .text =
                                                                           value!;
                                                                         });
                                                                       },
@@ -982,8 +1132,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -1003,14 +1157,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -1022,22 +1178,41 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[0]["exams"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[0]["exams"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[0]["exams"]["exam1mark"] =
-                                                                                            examOneMark.text;
+                                                                                            examOneMark
+                                                                                                .text;
                                                                                         subjectData[0]["exams"]["exam2mark"] =
-                                                                                            examTwoMark.text;
+                                                                                            examTwoMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -1046,45 +1221,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -1110,14 +1300,17 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     title: Text(
                                                       "Term Two",
                                                       style: TextStyle(
-                                                          color: Theme.of(context)
+                                                          color: Theme
+                                                              .of(context)
                                                               .primaryColorDark,
-                                                          fontWeight: FontWeight.w700,
+                                                          fontWeight: FontWeight
+                                                              .w700,
                                                           fontSize: 16),
                                                     ),
                                                     children: [
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -1125,7 +1318,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Test Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -1146,7 +1340,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -1158,10 +1353,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoTestOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoTestOneMark
@@ -1184,7 +1381,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -1196,10 +1394,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoTestTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoTestTwoMark
@@ -1222,7 +1422,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -1234,10 +1435,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoTestThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoTestThreeMark
@@ -1260,7 +1463,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 4",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -1272,10 +1476,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoTestFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoTestFourMark
@@ -1305,8 +1511,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -1325,14 +1535,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -1343,29 +1555,52 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         // get the subject data from the map
                                                                                         var subjectData =
                                                                                         allSubjects[key];
-                                                                                        logger.e(subjectData);
-                                                                                        logger.i(subjectData[1]["tests"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData[1]["tests"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         //logger.i("$subjectName Found Subject: $subjectData");
 
                                                                                         // update the data
                                                                                         subjectData[1]["tests"]["test1mark"] =
-                                                                                            termTwoTestOneMark.text;
+                                                                                            termTwoTestOneMark
+                                                                                                .text;
                                                                                         subjectData[1]["tests"]["test2mark"] =
-                                                                                            termTwoTestTwoMark.text;
+                                                                                            termTwoTestTwoMark
+                                                                                                .text;
                                                                                         subjectData[1]["tests"]["test3mark"] =
-                                                                                            termTwoTestThreeMark.text;
+                                                                                            termTwoTestThreeMark
+                                                                                                .text;
                                                                                         subjectData[1]["tests"]["test4mark"] =
-                                                                                            termTwoTestFourMark.text;
+                                                                                            termTwoTestFourMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.e(subjectData);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -1374,45 +1609,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('The learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'The learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -1427,7 +1677,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -1435,7 +1686,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Assignment Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -1457,7 +1709,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -1469,10 +1722,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoAssignmentOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoAssignmentOneMark
@@ -1496,7 +1751,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -1508,10 +1764,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoAssignmentTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoAssignmentTwoMark
@@ -1535,7 +1793,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -1547,10 +1806,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoAssignmentThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoAssignmentThreeMark
@@ -1574,7 +1835,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 4",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -1586,10 +1848,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoAssignmentFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoAssignmentFourMark
@@ -1619,8 +1883,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -1639,14 +1907,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -1658,26 +1928,47 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[1]["assignments"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[1]["assignments"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[1]["assignments"]["assignment1mark"] =
-                                                                                            termTwoAssignmentOneMark.text;
+                                                                                            termTwoAssignmentOneMark
+                                                                                                .text;
                                                                                         subjectData[1]["assignments"]["assignment2mark"] =
-                                                                                            termTwoAssignmentTwoMark.text;
+                                                                                            termTwoAssignmentTwoMark
+                                                                                                .text;
                                                                                         subjectData[1]["assignments"]["assignment3mark"] =
-                                                                                            termTwoAssignmentThreeMark.text;
+                                                                                            termTwoAssignmentThreeMark
+                                                                                                .text;
                                                                                         subjectData[1]["assignments"]["assignment4mark"] =
-                                                                                            termTwoAssignmentFourMark.text;
+                                                                                            termTwoAssignmentFourMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -1686,45 +1977,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -1739,7 +2045,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -1747,7 +2054,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Exam Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -1768,7 +2076,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -1780,10 +2089,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoExamOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoExamTwoMark
@@ -1806,7 +2117,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -1818,10 +2130,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoExamTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoExamTwoMark
@@ -1851,8 +2165,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -1872,14 +2190,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -1891,22 +2211,41 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[1]["exams"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[1]["exams"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[1]["exams"]["exam1mark"] =
-                                                                                            termTwoExamOneMark.text;
+                                                                                            termTwoExamOneMark
+                                                                                                .text;
                                                                                         subjectData[1]["exams"]["exam2mark"] =
-                                                                                            termTwoExamTwoMark.text;
+                                                                                            termTwoExamTwoMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -1915,45 +2254,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -1979,14 +2333,17 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     title: Text(
                                                       "Term Three",
                                                       style: TextStyle(
-                                                          color: Theme.of(context)
+                                                          color: Theme
+                                                              .of(context)
                                                               .primaryColorDark,
-                                                          fontWeight: FontWeight.w700,
+                                                          fontWeight: FontWeight
+                                                              .w700,
                                                           fontSize: 16),
                                                     ),
                                                     children: [
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -1994,7 +2351,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Test Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -2015,7 +2373,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -2027,10 +2386,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeTestOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeTestTwoMark
@@ -2053,7 +2414,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -2065,10 +2427,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeTestTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeTestTwoMark
@@ -2091,7 +2455,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -2103,10 +2468,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeTestThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeTestThreeMark
@@ -2129,7 +2496,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 4",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -2141,10 +2509,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeTestFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeTestFourMark
@@ -2174,8 +2544,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -2195,14 +2569,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -2213,29 +2589,52 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         // get the subject data from the map
                                                                                         var subjectData =
                                                                                         allSubjects[key];
-                                                                                        logger.e(subjectData);
-                                                                                        logger.i(subjectData[2]["tests"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData[2]["tests"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         //logger.i("$subjectName Found Subject: $subjectData");
 
                                                                                         // update the data
                                                                                         subjectData[2]["tests"]["test1mark"] =
-                                                                                            termThreeTestOneMark.text;
+                                                                                            termThreeTestOneMark
+                                                                                                .text;
                                                                                         subjectData[2]["tests"]["test2mark"] =
-                                                                                            termThreeTestTwoMark.text;
+                                                                                            termThreeTestTwoMark
+                                                                                                .text;
                                                                                         subjectData[2]["tests"]["test3mark"] =
-                                                                                            termThreeTestThreeMark.text;
+                                                                                            termThreeTestThreeMark
+                                                                                                .text;
                                                                                         subjectData[2]["tests"]["test4mark"] =
-                                                                                            termThreeTestFourMark.text;
+                                                                                            termThreeTestFourMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.e(subjectData);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -2244,45 +2643,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('The learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'The learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -2297,7 +2711,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -2305,7 +2720,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Assignment Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -2327,7 +2743,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -2339,10 +2756,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeAssignmentOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeAssignmentOneMark
@@ -2366,7 +2785,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -2378,10 +2798,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeAssignmentTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeAssignmentTwoMark
@@ -2405,7 +2827,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -2417,10 +2840,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeAssignmentThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeAssignmentThreeMark
@@ -2444,7 +2869,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 4",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -2456,10 +2882,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeAssignmentFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeAssignmentFourMark
@@ -2489,8 +2917,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -2509,14 +2941,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -2528,26 +2962,47 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[2]["assignments"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[2]["assignments"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[2]["assignments"]["assignment1mark"] =
-                                                                                            termThreeAssignmentOneMark.text;
+                                                                                            termThreeAssignmentOneMark
+                                                                                                .text;
                                                                                         subjectData[2]["assignments"]["assignment2mark"] =
-                                                                                            termThreeAssignmentTwoMark.text;
+                                                                                            termThreeAssignmentTwoMark
+                                                                                                .text;
                                                                                         subjectData[2]["assignments"]["assignment3mark"] =
-                                                                                            termThreeAssignmentThreeMark.text;
+                                                                                            termThreeAssignmentThreeMark
+                                                                                                .text;
                                                                                         subjectData[2]["assignments"]["assignment4mark"] =
-                                                                                            termThreeAssignmentFourMark.text;
+                                                                                            termThreeAssignmentFourMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -2556,45 +3011,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -2609,7 +3079,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -2617,7 +3088,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Exam Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -2638,7 +3110,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -2650,10 +3123,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeExamOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeExamOneMark
@@ -2676,7 +3151,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -2688,10 +3164,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeExamTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeExamTwoMark
@@ -2721,8 +3199,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -2741,14 +3223,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -2760,22 +3244,41 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[2]["exams"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[2]["exams"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[2]["exams"]["exam1mark"] =
-                                                                                            termThreeExamOneMark.text;
+                                                                                            termThreeExamOneMark
+                                                                                                .text;
                                                                                         subjectData[2]["exams"]["exam2mark"] =
-                                                                                            termThreeExamTwoMark.text;
+                                                                                            termThreeExamTwoMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -2784,47 +3287,65 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        backgroundColor:
-                                                                                        Theme.of(context).primaryColor,
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            backgroundColor:
+                                                                                            Theme
+                                                                                                .of(
+                                                                                                context)
+                                                                                                .primaryColor,
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -2850,14 +3371,17 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     title: Text(
                                                       "Term Four",
                                                       style: TextStyle(
-                                                          color: Theme.of(context)
+                                                          color: Theme
+                                                              .of(context)
                                                               .primaryColorDark,
-                                                          fontWeight: FontWeight.w700,
+                                                          fontWeight: FontWeight
+                                                              .w700,
                                                           fontSize: 16),
                                                     ),
                                                     children: [
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -2865,7 +3389,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Test Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -2886,7 +3411,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -2898,10 +3424,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourTestOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourTestOneMark
@@ -2924,7 +3452,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -2936,10 +3465,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourTestTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourTestTwoMark
@@ -2962,7 +3493,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -2974,10 +3506,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourTestThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourTestThreeMark
@@ -3000,7 +3534,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -3012,10 +3547,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourTestFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourTestFourMark
@@ -3045,8 +3582,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -3070,14 +3611,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -3088,29 +3631,52 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         // get the subject data from the map
                                                                                         var subjectData =
                                                                                         allSubjects[key];
-                                                                                        logger.e(subjectData);
-                                                                                        logger.i(subjectData[3]["tests"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData[3]["tests"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         //logger.i("$subjectName Found Subject: $subjectData");
 
                                                                                         // update the data
                                                                                         subjectData[3]["tests"]["test1mark"] =
-                                                                                            termFourTestOneMark.text;
+                                                                                            termFourTestOneMark
+                                                                                                .text;
                                                                                         subjectData[3]["tests"]["test2mark"] =
-                                                                                            termFourTestTwoMark.text;
+                                                                                            termFourTestTwoMark
+                                                                                                .text;
                                                                                         subjectData[3]["tests"]["test3mark"] =
-                                                                                            termFourTestThreeMark.text;
+                                                                                            termFourTestThreeMark
+                                                                                                .text;
                                                                                         subjectData[3]["tests"]["test4mark"] =
-                                                                                            termFourTestFourMark.text;
+                                                                                            termFourTestFourMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.e(subjectData);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -3119,45 +3685,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('The learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'The learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -3172,7 +3753,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -3180,7 +3762,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Assignment Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -3202,7 +3785,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -3214,10 +3798,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourAssignmentOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourAssignmentOneMark
@@ -3241,7 +3827,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -3253,10 +3840,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourAssignmentTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourAssignmentTwoMark
@@ -3280,7 +3869,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -3292,10 +3882,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourAssignmentThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourAssignmentThreeMark
@@ -3319,7 +3911,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 4",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -3331,10 +3924,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourAssignmentFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourAssignmentFourMark
@@ -3357,15 +3952,21 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         MaterialButton(
                                                                             child: loading
                                                                                 ? SpinKitChasingDots(
-                                                                              color: Theme.of(context)
+                                                                              color: Theme
+                                                                                  .of(
+                                                                                  context)
                                                                                   .primaryColor,
                                                                             )
                                                                                 : Text(
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -3384,14 +3985,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -3403,26 +4006,47 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[3]["assignments"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[3]["assignments"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[3]["assignments"]["assignment1mark"] =
-                                                                                            termFourAssignmentOneMark.text;
+                                                                                            termFourAssignmentOneMark
+                                                                                                .text;
                                                                                         subjectData[3]["assignments"]["assignment2mark"] =
-                                                                                            termFourAssignmentTwoMark.text;
+                                                                                            termFourAssignmentTwoMark
+                                                                                                .text;
                                                                                         subjectData[3]["assignments"]["assignment3mark"] =
-                                                                                            termFourAssignmentThreeMark.text;
+                                                                                            termFourAssignmentThreeMark
+                                                                                                .text;
                                                                                         subjectData[3]["assignments"]["assignment4mark"] =
-                                                                                            termFourAssignmentFourMark.text;
+                                                                                            termFourAssignmentFourMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -3431,45 +4055,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -3484,7 +4123,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -3492,7 +4132,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Exam Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -3513,7 +4154,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -3525,10 +4167,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourExamOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourExamOneMark
@@ -3551,7 +4195,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -3563,10 +4208,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourExamTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourExamTwoMark
@@ -3589,15 +4236,21 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         MaterialButton(
                                                                             child: loading
                                                                                 ? SpinKitChasingDots(
-                                                                              color: Theme.of(context)
+                                                                              color: Theme
+                                                                                  .of(
+                                                                                  context)
                                                                                   .primaryColor,
                                                                             )
                                                                                 : Text(
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -3619,14 +4272,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -3638,22 +4293,41 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[3]["exams"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[3]["exams"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[3]["exams"]["exam1mark"] =
-                                                                                            termFourExamOneMark.text;
+                                                                                            termFourExamOneMark
+                                                                                                .text;
                                                                                         subjectData[3]["exams"]["exam2mark"] =
-                                                                                            termFourExamTwoMark.text;
+                                                                                            termFourExamTwoMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -3662,45 +4336,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -3728,7 +4417,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 18,
-                                            color: Theme.of(context).primaryColor,
+                                            color: Theme
+                                                .of(context)
+                                                .primaryColor,
                                           ),
                                         ));
                                   }
@@ -3741,10 +4432,13 @@ class _AddEditForAllState extends State<AddEditForAll> {
                 ),
               ),
             );
-          }else{
+          } else {
             return Scaffold(
               body: Container(
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height,
                 margin: const EdgeInsets.only(top: 0.0),
                 decoration: const BoxDecoration(
                   //screen background color
@@ -3756,8 +4450,14 @@ class _AddEditForAllState extends State<AddEditForAll> {
                 child: SafeArea(
                   child: Center(
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 2.3,
-                      height: MediaQuery.of(context).size.height ,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 2.3,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height,
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -3777,7 +4477,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).primaryColorDark,
+                                      color: Theme
+                                          .of(context)
+                                          .primaryColorDark,
                                     ),
                                   ),
                                 ),
@@ -3802,13 +4504,21 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                 stream: identityDocument.snapshots(),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                  if (snapshot.hasData && snapshot.data!.exists) {
-                                    var allSubjects = snapshot.data!.get('allSubjects');
+                                  if (snapshot.hasData &&
+                                      snapshot.data!.exists) {
+                                    var allSubjects = snapshot.data!.get(
+                                        'allSubjects');
                                     //var allSubjects = snapshot.data!["allSubjects"];
 
                                     return SizedBox(
-                                      height: MediaQuery.of(context).size.height,
-                                      width: MediaQuery.of(context).size.width,
+                                      height: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .height,
+                                      width: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width,
                                       child: SingleChildScrollView(
                                         child: Padding(
                                           padding: const EdgeInsets.only(
@@ -3818,7 +4528,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                             title: Text(
                                               "Add marks For every Term",
                                               style: TextStyle(
-                                                  color: Theme.of(context)
+                                                  color: Theme
+                                                      .of(context)
                                                       .primaryColorDark,
                                                   fontWeight: FontWeight.w700,
                                                   fontSize: 16),
@@ -3832,14 +4543,17 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     title: Text(
                                                       "Term One",
                                                       style: TextStyle(
-                                                          color: Theme.of(context)
+                                                          color: Theme
+                                                              .of(context)
                                                               .primaryColorDark,
-                                                          fontWeight: FontWeight.w700,
+                                                          fontWeight: FontWeight
+                                                              .w700,
                                                           fontSize: 16),
                                                     ),
                                                     children: [
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -3847,7 +4561,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Test Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -3868,7 +4583,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test Mark 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -3883,13 +4599,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       TextInputType
                                                                           .number,
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       testOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
-                                                                          testOneMark.text =
+                                                                          testOneMark
+                                                                              .text =
                                                                           value!;
                                                                         });
                                                                       },
@@ -3908,7 +4627,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test Mark 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -3920,13 +4640,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       testTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
-                                                                          testTwoMark.text =
+                                                                          testTwoMark
+                                                                              .text =
                                                                           value!;
                                                                         });
                                                                       },
@@ -3942,7 +4665,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test Mark 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -3957,10 +4681,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       TextInputType
                                                                           .number,
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       testThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           testThreeMark
@@ -3980,7 +4706,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test Mark 4",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -3995,10 +4722,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       testFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           testFourMark
@@ -4028,8 +4757,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -4049,14 +4782,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -4067,29 +4802,52 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         // get the subject data from the map
                                                                                         var subjectData =
                                                                                         allSubjects[key];
-                                                                                        logger.e(subjectData);
-                                                                                        logger.i(subjectData[0]["tests"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData[0]["tests"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         //logger.i("$subjectName Found Subject: $subjectData");
 
                                                                                         // update the data
                                                                                         subjectData[0]["tests"]["test1mark"] =
-                                                                                            testOneMark.text;
+                                                                                            testOneMark
+                                                                                                .text;
                                                                                         subjectData[0]["tests"]["test2mark"] =
-                                                                                            testTwoMark.text;
+                                                                                            testTwoMark
+                                                                                                .text;
                                                                                         subjectData[0]["tests"]["test3mark"] =
-                                                                                            testThreeMark.text;
+                                                                                            testThreeMark
+                                                                                                .text;
                                                                                         subjectData[0]["tests"]["test4mark"] =
-                                                                                            testFourMark.text;
+                                                                                            testFourMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.e(subjectData);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -4098,45 +4856,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('The learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'The learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -4151,7 +4924,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -4159,7 +4933,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Assignment Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -4178,7 +4953,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -4193,10 +4969,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       assignmentOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           assignmentOneMark
@@ -4220,7 +4998,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -4232,10 +5011,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       assignmentTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           assignmentTwoMark
@@ -4259,7 +5040,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -4271,10 +5053,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       assignmentThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           assignmentThreeMark
@@ -4298,7 +5082,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 4",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -4310,10 +5095,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       assignmentFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           assignmentFourMark
@@ -4336,15 +5123,21 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         MaterialButton(
                                                                             child: loading
                                                                                 ? SpinKitChasingDots(
-                                                                              color: Theme.of(context)
+                                                                              color: Theme
+                                                                                  .of(
+                                                                                  context)
                                                                                   .primaryColor,
                                                                             )
                                                                                 : Text(
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -4361,14 +5154,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -4380,25 +5175,46 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[0]["assignments"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[0]["assignments"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[0]["assignments"]["assignment1mark"] =
-                                                                                            assignmentOneMark.text;
+                                                                                            assignmentOneMark
+                                                                                                .text;
                                                                                         subjectData[0]["assignments"]["assignment2mark"] =
-                                                                                            assignmentTwoMark.text;
+                                                                                            assignmentTwoMark
+                                                                                                .text;
                                                                                         subjectData[0]["assignments"]["assignment3mark"] =
-                                                                                            assignmentThreeMark.text;
+                                                                                            assignmentThreeMark
+                                                                                                .text;
                                                                                         subjectData[0]["assignments"]["assignment4mark"] =
-                                                                                            assignmentFourMark.text;
+                                                                                            assignmentFourMark
+                                                                                                .text;
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -4407,45 +5223,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -4460,7 +5291,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -4468,7 +5300,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Exam Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -4489,7 +5322,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -4501,13 +5335,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       examOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
-                                                                          examOneMark.text =
+                                                                          examOneMark
+                                                                              .text =
                                                                           value!;
                                                                         });
                                                                       },
@@ -4526,7 +5363,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -4538,13 +5376,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       examTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
-                                                                          examTwoMark.text =
+                                                                          examTwoMark
+                                                                              .text =
                                                                           value!;
                                                                         });
                                                                       },
@@ -4570,8 +5411,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -4591,14 +5436,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -4610,22 +5457,41 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[0]["exams"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[0]["exams"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[0]["exams"]["exam1mark"] =
-                                                                                            examOneMark.text;
+                                                                                            examOneMark
+                                                                                                .text;
                                                                                         subjectData[0]["exams"]["exam2mark"] =
-                                                                                            examTwoMark.text;
+                                                                                            examTwoMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -4634,45 +5500,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -4698,14 +5579,17 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     title: Text(
                                                       "Term Two",
                                                       style: TextStyle(
-                                                          color: Theme.of(context)
+                                                          color: Theme
+                                                              .of(context)
                                                               .primaryColorDark,
-                                                          fontWeight: FontWeight.w700,
+                                                          fontWeight: FontWeight
+                                                              .w700,
                                                           fontSize: 16),
                                                     ),
                                                     children: [
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -4713,7 +5597,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Test Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -4734,7 +5619,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -4746,10 +5632,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoTestOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoTestOneMark
@@ -4772,7 +5660,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -4784,10 +5673,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoTestTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoTestTwoMark
@@ -4810,7 +5701,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -4822,10 +5714,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoTestThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoTestThreeMark
@@ -4848,7 +5742,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 4",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -4860,10 +5755,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoTestFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoTestFourMark
@@ -4893,8 +5790,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -4913,14 +5814,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -4931,29 +5834,52 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         // get the subject data from the map
                                                                                         var subjectData =
                                                                                         allSubjects[key];
-                                                                                        logger.e(subjectData);
-                                                                                        logger.i(subjectData[1]["tests"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData[1]["tests"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         //logger.i("$subjectName Found Subject: $subjectData");
 
                                                                                         // update the data
                                                                                         subjectData[1]["tests"]["test1mark"] =
-                                                                                            termTwoTestOneMark.text;
+                                                                                            termTwoTestOneMark
+                                                                                                .text;
                                                                                         subjectData[1]["tests"]["test2mark"] =
-                                                                                            termTwoTestTwoMark.text;
+                                                                                            termTwoTestTwoMark
+                                                                                                .text;
                                                                                         subjectData[1]["tests"]["test3mark"] =
-                                                                                            termTwoTestThreeMark.text;
+                                                                                            termTwoTestThreeMark
+                                                                                                .text;
                                                                                         subjectData[1]["tests"]["test4mark"] =
-                                                                                            termTwoTestFourMark.text;
+                                                                                            termTwoTestFourMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.e(subjectData);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -4962,45 +5888,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('The learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'The learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -5015,7 +5956,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -5023,7 +5965,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Assignment Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -5045,7 +5988,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -5057,10 +6001,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoAssignmentOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoAssignmentOneMark
@@ -5084,7 +6030,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -5096,10 +6043,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoAssignmentTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoAssignmentTwoMark
@@ -5123,7 +6072,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -5135,10 +6085,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoAssignmentThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoAssignmentThreeMark
@@ -5162,7 +6114,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 4",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -5174,10 +6127,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoAssignmentFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoAssignmentFourMark
@@ -5207,8 +6162,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -5227,14 +6186,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -5246,26 +6207,47 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[1]["assignments"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[1]["assignments"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[1]["assignments"]["assignment1mark"] =
-                                                                                            termTwoAssignmentOneMark.text;
+                                                                                            termTwoAssignmentOneMark
+                                                                                                .text;
                                                                                         subjectData[1]["assignments"]["assignment2mark"] =
-                                                                                            termTwoAssignmentTwoMark.text;
+                                                                                            termTwoAssignmentTwoMark
+                                                                                                .text;
                                                                                         subjectData[1]["assignments"]["assignment3mark"] =
-                                                                                            termTwoAssignmentThreeMark.text;
+                                                                                            termTwoAssignmentThreeMark
+                                                                                                .text;
                                                                                         subjectData[1]["assignments"]["assignment4mark"] =
-                                                                                            termTwoAssignmentFourMark.text;
+                                                                                            termTwoAssignmentFourMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -5274,45 +6256,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -5327,7 +6324,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -5335,7 +6333,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Exam Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -5356,7 +6355,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -5368,10 +6368,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoExamOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoExamTwoMark
@@ -5394,7 +6396,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -5406,10 +6409,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termTwoExamTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termTwoExamTwoMark
@@ -5439,8 +6444,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -5460,14 +6469,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -5479,22 +6490,41 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[1]["exams"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[1]["exams"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[1]["exams"]["exam1mark"] =
-                                                                                            termTwoExamOneMark.text;
+                                                                                            termTwoExamOneMark
+                                                                                                .text;
                                                                                         subjectData[1]["exams"]["exam2mark"] =
-                                                                                            termTwoExamTwoMark.text;
+                                                                                            termTwoExamTwoMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -5503,45 +6533,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -5567,14 +6612,17 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     title: Text(
                                                       "Term Three",
                                                       style: TextStyle(
-                                                          color: Theme.of(context)
+                                                          color: Theme
+                                                              .of(context)
                                                               .primaryColorDark,
-                                                          fontWeight: FontWeight.w700,
+                                                          fontWeight: FontWeight
+                                                              .w700,
                                                           fontSize: 16),
                                                     ),
                                                     children: [
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -5582,7 +6630,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Test Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -5603,7 +6652,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -5615,10 +6665,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeTestOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeTestTwoMark
@@ -5641,7 +6693,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -5653,10 +6706,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeTestTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeTestTwoMark
@@ -5679,7 +6734,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -5691,10 +6747,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeTestThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeTestThreeMark
@@ -5717,7 +6775,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 4",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -5729,10 +6788,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeTestFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeTestFourMark
@@ -5762,8 +6823,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -5783,14 +6848,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -5801,29 +6868,52 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         // get the subject data from the map
                                                                                         var subjectData =
                                                                                         allSubjects[key];
-                                                                                        logger.e(subjectData);
-                                                                                        logger.i(subjectData[2]["tests"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData[2]["tests"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         //logger.i("$subjectName Found Subject: $subjectData");
 
                                                                                         // update the data
                                                                                         subjectData[2]["tests"]["test1mark"] =
-                                                                                            termThreeTestOneMark.text;
+                                                                                            termThreeTestOneMark
+                                                                                                .text;
                                                                                         subjectData[2]["tests"]["test2mark"] =
-                                                                                            termThreeTestTwoMark.text;
+                                                                                            termThreeTestTwoMark
+                                                                                                .text;
                                                                                         subjectData[2]["tests"]["test3mark"] =
-                                                                                            termThreeTestThreeMark.text;
+                                                                                            termThreeTestThreeMark
+                                                                                                .text;
                                                                                         subjectData[2]["tests"]["test4mark"] =
-                                                                                            termThreeTestFourMark.text;
+                                                                                            termThreeTestFourMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.e(subjectData);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -5832,45 +6922,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('The learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'The learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -5885,7 +6990,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -5893,7 +6999,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Assignment Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -5915,7 +7022,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -5927,10 +7035,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeAssignmentOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeAssignmentOneMark
@@ -5954,7 +7064,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -5966,10 +7077,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeAssignmentTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeAssignmentTwoMark
@@ -5993,7 +7106,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -6005,10 +7119,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeAssignmentThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeAssignmentThreeMark
@@ -6032,7 +7148,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 4",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -6044,10 +7161,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeAssignmentFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeAssignmentFourMark
@@ -6077,8 +7196,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -6097,14 +7220,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -6116,26 +7241,47 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[2]["assignments"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[2]["assignments"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[2]["assignments"]["assignment1mark"] =
-                                                                                            termThreeAssignmentOneMark.text;
+                                                                                            termThreeAssignmentOneMark
+                                                                                                .text;
                                                                                         subjectData[2]["assignments"]["assignment2mark"] =
-                                                                                            termThreeAssignmentTwoMark.text;
+                                                                                            termThreeAssignmentTwoMark
+                                                                                                .text;
                                                                                         subjectData[2]["assignments"]["assignment3mark"] =
-                                                                                            termThreeAssignmentThreeMark.text;
+                                                                                            termThreeAssignmentThreeMark
+                                                                                                .text;
                                                                                         subjectData[2]["assignments"]["assignment4mark"] =
-                                                                                            termThreeAssignmentFourMark.text;
+                                                                                            termThreeAssignmentFourMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -6144,45 +7290,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -6197,7 +7358,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -6205,7 +7367,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Exam Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -6226,7 +7389,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -6238,10 +7402,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeExamOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeExamOneMark
@@ -6264,7 +7430,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -6276,10 +7443,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termThreeExamTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termThreeExamTwoMark
@@ -6309,8 +7478,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -6329,14 +7502,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -6348,22 +7523,41 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[2]["exams"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[2]["exams"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[2]["exams"]["exam1mark"] =
-                                                                                            termThreeExamOneMark.text;
+                                                                                            termThreeExamOneMark
+                                                                                                .text;
                                                                                         subjectData[2]["exams"]["exam2mark"] =
-                                                                                            termThreeExamTwoMark.text;
+                                                                                            termThreeExamTwoMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -6372,47 +7566,65 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        backgroundColor:
-                                                                                        Theme.of(context).primaryColor,
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            backgroundColor:
+                                                                                            Theme
+                                                                                                .of(
+                                                                                                context)
+                                                                                                .primaryColor,
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -6438,14 +7650,17 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                     title: Text(
                                                       "Term Four",
                                                       style: TextStyle(
-                                                          color: Theme.of(context)
+                                                          color: Theme
+                                                              .of(context)
                                                               .primaryColorDark,
-                                                          fontWeight: FontWeight.w700,
+                                                          fontWeight: FontWeight
+                                                              .w700,
                                                           fontSize: 16),
                                                     ),
                                                     children: [
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -6453,7 +7668,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Test Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -6474,7 +7690,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -6486,10 +7703,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourTestOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourTestOneMark
@@ -6512,7 +7731,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -6524,10 +7744,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourTestTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourTestTwoMark
@@ -6550,7 +7772,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -6562,10 +7785,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourTestThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourTestThreeMark
@@ -6588,7 +7813,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Test 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -6600,10 +7826,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourTestFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourTestFourMark
@@ -6633,8 +7861,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -6658,14 +7890,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -6676,29 +7910,52 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         // get the subject data from the map
                                                                                         var subjectData =
                                                                                         allSubjects[key];
-                                                                                        logger.e(subjectData);
-                                                                                        logger.i(subjectData[3]["tests"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData[3]["tests"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         //logger.i("$subjectName Found Subject: $subjectData");
 
                                                                                         // update the data
                                                                                         subjectData[3]["tests"]["test1mark"] =
-                                                                                            termFourTestOneMark.text;
+                                                                                            termFourTestOneMark
+                                                                                                .text;
                                                                                         subjectData[3]["tests"]["test2mark"] =
-                                                                                            termFourTestTwoMark.text;
+                                                                                            termFourTestTwoMark
+                                                                                                .text;
                                                                                         subjectData[3]["tests"]["test3mark"] =
-                                                                                            termFourTestThreeMark.text;
+                                                                                            termFourTestThreeMark
+                                                                                                .text;
                                                                                         subjectData[3]["tests"]["test4mark"] =
-                                                                                            termFourTestFourMark.text;
+                                                                                            termFourTestFourMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.e(subjectData);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -6707,45 +7964,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('The learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'The learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -6760,7 +8032,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -6768,7 +8041,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Assignment Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -6790,7 +8064,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -6802,10 +8077,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourAssignmentOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourAssignmentOneMark
@@ -6829,7 +8106,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -6841,10 +8119,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourAssignmentTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourAssignmentTwoMark
@@ -6868,7 +8148,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 3",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -6880,10 +8161,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourAssignmentThreeMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourAssignmentThreeMark
@@ -6907,7 +8190,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Assignment 4",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -6919,10 +8203,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourAssignmentFourMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourAssignmentFourMark
@@ -6945,15 +8231,21 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         MaterialButton(
                                                                             child: loading
                                                                                 ? SpinKitChasingDots(
-                                                                              color: Theme.of(context)
+                                                                              color: Theme
+                                                                                  .of(
+                                                                                  context)
                                                                                   .primaryColor,
                                                                             )
                                                                                 : Text(
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -6972,14 +8264,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -6991,26 +8285,47 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[3]["assignments"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[3]["assignments"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[3]["assignments"]["assignment1mark"] =
-                                                                                            termFourAssignmentOneMark.text;
+                                                                                            termFourAssignmentOneMark
+                                                                                                .text;
                                                                                         subjectData[3]["assignments"]["assignment2mark"] =
-                                                                                            termFourAssignmentTwoMark.text;
+                                                                                            termFourAssignmentTwoMark
+                                                                                                .text;
                                                                                         subjectData[3]["assignments"]["assignment3mark"] =
-                                                                                            termFourAssignmentThreeMark.text;
+                                                                                            termFourAssignmentThreeMark
+                                                                                                .text;
                                                                                         subjectData[3]["assignments"]["assignment4mark"] =
-                                                                                            termFourAssignmentFourMark.text;
+                                                                                            termFourAssignmentFourMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -7019,45 +8334,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -7072,7 +8402,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
+                                                        padding: const EdgeInsets
+                                                            .only(
                                                             left: 20,
                                                             bottom: 10,
                                                             right: 20),
@@ -7080,7 +8411,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                           title: Text(
                                                             "Exam Marks",
                                                             style: TextStyle(
-                                                                color: Theme.of(context)
+                                                                color: Theme
+                                                                    .of(context)
                                                                     .primaryColorDark,
                                                                 fontWeight:
                                                                 FontWeight.w700,
@@ -7101,7 +8433,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 1",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -7113,10 +8446,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourExamOneMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourExamOneMark
@@ -7139,7 +8474,8 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         label: Text(
                                                                           "Exam 2",
                                                                           style: TextStyle(
-                                                                              color: Theme.of(
+                                                                              color: Theme
+                                                                                  .of(
                                                                                   context)
                                                                                   .primaryColorDark,
                                                                               fontWeight:
@@ -7151,10 +8487,12 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                       style: textStyleText(
                                                                           context),
                                                                       textAlign:
-                                                                      TextAlign.center,
+                                                                      TextAlign
+                                                                          .center,
                                                                       controller:
                                                                       termFourExamTwoMark,
-                                                                      onSaved: (value) {
+                                                                      onSaved: (
+                                                                          value) {
                                                                         //Do something with the user input.
                                                                         setState(() {
                                                                           termFourExamTwoMark
@@ -7177,15 +8515,21 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                         MaterialButton(
                                                                             child: loading
                                                                                 ? SpinKitChasingDots(
-                                                                              color: Theme.of(context)
+                                                                              color: Theme
+                                                                                  .of(
+                                                                                  context)
                                                                                   .primaryColor,
                                                                             )
                                                                                 : Text(
                                                                               "Update",
                                                                               style: TextStyle(
                                                                                   color:
-                                                                                  Theme.of(context).primaryColorDark,
-                                                                                  fontWeight: FontWeight.w700,
+                                                                                  Theme
+                                                                                      .of(
+                                                                                      context)
+                                                                                      .primaryColorDark,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w700,
                                                                                   fontSize: 16),
                                                                             ),
                                                                             onPressed:
@@ -7207,14 +8551,16 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                   // check if the data is a Map
                                                                                   if (allSubjects
                                                                                   is Map) {
-                                                                                    logger.e(
+                                                                                    logger
+                                                                                        .e(
                                                                                         "is a Map");
                                                                                     bool
                                                                                     foundCatIndex =
                                                                                     false;
                                                                                     // iterate over the keys of the map
                                                                                     for (var key
-                                                                                    in allSubjects.keys) {
+                                                                                    in allSubjects
+                                                                                        .keys) {
                                                                                       // if the key is the user's subject
                                                                                       if (key ==
                                                                                           subjectName) {
@@ -7226,22 +8572,41 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                         var subjectData =
                                                                                         allSubjects[key];
                                                                                         //logger.e(subjectData);
-                                                                                        logger.e(subjectData[3]["exams"]);
+                                                                                        logger
+                                                                                            .e(
+                                                                                            subjectData[3]["exams"]);
 
                                                                                         // do something with the data, such as print it
                                                                                         // update the data
                                                                                         subjectData[3]["exams"]["exam1mark"] =
-                                                                                            termFourExamOneMark.text;
+                                                                                            termFourExamOneMark
+                                                                                                .text;
                                                                                         subjectData[3]["exams"]["exam2mark"] =
-                                                                                            termFourExamTwoMark.text;
+                                                                                            termFourExamTwoMark
+                                                                                                .text;
 
                                                                                         // Update the "allSubjects" field with the modified map
-                                                                                        await identityDocument.set({
-                                                                                          'allSubjects': allSubjects
-                                                                                        }, SetOptions(merge: true)).then(
-                                                                                              (value) => Fluttertoast.showToast(backgroundColor: Theme.of(context).primaryColor, msg: "Added marks"),
+                                                                                        await identityDocument
+                                                                                            .set(
+                                                                                            {
+                                                                                              'allSubjects': allSubjects
+                                                                                            },
+                                                                                            SetOptions(
+                                                                                                merge: true))
+                                                                                            .then(
+                                                                                              (
+                                                                                              value) =>
+                                                                                              Fluttertoast
+                                                                                                  .showToast(
+                                                                                                  backgroundColor: Theme
+                                                                                                      .of(
+                                                                                                      context)
+                                                                                                      .primaryColor,
+                                                                                                  msg: "Added marks"),
                                                                                         );
-                                                                                        logger.i(subjectData);
+                                                                                        logger
+                                                                                            .i(
+                                                                                            subjectData);
 
                                                                                         break;
                                                                                       }
@@ -7250,45 +8615,60 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                                                                     if (!foundCatIndex) {
                                                                                       // handle case where subject index does not exist
                                                                                       logger
-                                                                                          .i('No $subjectName index found');
+                                                                                          .i(
+                                                                                          'No $subjectName index found');
                                                                                       scaffoldContext
-                                                                                          .showSnackBar(SnackBar(
-                                                                                        content:
-                                                                                        Text('Poor internet connection or the learner is not registered to do $subjectName'),
-                                                                                        duration:
-                                                                                        const Duration(seconds: 1),
-                                                                                      ));
+                                                                                          .showSnackBar(
+                                                                                          SnackBar(
+                                                                                            content:
+                                                                                            Text(
+                                                                                                'Poor internet connection or the learner is not registered to do $subjectName'),
+                                                                                            duration:
+                                                                                            const Duration(
+                                                                                                seconds: 1),
+                                                                                          ));
                                                                                     }
                                                                                   } else {
                                                                                     // handle case where teacherSubject index does not exist
-                                                                                    logger.i(
+                                                                                    logger
+                                                                                        .i(
                                                                                         'No $subjectName index found');
                                                                                     Fluttertoast
                                                                                         .showToast(
                                                                                       backgroundColor:
-                                                                                      Theme.of(context).primaryColor,
+                                                                                      Theme
+                                                                                          .of(
+                                                                                          context)
+                                                                                          .primaryColor,
                                                                                       msg:
                                                                                       "No $subjectName index found",
                                                                                     );
                                                                                   }
                                                                                 } else {
                                                                                   // handle case where document does not exist
-                                                                                  logger.i(
+                                                                                  logger
+                                                                                      .i(
                                                                                       'Document does not exist');
                                                                                   Fluttertoast
                                                                                       .showToast(
                                                                                     backgroundColor:
-                                                                                    Theme.of(context).primaryColor,
+                                                                                    Theme
+                                                                                        .of(
+                                                                                        context)
+                                                                                        .primaryColor,
                                                                                     msg:
                                                                                     "No $subjectName index found",
                                                                                   );
                                                                                 }
                                                                               } catch (e) {
-                                                                                logger.i(e);
+                                                                                logger
+                                                                                    .i(
+                                                                                    e);
                                                                                 Fluttertoast
                                                                                     .showToast(
                                                                                     msg:
-                                                                                    e.toString());
+                                                                                    e
+                                                                                        .toString());
                                                                               }
                                                                               setState(() {
                                                                                 loading =
@@ -7316,7 +8696,9 @@ class _AddEditForAllState extends State<AddEditForAll> {
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 18,
-                                            color: Theme.of(context).primaryColor,
+                                            color: Theme
+                                                .of(context)
+                                                .primaryColor,
                                           ),
                                         ));
                                   }

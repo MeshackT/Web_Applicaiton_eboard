@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:yueway/testing_messaging/ViewAllTeachersMessages.dart';
-
+import 'package:Eboard/testing_messaging/ViewAllTeachersMessages.dart';
 import '../../AllNew/model/ConnectionChecker.dart';
 import '../../AllNew/shared/constants.dart';
 import '../ViewAllTeachersTexts.dart';

@@ -3,17 +3,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
-import 'package:yueway/AllNew/screens/wrapper.dart';
+import 'package:url_strategy/url_strategy.dart';
+
+import 'AllNew/screens/Notifications/local_notifications.dart';
+import 'AllNew/screens/wrapper.dart';
 
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
 
 @pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  //await Firebase.initializeApp();
-}
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
 
 Future<void> main() async {
+  setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -55,6 +56,7 @@ class _MyAppState extends State<MyApp> {
         900: Color(0xE7791971),
       },
     );
+
     // Define light and dark themes
     final ThemeData lightTheme = ThemeData(
       primarySwatch: myColor,
@@ -81,7 +83,7 @@ class _MyAppState extends State<MyApp> {
       theme: darkModeEnabled ? darkTheme : lightTheme,
       debugShowCheckedModeBanner: false,
       home: const Wrapper(),
-      //home: const Home(),
+      // home: const TestingThis(),
     );
   }
 
@@ -89,5 +91,16 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     LocalNotificationService.initialize();
+  }
+}
+
+class TestingThis extends StatelessWidget {
+  const TestingThis({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: SizedBox(),
+    );
   }
 }

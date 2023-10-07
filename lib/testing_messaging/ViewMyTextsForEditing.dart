@@ -1,8 +1,8 @@
+import 'package:Eboard/testing_messaging/DesktopMessaging/DesktopViewMyTextsForEditing.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:yueway/testing_messaging/DesktopMessaging/DesktopViewMyTextsForEditing.dart';
 
 import '../AllNew/model/ConnectionChecker.dart';
 import '../AllNew/shared/constants.dart';

@@ -1,9 +1,7 @@
+import 'package:Eboard/testing_messaging/LearnerViewPrivateDocuments.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:yueway/testing_messaging/LearnerViewDocument.dart';
-import 'package:yueway/testing_messaging/LearnerViewPrivateDocuments.dart';
-import 'package:yueway/testing_messaging/ViewDocuments.dart';
 
 import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';

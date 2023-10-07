@@ -6,7 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:yueway/AllNew/screens/Authentication/Authenticate.dart';
+import 'package:Eboard/AllNew/screens/Authentication/Authenticate.dart';
 
 import '../../../shared/constants.dart';
 import '../../home/home.dart';
@@ -316,7 +316,7 @@ class _DesktopMoreState extends State<DesktopMore> {
                                   )
                                 : Center(
                                     child: Text(
-                                      "App Name: $appName\nApp Version: $appVersion\nApp BuildNumber: $appBuildUpNumber\n$appPackage",
+                                      "App Name: $appName\nApp Version: $appVersion",
                                       style: textStyleText(context).copyWith(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 16,

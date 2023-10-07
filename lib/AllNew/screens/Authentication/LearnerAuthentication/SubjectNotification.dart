@@ -1,10 +1,10 @@
+import 'package:Eboard/AllNew/screens/Notifications/local_notifications.dart';
+import 'package:Eboard/AllNew/shared/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
-import 'package:yueway/AllNew/shared/constants.dart';
 
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
 var user = FirebaseAuth.instance.currentUser!;
@@ -33,6 +33,7 @@ class _SubjectNotificationsState extends State<SubjectNotifications> {
   //access the class methods for subscription
   LocalNotificationService localNotificationService =
       LocalNotificationService();
+
   //used to save the state of widgets
   late SharedPreferences prefs;
 

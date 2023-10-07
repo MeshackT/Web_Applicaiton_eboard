@@ -1,14 +1,14 @@
 import 'dart:async';
 
+import 'package:Eboard/AllNew/screens/Notifications/DesktopNotifications/DesktopViewNotification.dart';
+import 'package:Eboard/AllNew/screens/Notifications/local_notifications.dart';
+import 'package:Eboard/AllNew/screens/Notifications/sendNotification.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
-import 'package:yueway/AllNew/screens/Notifications/DesktopNotifications/DesktopViewNotification.dart';
-import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
-import 'package:yueway/AllNew/screens/Notifications/sendNotification.dart';
 
 import '../../../model/ConnectionChecker.dart';
 import '../../../shared/constants.dart';

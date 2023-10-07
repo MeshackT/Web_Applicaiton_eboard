@@ -1,3 +1,6 @@
+import 'package:Eboard/AllNew/screens/Notifications/local_notifications.dart';
+import 'package:Eboard/AllNew/screens/more/LearnerMore.dart';
+import 'package:Eboard/testing_messaging/LearnerViewDocument.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,9 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
-import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
-import 'package:yueway/AllNew/screens/more/LearnerMore.dart';
-import 'package:yueway/testing_messaging/LearnerViewDocument.dart';
 
 import '../../../testing_messaging/LearnerViewAllMessages.dart';
 import '../../../testing_messaging/LearnerViewAllTexts.dart';

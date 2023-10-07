@@ -1,22 +1,24 @@
 import 'dart:async';
 import 'dart:io';
+
+import 'package:Eboard/AllNew/screens/Notifications/local_notifications.dart';
+import 'package:Eboard/testing_messaging/ViewDocuments.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:insta_image_viewer/insta_image_viewer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:logger/logger.dart';
-import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
-import 'package:yueway/testing_messaging/ViewDocuments.dart';
+
 import '../AllNew/model/ConnectionChecker.dart';
 import '../AllNew/screens/home/home.dart';
 import '../AllNew/shared/constants.dart';
@@ -75,7 +77,6 @@ class _MessagingState extends State<Messaging>
     //get logged in user data
     _getCurrentUserData();
   }
-
 
   Future<void> _addDocument(String text, String teacherNameFromData) async {
     try {
@@ -787,8 +788,7 @@ class _MessagingState extends State<Messaging>
                               SingleChildScrollView(
                                 child: SizedBox(
                                   width: MediaQuery.of(context).size.width,
-                                  child:
-                                  selectedFileName.isEmpty
+                                  child: selectedFileName.isEmpty
                                       ? Column(
                                           children: [
                                             GestureDetector(
@@ -809,14 +809,17 @@ class _MessagingState extends State<Messaging>
                                             ),
                                           ],
                                         )
-                                      : kIsWeb? Image.memory(webImage, fit: BoxFit.cover,)
-                                      :Center(
-                                          child: Image.file(
-                                              File(file.path),
-                                              height: 320,
-                                              width: 320,
-                                              fit: BoxFit.cover),
-                                        ),
+                                      : kIsWeb
+                                          ? Image.memory(
+                                              webImage,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Center(
+                                              child: Image.file(File(file.path),
+                                                  height: 320,
+                                                  width: 320,
+                                                  fit: BoxFit.cover),
+                                            ),
                                 ),
                               ),
                               const SizedBox(
@@ -1370,7 +1373,6 @@ class _MessagingState extends State<Messaging>
     }
   }
 
-
   // _selectFile(bool imageFrom) async {
   //   ImageSource? source;
   //
@@ -1418,14 +1420,12 @@ class _MessagingState extends State<Messaging>
   //
   // }
 
-
-
   /////////////TODO uploading Data image and collection to firebase
   Future<void> _addDocumentWithImage(
     String text,
     String urlLink,
     String teacherNameFromData,
-      ) async {
+  ) async {
     logger.i("add to document $urlLink");
     try {
       await FirebaseFirestore.instance.collection("messages").add({

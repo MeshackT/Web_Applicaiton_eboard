@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class UserModel {
   static FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
   static Future<List<User>> getAllUserProfiles() async {
     try {
       final List<User> users = [];

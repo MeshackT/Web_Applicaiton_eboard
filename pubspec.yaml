@@ -1,4 +1,4 @@
-name: yueway
+name: Eboard
 description: Eboard
 
 # The following line prevents the package from being accidentally published to
@@ -95,7 +95,7 @@ dependencies:
   http: ^0.13.5
   #share files link and texts
   flutter_share: ^2.0.0
-  share_plus: ^3.0.4
+#  share_plus: ^3.0.4
   permission_handler: ^10.1.0
   #download images
   gallery_saver: ^2.3.2
@@ -128,7 +128,11 @@ dependencies:
   firebase_storage_web: ^3.5.0
   cloud_firestore_web: ^3.4.3
 
+  #Remove # on web app
+  url_strategy: ^0.2.0
 
+  #rename
+  rename: ^2.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

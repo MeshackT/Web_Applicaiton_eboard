@@ -1,10 +1,10 @@
+import 'package:Eboard/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
-import 'package:yueway/main.dart';
 
 import '../../../model/ConnectionChecker.dart';
 import '../../../shared/constants.dart';
@@ -1902,3 +1902,386 @@ class _LearnerRegisterState extends State<LearnerRegister> {
     });
   }
 }
+/**
+SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 4.5,
+              // padding: const EdgeInsets.all(10),
+              alignment: Alignment.center,
+              child: Image.asset(
+                'images/design.png',
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: GestureDetector(
+                onDoubleTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          backgroundColor: Theme.of(context)
+                              .primaryColorLight
+                              .withOpacity(.9),
+                          title: const Text(
+                            textAlign: TextAlign.center,
+                            'Password',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          content: TextField(
+                            onChanged: (val) {
+                              passwordController = val;
+                            },
+                          ),
+                          actions: <Widget>[
+                            Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        'Close',
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      //Delete the record
+                                      try {
+                                        if (passwordController ==
+                                            passwordEdit) {
+                                          createAnAcademy(context);
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              backgroundColor: Colors.green,
+                                              msg: "Incorrect Password",
+                                              textColor: Colors.white);
+                                        }
+                                      } catch (e) {}
+                                    },
+                                    child: Text(
+                                      'Open',
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      });
+                },
+                onTap: () {
+                  Reuse.logger.e(
+                    teachersRegistered.snapshots(),
+                  );
+                },
+                child: SizedBox(
+                  child: Text("Sign in",
+                      style: textStyleText.copyWith(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.w900)),
+                ),
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: SizedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30.0, vertical: 10),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(children: <Widget>[
+                        Reuse.spaceBetween(),
+                        Reuse.spaceBetween(),
+                        
+                        StreamBuilder<QuerySnapshot>(
+                          stream: teachersRegistered.snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (!snapshot.hasData) {
+                              return Text(
+                                'No academy yet',
+                                style: textStyleText,
+                              );
+                            } else if (snapshot.hasData) {
+                              List<DropdownMenuItem<String>> dropdownItems = [];
+                              snapshot.data?.docs.forEach((doc) {
+                                dropdownItems.add(
+                                  DropdownMenuItem(
+                                    value: teachersRegistered
+                                        .doc('academies')
+                                        .snapshots()
+                                        .toString(),
+                                    child: Text(
+                                      " ${doc.data()}",
+                                      style: textStyleText,
+                                    ),
+                                  ),
+                                );
+                              });
+                              
+                              return Column(
+                                children: [
+                                  DropdownButton(
+                                      hint: Text(
+                                        "Academy name",
+                                        style: textStyleText.copyWith(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      //valueTeacher1
+                                      value: valueAcademy,
+                                      items: dropdownItems,
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          //valueTeacher1
+                                          valueAcademy = newValue;
+                                        });
+                                      }),
+                                  if (valueAcademy == null)
+                                    const Text(
+                                      "Please select an academy name",
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                ],
+                              );
+                            } else {
+                              return Text('Error retrieving names',
+                                  style: textStyleText);
+                            }
+                          },
+                        ),
+                        //subject3 ends
+                        Reuse.spaceBetween(),
+                        Reuse.spaceBetween(),
+                        TextFormField(
+                          decoration: textInputDecoration.copyWith(
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.black45, width: 1),
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.black12, width: 1),
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            enabled: true,
+                            label: Text(
+                              'My email',
+                              style: textStyleText.copyWith(
+                                  fontSize: 12,
+                                  color: Theme.of(context).primaryColor),
+                            ),
+                            hintText: "example@gmail.com",
+                            hintStyle: textStyleText.copyWith(
+                                color: Theme.of(context).primaryColor),
+                          ),
+                          style: textStyleText.copyWith(
+                              fontSize: 12,
+                              color: Theme.of(context).primaryColor),
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return "Enter an email address";
+                            } else if (!val.contains("@")) {
+                              return "Enter a correct email address";
+                            }
+                            return null;
+                          },
+                          onChanged: (val) {
+                            setState(() {
+                              email = val;
+                            });
+                          },
+                        ),
+                        Reuse.spaceBetween(),
+                        Reuse.spaceBetween(),
+                        TextFormField(
+                          decoration: textInputDecoration.copyWith(
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.black45, width: 1),
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.black12, width: 1),
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            enabled: true,
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  passwordVisible = !passwordVisible;
+                                });
+                              },
+                              icon: passwordVisible
+                                  ? Icon(
+                                      Icons.visibility,
+                                      color: IconTheme.of(context).color,
+                                    )
+                                  : Icon(
+                                      Icons.lock,
+                                      color: Theme.of(context).iconTheme.color,
+                                    ),
+                            ),
+                            label: Text(
+                              'My password',
+                              style: textStyleText.copyWith(
+                                  fontSize: 12,
+                                  color: Theme.of(context).primaryColor),
+                            ),
+                            hintText: "Enter your password",
+                            hintStyle: textStyleText.copyWith(
+                                fontSize: 12,
+                                color: Theme.of(context).primaryColor),
+                          ),
+                          style: textStyleText.copyWith(
+                              fontSize: 12,
+                              color: Theme.of(context).primaryColor),
+                          obscureText: passwordVisible,
+                          validator: (val) {
+                            if (val!.length < 6) {
+                              return "Enter a password greater than 5";
+                            }
+                            return null;
+                          },
+                          onChanged: (val) {
+                            setState(() {
+                              password = val;
+                            });
+                          },
+                        ),
+                        Reuse.spaceBetween(),
+                        Reuse.spaceBetween(),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              height: 30,
+                              child: Text(
+                                "Forgot password?",
+                                style: textStyleText.copyWith(
+                                    color: Theme.of(context).primaryColorLight,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                showSheetToReset(context);
+                              },
+                              child: SizedBox(
+                                height: 30,
+                                child: Text(
+                                  "Reset Password",
+                                  style: textStyleText.copyWith(
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: MaterialButton(
+                              height: 60,
+                              onPressed: () async {
+                                //check if the form is validated
+                                if (_formKey.currentState!.validate()) {
+                                  await signIn();
+                                }
+                                // else {
+                                //   Reuse.callSnack(
+                                //       context, "Failed to Sign In");
+                                // }
+                              },
+                              color: Colors.green,
+                              child: loading
+                                  ? CircularProgressIndicator(
+                                      color:
+                                          Theme.of(context).primaryColorLight,
+                                    )
+                                  : Text(
+                                      "Sign In",
+                                      style: textStyleText.copyWith(
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 6,
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: MaterialButton(
+                              height: 60,
+                              onPressed: () {
+                                widget.toggleView();
+                              },
+                              child: Text(
+                                "Sign Up",
+                                style: textStyleText.copyWith(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          error,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ]),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+ */

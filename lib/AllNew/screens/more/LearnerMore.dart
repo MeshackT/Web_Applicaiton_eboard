@@ -1,3 +1,7 @@
+import 'package:Eboard/AllNew/screens/Authentication/Authenticate.dart';
+import 'package:Eboard/AllNew/screens/Authentication/LearnerAuthentication/SubjectNotification.dart';
+import 'package:Eboard/AllNew/screens/Notifications/local_notifications.dart';
+import 'package:Eboard/AllNew/screens/home/learnersHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yueway/AllNew/screens/Authentication/Authenticate.dart';
-import 'package:yueway/AllNew/screens/Authentication/LearnerAuthentication/SubjectNotification.dart';
-import 'package:yueway/AllNew/screens/Authentication/LearnerAuthentication/testingSwitches.dart';
-import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
-import 'package:yueway/AllNew/screens/home/learnersHome.dart';
+
 import '../../shared/constants.dart';
 import '../home/home.dart';
 import 'feedbackclass.dart';

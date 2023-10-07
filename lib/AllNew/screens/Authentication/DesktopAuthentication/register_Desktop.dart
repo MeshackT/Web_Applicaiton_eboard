@@ -1,10 +1,10 @@
+import 'package:Eboard/AllNew/screens/Authentication/DesktopAuthentication/sign_inDesktop.dart';
+import 'package:Eboard/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:yueway/AllNew/screens/Authentication/DesktopAuthentication/sign_inDesktop.dart';
-import 'package:yueway/main.dart';
 
 import '../../../../verifyEmailPage.dart';
 import '../../../shared/constants.dart';
@@ -75,6 +75,7 @@ class _RegisterDesktopState extends State<RegisterDesktop> {
   String name = '';
   String secondName = '';
   String documentID = '';
+
   // String subject1 = '';
   // String subject2 = '';
   List<String> subjects = [];

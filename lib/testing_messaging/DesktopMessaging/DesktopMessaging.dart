@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -16,9 +15,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:logger/logger.dart';
-import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
-import 'package:yueway/testing_messaging/ViewDocuments.dart';
-import 'package:yueway/testing_messaging/messaging.dart';
+import 'package:Eboard/AllNew/screens/Notifications/local_notifications.dart';
+import 'package:Eboard/testing_messaging/ViewDocuments.dart';
+import 'package:Eboard/testing_messaging/messaging.dart';
 
 import '../../AllNew/model/ConnectionChecker.dart';
 import '../../AllNew/screens/home/home.dart';

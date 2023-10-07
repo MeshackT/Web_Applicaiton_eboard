@@ -1,12 +1,12 @@
+import 'package:Eboard/AllNew/screens/Authentication/DesktopAuthentication/sign_inDesktop.dart';
+import 'package:Eboard/AllNew/screens/Authentication/guestView.dart';
+import 'package:Eboard/main.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:yueway/AllNew/screens/Authentication/DesktopAuthentication/sign_inDesktop.dart';
-import 'package:yueway/AllNew/screens/Authentication/guestView.dart';
-import 'package:yueway/main.dart';
 
 import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';

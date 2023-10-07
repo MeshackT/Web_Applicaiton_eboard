@@ -153,7 +153,6 @@ class LocalNotificationService {
     await Permission.storage.request();
     await Permission.notification.request();
 
-
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
       alert: true,
       badge: true,
@@ -231,12 +230,23 @@ class LocalNotificationService {
   //STEP 5
   //shows the notification on screen
   static void showNotificationOnForeground(RemoteMessage message) {
-    const notificationDetail = NotificationDetails(
+    var notificationDetail = NotificationDetails(
       android: AndroidNotificationDetails(
-          "com.example.testingnotifications", //channelId
-          "testingnotifications", //channel name
-          importance: Importance.max,
-          priority: Priority.high),
+        "com.example.testingnotifications", //channelId
+        "testingnotifications", //channel name
+        importance: Importance.max,
+        priority: Priority.high,
+        styleInformation: BigTextStyleInformation(
+          "${message.notification!.body}",
+          // 'Grey Background Notification',
+          htmlFormatContent: true,
+          htmlFormatTitle: true,
+          htmlFormatContentTitle: true,
+          htmlFormatSummaryText: true,
+          // Set the background color to grey
+          htmlFormatBigText: true, // Enable HTML formatting for big text
+        ),
+      ),
     );
 
     _notificationsPlugin.show(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
+import 'package:Eboard/AllNew/screens/Notifications/local_notifications.dart';
 
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
 var user = FirebaseAuth.instance.currentUser!;
@@ -11,6 +11,7 @@ LocalNotificationService localNotificationService = LocalNotificationService();
 
 class TeacherListPage extends StatefulWidget {
   List<dynamic> teachersIDS;
+
   TeacherListPage({Key? key, required this.teachersIDS}) : super(key: key);
 
   @override

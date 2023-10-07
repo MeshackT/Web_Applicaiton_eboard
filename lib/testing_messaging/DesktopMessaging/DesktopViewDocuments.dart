@@ -12,10 +12,10 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'package:yueway/AllNew/screens/home/home.dart';
-import 'package:yueway/AllNew/shared/constants.dart';
-import 'package:yueway/testing_messaging/ViewDocuments.dart';
-import 'package:yueway/testing_messaging/messaging.dart';
+import 'package:Eboard/AllNew/screens/home/home.dart';
+import 'package:Eboard/AllNew/shared/constants.dart';
+import 'package:Eboard/testing_messaging/ViewDocuments.dart';
+import 'package:Eboard/testing_messaging/messaging.dart';
 
 var user = FirebaseAuth.instance.currentUser!;
 

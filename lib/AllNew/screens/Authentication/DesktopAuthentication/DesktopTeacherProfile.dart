@@ -4,8 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:yueway/AllNew/model/VerificationModel.dart';
-
+import 'package:Eboard/AllNew/model/VerificationModel.dart';
 import '../../../model/ConnectionChecker.dart';
 import '../../../shared/constants.dart';
 import '../../home/home.dart';

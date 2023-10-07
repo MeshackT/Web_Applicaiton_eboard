@@ -33,7 +33,9 @@ class _TestingListOfItemsState extends State<TestingListOfItems> {
                   if (!snapshot.hasData) {
                     return Center(
                       child: SpinKitChasingDots(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme
+                            .of(context)
+                            .primaryColor,
                       ),
                     );
                   }
@@ -44,7 +46,7 @@ class _TestingListOfItemsState extends State<TestingListOfItems> {
                     itemCount: documents.length,
                     itemBuilder: (BuildContext context, int index) {
                       final myArray =
-                          documents[index]['subjects'] as List<dynamic>;
+                      documents[index]['subjects'] as List<dynamic>;
                       return ListView.builder(
                         shrinkWrap: true,
                         itemCount: myArray.length,
@@ -62,12 +64,15 @@ class _TestingListOfItemsState extends State<TestingListOfItems> {
                                     topLeft: Radius.circular(280),
                                   ),
                                   child: Container(
-                                    color: Theme.of(context).primaryColor,
+                                    color: Theme
+                                        .of(context)
+                                        .primaryColor,
                                     child: ListTile(
                                       title: Text(
                                         item,
                                         style: TextStyle(
-                                            color: Theme.of(context)
+                                            color: Theme
+                                                .of(context)
                                                 .primaryColorLight),
                                       ),
                                     ),

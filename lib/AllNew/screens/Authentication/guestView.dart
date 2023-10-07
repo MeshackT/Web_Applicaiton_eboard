@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
-import 'package:yueway/AllNew/model/ConnectionChecker.dart';
-import 'package:yueway/AllNew/screens/Authentication/Authenticate.dart';
-import 'package:yueway/AllNew/shared/constants.dart';
+import 'package:Eboard/AllNew/model/ConnectionChecker.dart';
+import 'package:Eboard/AllNew/screens/Authentication/Authenticate.dart';
+import 'package:Eboard/AllNew/shared/constants.dart';
 
 User user = FirebaseAuth.instance.currentUser!;
 

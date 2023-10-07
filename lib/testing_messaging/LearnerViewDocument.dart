@@ -1,18 +1,17 @@
 import 'dart:io';
 import 'dart:typed_data';
+
+import 'package:Eboard/AllNew/screens/home/learnersHome.dart';
+import 'package:Eboard/AllNew/shared/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gallery_saver/files.dart';
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'package:yueway/AllNew/screens/home/learnersHome.dart';
-import 'package:yueway/AllNew/shared/constants.dart';
-import 'package:yueway/testing_messaging/messaging.dart';
-import 'package:http/http.dart' as http;
 
 class LearnerViewDocuments extends StatefulWidget {
   const LearnerViewDocuments({Key? key}) : super(key: key);
@@ -27,7 +26,6 @@ class _LearnerViewDocumentsState extends State<LearnerViewDocuments> {
   bool isLoading = false;
   String searchText = '';
   List<DocumentSnapshot> _documents = [];
-
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +48,11 @@ class _LearnerViewDocumentsState extends State<LearnerViewDocuments> {
             children: [
               isLoading
                   ? SpinKitChasingDots(
-                color: Theme.of(context).primaryColor,
-                size: 16,
-              ):Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20),
+                      color: Theme.of(context).primaryColor,
+                      size: 16,
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Container(
                         // color:
                         //     Theme.of(context).primaryColorLight.withOpacity(.8),
@@ -94,7 +92,9 @@ class _LearnerViewDocumentsState extends State<LearnerViewDocuments> {
                         ),
                       ),
                     ),
-              const SizedBox(height: 5,),
+              const SizedBox(
+                height: 5,
+              ),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance

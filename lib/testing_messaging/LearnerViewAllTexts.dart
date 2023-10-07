@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
@@ -15,6 +16,7 @@ class LearnerViewAllTexts extends StatefulWidget {
 
 class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
   bool layoutIn = false;
+
   @override
   void initState() {
     super.initState();

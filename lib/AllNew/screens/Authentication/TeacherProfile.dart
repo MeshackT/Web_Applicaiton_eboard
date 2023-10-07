@@ -1,3 +1,5 @@
+import 'package:Eboard/AllNew/model/VerificationModel.dart';
+import 'package:Eboard/AllNew/screens/Authentication/DesktopAuthentication/DesktopTeacherProfile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,8 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:yueway/AllNew/model/VerificationModel.dart';
-import 'package:yueway/AllNew/screens/Authentication/DesktopAuthentication/DesktopTeacherProfile.dart';
 
 import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';

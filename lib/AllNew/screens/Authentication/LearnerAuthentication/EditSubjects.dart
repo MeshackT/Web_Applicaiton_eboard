@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Eboard/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
-import 'package:yueway/main.dart';
 
 import '../../../model/ConnectionChecker.dart';
 import '../../../shared/constants.dart';

@@ -60,3 +60,7 @@ changed the
 <!--  <base href="$FLUTTER_BASE_HREF">-->
 changed TO
   <base href="/"> works okay apparently
+
+
+Open app
+Flutter Tutorial - How To Use URL Launcher | Open URL In Web Browser / In App WebView

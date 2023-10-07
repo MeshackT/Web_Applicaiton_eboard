@@ -77,6 +77,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231030944816:android:ceddfc6c12a6996e26e9f5",
+        "android_client_info": {
+          "package_name": "com.meshacknkosi.eboard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "231030944816-p97hta5fn1i6tavafmf4d3rp5ad3uv2o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZB39s8O_TjIgqVsKH_J1zmaRgRMbhSIk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "231030944816-p97hta5fn1i6tavafmf4d3rp5ad3uv2o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "231030944816-0ev12n0mddk7qf7k7mkk3ukq05ofjvmn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.testingnotifications"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

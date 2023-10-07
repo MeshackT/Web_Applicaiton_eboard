@@ -9,12 +9,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
-import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
-import 'package:yueway/AllNew/screens/gradeList/registeredLearners/DesktopGrade10.dart';
-import 'package:yueway/AllNew/screens/gradeList/registeredLearners/DesktopGrade12.dart';
-import 'package:yueway/AllNew/screens/gradeList/registeredLearners/DesktopGrade9.dart';
-import 'package:yueway/AllNew/screens/gradeList/registeredLearners/NavigationDrawer.dart';
-import 'package:yueway/AllNew/screens/home/home.dart';
+import 'package:Eboard/AllNew/screens/Notifications/local_notifications.dart';
+import 'package:Eboard/AllNew/screens/gradeList/registeredLearners/DesktopGrade10.dart';
+import 'package:Eboard/AllNew/screens/gradeList/registeredLearners/DesktopGrade12.dart';
+import 'package:Eboard/AllNew/screens/gradeList/registeredLearners/DesktopGrade9.dart';
+import 'package:Eboard/AllNew/screens/gradeList/registeredLearners/NavigationDrawer.dart';
+import 'package:Eboard/AllNew/screens/home/home.dart';
 
 import '../../../../testing_messaging/messaging.dart';
 import '../../../shared/constants.dart';

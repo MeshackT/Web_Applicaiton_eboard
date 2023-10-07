@@ -16,6 +16,7 @@ class _UploadImagesState extends State<UploadImages> {
   Uint8List? imageBytes;
   String? url;
   String fileName = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

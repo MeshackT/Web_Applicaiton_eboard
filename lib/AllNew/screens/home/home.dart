@@ -10,12 +10,11 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
-import 'package:yueway/AllNew/screens/Notifications/local_notifications.dart';
-
 import '../../../testing_messaging/messaging.dart';
 import '../../shared/constants.dart';
 import '../Authentication/Authenticate.dart';
 import '../Authentication/TeacherProfile.dart';
+import '../Notifications/local_notifications.dart';
 import '../gradeList/grade10.dart';
 import '../gradeList/grade11.dart';
 import '../gradeList/grade12.dart';
@@ -81,6 +80,7 @@ class _HomeState extends State<Home> {
   List<DocumentSnapshot> documents = [];
   LocalNotificationService localNotificationService =
       LocalNotificationService();
+
   //////////////////////////////
   List<Map<dynamic, dynamic>> lists = [];
   final databaseReference =
