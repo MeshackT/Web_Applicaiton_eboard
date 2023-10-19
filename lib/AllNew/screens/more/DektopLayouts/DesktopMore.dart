@@ -6,9 +6,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:Eboard/AllNew/screens/Authentication/Authenticate.dart';
 
 import '../../../shared/constants.dart';
+import '../../Authentication/Authenticate.dart';
 import '../../home/home.dart';
 import '../feedbackclass.dart';
 
@@ -53,47 +53,40 @@ class _DesktopMoreState extends State<DesktopMore> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth < Utils.mobileWidth) {
-        return const DesktopMore();
-      } else {
-        return Scaffold(
-          body: SafeArea(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          color: Theme.of(context).primaryColorLight,
+          child: Center(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width / 1.5,
               height: MediaQuery.of(context).size.height,
-              decoration: const BoxDecoration(
-                //screen background color
-                gradient: LinearGradient(
-                    colors: [Color(0x00cccccc), Color(0xE7791971)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight),
-              ),
-              child: Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 1.5,
-                  height: MediaQuery.of(context).size.height,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      OutlinedButton(
+                        style: buttonRound,
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const Home()));
+                        },
+                        child: Text(
+                          "Back",
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                      ),
+                      spaceVertical(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          OutlinedButton(
-                            style: buttonRound,
-                            onPressed: () {
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => const Home()));
-                            },
-                            child: Text(
-                              "Back",
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor),
-                            ),
-                          ),
-                          spaceVertical(),
                           Container(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               decoration: BoxDecoration(
@@ -108,11 +101,24 @@ class _DesktopMoreState extends State<DesktopMore> {
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SizedBox(
-                                    height: 150,
+                                  Container(
+                                    height: 180,
+                                    decoration: BoxDecoration(
+                                        color:
+                                            Theme.of(context).primaryColorLight,
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            blurRadius: .5,
+                                          )
+                                        ]),
                                     width: MediaQuery.of(context).size.width,
                                     child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Padding(
                                           padding:
@@ -289,7 +295,7 @@ class _DesktopMoreState extends State<DesktopMore> {
                                   color: Theme.of(context).primaryColor,
                                 ),
                               ),
-                              width: MediaQuery.of(context).size.width,
+                              width: 120,
                               height: 50,
                               child: Padding(
                                 padding: const EdgeInsets.only(
@@ -316,7 +322,7 @@ class _DesktopMoreState extends State<DesktopMore> {
                                   )
                                 : Center(
                                     child: Text(
-                                      "App Name: $appName\nApp Version: $appVersion",
+                                      "Version: $appVersion",
                                       style: textStyleText(context).copyWith(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 16,
@@ -330,16 +336,16 @@ class _DesktopMoreState extends State<DesktopMore> {
                                   ),
                           ),
                         ],
-                      ),
-                    ),
+                      )
+                    ],
                   ),
                 ),
               ),
             ),
           ),
-        );
-      }
-    });
+        ),
+      ),
+    );
   }
 
   //TODO send FeedBack

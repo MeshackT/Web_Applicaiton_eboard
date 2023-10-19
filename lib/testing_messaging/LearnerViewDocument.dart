@@ -53,43 +53,44 @@ class _LearnerViewDocumentsState extends State<LearnerViewDocuments> {
                     )
                   : Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Container(
-                        // color:
-                        //     Theme.of(context).primaryColorLight.withOpacity(.8),
-                        child: TextField(
-                          controller: _searchController,
-                          cursorColor: Theme.of(context).primaryColorDark,
-                          keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColorDark,
-                                  width: 1.0),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            contentPadding: const EdgeInsets.only(
-                              left: 15,
-                              bottom: 11,
-                              top: 11,
-                              right: 15,
-                            ),
-                            hintText: "Enter a name",
-                            hintStyle: TextStyle(
+                      child: TextField(
+                        controller: _searchController,
+                        cursorColor: Theme.of(context).primaryColorDark,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
                                 color: Theme.of(context).primaryColorDark,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1),
-                            prefixIcon: const Icon(Icons.search),
+                                width: 1.0),
+                            borderRadius: BorderRadius.circular(30),
                           ),
-                          onChanged: (value) {
-                            setState(() {
-                              searchText = value;
-                            });
-                          },
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColorDark,
+                                width: 1.0),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          contentPadding: const EdgeInsets.only(
+                            left: 15,
+                            bottom: 11,
+                            top: 11,
+                            right: 15,
+                          ),
+                          hintText: "Enter a name",
+                          hintStyle: TextStyle(
+                              color: Theme.of(context).primaryColorDark,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
+                          prefixIcon: const Icon(Icons.search),
                         ),
+                        onChanged: (value) {
+                          setState(() {
+                            searchText = value;
+                          });
+                        },
                       ),
                     ),
               const SizedBox(
@@ -136,6 +137,7 @@ class _LearnerViewDocumentsState extends State<LearnerViewDocuments> {
                         }).toList();
                       }
                       return ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 80),
                         itemCount: _documents.length,
                         itemBuilder: (BuildContext context, int index) {
                           DocumentSnapshot document = _documents[index];

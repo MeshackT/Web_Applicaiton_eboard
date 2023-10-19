@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:Eboard/AllNew/screens/Notifications/DesktopNotifications/DesktopViewNotification.dart';
 import 'package:Eboard/AllNew/screens/Notifications/local_notifications.dart';
 import 'package:Eboard/AllNew/screens/Notifications/sendNotification.dart';
+import 'package:Eboard/AllNew/screens/home/DesktopHomeLayouts/DesktopHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -13,7 +14,6 @@ import 'package:logger/logger.dart';
 import '../../../model/ConnectionChecker.dart';
 import '../../../shared/constants.dart';
 import '../../gradeList/grade12.dart';
-import '../../home/home.dart';
 
 User? user = FirebaseAuth.instance.currentUser;
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
@@ -139,23 +139,27 @@ class _DesktopSendNotificationState extends State<DesktopSendNotification> {
           initialIndex: 0,
           child: Scaffold(
             appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  navigate(context);
-                },
-                icon: const Icon(Icons.arrow_back_rounded),
+              automaticallyImplyLeading: true,
+              iconTheme: IconTheme.of(context)
+                  .copyWith(color: Theme.of(context).primaryColorLight),
+              title: const Text(
+                "Learner's notifications",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 2,
+                ),
               ),
-              title: const Text("Learner's notifications"),
               titleSpacing: 2,
-              centerTitle: false,
+              centerTitle: true,
               elevation: 0,
               actions: [
                 Utils.toolTipMessage(
                     "Send a message to learners privately.", context),
                 IconButton(
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => const Home()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const DesktopHomeLayout()));
                   },
                   icon: Icon(
                     Icons.home,
@@ -218,8 +222,17 @@ class _DesktopSendNotificationState extends State<DesktopSendNotification> {
                 child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: SingleChildScrollView(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 1.5,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColorLight,
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 1.0,
+                        ),
+                      ]),
+                  width: MediaQuery.of(context).size.width / 1.6,
                   height: MediaQuery.of(context).size.height,
                   child: Form(
                     key: _formKey,
@@ -290,6 +303,11 @@ class _DesktopSendNotificationState extends State<DesktopSendNotification> {
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Theme.of(context).primaryColor,
@@ -301,11 +319,6 @@ class _DesktopSendNotificationState extends State<DesktopSendNotification> {
                                 "Your Message",
                                 style: textStyleText(context).copyWith(
                                     fontSize: 16, fontWeight: FontWeight.w700),
-                              ),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Theme.of(context).primaryColor),
-                                borderRadius: BorderRadius.circular(8),
                               ),
                               hintText: "Enter your message here",
                               hintStyle: textStyleText(context),
@@ -463,7 +476,11 @@ class _DesktopSendNotificationState extends State<DesktopSendNotification> {
                                 snack(e.toString(), context);
                               }
                             },
-                            style: buttonRound,
+                            style: OutlinedButton.styleFrom(
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20))),
+                                foregroundColor: Colors.purple),
                             child: isLoading
                                 ? SpinKitChasingDots(
                                     color: Theme.of(context).primaryColorLight,
@@ -472,8 +489,7 @@ class _DesktopSendNotificationState extends State<DesktopSendNotification> {
                                 : Text(
                                     "Send",
                                     style: textStyleText(context).copyWith(
-                                        color:
-                                            Theme.of(context).primaryColorLight,
+                                        color: Theme.of(context).primaryColor,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16),
                                   ),

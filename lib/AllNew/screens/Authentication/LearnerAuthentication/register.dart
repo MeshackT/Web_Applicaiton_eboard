@@ -53,8 +53,8 @@ class User {
           'email': email.trim().toLowerCase(), // John Doe
           'uid': uid, // Stokes and Sons
           'password': password.trim(), //
-          'name': name.trim(),
-          'secondName': secondName.trim(),
+          'name': name.trim().capitalize(),
+          'secondName': secondName.trim().capitalize(),
           'grade': grade.trim(),
           'role': role.trim().toLowerCase(),
           'subjects': subjects,

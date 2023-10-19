@@ -9,7 +9,6 @@ import 'package:logger/logger.dart';
 
 import '../../model/ConnectionChecker.dart';
 import '../../shared/constants.dart';
-import '../home/learnersHome.dart';
 
 Logger logger = Logger(printer: PrettyPrinter(colors: true));
 
@@ -80,11 +79,25 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Subject Private Notifications",
+          style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+        ),
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.home),
+          ),
+        ],
+      ),
+      backgroundColor: Theme.of(context).primaryColorLight,
       body: DoubleBackToCloseApp(
         snackBar: SnackBar(
           backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
           content: Text(
-            'Tap back again to leave the application',
+            'Tap back again to close notifications',
             style: TextStyle(color: Theme.of(context).primaryColorLight),
             textAlign: TextAlign.center,
           ),
@@ -103,29 +116,6 @@ class _LearnerViewNotificationsState extends State<LearnerViewNotifications> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: OutlinedButton(
-                        style: buttonRound,
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LearnerHome()));
-                        },
-                        child: Text(
-                          "Back",
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
                 Expanded(
                   child: SingleChildScrollView(
                     child: StreamBuilder<QuerySnapshot>(

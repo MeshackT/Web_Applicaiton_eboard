@@ -129,7 +129,6 @@ class _SendNotificationState extends State<SendNotification> {
 
   @override
   Widget build(BuildContext context) {
-    String subjectTopic = nameOfTeacher;
     return LayoutBuilder(builder: (context, constraints) {
       if (constraints.maxWidth < Utils.mobileWidth) {
         return DefaultTabController(
@@ -137,15 +136,19 @@ class _SendNotificationState extends State<SendNotification> {
           initialIndex: 0,
           child: Scaffold(
             appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  navigate(context);
-                },
-                icon: const Icon(Icons.arrow_back_rounded),
+              iconTheme: IconTheme.of(context)
+                  .copyWith(color: Theme.of(context).primaryColorLight),
+              automaticallyImplyLeading: true,
+              title: const Text(
+                "Learner's notifications",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 2,
+                ),
               ),
-              title: const Text("Learner's notifications"),
               titleSpacing: 2,
-              centerTitle: false,
+              centerTitle: true,
               elevation: 0,
               actions: [
                 Utils.toolTipMessage(
@@ -186,7 +189,7 @@ class _SendNotificationState extends State<SendNotification> {
               snackBar: SnackBar(
                 backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
                 content: Text(
-                  'Tap back again to leave the application',
+                  'Tap back again to leave this screen',
                   style: TextStyle(color: Theme.of(context).primaryColorLight),
                   textAlign: TextAlign.center,
                 ),
@@ -213,12 +216,8 @@ class _SendNotificationState extends State<SendNotification> {
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          //screen background color
-          gradient: LinearGradient(
-              colors: [Color(0x00cccccc), Color(0xE7791971)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight),
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColorLight,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

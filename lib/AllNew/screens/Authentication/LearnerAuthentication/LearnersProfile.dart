@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
 import '../../../model/Admin.dart';
 import '../../../model/ConnectionChecker.dart';
 import '../../../model/VerificationModel.dart';
@@ -186,7 +187,7 @@ class _LearnersProfileState extends State<LearnersProfile> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 labelText("Name"),
-                                labelText(learnersName.toString()),
+                                labelText(learnersName.toString().capitalize()),
                               ],
                             ),
                             const SizedBox(
@@ -196,7 +197,8 @@ class _LearnersProfileState extends State<LearnersProfile> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 labelText("Second Name"),
-                                labelText(learnersSecondName.toString()),
+                                labelText(
+                                    learnersSecondName.toString().capitalize()),
                               ],
                             ),
                             const SizedBox(
@@ -208,7 +210,8 @@ class _LearnersProfileState extends State<LearnersProfile> {
                                 labelText("Email"),
                                 Wrap(
                                   children: [
-                                    labelText(learnersEmail.toString()),
+                                    labelText(
+                                        learnersEmail.toString().toLowerCase()),
                                   ],
                                 ),
                               ],
@@ -249,6 +252,7 @@ class _LearnersProfileState extends State<LearnersProfile> {
                                       children: [
                                         labelText(learnersSubjects
                                             .join("\n")
+                                            .capitalize()
                                             .toString()),
                                       ],
                                     ),
@@ -712,6 +716,7 @@ class _LearnersProfileState extends State<LearnersProfile> {
                                           .withOpacity(.7),
                                     ),
                                   ),
+                                  enabled: false,
                                   style: textStyleText(context),
                                   textAlign: TextAlign.center,
                                   autocorrect: true,

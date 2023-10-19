@@ -12,11 +12,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:logger/logger.dart';
 
 import '../AllNew/model/ConnectionChecker.dart';
@@ -40,6 +38,7 @@ class Messaging extends StatefulWidget {
 class _MessagingState extends State<Messaging>
     with SingleTickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
+  late FocusNode myFocusNode;
 
   LocalNotificationService localNotificationService =
       LocalNotificationService();
@@ -66,6 +65,10 @@ class _MessagingState extends State<Messaging>
 
   XFile? _pickerImage;
   Uint8List webImage = Uint8List(8);
+  Uint8List? imageBytes;
+  String fileNameWeb = "";
+  String fileNameDoc = "";
+  String webName = "";
 
   String nameOfTeacher = "";
   String? selectedOption;
@@ -73,6 +76,7 @@ class _MessagingState extends State<Messaging>
   @override
   void initState() {
     super.initState();
+    myFocusNode = FocusNode();
     ConnectionChecker.checkTimer();
     //get logged in user data
     _getCurrentUserData();
@@ -104,396 +108,428 @@ class _MessagingState extends State<Messaging>
           height: MediaQuery.of(context).size.height,
           margin: const EdgeInsets.only(top: 0.0),
           decoration: const BoxDecoration(
-            //screen background color
             gradient: LinearGradient(
                 colors: [Color(0x0fffffff), Color(0xE7791971)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight),
           ),
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    OutlinedButton(
-                      onPressed: () async {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const Home(),
-                          ),
-                        );
-                      },
-                      style: buttonRound,
-                      child: Text(
-                        "Back",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                      ),
-                    ),
-                    OutlinedButton(
-                      onPressed: () async {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const ViewMyTextsForEditing(),
-                          ),
-                        );
-                      },
-                      style: buttonRound,
-                      child: Text(
-                        "Modify Texts",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => const Home()));
-                      },
-                      icon: Icon(Icons.home,
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(.7)),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(50),
-                  bottomRight: Radius.circular(50),
-                  topLeft: Radius.circular(50),
-                  topRight: Radius.circular(50),
-                ),
-                child: Container(
-                  height: 60,
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(
-                      top: 10.0, bottom: 10, left: 5, right: 5),
-                  color: Theme.of(context).primaryColor.withOpacity(.7),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      OutlinedButton(
-                        onPressed: () async {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ViewAllTeachersMessages(),
-                            ),
-                          );
-                        },
-                        style: buttonRound.copyWith(
-                          side: MaterialStateProperty.all<BorderSide>(
-                            const BorderSide(
-                              color: Colors.transparent,
-                              width: 2, // Set the outline width to 2
-                            ),
-                          ),
-                        ),
-                        child: Text(
-                          "View Images",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColorLight,
-                          ),
-                        ),
-                      ),
-                      OutlinedButton(
-                        onPressed: () async {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ViewAllTeachersTexts(),
-                            ),
-                          );
-                        },
-                        style: buttonRound.copyWith(
-                          side: MaterialStateProperty.all<BorderSide>(
-                            const BorderSide(
-                              color: Colors.transparent,
-                              width: 2, // Set the outline width to 2
-                            ),
-                          ),
-                        ),
-                        child: Text(
-                          "View Texts",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColorLight,
-                          ),
-                        ),
-                      ),
-                      OutlinedButton(
-                        onPressed: () async {
-                          //Fluttertoast.showToast(msg: "Coming soon");
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => const ViewDocuments(),
-                            ),
-                          );
-                        },
-                        style: buttonRound.copyWith(
-                          side: MaterialStateProperty.all<BorderSide>(
-                            const BorderSide(
-                              color: Colors.transparent,
-                              width: 2, // Set the outline width to 2
-                            ),
-                          ),
-                        ),
-                        child: Text(
-                          "View Documents",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColorLight,
-                          ),
-                        ),
-                      ),
-                    ],
+          child: Center(
+            child: Container(
+              color: Colors.transparent,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width / 1.2,
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Flexible(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection("messages")
-                      .orderBy("timestamp", descending: true)
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasError) {
-                      return Text("Error: ${snapshot.error}");
-                    } else if (!snapshot.hasData ||
-                        snapshot.data == null ||
-                        snapshot.data!.size <= 0) {
-                      return Center(
-                        child: Text(
-                          "No data sent yet.",
-                          style: textStyleText(context).copyWith(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        OutlinedButton(
+                          onPressed: () async {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const Home(),
+                              ),
+                            );
+                          },
+                          style: buttonRound,
+                          child: Text(
+                            "Backs",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
                           ),
                         ),
-                      );
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return SpinKitChasingDots(
-                        color: Theme.of(context).primaryColor,
-                      );
-                    } else {
-                      _documents = snapshot.data!.docs;
-                      return ListView.builder(
-                        itemCount: _documents.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          DocumentSnapshot document = _documents[index];
-                          imageURLFromFirebase =
-                              (document.get("imageURL")).toString();
-                          String text = document.get("text");
-                          String name = document.get("nameOfTeacher");
-                          String teacherID = document.get("userID");
-
-                          var dateAndTime = document.get("timestamp");
-
-                          return Dismissible(
-                            key: Key(_documents[index].id),
-                            onDismissed: (direction) {
-                              try {
-                                setState(() {
-                                  FirebaseFirestore.instance
-                                      .collection("messages")
-                                      .doc(document.id)
-                                      .delete();
-                                });
-                                snack("Notification deleted", context);
-                              } on Exception catch (e) {
-                                // TODO
-                                snack(e.toString(), context);
-                              }
-                            },
-                            background: Container(
+                        OutlinedButton(
+                          onPressed: () async {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ViewMyTextsForEditing(),
+                              ),
+                            );
+                          },
+                          style: buttonRound,
+                          child: Text(
+                            "Modify Texts",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => const Home()));
+                          },
+                          icon: Icon(Icons.home,
                               color: Theme.of(context)
                                   .primaryColor
-                                  .withOpacity(.6),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 15),
-                                    child: Icon(
-                                      Icons.delete,
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                    ),
-                                  ),
-                                ],
+                                  .withOpacity(.7)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(50),
+                      bottomRight: Radius.circular(50),
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50),
+                    ),
+                    child: Container(
+                      height: 60,
+                      width: MediaQuery.of(context).size.width,
+                      color: Theme.of(context).primaryColor.withOpacity(.7),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          OutlinedButton(
+                            onPressed: () async {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ViewAllTeachersMessages(),
+                                ),
+                              );
+                            },
+                            style: buttonRound.copyWith(
+                              side: MaterialStateProperty.all<BorderSide>(
+                                const BorderSide(
+                                  color: Colors.transparent,
+                                  width: 2, // Set the outline width to 2
+                                ),
                               ),
                             ),
-                            confirmDismiss: (DismissDirection direction) async {
-                              return await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      "Delete",
-                                      style: textStyleText(context).copyWith(
-                                        fontWeight: FontWeight.bold,
+                            child: Text(
+                              "View Images",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context).primaryColorLight,
+                              ),
+                            ),
+                          ),
+                          OutlinedButton(
+                            onPressed: () async {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ViewAllTeachersTexts(),
+                                ),
+                              );
+                            },
+                            style: buttonRound.copyWith(
+                              side: MaterialStateProperty.all<BorderSide>(
+                                const BorderSide(
+                                  color: Colors.transparent,
+                                  width: 2, // Set the outline width to 2
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              "View Texts",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context).primaryColorLight,
+                              ),
+                            ),
+                          ),
+                          OutlinedButton(
+                            onPressed: () async {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => const ViewDocuments(),
+                                ),
+                              );
+                            },
+                            style: buttonRound.copyWith(
+                              side: MaterialStateProperty.all<BorderSide>(
+                                const BorderSide(
+                                  color: Colors.transparent,
+                                  width: 2, // Set the outline width to 2
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              "View Documents",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context).primaryColorLight,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Flexible(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection("messages")
+                          .orderBy("timestamp", descending: true)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        } else if (!snapshot.hasData ||
+                            snapshot.data == null ||
+                            snapshot.data!.size <= 0) {
+                          return Center(
+                            child: Text(
+                              "No data sent yet.",
+                              style: textStyleText(context).copyWith(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          );
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return SpinKitChasingDots(
+                            color: Theme.of(context).primaryColor,
+                          );
+                        } else {
+                          _documents = snapshot.data!.docs;
+                          return ListView.builder(
+                            itemCount: _documents.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              DocumentSnapshot document = _documents[index];
+                              String imageURLFromFirebase =
+                                  document.get("imageURL");
+                              String text = document.get("text");
+                              String name = document.get("nameOfTeacher");
+                              String teacherID = document.get("userID");
+
+                              var dateAndTime = document.get("timestamp");
+
+                              return Dismissible(
+                                key: Key(_documents[index].id),
+                                onDismissed: (direction) {
+                                  try {
+                                    setState(() {
+                                      FirebaseFirestore.instance
+                                          .collection("messages")
+                                          .doc(document.id)
+                                          .delete();
+                                    });
+                                    snack("Notification deleted", context);
+                                  } on Exception catch (e) {
+                                    // TODO
+                                    snack(e.toString(), context);
+                                  }
+                                },
+                                background: Container(
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(.6),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "Delete image",
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w500),
                                       ),
-                                    ),
-                                    content: Text(
-                                      "Do you really want to dismiss this notification?",
-                                      style: textStyleText(context),
-                                    ),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          if (teacherID.toString() !=
-                                              (user!.uid).toString()) {
-                                            snack(
-                                                "Can't delete a message for someone else",
-                                                context);
-                                            Navigator.of(context).pop(false);
-                                          } else {
-                                            Navigator.of(context).pop(true);
-                                          }
-                                        },
-                                        child: Text(
-                                          "Yes",
-                                          style: textStyleText(context),
-                                        ),
-                                      ),
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(false),
-                                        child: Text(
-                                          "Cancel",
-                                          style: textStyleText(context),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 15),
+                                        child: Icon(
+                                          Icons.delete,
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
                                         ),
                                       ),
                                     ],
-                                  );
-                                },
-                              );
-                            },
-                            movementDuration: const Duration(milliseconds: 500),
-                            direction: DismissDirection.endToStart,
-                            child: SizedBox(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      CircleAvatar(
-                                        child: Text(
-                                          name.toString()[0],
+                                  ),
+                                ),
+                                confirmDismiss:
+                                    (DismissDirection direction) async {
+                                  return await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text(
+                                          "Delete",
                                           style:
                                               textStyleText(context).copyWith(
                                             fontWeight: FontWeight.bold,
-                                            color: Theme.of(context)
-                                                .primaryColorLight,
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                name,
-                                                style: textStyleText(context)
-                                                    .copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                ),
-                                              ),
-                                              Text(
-                                                Utils.formattedDate(
-                                                    dateAndTime),
-                                                style: textStyleText(context)
-                                                    .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color: Theme.of(context)
-                                                            .primaryColor
-                                                            .withOpacity(.7),
-                                                        fontSize: 10),
-                                              ),
-                                            ],
+                                        content: Text(
+                                          "Do you really want to dismiss this notification?",
+                                          style: textStyleText(context),
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
+                                              if (teacherID.toString() !=
+                                                  (user!.uid).toString()) {
+                                                snack(
+                                                    "Can't delete a message for someone else",
+                                                    context);
+                                                Navigator.of(context)
+                                                    .pop(false);
+                                              } else {
+                                                Navigator.of(context).pop(true);
+                                              }
+                                            },
+                                            child: Text(
+                                              "Yes",
+                                              style: textStyleText(context),
+                                            ),
                                           ),
-                                          SizedBox(
-                                            width: 40,
-                                            height: 40,
-                                            child: IconButton(
-                                              onPressed: () async {},
-                                              icon: Icon(
-                                                Icons.circle,
-                                                color: Theme.of(context)
-                                                    .primaryColor
-                                                    .withOpacity(.5),
-                                              ),
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pop(false),
+                                            child: Text(
+                                              "Cancel",
+                                              style: textStyleText(context),
                                             ),
                                           ),
                                         ],
+                                      );
+                                    },
+                                  );
+                                },
+                                movementDuration:
+                                    const Duration(milliseconds: 500),
+                                direction: DismissDirection.endToStart,
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 2, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Theme.of(context)
+                                        .primaryColorLight
+                                        .withOpacity(.7),
+                                    // color: Theme.of(context).primaryColorLight,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          CircleAvatar(
+                                            child: Text(
+                                              name.toString()[0],
+                                              style: textStyleText(context)
+                                                  .copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                color: Theme.of(context)
+                                                    .primaryColorLight,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    name,
+                                                    style:
+                                                        textStyleText(context)
+                                                            .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    Utils.formattedDate(
+                                                        dateAndTime),
+                                                    style: textStyleText(context)
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor
+                                                                .withOpacity(
+                                                                    .7),
+                                                            fontSize: 10),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                width: 40,
+                                                height: 40,
+                                                child: IconButton(
+                                                  onPressed: () async {},
+                                                  icon: Icon(
+                                                    Icons.circle,
+                                                    color: Theme.of(context)
+                                                        .primaryColor
+                                                        .withOpacity(.5),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      SizedBox(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5, vertical: 2),
+                                          child: Text(
+                                            text,
+                                            style: textStyleText(context),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  //removed sizedBo with height=400
-                                  buildImage(imageURLFromFirebase!,
-                                      _documents[index].id),
-                                  SizedBox(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 5, vertical: 2),
-                                      child: Text(
-                                        text,
-                                        style: textStyleText(context),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                ),
+                              );
+                            },
                           );
-                        },
-                      );
-                    }
-                  },
-                ),
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -664,36 +700,32 @@ class _MessagingState extends State<Messaging>
   ///////////////TODO show image edit sheet////////////////////
   showSheetToEditWIthImage() {
     showModalBottomSheet(
+      barrierColor: Theme.of(context).primaryColor.withOpacity(.5),
       isScrollControlled: true,
       enableDrag: true,
       elevation: 1,
       useSafeArea: true,
       context: context,
       builder: (context) {
-        return ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(0),
-            bottomRight: Radius.circular(0),
-            // topLeft: Radius.circular(50),
-            // topRight: Radius.circular(50),
+        return Container(
+          padding: const EdgeInsets.only(top: 30),
+          height: MediaQuery.of(context).size.height / 1.2,
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.only(top: 0.0),
+          decoration: const BoxDecoration(
+            //screen background color
+            gradient: LinearGradient(
+                colors: [Color(0x0fffffff), Color(0xE7791971)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight),
           ),
-          child: SafeArea(
-            child: Container(
-              padding: const EdgeInsets.only(top: 30),
-              //color: Theme.of(context).primaryColorLight,
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(top: 0.0),
-              decoration: const BoxDecoration(
-                //screen background color
-                gradient: LinearGradient(
-                    colors: [Color(0x0fffffff), Color(0xE7791971)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight),
-              ),
-              child: SingleChildScrollView(
+          child: SingleChildScrollView(
+            child: Center(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width / 1.5,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
                         height: 20,
@@ -788,38 +820,113 @@ class _MessagingState extends State<Messaging>
                               SingleChildScrollView(
                                 child: SizedBox(
                                   width: MediaQuery.of(context).size.width,
-                                  child: selectedFileName.isEmpty
-                                      ? Column(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: showSelectionForImage,
-                                              child: const Icon(
-                                                Icons.image,
-                                                size: 100,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      //TODO web Image if on web
+                                      Visibility(
+                                        visible: kIsWeb ? true : false,
+                                        child: Container(
+                                          color: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(.1),
+                                          child: Column(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: showSelectionForImage,
+                                                child: const Icon(
+                                                  Icons.image,
+                                                  size: 80,
+                                                ),
                                               ),
-                                            ),
-                                            Center(
-                                              child: Text(
-                                                  "Upload an image first",
-                                                  textAlign: TextAlign.center,
-                                                  style: textStyleText(context)
-                                                      .copyWith(
-                                                    fontWeight: FontWeight.w600,
-                                                  )),
-                                            ),
-                                          ],
-                                        )
-                                      : kIsWeb
-                                          ? Image.memory(
-                                              webImage,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Center(
-                                              child: Image.file(File(file.path),
-                                                  height: 320,
-                                                  width: 320,
-                                                  fit: BoxFit.cover),
-                                            ),
+                                              url.isNotEmpty
+                                                  ? const Icon(
+                                                      Icons.thumb_up,
+                                                      size: 80,
+                                                    )
+                                                  : const Icon(
+                                                      Icons.upload,
+                                                      size: 20,
+                                                    ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(fileNameWeb.toString()),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      //TODO ends//
+                                      Visibility(
+                                        visible: kIsWeb ? false : true,
+                                        child: Container(
+                                          color: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(.1),
+                                          child: Column(
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap:
+                                                        showSelectionForImage,
+                                                    child: Icon(
+                                                      Icons.image,
+                                                      size: 50,
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                    ),
+                                                  ),
+                                                  selectedFileName.isEmpty
+                                                      ? Icon(
+                                                          Icons.upload,
+                                                          size: 50,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                        )
+                                                      : Center(
+                                                          child: Image.file(
+                                                              File(file.path),
+                                                              height: 100,
+                                                              width: 100,
+                                                              fit:
+                                                                  BoxFit.cover),
+                                                        ),
+                                                  Center(
+                                                    child: selectedFileName
+                                                            .isNotEmpty
+                                                        ? Text(file.name)
+                                                        : Text(
+                                                            "Upload mobile image",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style:
+                                                                textStyleText(
+                                                                        context)
+                                                                    .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                            )),
+                                                  ),
+                                                ],
+                                              ),
+                                              // : Center(
+                                              //     child: Image.file(
+                                              //         File(file.path),
+                                              //         height: 320,
+                                              //         width: 320,
+                                              //         fit: BoxFit.cover),
+                                              //   ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               const SizedBox(
@@ -830,6 +937,7 @@ class _MessagingState extends State<Messaging>
                               ),
                               Center(
                                 child: TextFormField(
+                                  focusNode: myFocusNode,
                                   maxLength: 50,
                                   controller: _controller,
                                   maxLines: 1,
@@ -898,16 +1006,29 @@ class _MessagingState extends State<Messaging>
                                               // navContext.pop();
                                               logger.i("set all to true");
 
-                                              await _addDocumentWithImage(
-                                                      _controller.text,
-                                                      imageUrl,
-                                                      nameOfTeacher)
-                                                  .then((value) =>
-                                                      localNotificationService
-                                                          .sendNotificationToTopicALlToSee(
-                                                              "By $nameOfTeacher",
-                                                              _controller.text,
-                                                              subscribedTopicAll));
+                                              kIsWeb
+                                                  ? await _addDocumentWithImage(
+                                                          _controller.text,
+                                                          url,
+                                                          nameOfTeacher)
+                                                      .then((value) =>
+                                                          localNotificationService
+                                                              .sendNotificationToTopicALlToSee(
+                                                                  "By $nameOfTeacher",
+                                                                  _controller
+                                                                      .text,
+                                                                  subscribedTopicAll))
+                                                  : await _addDocumentWithImage(
+                                                          _controller.text,
+                                                          imageUrl,
+                                                          nameOfTeacher)
+                                                      .then((value) =>
+                                                          localNotificationService
+                                                              .sendNotificationToTopicALlToSee(
+                                                                  "By $nameOfTeacher",
+                                                                  _controller
+                                                                      .text,
+                                                                  subscribedTopicAll));
 
                                               setState(() {
                                                 picSend = false;
@@ -971,38 +1092,35 @@ class _MessagingState extends State<Messaging>
   }
 
   ///////////////TODO show pdf sheet////////////////////
+  ///////////////TODO show pdf sheet////////////////////
   showSheetToEditWIthPdf() {
     showModalBottomSheet(
+      barrierColor: Theme.of(context).primaryColor.withOpacity(.5),
       isScrollControlled: true,
       enableDrag: true,
       elevation: 1,
       useSafeArea: true,
       context: context,
       builder: (context) {
-        return ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(0),
-            bottomRight: Radius.circular(0),
-            // topLeft: Radius.circular(50),
-            // topRight: Radius.circular(50),
+        return Container(
+          padding: const EdgeInsets.only(top: 30),
+          height: MediaQuery.of(context).size.height / 1.2,
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.only(top: 0.0),
+          decoration: const BoxDecoration(
+            //screen background color
+            gradient: LinearGradient(
+                colors: [Color(0x0fffffff), Color(0xE7791971)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight),
           ),
-          child: SafeArea(
-            child: Container(
-              padding: const EdgeInsets.only(top: 30),
-              //color: Theme.of(context).primaryColorLight,
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(top: 0.0),
-              decoration: const BoxDecoration(
-                //screen background color
-                gradient: LinearGradient(
-                    colors: [Color(0x0fffffff), Color(0xE7791971)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight),
-              ),
-              child: SingleChildScrollView(
+          child: SingleChildScrollView(
+            child: Center(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width / 1.5,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
                         height: 20,
@@ -1089,12 +1207,26 @@ class _MessagingState extends State<Messaging>
                                         ),
                                       ),
                                       isChanged
-                                          ? Center(
-                                              child: Text(url,
-                                                  style: textStyleText(context)
-                                                      .copyWith(
-                                                    fontWeight: FontWeight.w600,
-                                                  )),
+                                          ? Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                const Icon(
+                                                  Icons.thumb_up,
+                                                  size: 80,
+                                                ),
+                                                Center(
+                                                  child: Text(fileNameDoc,
+                                                      style:
+                                                          textStyleText(context)
+                                                              .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      )),
+                                                ),
+                                              ],
                                             )
                                           : Center(
                                               child: Text(
@@ -1117,6 +1249,7 @@ class _MessagingState extends State<Messaging>
                               ),
                               Center(
                                 child: TextFormField(
+                                  focusNode: myFocusNode,
                                   maxLength: 50,
                                   controller: _controller,
                                   maxLines: 1,
@@ -1317,108 +1450,124 @@ class _MessagingState extends State<Messaging>
   }
 
   ///////////////TODO build the image/////////////////
-  Widget buildImage(String imageURL, var keyImage) {
+  Widget buildImage(String imageUrlHere) {
     return Builder(builder: (context) {
-      return InstaImageViewer(
-        child: CachedNetworkImage(
-          imageUrl: imageURL,
-          placeholder: (context, url) => SizedBox(
-            height: 200,
-            width: MediaQuery.of(context).size.width,
-            child: Center(
-              child: SpinKitChasingDots(
-                color: Theme.of(context).primaryColor,
-                size: 50,
-              ),
-            ),
-          ),
-          cacheManager: CacheManager(
-            //this removes the image and re-downloads it after 7 days
-            Config(
-              'customCacheKey',
-              stalePeriod: const Duration(days: 7),
-            ),
-          ),
-          errorWidget: (context, url, error) => Center(
-            child: Icon(
-              Icons.error,
-              size: 150,
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-          imageBuilder: (context, imageProvider) => Center(
-            child: Image(
+      return CachedNetworkImage(
+        imageUrl: imageUrlHere,
+        imageBuilder: (context, imageProvider) => Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
               image: imageProvider,
-              fit: BoxFit.contain,
+              fit: BoxFit.cover,
             ),
           ),
         ),
+        placeholder: (context, url) => Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(
+                10.0), // Adjust the radius value as needed
+            color: Colors.transparent,
+          ),
+          height: 100,
+          width: 100,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: Image.asset(
+              "assets/images/ic_launcher.png",
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        errorWidget: (context, url, error) => const Icon(Icons.error),
       );
     });
   }
 
-  //////TODO pick an image . THis is used by mobile devices//////////////////
-  _selectFile(bool imageFrom) async {
-    // file variable stores the image from cam or gallery
-    file = (await ImagePicker().pickImage(
-      source: imageFrom ? ImageSource.gallery : ImageSource.camera,
-      preferredCameraDevice: CameraDevice.rear,
-    ))!;
+  //TODO Pick and upload image with web//
+  Future<void> pickImage() async {
+    setState(() {
+      isLoading = true;
+    });
 
-    if (file != null) {
+    final navContext = Navigator.of(context);
+    // Pick an image
+    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+
+    if (result != null) {
+      final fileBytes = result.files.single.bytes;
+      final file = result.files.single;
+
+      // Generate a unique filename for the image
+      String fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('images')
+          .child('/$fileName');
+
+      // Display the loading indicator
+      isLoading
+          ? Utils.showDownloading(
+              context,
+              "Setting up image",
+              "Please wait a few seconds",
+            )
+          : null;
+
+      // Upload the image bytes to Firebase Cloud Storage
+      await ref.putData(
+        fileBytes!,
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      // Get the download URL of the uploaded image
+      String downloadURL = await ref.getDownloadURL();
+
+      // Dismiss the loading indicator
+      navContext.pop();
+
+      // Update the state
       setState(() {
-        selectedFileName = file.name;
+        myFocusNode.requestFocus();
+        isLoading = false;
+        imageBytes = fileBytes;
+        fileNameWeb = file.name;
+        url = downloadURL;
+        isLoading = false;
       });
-      logger.i(file.name);
+
+      logger.e("Here is the link for the image => $url");
+    } else {
+      // Handle the case when no file is picked
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
-  // _selectFile(bool imageFrom) async {
-  //   ImageSource? source;
-  //
-  //   if (Platform.isIOS || Platform.isAndroid) {
-  //     print("We are here: Mobile");
-  //     source = imageFrom ? ImageSource.gallery : ImageSource.camera;
-  //
-  //     if (source != null) {
-  //       final XFile? pickedFile = await ImagePicker().pickImage(
-  //         source: source,
-  //         preferredCameraDevice: CameraDevice.rear,
-  //       );
-  //
-  //       if (pickedFile != null) {
-  //         var file = XFile(pickedFile.path);
-  //         setState(() {
-  //           _pickerImage = file;
-  //           selectedFileName = file.path.split('/').last;
-  //         });
-  //         logger.i(selectedFileName);
-  //       }
-  //     }
-  //
-  //   }
-  //   else if(kIsWeb){
-  //     logger.e("We are here: Web");
-  //     ///////////////////////
-  //     final ImagePicker _picker = ImagePicker();
-  //     XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-  //     if(image != null){
-  //       var f = await image.readAsBytes();
-  //       setState(() {
-  //         webImage = f;
-  //         _pickerImage = XFile("a");
-  //       });
-  //       logger.e("Show the picked image: \n$webImage");
-  //     }else{
-  //       print("No image has been picked");
-  //     }
-  //     ////////////////////////
-  //   }else{
-  //     print("Something went wrong");
-  //   }
-  //
-  //
-  // }
+  //////TODO pick an image . THis is used by mobile devices//////////////////
+  _selectFile(bool imageFrom) async {
+    if (kIsWeb) {
+      pickImage();
+    } else {
+      // file variable stores the image from cam or gallery
+      file = (await ImagePicker().pickImage(
+        source: imageFrom ? ImageSource.gallery : ImageSource.camera,
+        preferredCameraDevice: CameraDevice.rear,
+      ))!;
+
+      if (file != null) {
+        setState(() {
+          selectedFileName = file.name;
+        });
+        myFocusNode.requestFocus();
+
+        logger.i(file.name);
+      }
+    }
+  }
 
   /////////////TODO uploading Data image and collection to firebase
   Future<void> _addDocumentWithImage(
@@ -1441,7 +1590,56 @@ class _MessagingState extends State<Messaging>
     }
   }
 
-  //Upload pdf for mobiles
+  //TODO Upload pdf for mobiles
+  // Future<void> uploadDocumentPDF() async {
+  //   logger.i("add to document $url");
+  //   var navContext = Navigator.of(context);
+  //   try {
+  //     setState(() {
+  //       isChanged = true;
+  //       isLoading = true;
+  //     });
+  //     print(isLoading);
+  //
+  //     //pick  pdf
+  //     FilePickerResult? result = await FilePicker.platform.pickFiles();
+  //     File pick = File(result!.files.single.path.toString());
+  //     var file = pick.readAsBytesSync();
+  //     String name = DateTime.now().millisecondsSinceEpoch.toString();
+  //     print('PDF file name: $name'); // Debugging line
+  //     //Upload the file to firestore
+  //     var pdfFile = firebase_storage.FirebaseStorage.instance
+  //         .ref()
+  //         .child('pdfs')
+  //         .child("/$name.pdf");
+  //
+  //     //show this loader while least uploading
+  //     isLoading
+  //         ? Utils.showDownloading(
+  //             context, "Uploading file", "Please wait a few seconds...")
+  //         : navContext.pop();
+  //
+  //     //uload the file into firebase storage
+  //     UploadTask task = pdfFile.putData(file);
+  //     navContext.pop;
+  //     TaskSnapshot snapshot = await task;
+  //
+  //     //display the  image
+  //     setState(() {});
+  //
+  //     //set the download link to the variable url
+  //     url = await snapshot.ref.getDownloadURL();
+  //   } on Exception catch (e) {
+  //     logger.i(e);
+  //   }
+  //   setState(() {
+  //     isLoading = false;
+  //     isChanged = false;
+  //   });
+  //   navContext.pop();
+  //   print("$isLoading, $url");
+  // }
+
   Future<void> uploadDocumentPDF() async {
     logger.i("add to document $url");
     var navContext = Navigator.of(context);
@@ -1450,35 +1648,78 @@ class _MessagingState extends State<Messaging>
         isChanged = true;
         isLoading = true;
       });
-      print(isLoading);
-      //pick  pdf
-      FilePickerResult? result = await FilePicker.platform.pickFiles();
-      File pick = File(result!.files.single.path.toString());
-      var file = pick.readAsBytesSync();
-      String name = DateTime.now().millisecondsSinceEpoch.toString();
-      print('PDF file name: $name'); // Debugging line
-      //Upload the file to firestore
-      var pdfFile = firebase_storage.FirebaseStorage.instance
-          .ref()
-          .child('pdfs')
-          .child("/$name.pdf");
 
-      isLoading
-          ? Utils.showDownloading(
-              context, "Uploading file", "Please wait a few seconds...")
-          : navContext.pop();
-      UploadTask task = pdfFile.putData(file);
-      navContext.pop;
-      TaskSnapshot snapshot = await task;
-      setState(() {});
-      url = await snapshot.ref.getDownloadURL();
-    } on Exception catch (e) {
+      // Pick PDF file
+      FilePickerResult? result;
+      if (kIsWeb) {
+        result = await FilePicker.platform.pickFiles();
+        webName = result!.files.single.name;
+      } else {
+        File pick = File(result!.files.single.path!);
+        result = await FilePicker.platform
+            .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+        webName = pick.path.split('/').last;
+      }
+
+      if (result != null) {
+        Uint8List file;
+        if (kIsWeb) {
+          file = result.files.single.bytes!;
+        } else {
+          File pick = File(result.files.single.path!);
+          file = pick.readAsBytesSync();
+        }
+
+        String name = DateTime.now().millisecondsSinceEpoch.toString();
+        print('PDF file name: $name');
+
+        // Upload the file to Firebase Storage
+        var pdfFile = firebase_storage.FirebaseStorage.instance
+            .ref()
+            .child('pdfs')
+            .child("/$name.pdf");
+
+        // Show the loading indicator
+        if (isLoading) {
+          Utils.showDownloading(
+            context,
+            "Uploading file",
+            "Please wait a few seconds...",
+          );
+          myFocusNode.requestFocus();
+        } else {
+          navContext.pop();
+          myFocusNode.requestFocus();
+        }
+
+        // Upload the file into Firebase Storage
+        UploadTask task = pdfFile.putData(file);
+        await task;
+
+        // Set the download link to the variable 'url'
+        url = await pdfFile.getDownloadURL();
+
+        // Update the state to trigger UI changes
+        setState(() {
+          myFocusNode.requestFocus();
+        });
+
+        // Dismiss the loading indicator
+        navContext.pop();
+      } else {
+        // Handle the case when no file is picked
+        navContext.pop();
+      }
+    } catch (e) {
       logger.i(e);
     }
+
     setState(() {
       isLoading = false;
       isChanged = false;
+      fileNameDoc = webName;
     });
+
     navContext.pop();
     print("$isLoading, $url");
   }
@@ -1566,6 +1807,7 @@ class _MessagingState extends State<Messaging>
       String imageUrlLocal = await ref.getDownloadURL();
 
       setState(() {
+        myFocusNode.requestFocus();
         imageUrl = imageUrlLocal;
       });
     } catch (e) {
@@ -1578,33 +1820,28 @@ class _MessagingState extends State<Messaging>
   showSheetToEdit() {
     showModalBottomSheet(
       isScrollControlled: true,
-      barrierColor: Colors.transparent,
+      barrierColor: Theme.of(context).primaryColor.withOpacity(.5),
       enableDrag: true,
       elevation: 1,
+      useSafeArea: true,
       context: context,
       builder: (context) {
-        return SafeArea(
-          child: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(0),
-              bottomRight: Radius.circular(0),
-              topLeft: Radius.circular(50),
-              topRight: Radius.circular(50),
-            ),
-            child: Container(
-              //color: Theme.of(context).primaryColorLight,
-              // height: MediaQuery.of(context).size.height / 1.2,
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(top: 0.0),
-              decoration: const BoxDecoration(
-                //screen background color
-                gradient: LinearGradient(
-                    colors: [Color(0x0fffffff), Color(0xE7791971)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight),
-              ),
-              child: SingleChildScrollView(
+        return Container(
+          height: MediaQuery.of(context).size.height / 1.2,
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.only(top: 0.0),
+          decoration: const BoxDecoration(
+            //screen background color
+            gradient: LinearGradient(
+                colors: [Color(0x0fffffff), Color(0xE7791971)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight),
+          ),
+          child: Center(
+            child: SingleChildScrollView(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width / 1.5,
                 child: Column(children: [
                   const SizedBox(
                     height: 20,
@@ -1693,6 +1930,7 @@ class _MessagingState extends State<Messaging>
                         ),
                         Center(
                           child: TextFormField(
+                            focusNode: myFocusNode,
                             controller: _controller,
                             maxLines: 5,
                             decoration: textInputDecoration.copyWith(
@@ -1825,10 +2063,10 @@ class _MessagingState extends State<Messaging>
       } else {
         print('No document found');
       }
-    }).catchError((error) => print('Failed to get document: $error'));
+    }).catchError((error) => logger.i('Failed to get document: $error'));
   }
 }
 
 Future<void> myBackgroundMessageHandler(Map<String, dynamic> message) async {
-  print("Handling background message: $message");
+  logger.i("Handling background message: $message");
 }

@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
@@ -83,6 +82,7 @@ class _LearnerViewAllTextsState extends State<LearnerViewAllTexts> {
                 } else {
                   var _documents = snapshot.data!.docs;
                   return ListView.builder(
+                    padding: const EdgeInsets.only(bottom: 80),
                     itemCount: _documents.length,
                     itemBuilder: (BuildContext context, int index) {
                       DocumentSnapshot document = _documents[index];

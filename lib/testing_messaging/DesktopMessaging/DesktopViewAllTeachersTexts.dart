@@ -1,4 +1,3 @@
-import 'package:Eboard/testing_messaging/ViewAllTeachersTexts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -37,287 +36,275 @@ class _DesktopViewAllTeachersTextsState
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth < Utils.mobileWidth) {
-        return const ViewAllTeachersTexts();
-      } else {
-        return Scaffold(
-          body: SafeArea(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(top: 0.0),
-              decoration: const BoxDecoration(
-                //screen background color
-                gradient: LinearGradient(
-                    colors: [Color(0x0fffffff), Color(0xE7791971)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight),
-              ),
-              child: Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 1.5,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OutlinedButton(
-                              onPressed: () async {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) => const Messaging(),
-                                  ),
-                                );
-                              },
-                              style: buttonRound,
-                              child: Text(
-                                "Back",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).primaryColorDark,
-                                ),
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.only(top: 0.0),
+          decoration: const BoxDecoration(
+            //screen background color
+            gradient: LinearGradient(
+                colors: [Color(0x0fffffff), Color(0xE7791971)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight),
+          ),
+          child: Center(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width / 1.5,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        OutlinedButton(
+                          onPressed: () async {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const Messaging(),
                               ),
+                            );
+                          },
+                          style: buttonRound,
+                          child: Text(
+                            "Back",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColorDark,
                             ),
-                            OutlinedButton(
-                              onPressed: () async {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ViewAllTeachersMessages(),
-                                  ),
-                                );
-                              },
-                              style: buttonRound,
-                              child: Text(
-                                "Feeds Images",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).primaryColorDark,
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection("messagesWithTextOnly")
-                              .orderBy("timestamp", descending: true)
-                              .snapshots(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (snapshot.hasError) {
-                              return Text("Error: ${snapshot.error}");
-                            } else if (!snapshot.hasData ||
-                                snapshot.data == null ||
-                                snapshot.data!.size <= 0) {
-                              return Center(
-                                child: Text(
-                                  "No data sent yet.",
-                                  style: textStyleText(context).copyWith(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                        OutlinedButton(
+                          onPressed: () async {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ViewAllTeachersMessages(),
+                              ),
+                            );
+                          },
+                          style: buttonRound,
+                          child: Text(
+                            "Feeds Images",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection("messagesWithTextOnly")
+                          .orderBy("timestamp", descending: true)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        } else if (!snapshot.hasData ||
+                            snapshot.data == null ||
+                            snapshot.data!.size <= 0) {
+                          return Center(
+                            child: Text(
+                              "No data sent yet.",
+                              style: textStyleText(context).copyWith(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          );
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return SpinKitChasingDots(
+                            color: Theme.of(context).primaryColor,
+                          );
+                        } else {
+                          var _documents = snapshot.data!.docs;
+                          return ListView.builder(
+                            itemCount: _documents.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              DocumentSnapshot document = _documents[index];
+                              String text = document.get("text");
+                              String name = document.get("nameOfTeacher");
+                              var dateAndTime = document.get("timestamp");
+
+                              Timestamp timestamp = document.get("timestamp");
+                              DateTime dateTime = timestamp.toDate();
+                              // convert timestamp to DateTime
+                              var formattedDateTime =
+                                  " ${dateTime.hour}:${dateTime.minute}";
+
+                              return Container(
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 3, horizontal: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Theme.of(context)
+                                      .primaryColorLight
+                                      .withOpacity(.7),
+                                  // color: Theme.of(context).primaryColorLight,
                                 ),
-                              );
-                            } else if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return SpinKitChasingDots(
-                                color: Theme.of(context).primaryColor,
-                              );
-                            } else {
-                              var _documents = snapshot.data!.docs;
-                              return ListView.builder(
-                                itemCount: _documents.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  DocumentSnapshot document = _documents[index];
-                                  String text = document.get("text");
-                                  String name = document.get("nameOfTeacher");
-                                  var dateAndTime = document.get("timestamp");
-
-                                  Timestamp timestamp =
-                                      document.get("timestamp");
-                                  DateTime dateTime = timestamp.toDate();
-                                  // convert timestamp to DateTime
-                                  var formattedDateTime =
-                                      " ${dateTime.hour}:${dateTime.minute}";
-
-                                  return Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 3, horizontal: 5),
-                                    color: Theme.of(context)
-                                        .primaryColorLight
-                                        .withOpacity(.3),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
                                       children: [
-                                        Row(
-                                          children: [
-                                            CircleAvatar(
-                                              child: Text(
-                                                name.toString()[0],
+                                        CircleAvatar(
+                                          child: Text(
+                                            name.toString()[0],
+                                            style:
+                                                textStyleText(context).copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                name,
                                                 style: textStyleText(context)
                                                     .copyWith(
                                                   fontWeight: FontWeight.bold,
                                                   color: Theme.of(context)
-                                                      .primaryColorLight,
+                                                      .primaryColor,
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                              Row(
                                                 children: [
                                                   Text(
-                                                    name,
-                                                    style:
-                                                        textStyleText(context)
-                                                            .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Theme.of(context)
-                                                          .primaryColor,
-                                                    ),
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        Utils.formattedDate(
-                                                            dateAndTime),
-                                                        style: textStyleText(
-                                                                context)
-                                                            .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .primaryColor
-                                                                    .withOpacity(
-                                                                        .7),
-                                                                fontSize: 10),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Text(
-                                                        formattedDateTime,
-                                                        style: textStyleText(
-                                                                context)
-                                                            .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .primaryColor
-                                                                    .withOpacity(
-                                                                        .7),
-                                                                fontSize: 10),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Visibility(
-                                              visible: kIsWeb
-                                                  ? webDisplay
-                                                  : !webDisplay,
-                                              child: SizedBox(
-                                                width: 30,
-                                                height: 40,
-                                                child: PopupMenuButton<int>(
-                                                  color: Theme.of(context)
-                                                      .primaryColorLight,
-                                                  icon: Icon(
-                                                    Icons.more_vert,
-                                                    color: Theme.of(context)
-                                                        .primaryColor,
-                                                  ),
-                                                  elevation: 5.0,
-                                                  itemBuilder: (context) => [
-                                                    PopupMenuItem<int>(
-                                                      value: 0,
-                                                      child: Row(
-                                                        children: [
-                                                          Icon(
-                                                            Icons.share,
+                                                    Utils.formattedDate(
+                                                        dateAndTime),
+                                                    style: textStyleText(context)
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
                                                             color: Theme.of(
                                                                     context)
                                                                 .primaryColor
                                                                 .withOpacity(
                                                                     .7),
-                                                            size: 15,
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 10,
-                                                          ),
-                                                          Text(
-                                                            "Share",
-                                                            style:
-                                                                textStyleText(
-                                                                        context)
-                                                                    .copyWith(),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                  onSelected: (item) =>
-                                                      selectedItem(context,
-                                                          item, name, text),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 8),
-                                          child: Wrap(
-                                            children: [
-                                              SelectableText(
-                                                text,
-                                                style: textStyleText(context),
+                                                            fontSize: 10),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    formattedDateTime,
+                                                    style: textStyleText(context)
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor
+                                                                .withOpacity(
+                                                                    .7),
+                                                            fontSize: 10),
+                                                  )
+                                                ],
                                               ),
                                             ],
                                           ),
                                         ),
+                                        Visibility(
+                                          visible:
+                                              kIsWeb ? webDisplay : !webDisplay,
+                                          child: SizedBox(
+                                            width: 30,
+                                            height: 40,
+                                            child: PopupMenuButton<int>(
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
+                                              icon: Icon(
+                                                Icons.more_vert,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                              elevation: 5.0,
+                                              itemBuilder: (context) => [
+                                                PopupMenuItem<int>(
+                                                  value: 0,
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.share,
+                                                        color: Theme.of(context)
+                                                            .primaryColor
+                                                            .withOpacity(.7),
+                                                        size: 15,
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                        "Share",
+                                                        style: textStyleText(
+                                                                context)
+                                                            .copyWith(),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                              onSelected: (item) =>
+                                                  selectedItem(context, item,
+                                                      name, text),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
-                                  );
-                                },
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 8),
+                                      child: Wrap(
+                                        children: [
+                                          SelectableText(
+                                            text,
+                                            style: textStyleText(context),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               );
-                            }
-                          },
-                        ),
-                      ),
-                    ],
+                            },
+                          );
+                        }
+                      },
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
-        );
-      }
-    });
+        ),
+      ),
+    );
   }
 
   //TODO Show pop up button

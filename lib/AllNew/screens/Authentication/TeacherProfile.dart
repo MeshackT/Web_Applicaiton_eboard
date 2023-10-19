@@ -69,13 +69,15 @@ class _TeachersProfileState extends State<TeachersProfile> {
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                  //screen background color
-                  gradient: LinearGradient(colors: [
-                    const Color(0x00cccccc),
-                    const Color(0xE6691971).withOpacity(.7)
-                  ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-                ),
+                // decoration: BoxDecoration(
+                //   //screen background color
+                //   gradient: LinearGradient(colors: [
+                //     const Color(0x00cccccc),
+                //     const Color(0xE6691971).withOpacity(.7)
+                //   ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                // ),
+                color: Theme.of(context).primaryColorLight,
+
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -200,14 +202,22 @@ class _TeachersProfileState extends State<TeachersProfile> {
                                     const SizedBox(
                                       height: 10,
                                     ),
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        labelText(teachersSubjects.join("\n")),
-                                      ],
-                                    )
+                                    teachersSubjects.isEmpty ||
+                                            teachersSubjects.length <= 0
+                                        ? CircularProgressIndicator(
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
+                                          )
+                                        : Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              labelText(
+                                                  teachersSubjects.join("\n")),
+                                            ],
+                                          )
                                   ],
                                 ),
                               ],
@@ -640,6 +650,7 @@ class _TeachersProfileState extends State<TeachersProfile> {
                                       .withOpacity(.7),
                                 ),
                               ),
+                              enabled: false,
                               style: textStyleText(context),
                               textAlign: TextAlign.center,
                               autocorrect: true,
@@ -729,10 +740,12 @@ class _TeachersProfileState extends State<TeachersProfile> {
                                           //await user.updateEmail(editEmailOfTeachers.text.trim().toLowerCase());
 
                                           List<dynamic> editSubjects = [];
-                                          editSubjects
-                                              .add(editS1OfTeachers.text);
-                                          editSubjects
-                                              .add(editS2OfTeachers.text);
+                                          editSubjects.add(editS1OfTeachers.text
+                                              .toLowerCase()
+                                              .trim());
+                                          editSubjects.add(editS2OfTeachers.text
+                                              .toLowerCase()
+                                              .trim());
 
                                           final CollectionReference
                                               learnersCollection =
@@ -746,13 +759,16 @@ class _TeachersProfileState extends State<TeachersProfile> {
                                               .set({
                                                 'subjects': editSubjects,
                                                 'name': editNameOfTeachers.text
+                                                    .capitalize()
                                                     .toString(),
                                                 'secondName':
                                                     editSecondNameOfTeachers
                                                         .text
+                                                        .capitalize()
                                                         .toString(),
                                                 'email': editEmailOfTeachers
                                                     .text
+                                                    .toLowerCase()
                                                     .toString(),
                                               }, SetOptions(merge: true))
                                               .then(

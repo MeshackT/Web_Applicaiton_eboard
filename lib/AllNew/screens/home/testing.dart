@@ -108,7 +108,7 @@ class _LearnersHomeState extends State<LearnersHome> {
                               ),
                               title: Text(documents[index]['name']),
                               subtitle:
-                                  Text("Grade " + documents[index]['grade']),
+                                  Text("Grade  ${documents[index]['grade']}"),
                               trailing: IconButton(
                                 onPressed: () {
                                   allNoteCollection

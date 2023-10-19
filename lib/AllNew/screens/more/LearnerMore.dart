@@ -277,7 +277,7 @@ class _LearnerMoreState extends State<LearnerMore> {
                               style: textStyleText(context).copyWith(
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             ),
-                            TextButton(
+                            const TextButton(
                               onPressed: null,
                               //     () {
                               //   Navigator.of(context).pushReplacement(
@@ -425,7 +425,7 @@ class _LearnerMoreState extends State<LearnerMore> {
                             color: Theme.of(context).primaryColor,
                           )
                         : Text(
-                            "App Name: $appName\nApp Version: $appVersion\nApp BuildNumber: $appBuildUpNumber\n$appPackage",
+                            "Version: $appVersion",
                             style: textStyleText(context).copyWith(
                               fontWeight: FontWeight.w500,
                               fontSize: 16,

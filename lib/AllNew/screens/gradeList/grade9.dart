@@ -1,9 +1,11 @@
 import 'package:Eboard/AllNew/screens/Authentication/Authenticate.dart';
 import 'package:Eboard/AllNew/screens/Authentication/TeacherProfile.dart';
+import 'package:Eboard/AllNew/screens/gradeList/NavigationDrawerMobile.dart';
 import 'package:Eboard/AllNew/screens/gradeList/grade10.dart';
 import 'package:Eboard/AllNew/screens/gradeList/grade11.dart';
 import 'package:Eboard/AllNew/screens/gradeList/grade12.dart';
 import 'package:Eboard/AllNew/screens/gradeList/grade8.dart';
+import 'package:Eboard/AllNew/screens/gradeList/registeredLearners/DesktopGrade9.dart';
 import 'package:Eboard/AllNew/screens/more/more.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -168,6 +170,37 @@ class _Grade9State extends State<Grade9> {
     super.dispose();
   }
 
+  Future<void> selectedItem(
+    BuildContext context,
+    item,
+    int selectedItemI,
+    String documentsIndexId,
+    String nameOfLearner,
+  ) async {
+    switch (item) {
+      case 0:
+        break;
+      case 1:
+        //Register the first  subject
+        enterMarksForSubjectOne(selectedItemI, documentsIndexId, nameOfLearner);
+        break;
+      case 2:
+        //Register the second subject
+        enterMarksForSubjectTwo(selectedItemI, documentsIndexId, nameOfLearner);
+        break;
+      case 3:
+        break;
+      case 4:
+        //delete subject one
+        deleteSubjectOne(documentsIndexId);
+        break;
+      case 5:
+        //delete subject two
+        deleteSubjectTwo(documentsIndexId);
+        break;
+    }
+  }
+
   void deleteSubject(String learnersDocumentID, String _userSubject) async {
     // Fetch the document
     DocumentSnapshot docSnapshot =
@@ -182,637 +215,785 @@ class _Grade9State extends State<Grade9> {
 
   @override
   Widget build(BuildContext context) {
-    void toggleVisibility() {
-      setState(() {
-        isVisible = !isVisible;
-      });
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Registered learner's"),
-        elevation: 0.0,
-        centerTitle: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(30),
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const SendNotification()));
-            },
-            icon: Icon(
-              Icons.notification_add,
-              color: Theme.of(context).primaryColorLight,
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth > Utils.mobileWidth) {
+        return const DesktopGrade9();
+      } else {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              "Registered learner's",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500, fontSize: 16, letterSpacing: 2),
             ),
-          ),
-        ],
-      ),
-      drawer: const NavigationDrawer(),
-      drawerScrimColor: Colors.transparent,
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        margin: const EdgeInsets.only(top: 0.0),
-        decoration: const BoxDecoration(
-          //screen background color
-          gradient: LinearGradient(
-              colors: [Color(0x0fffffff), Color(0xE7791971)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: TextField(
-                controller: _searchController,
-                cursorColor: Theme.of(context).primaryColorDark,
-                keyboardType: TextInputType.name,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme.of(context).primaryColorDark, width: 1.0),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme.of(context).primaryColorDark, width: 1.0),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme.of(context).primaryColorDark, width: 1.0),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  contentPadding: const EdgeInsets.only(
-                    left: 15,
-                    bottom: 11,
-                    top: 11,
-                    right: 15,
-                  ),
-                  hintText: "Enter a name",
-                  hintStyle: TextStyle(
-                      color: Theme.of(context).primaryColorDark,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1),
-                  prefixIcon: const Icon(Icons.search),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    searchText = value;
-                  });
+            elevation: 0.0,
+            centerTitle: true,
+            backgroundColor: const Color(0xE7791971),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SendNotification()));
                 },
+                icon: Icon(
+                  Icons.notification_add,
+                  color: Theme.of(context).primaryColorLight,
+                ),
               ),
-            ),
-            //TODO add here
-            Expanded(
-              flex: 1,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: StreamBuilder(
-                    stream: allLearnersCollection
-                        .where('teachersID', arrayContains: user!.uid)
-                        .where('grade', isEqualTo: '9')
-                        .orderBy('name', descending: true)
-                        .snapshots(),
-                    builder: (ctx, streamSnapshot) {
-                      if (streamSnapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return Center(
-                            child: Column(
-                          children: [
-                            Text(
-                              'Waiting for Internet Connection',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColorDark,
-                              ),
-                            ),
-                            SpinKitChasingDots(
-                              color: Theme.of(context).primaryColorDark,
-                              size: 15,
-                            ),
-                          ],
-                        ));
-                      } else if (streamSnapshot.connectionState ==
-                          ConnectionState.none) {
-                        return Center(
-                            child: Column(
-                          children: [
-                            Text(
-                              'No for Internet Connection',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColorDark,
-                              ),
-                            ),
-                            SpinKitChasingDots(
-                              color: Theme.of(context).primaryColorDark,
-                              size: 15,
-                            ),
-                          ],
-                        ));
-                      } else if (streamSnapshot.hasError) {
-                        return Text("Error: ${streamSnapshot.error}");
-                      } else if (!streamSnapshot.hasData ||
-                          streamSnapshot.data == null ||
-                          streamSnapshot.data!.size <= 0) {
-                        return Center(
-                          child: Text(
-                            "No list of grade 9 learners yet.",
-                            style: textStyleText(context).copyWith(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        );
-                      }
+            ],
+          ),
+          drawer: NavigationDrawerForAllMobile(
+            nameOfTeacher: nameOfTeacher,
+          ),
+          drawerScrimColor: Colors.transparent,
+          body: Container(
+            height: MediaQuery.of(context).size.height,
+            margin: const EdgeInsets.only(top: 0.0),
+            // decoration: const BoxDecoration(
+            //   //screen background color
+            //   gradient: LinearGradient(
+            //       colors: [Color(0x0fffffff), Color(0xE7791971)],
+            //       begin: Alignment.topLeft,
+            //       end: Alignment.bottomRight),
+            // ),
+            color: Theme.of(context).primaryColorLight,
 
-                      documents = streamSnapshot.data!.docs;
-                      //todo Documents list added to filterTitle
-                      if (searchText.isNotEmpty) {
-                        documents = documents.where((element) {
-                          return element
-                              .get('name')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchText.toLowerCase());
-                        }).toList();
-                      }
-
-                      return ListView.builder(
-                        //reverse: true,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: documents.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 3.0),
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                              ),
-                              child: Container(
-                                color: Theme.of(context)
-                                    .primaryColorLight
-                                    .withOpacity(.3),
-                                child: ListTile(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 0.0),
-                                  leading: CircleAvatar(
-                                    backgroundColor:
-                                        Theme.of(context).primaryColorDark,
-                                    child: Text(
-                                      documents[index]['name'][0],
-                                    ),
-                                  ),
-                                  title: Text(
-                                    documents[index]['name'],
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).primaryColorDark,
-                                    ),
-                                  ),
-                                  subtitle: Row(
-                                    children: [
-                                      Text(
-                                        "Grade  ${documents[index]['grade']}",
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .primaryColorDark
-                                                .withOpacity(.7),
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                      Utils.toolTipMessage(
-                                          "Remove the subject from this"
-                                          " learner or add marks for the learner",
-                                          context),
-                                    ],
-                                  ),
-                                  trailing: SizedBox(
-                                    width: 120,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        IconButton(
-                                          color: Colors.blue,
-                                          onPressed: () {
-                                            //show the dialog when you press delete
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: Text(
-                                                    textAlign: TextAlign.center,
-                                                    'Remove $_userSubject?',
-                                                    style: TextStyle(
-                                                        color: Theme.of(context)
-                                                            .primaryColor,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w700),
-                                                  ),
-                                                  content: Text(
-                                                    'This action will '
-                                                    'permanently '
-                                                    'delete all marks stored for'
-                                                    ' $_userSubject for this learner, '
-                                                    'are you sure you '
-                                                    'want to delete?',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: Theme.of(context)
-                                                            .primaryColorDark
-                                                            .withOpacity(.70)),
-                                                  ),
-                                                  actions: <Widget>[
-                                                    Center(
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          SizedBox(
-                                                            width: 120,
-                                                            child: TextButton(
-                                                              onPressed: () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                              child: Text(
-                                                                'Cancel',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .primaryColor,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            width: 120,
-                                                            child: TextButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                //Delete the record
-                                                                final navContext =
-                                                                    Navigator.of(
-                                                                        context);
-                                                                var colorToast =
-                                                                    Theme.of(
-                                                                        context);
-
-                                                                try {
-                                                                  //get the documents data from firestore
-                                                                  DocumentSnapshot
-                                                                      snapshot =
-                                                                      await FirebaseFirestore
-                                                                          .instance
-                                                                          .collection(
-                                                                              'learnersData')
-                                                                          .doc(documents[index]
-                                                                              .id)
-                                                                          .get();
-
-                                                                  if (snapshot
-                                                                      .exists) {
-                                                                    logger.e(
-                                                                        snapshot
-                                                                            .get("allSubjects"));
-
-                                                                    // go to the field in the document
-                                                                    var data =
-                                                                        snapshot
-                                                                            .get("allSubjects");
-
-                                                                    // check if the data is a Map
-                                                                    if (data
-                                                                        is Map) {
-                                                                      logger.e(
-                                                                          "is a map $_userSubject $_userSubject2");
-                                                                      // check if the user subject exists in the Map
-                                                                      if (data.containsKey(
-                                                                          _userSubject)) {
-                                                                        var newIndex = data
-                                                                            .containsKey(_userSubject)
-                                                                            .toString();
-                                                                        logger.i(
-                                                                            "this is the index $newIndex");
-                                                                        FirebaseFirestore
-                                                                            .instance
-                                                                            .collection('learnersData')
-                                                                            .doc(documents[index].id)
-                                                                            .update({
-                                                                          'allSubjects.$_userSubject':
-                                                                              FieldValue.delete(),
-                                                                        });
-                                                                        Fluttertoast.showToast(
-                                                                            backgroundColor:
-                                                                                colorToast.primaryColor,
-                                                                            msg: "Learner is de-registered from doing $_userSubject");
-                                                                        logger.i(
-                                                                            "deleted $_userSubject");
-                                                                        logger.e(
-                                                                            snapshot.data());
-                                                                        navContext
-                                                                            .pop();
-                                                                        setState(
-                                                                            () {
-                                                                          isRegistered =
-                                                                              true;
-                                                                          loading =
-                                                                              false;
-                                                                        });
-                                                                        return;
-                                                                      } else if (data
-                                                                          .containsKey(
-                                                                              "$_userSubject2")) {
-                                                                        FirebaseFirestore
-                                                                            .instance
-                                                                            .collection(
-                                                                                'learnersData')
-                                                                            .doc(documents[index]
-                                                                                .id)
-                                                                            .update({
-                                                                          'allSubjects.$_userSubject2':
-                                                                              FieldValue.delete(),
-                                                                        }).then((value) =>
-                                                                                Fluttertoast.showToast(msg: "deleted"));
-                                                                        logger.i(
-                                                                            "deleted $_userSubject2");
-                                                                        Fluttertoast.showToast(
-                                                                            backgroundColor:
-                                                                                colorToast.primaryColor,
-                                                                            msg: "Learner is de-registered from doing $_userSubject2 Lit");
-                                                                        navContext
-                                                                            .pop();
-                                                                        setState(
-                                                                            () {
-                                                                          isRegistered =
-                                                                              true;
-                                                                          loading =
-                                                                              false;
-                                                                        });
-                                                                        return;
-                                                                      } else {
-                                                                        Fluttertoast.showToast(
-                                                                            backgroundColor:
-                                                                                colorToast.primaryColor,
-                                                                            msg: "There is no subject registered");
-                                                                        navContext
-                                                                            .pop();
-                                                                      }
-                                                                    } else {
-                                                                      logger.i(
-                                                                          "field is Not a map");
-                                                                    }
-                                                                  } else {
-                                                                    // handle case where document does not exist
-                                                                    logger.i(
-                                                                        'Document does not exist');
-                                                                  }
-                                                                } catch (e) {
-                                                                  logger.i(e);
-                                                                  ScaffoldMessenger.of(
-                                                                          context)
-                                                                      .showSnackBar(
-                                                                    SnackBar(
-                                                                      content:
-                                                                          Text(
-                                                                        'Failed to de-Register a learner ${e.toString()}',
-                                                                        style: const TextStyle(
-                                                                            fontSize:
-                                                                                16,
-                                                                            fontWeight:
-                                                                                FontWeight.bold),
-                                                                      ),
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .purple,
-                                                                    ),
-                                                                  );
-                                                                  logger.i(documents[
-                                                                          index]
-                                                                      [user!
-                                                                          .uid]);
-                                                                }
-                                                              },
-                                                              child: Text(
-                                                                'Yes',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .primaryColor,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                          icon: Icon(
-                                            Icons.delete,
-                                            size: 25,
-                                            key: ValueKey(documents[index]),
-                                            color: IconTheme.of(context)
-                                                .color!
-                                                .withOpacity(.8),
-                                          ),
-                                        ),
-                                        InkWell(
-                                            child: SizedBox(
-                                              height: 40,
-                                              width: 40,
-                                              child: Icon(
-                                                Icons
-                                                    .keyboard_double_arrow_right,
-                                                size: 25,
-                                                key: widget.key,
-                                                color: IconTheme.of(context)
-                                                    .color!
-                                                    .withOpacity(.7),
-                                              ),
-                                            ),
-                                            onTap: () async {
-                                              try {
-                                                snack(
-                                                    "Loading Data please wait...",
-                                                    context);
-
-                                                // get the document data from firestore
-                                                DocumentSnapshot snapshot =
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection(
-                                                            'learnersData')
-                                                        .doc(
-                                                            documents[index].id)
-                                                        .get();
-
-                                                // check if the document exists
-                                                if (snapshot.exists) {
-                                                  // get the allSubjects map from the document data
-                                                  Map<String, dynamic> data =
-                                                      snapshot
-                                                          .get("allSubjects");
-                                                  // check if the data is a map
-                                                  if (data is Map) {
-                                                    bool foundCatIndex = false;
-                                                    // for every key-value pair in the map
-                                                    data.forEach((key, value) {
-                                                      // if the key is equal to _userSubject
-                                                      if (key == _userSubject) {
-                                                        // index is present
-                                                        foundCatIndex = true;
-                                                        Map<String, dynamic>
-                                                            finalMarks = {};
-                                                        // store the teacherSubject here
-                                                        var teacherSubject =
-                                                            value;
-
-                                                        finalMarks[
-                                                                _userSubject] =
-                                                            teacherSubject;
-                                                        String
-                                                            documentIDToEdit =
-                                                            documents[index].id;
-                                                        logger.i(
-                                                            "$finalMarks\n$documentIDToEdit\n$_userSubject");
-                                                        Navigator.of(context)
-                                                            .pushReplacement(
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                AddEditForAll(
-                                                              getMarksFromFirestore:
-                                                                  finalMarks,
-                                                              subjectName:
-                                                                  _userSubject,
-                                                              documentIDToEdit:
-                                                                  documentIDToEdit,
-                                                            ),
-                                                          ),
-                                                        );
-                                                        // do something with the 'CAT' data, such as print it
-                                                      } else if (key ==
-                                                          _userSubject2) {
-                                                        // index is present
-                                                        foundCatIndex = true;
-                                                        Map<String, dynamic>
-                                                            finalMarks2 = {};
-                                                        // store the teacherSubject here
-                                                        var teacherSubject2 =
-                                                            value;
-
-                                                        finalMarks2[
-                                                                _userSubject2] =
-                                                            teacherSubject2;
-                                                        String
-                                                            documentIDToEdit =
-                                                            documents[index].id;
-                                                        logger.i(
-                                                            "$finalMarks2\n$documentIDToEdit\n$_userSubject2");
-                                                        Navigator.of(context)
-                                                            .pushReplacement(
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                AddEditForAll(
-                                                              getMarksFromFirestore:
-                                                                  finalMarks2,
-                                                              subjectName:
-                                                                  _userSubject2,
-                                                              documentIDToEdit:
-                                                                  documentIDToEdit,
-                                                            ),
-                                                          ),
-                                                        );
-                                                        // do something with the 'CAT' data, such as print it
-                                                      }
-                                                    });
-                                                    // if the teacherSubject is not found
-                                                    if (!foundCatIndex) {
-                                                      // handle case where _userSubject index does not exist
-                                                      logger.i(
-                                                          'No $_userSubject index found');
-                                                      snack(
-                                                          "Leaner is not registered",
-                                                          context);
-                                                    }
-                                                  } else {
-                                                    // handle case where teacherSubject index does not exist
-                                                    logger.i(
-                                                        'No $_userSubject index found');
-                                                    Fluttertoast.showToast(
-                                                        msg:
-                                                            "$_userSubject not found");
-                                                  }
-                                                } else {
-                                                  // handle case where document does not exist
-                                                  logger.i(
-                                                      'Document does not exist');
-                                                  Fluttertoast.showToast(
-                                                      msg: "No document found");
-                                                }
-                                                setState(() {
-                                                  loading = false;
-                                                });
-                                              } catch (e) {
-                                                setState(() {
-                                                  loading = false;
-                                                });
-                                                logger.i(e);
-                                                Fluttertoast.showToast(
-                                                  msg: e.toString(),
-                                                  textColor: Theme.of(context)
-                                                      .primaryColorLight,
-                                                  backgroundColor:
-                                                      Theme.of(context)
-                                                          .primaryColor,
-                                                );
-                                              }
-                                            }),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      );
+            child: Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  child: TextField(
+                    controller: _searchController,
+                    cursorColor: Theme.of(context).primaryColorDark,
+                    keyboardType: TextInputType.name,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).primaryColorDark,
+                            width: 1.0),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).primaryColorDark,
+                            width: 1.0),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).primaryColorDark,
+                            width: 1.0),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      contentPadding: const EdgeInsets.only(
+                        left: 15,
+                        bottom: 11,
+                        top: 11,
+                        right: 15,
+                      ),
+                      hintText: "Enter a name",
+                      hintStyle: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1),
+                      prefixIcon: const Icon(Icons.search),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        searchText = value;
+                      });
                     },
                   ),
                 ),
-              ),
+                //TODO add here
+                Expanded(
+                  flex: 1,
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: StreamBuilder(
+                        stream: allLearnersCollection
+                            .where('teachersID', arrayContains: user!.uid)
+                            .where('grade', isEqualTo: '9')
+                            .orderBy('name', descending: true)
+                            .snapshots(),
+                        builder: (ctx, streamSnapshot) {
+                          if (streamSnapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                                child: Column(
+                              children: [
+                                Text(
+                                  'Waiting for Internet Connection',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
+                                ),
+                                SpinKitChasingDots(
+                                  color: Theme.of(context).primaryColorDark,
+                                  size: 15,
+                                ),
+                              ],
+                            ));
+                          } else if (streamSnapshot.connectionState ==
+                              ConnectionState.none) {
+                            return Center(
+                                child: Column(
+                              children: [
+                                Text(
+                                  'No for Internet Connection',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
+                                ),
+                                SpinKitChasingDots(
+                                  color: Theme.of(context).primaryColorDark,
+                                  size: 15,
+                                ),
+                              ],
+                            ));
+                          } else if (streamSnapshot.hasError) {
+                            return Text("Error: ${streamSnapshot.error}");
+                          } else if (!streamSnapshot.hasData ||
+                              streamSnapshot.data == null ||
+                              streamSnapshot.data!.size <= 0) {
+                            return Center(
+                              child: Text(
+                                "No list of grade 9 learners yet.",
+                                style: textStyleText(context).copyWith(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            );
+                          }
+
+                          documents = streamSnapshot.data!.docs;
+                          //todo Documents list added to filterTitle
+                          if (searchText.isNotEmpty) {
+                            documents = documents.where((element) {
+                              return element
+                                  .get('name')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchText.toLowerCase());
+                            }).toList();
+                          }
+
+                          return ListView.builder(
+                            //reverse: true,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: documents.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              String nameOfL = documents[index]['name'];
+                              String surnameOfL =
+                                  documents[index]['secondName'];
+                              String gradeOfL = documents[index]['grade'];
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 3.0),
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                  ),
+                                  child: Container(
+                                    color: Theme.of(context)
+                                        .primaryColorLight
+                                        .withOpacity(.3),
+                                    child: ListTile(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 0.0),
+                                      leading: CircleAvatar(
+                                        backgroundColor:
+                                            Theme.of(context).primaryColorDark,
+                                        child: Text(
+                                          nameOfL[0],
+                                        ),
+                                      ),
+                                      title: Text(
+                                        nameOfL,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w800,
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
+                                        ),
+                                      ),
+                                      subtitle: Row(
+                                        children: [
+                                          Text(
+                                            "Grade  $gradeOfL",
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColorDark
+                                                  .withOpacity(.7),
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Utils.toolTipMessage(
+                                              "Remove the subject or add marks for the learner\n\nView marks is only available on full screen",
+                                              context),
+                                        ],
+                                      ),
+                                      trailing: SizedBox(
+                                        width: 40,
+                                        child: SizedBox(
+                                          width: 40,
+                                          height: 40,
+                                          child: PopupMenuButton<int>(
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
+                                            icon: Icon(
+                                              Icons.more_vert,
+                                              color: Theme.of(context)
+                                                  .iconTheme
+                                                  .color,
+                                            ),
+                                            elevation: 5.0,
+                                            itemBuilder: (context) => [
+                                              PopupMenuItem<int>(
+                                                value: 0,
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      "Enter Marks",
+                                                      style: textStyleText(
+                                                              context)
+                                                          .copyWith(
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              letterSpacing: 1,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 1,
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.double_arrow,
+                                                      color: Theme.of(context)
+                                                          .iconTheme
+                                                          .color,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 7,
+                                                    ),
+                                                    _userSubject != ""
+                                                        ? Text(
+                                                            _userSubject
+                                                                .capitalize(),
+                                                            style: textStyleText(context).copyWith(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor),
+                                                          )
+                                                        : Text(
+                                                            "No 1st Subject",
+                                                            style: textStyleText(context).copyWith(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor),
+                                                          ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 2,
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.double_arrow,
+                                                      color: Theme.of(context)
+                                                          .iconTheme
+                                                          .color,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 7,
+                                                    ),
+                                                    _userSubject2 != ""
+                                                        ? Text(
+                                                            _userSubject2
+                                                                .capitalize(),
+                                                            style: textStyleText(context).copyWith(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor),
+                                                          )
+                                                        : Text(
+                                                            "No 2st Subject",
+                                                            style: textStyleText(context).copyWith(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor),
+                                                          ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 3,
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 15.0),
+                                                  child: Divider(
+                                                    height: 1,
+                                                    color: Theme.of(context)
+                                                        .primaryColorDark
+                                                        .withOpacity(.7),
+                                                  ),
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 4,
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      "Delete subjects",
+                                                      style: textStyleText(
+                                                              context)
+                                                          .copyWith(
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              letterSpacing: 1,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 5,
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.delete,
+                                                      color: Theme.of(context)
+                                                          .iconTheme
+                                                          .color!
+                                                          .withOpacity(.7),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 7,
+                                                    ),
+                                                    Text(
+                                                      "Remove ${_userSubject.capitalize()}",
+                                                      style: textStyleText(
+                                                              context)
+                                                          .copyWith(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 5,
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.delete,
+                                                      color: Theme.of(context)
+                                                          .iconTheme
+                                                          .color!
+                                                          .withOpacity(.7),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 7,
+                                                    ),
+                                                    Text(
+                                                      "Remove ${_userSubject2.capitalize()}",
+                                                      style: textStyleText(
+                                                              context)
+                                                          .copyWith(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                            onSelected: (item) => selectedItem(
+                                                context,
+                                                item,
+                                                index,
+                                                documents[index].id,
+                                                nameOfL),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
+        );
+      }
+    });
+  }
+
+  // delete subject One
+  Future<void> deleteSubjectOne(String documentsIndexId) async {
+    //Delete the record
+    final navContext = Navigator.of(context);
+    var colorToast = Theme.of(context);
+
+    try {
+      //get the documents data from firestore
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('learnersData')
+          .doc(documentsIndexId)
+          .get();
+
+      if (snapshot.exists) {
+        logger.e(snapshot.get("allSubjects"));
+
+        // go to the field in the document
+        var data = snapshot.get("allSubjects");
+
+        // check if the data is a Map
+        if (data is Map) {
+          logger.e("is a map $_userSubject $_userSubject2");
+          // check if the user subject exists in the Map
+          if (data.containsKey(_userSubject)) {
+            var newIndex = data.containsKey(_userSubject).toString();
+            logger.i("this is the index $newIndex");
+            FirebaseFirestore.instance
+                .collection('learnersData')
+                .doc(documentsIndexId)
+                .update({
+              'allSubjects.$_userSubject': FieldValue.delete(),
+            });
+            Fluttertoast.showToast(
+                backgroundColor: colorToast.primaryColor,
+                msg: "Learner is de-registered from doing $_userSubject");
+            logger.i("deleted $_userSubject");
+            logger.e(snapshot.data());
+            setState(() {
+              isRegistered = true;
+              loading = false;
+            });
+            return;
+          } else {
+            Fluttertoast.showToast(
+                backgroundColor: colorToast.primaryColor,
+                msg: "There is no subject registered");
+            navContext.pop();
+          }
+        } else {
+          logger.i("field is Not a map");
+        }
+      } else {
+        // handle case where document does not exist
+        logger.i('Document does not exist');
+      }
+    } catch (e) {
+      logger.i(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Failed to de-Register a learner ${e.toString()}',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.purple,
         ),
-      ),
-    );
+      );
+      // logger.i(documents[index][user!.uid]);
+    }
+  }
+
+  // delete subject One
+  Future<void> deleteSubjectTwo(String documentsIndexId) async {
+    //Delete the record
+    final navContext = Navigator.of(context);
+    var colorToast = Theme.of(context);
+
+    try {
+      //get the documents data from firestore
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('learnersData')
+          .doc(documentsIndexId)
+          .get();
+
+      if (snapshot.exists) {
+        logger.e(snapshot.get("allSubjects"));
+
+        // go to the field in the document
+        var data = snapshot.get("allSubjects");
+
+        // check if the data is a Map
+        if (data is Map) {
+          logger.e("is a map $_userSubject $_userSubject2");
+
+          if (data.containsKey(_userSubject2)) {
+            FirebaseFirestore.instance
+                .collection('learnersData')
+                .doc(documentsIndexId)
+                .update({
+              'allSubjects.$_userSubject2': FieldValue.delete(),
+            }).then((value) => Fluttertoast.showToast(msg: "deleted"));
+            logger.i("deleted $_userSubject2");
+            Fluttertoast.showToast(
+                backgroundColor: colorToast.primaryColor,
+                msg: "Learner is de-registered from doing $_userSubject2 Lit");
+            setState(() {
+              isRegistered = true;
+              loading = false;
+            });
+            return;
+          } else {
+            Fluttertoast.showToast(
+                backgroundColor: colorToast.primaryColor,
+                msg: "There is no subject registered");
+          }
+        } else {
+          logger.i("field is Not a map");
+        }
+      } else {
+        // handle case where document does not exist
+        logger.i('Document does not exist');
+      }
+    } catch (e) {
+      logger.i(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Failed to de-Register a learner ${e.toString()}',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.purple,
+        ),
+      );
+      // logger.i(documents[index][user!.uid]);
+    }
+  }
+
+  //Register the first subject
+  Future<void> enterMarksForSubjectOne(
+    int selectedItemI,
+    String documentsIndexId,
+    String nameOfLearner,
+  ) async {
+    try {
+      snack("Loading Data please wait...", context);
+
+      // get the document data from firestore
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('learnersData')
+          // .doc(documents[index].id)
+          .doc(documentsIndexId)
+          .get();
+
+      // check if the document exists
+      if (snapshot.exists) {
+        // get the allSubjects map from the document data
+        Map<String, dynamic> data = snapshot.get("allSubjects");
+        // check if the data is a map
+        if (data is Map) {
+          bool foundCatIndex = false;
+          // for every key-value pair in the map
+          data.forEach((key, value) {
+            // if the key is equal to _userSubject
+            if (key == _userSubject) {
+              // index is present
+              foundCatIndex = true;
+              Map<String, dynamic> finalMarks = {};
+              // store the teacherSubject here
+              var teacherSubject = value;
+
+              finalMarks[_userSubject] = teacherSubject;
+              String
+                  // documentIDToEdit = documents[index].id;
+                  documentIDToEdit = documentsIndexId;
+              logger.i("$finalMarks\n$documentIDToEdit\n$_userSubject");
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => AddEditForAll(
+                    nameOfLearnerFromFirebase: nameOfLearner,
+                    getMarksFromFirestore: finalMarks,
+                    subjectName: _userSubject,
+                    documentIDToEdit: documentIDToEdit,
+                  ),
+                ),
+              );
+              // do something with the 'CAT' data, such as print it
+            }
+          });
+          // if the teacherSubject is not found
+          if (!foundCatIndex) {
+            // handle case where _userSubject index does not exist
+            logger.i('No $_userSubject index found');
+            snack(
+                "Learner is not registered to do ${_userSubject.capitalize()}",
+                context);
+          }
+        } else {
+          // handle case where teacherSubject index does not exist
+          logger.i('No $_userSubject index found');
+          Fluttertoast.showToast(msg: "$_userSubject not found");
+        }
+      } else {
+        // handle case where document does not exist
+        logger.i('Document does not exist');
+        Fluttertoast.showToast(msg: "No document found");
+      }
+      setState(() {
+        loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        loading = false;
+      });
+      logger.i(e);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        textColor: Theme.of(context).primaryColorLight,
+        backgroundColor: Theme.of(context).primaryColor,
+      );
+    }
+  }
+
+  //Register the second subject
+  Future<void> enterMarksForSubjectTwo(
+    int selectedItemI,
+    String documentsIndexId,
+    String nameOfLearner,
+  ) async {
+    try {
+      snack("Loading Data please wait...", context);
+
+      // get the document data from firestore
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('learnersData')
+          // .doc(documents[index].id)
+          .doc(documentsIndexId)
+          .get();
+
+      // check if the document exists
+      if (snapshot.exists) {
+        // get the allSubjects map from the document data
+        Map<String, dynamic> data = snapshot.get("allSubjects");
+        // check if the data is a map
+        if (data is Map) {
+          bool foundCatIndex = false;
+          // for every key-value pair in the map
+          data.forEach((key, value) {
+            if (key == _userSubject2) {
+              // index is present
+              foundCatIndex = true;
+              Map<String, dynamic> finalMarks2 = {};
+              // store the teacherSubject here
+              var teacherSubject2 = value;
+
+              finalMarks2[_userSubject2] = teacherSubject2;
+              String
+                  // documentIDToEdit = documents[index].id;
+                  documentIDToEdit = documentsIndexId;
+              logger.i("$finalMarks2\n$documentIDToEdit\n$_userSubject2");
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => AddEditForAll(
+                    nameOfLearnerFromFirebase: nameOfLearner,
+                    getMarksFromFirestore: finalMarks2,
+                    subjectName: _userSubject2,
+                    documentIDToEdit: documentIDToEdit,
+                  ),
+                ),
+              );
+              // do something with the 'CAT' data, such as print it
+            }
+          });
+          // if the teacherSubject is not found
+          if (!foundCatIndex) {
+            // handle case where _userSubject index does not exist
+            logger.i('No $_userSubject2 index found');
+            snack(
+                "Learner is not registered to do ${_userSubject2.capitalize()}",
+                context);
+          }
+        } else {
+          // handle case where teacherSubject index does not exist
+          logger.i('No $_userSubject index found');
+          Fluttertoast.showToast(msg: "$_userSubject not found");
+        }
+      } else {
+        // handle case where document does not exist
+        logger.i('Document does not exist');
+        Fluttertoast.showToast(msg: "No document found");
+      }
+      setState(() {
+        loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        loading = false;
+      });
+      logger.i(e);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        textColor: Theme.of(context).primaryColorLight,
+        backgroundColor: Theme.of(context).primaryColor,
+      );
+    }
   }
 
   //get the field required for the current logged in user
@@ -895,7 +1076,7 @@ class NavigationDrawer extends StatelessWidget {
                   builder: (context) => const TeachersProfile()));
             },
             child: Container(
-              color: Theme.of(context).primaryColorDark.withOpacity(.6),
+              color: Theme.of(context).primaryColorDark.withOpacity(.8),
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.only(
                 top: MediaQuery.of(context).padding.top,
@@ -903,14 +1084,16 @@ class NavigationDrawer extends StatelessWidget {
               child: Column(
                 children: [
                   CircleAvatar(
+                    backgroundColor: Theme.of(context).primaryColorLight,
                     child: Wrap(
                       children: [
                         Text(
-                          teachersSecondName[0].toString(),
+                          teachersSecondName[0].toString() ?? "",
                           style: textStyleText(context).copyWith(
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
-                            color: Theme.of(context).primaryColorLight,
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(.8),
                           ),
                         ),
                       ],
@@ -922,10 +1105,11 @@ class NavigationDrawer extends StatelessWidget {
                   Wrap(
                     children: [
                       Text(
-                        teachersSecondName.toString(),
+                        teachersSecondName.toString().capitalize() ?? "",
                         style: textStyleText(context).copyWith(
                           fontWeight: FontWeight.w700,
                           fontSize: 12,
+                          letterSpacing: 1,
                           color: Theme.of(context).primaryColorLight,
                         ),
                       ),
@@ -978,7 +1162,9 @@ class NavigationDrawer extends StatelessWidget {
                 "Home",
                 style: TextStyle(
                     color: Theme.of(context).primaryColorDark,
-                    fontWeight: FontWeight.w700),
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 2,
+                    fontSize: 13),
               ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
@@ -1001,7 +1187,9 @@ class NavigationDrawer extends StatelessWidget {
                 "Grade 12",
                 style: TextStyle(
                     color: Theme.of(context).primaryColorDark,
-                    fontWeight: FontWeight.w700),
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 2,
+                    fontSize: 13),
               ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
@@ -1017,7 +1205,9 @@ class NavigationDrawer extends StatelessWidget {
                 "Grade 11",
                 style: TextStyle(
                     color: Theme.of(context).primaryColorDark,
-                    fontWeight: FontWeight.w700),
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 2,
+                    fontSize: 13),
               ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
@@ -1033,7 +1223,9 @@ class NavigationDrawer extends StatelessWidget {
                 "Grade 10",
                 style: TextStyle(
                     color: Theme.of(context).primaryColorDark,
-                    fontWeight: FontWeight.w700),
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 2,
+                    fontSize: 13),
               ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
@@ -1049,7 +1241,9 @@ class NavigationDrawer extends StatelessWidget {
                 "Grade 9",
                 style: TextStyle(
                     color: Theme.of(context).primaryColorDark,
-                    fontWeight: FontWeight.w700),
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 2,
+                    fontSize: 13),
               ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
@@ -1065,7 +1259,9 @@ class NavigationDrawer extends StatelessWidget {
                 "Grade 8",
                 style: TextStyle(
                     color: Theme.of(context).primaryColorDark,
-                    fontWeight: FontWeight.w700),
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 2,
+                    fontSize: 13),
               ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
@@ -1081,7 +1277,9 @@ class NavigationDrawer extends StatelessWidget {
                 "More",
                 style: TextStyle(
                     color: Theme.of(context).primaryColorDark,
-                    fontWeight: FontWeight.w700),
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 2,
+                    fontSize: 13),
               ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
@@ -1097,7 +1295,9 @@ class NavigationDrawer extends StatelessWidget {
                 "Sign Out",
                 style: TextStyle(
                     color: Theme.of(context).primaryColorDark,
-                    fontWeight: FontWeight.w700),
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 2,
+                    fontSize: 13),
               ),
               onTap: () async {
                 await sigOut(context);

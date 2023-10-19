@@ -1,29 +1,25 @@
-import 'package:Eboard/testing_messaging/LearnerViewPrivateDocuments.dart';
-import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 
-import '../../model/ConnectionChecker.dart';
-import '../../shared/constants.dart';
-import '../Notifications/learnerViewNotifications.dart';
-import 'learnersHome.dart';
+import '../../../shared/constants.dart';
 
-Logger logger = Logger(printer: PrettyPrinter(colors: true));
-
-class LearnerViewMarks extends StatefulWidget {
-  Map<String, dynamic> indexMarks = {};
+class DetailedMarks extends StatefulWidget {
+  var indexMarks = {};
   final String subjectName;
+  final String nameOfL;
 
-  LearnerViewMarks(
-      {Key? key, required this.indexMarks, required this.subjectName})
+  DetailedMarks(
+      {Key? key,
+      required this.subjectName,
+      required this.nameOfL,
+      required this.indexMarks})
       : super(key: key);
 
   @override
-  State<LearnerViewMarks> createState() => _LearnerViewMarksState();
+  State<DetailedMarks> createState() => _DetailedMarksState();
 }
 
-class _LearnerViewMarksState extends State<LearnerViewMarks> {
-  Map<String, dynamic> newDataArray = {};
+class _DetailedMarksState extends State<DetailedMarks> {
+  var newDataArray = {};
 
   ///TODO TERM 1///
   String termOneTestMarkOne = "";
@@ -86,18 +82,19 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
   @override
   void initState() {
     super.initState();
-    ConnectionChecker.checkTimer();
-    setState(() {
-      subjectOfTeacher = widget.subjectName;
-      newDataArray = widget.indexMarks;
-      //logger.i("on stat view marks ${subjectOfTeacher}\n $newDataArray");
-    });
+    subjectOfTeacher = widget.subjectName;
+    newDataArray = widget.indexMarks;
+
+    // Utils.logger.i(
+    //     "name of learner\n${widget.nameOfL}\nParsed List\n${widget.subjectName}\n${widget.indexMarks}");
+    // Utils.logger.i(
+    //     "name of learner\n${widget.nameOfL}instantiated list\n${subjectOfTeacher}\n${newDataArray}");
   }
 
   @override
   void dispose() {
-    widget.indexMarks.clear();
-    newDataArray.clear();
+    // widget.indexMarks.clear();
+    // newDataArray.clear();
     super.dispose();
   }
 
@@ -223,90 +220,50 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
     termFourExamMarkTwo =
         newDataArray[subjectOfTeacher][3]["exams"]['exam2mark'] ?? "0";
 
-    return Scaffold(
-      body: DoubleBackToCloseApp(
-        snackBar: SnackBar(
-          backgroundColor: Theme.of(context).primaryColor.withOpacity(1),
-          content: Text(
-            'Tap back again to leave the application',
-            style: TextStyle(color: Theme.of(context).primaryColorLight),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        child: SafeArea(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(top: 0.0),
-            decoration: const BoxDecoration(
-              //screen background color
-              gradient: LinearGradient(
-                  colors: [Color(0x00cccccc), Color(0xE7791971)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      OutlinedButton(
-                        style: buttonRound,
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LearnerHome()));
-                        },
-                        child: Text(
-                          "Back",
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
+    return widget.indexMarks.isNotEmpty || widget.indexMarks != null
+        ? Expanded(
+            flex: 1,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColorLight,
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 3.0,
+                  )
+                ],
+              ),
+              margin: const EdgeInsets.only(right: 10),
+              width: MediaQuery.of(context).size.width,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(50),
+                        bottomRight: Radius.circular(50),
+                        topLeft: Radius.circular(50),
+                        topRight: Radius.circular(50),
+                      ),
+                      child: Container(
+                        color: Theme.of(context).primaryColor.withOpacity(.7),
+                        width: MediaQuery.of(context).size.width / 1.5,
+                        height: 50,
+                        child: Center(
+                          child: Text(
+                            "Marks for ${widget.nameOfL}",
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Apple SD Gothic Neo',
+                                color: Theme.of(context).primaryColorLight),
+                          ),
                         ),
                       ),
-                      OutlinedButton(
-                        style: buttonRound,
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const LearnerViewPrivateDocuments()));
-                        },
-                        child: Text(
-                          "Documents",
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                        ),
-                      ),
-                      OutlinedButton(
-                        style: buttonRound,
-                        onPressed: () {
-                          ///TODO Send subject
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LearnerViewNotifications(
-                                subject: subjectOfTeacher.toString(),
-                              ),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "Subject Notification",
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
+                    ),
+                    const SizedBox(height: 10),
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
@@ -364,19 +321,19 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          labelText("Test 1"),
+                                          labelText(context, "Test 1"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Test 2"),
+                                          labelText(context, "Test 2"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Test 3"),
+                                          labelText(context, "Test 3"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Test 4"),
+                                          labelText(context, "Test 4"),
                                         ],
                                       ),
                                     ),
@@ -390,19 +347,23 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          labelText(termOneTestMarkOne),
+                                          labelText(
+                                              context, termOneTestMarkOne),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termOneTestMarkTwo),
+                                          labelText(
+                                              context, termOneTestMarkTwo),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termOneTestMarkThree),
+                                          labelText(
+                                              context, termOneTestMarkThree),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termOneTestMarkFour),
+                                          labelText(
+                                              context, termOneTestMarkFour),
                                         ],
                                       ),
                                     ),
@@ -455,19 +416,19 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          labelText("Assignment 1"),
+                                          labelText(context, "Assignment 1"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Assignment 2"),
+                                          labelText(context, "Assignment 2"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Assignment 3"),
+                                          labelText(context, "Assignment 3"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Assignment 4"),
+                                          labelText(context, "Assignment 4"),
                                         ],
                                       ),
                                     ),
@@ -481,19 +442,23 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          labelText(termOneAssignmentMarkOne),
+                                          labelText(context,
+                                              termOneAssignmentMarkOne),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termOneAssignmentMarkTwo),
+                                          labelText(context,
+                                              termOneAssignmentMarkTwo),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termOneAssignmentMarkThree),
+                                          labelText(context,
+                                              termOneAssignmentMarkThree),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termOneAssignmentMarkFour),
+                                          labelText(context,
+                                              termOneAssignmentMarkFour),
                                         ],
                                       ),
                                     ),
@@ -549,11 +514,11 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Exam 1"),
+                                          labelText(context, "Exam 1"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Exam 2"),
+                                          labelText(context, "Exam 2"),
                                         ],
                                       ),
                                     ),
@@ -570,11 +535,13 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termOneExamMarkOne),
+                                          labelText(
+                                              context, termOneExamMarkOne),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termOneExamMarkTwo),
+                                          labelText(
+                                              context, termOneExamMarkTwo),
                                         ],
                                       ),
                                     ),
@@ -638,19 +605,19 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          labelText("Test 1"),
+                                          labelText(context, "Test 1"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Test 2"),
+                                          labelText(context, "Test 2"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Test 3"),
+                                          labelText(context, "Test 3"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Test 4"),
+                                          labelText(context, "Test 4"),
                                         ],
                                       ),
                                     ),
@@ -664,19 +631,23 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          labelText(termTwoTestMarkOne),
+                                          labelText(
+                                              context, termTwoTestMarkOne),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termTwoTestMarkTwo),
+                                          labelText(
+                                              context, termTwoTestMarkTwo),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termTwoTestMarkThree),
+                                          labelText(
+                                              context, termTwoTestMarkThree),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termTwoTestMarkFour),
+                                          labelText(
+                                              context, termTwoTestMarkFour),
                                         ],
                                       ),
                                     ),
@@ -729,19 +700,19 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          labelText("Assignment 1"),
+                                          labelText(context, "Assignment 1"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Assignment 2"),
+                                          labelText(context, "Assignment 2"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Assignment 3"),
+                                          labelText(context, "Assignment 3"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Assignment 4"),
+                                          labelText(context, "Assignment 4"),
                                         ],
                                       ),
                                     ),
@@ -755,19 +726,23 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          labelText(termTwoAssignmentMarkOne),
+                                          labelText(context,
+                                              termTwoAssignmentMarkOne),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termTwoAssignmentMarkTwo),
+                                          labelText(context,
+                                              termTwoAssignmentMarkTwo),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termTwoAssignmentMarkThree),
+                                          labelText(context,
+                                              termTwoAssignmentMarkThree),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termTwoAssignmentMarkFour),
+                                          labelText(context,
+                                              termTwoAssignmentMarkFour),
                                         ],
                                       ),
                                     ),
@@ -823,11 +798,11 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Exam 1"),
+                                          labelText(context, "Exam 1"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Exam 2"),
+                                          labelText(context, "Exam 2"),
                                         ],
                                       ),
                                     ),
@@ -844,11 +819,13 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termTwoExamMarkOne),
+                                          labelText(
+                                              context, termTwoExamMarkOne),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termTwoExamMarkTwo),
+                                          labelText(
+                                              context, termTwoExamMarkTwo),
                                         ],
                                       ),
                                     ),
@@ -912,19 +889,19 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          labelText("Test 1"),
+                                          labelText(context, "Test 1"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Test 2"),
+                                          labelText(context, "Test 2"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Test 3"),
+                                          labelText(context, "Test 3"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Test 4"),
+                                          labelText(context, "Test 4"),
                                         ],
                                       ),
                                     ),
@@ -938,19 +915,23 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          labelText(termThreeTestMarkOne),
+                                          labelText(
+                                              context, termThreeTestMarkOne),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termThreeTestMarkTwo),
+                                          labelText(
+                                              context, termThreeTestMarkTwo),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termThreeTestMarkThree),
+                                          labelText(
+                                              context, termThreeTestMarkThree),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termThreeTestMarkFour),
+                                          labelText(
+                                              context, termThreeTestMarkFour),
                                         ],
                                       ),
                                     ),
@@ -1003,19 +984,19 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          labelText("Assignment 1"),
+                                          labelText(context, "Assignment 1"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Assignment 2"),
+                                          labelText(context, "Assignment 2"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Assignment 3"),
+                                          labelText(context, "Assignment 3"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Assignment 4"),
+                                          labelText(context, "Assignment 4"),
                                         ],
                                       ),
                                     ),
@@ -1029,20 +1010,22 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          labelText(termThreeAssignmentMarkOne),
+                                          labelText(context,
+                                              termThreeAssignmentMarkOne),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termThreeAssignmentMarkTwo),
+                                          labelText(context,
+                                              termThreeAssignmentMarkTwo),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(
+                                          labelText(context,
                                               termThreeAssignmentMarkThree),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(
+                                          labelText(context,
                                               termThreeAssignmentMarkFour),
                                         ],
                                       ),
@@ -1099,11 +1082,11 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          labelText("Exam 1"),
+                                          labelText(context, "Exam 1"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Exam 2"),
+                                          labelText(context, "Exam 2"),
                                         ],
                                       ),
                                     ),
@@ -1120,11 +1103,13 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termThreeExamMarkOne),
+                                          labelText(
+                                              context, termThreeExamMarkOne),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termThreeExamMarkTwo),
+                                          labelText(
+                                              context, termThreeExamMarkTwo),
                                         ],
                                       ),
                                     ),
@@ -1188,19 +1173,19 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          labelText("Test 1"),
+                                          labelText(context, "Test 1"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Test 2"),
+                                          labelText(context, "Test 2"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Test 3"),
+                                          labelText(context, "Test 3"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Test 4"),
+                                          labelText(context, "Test 4"),
                                         ],
                                       ),
                                     ),
@@ -1214,19 +1199,23 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          labelText(termFourTestMarkOne),
+                                          labelText(
+                                              context, termFourTestMarkOne),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termFourTestMarkTwo),
+                                          labelText(
+                                              context, termFourTestMarkTwo),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termFourTestMarkThree),
+                                          labelText(
+                                              context, termFourTestMarkThree),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termFourTestMarkFour),
+                                          labelText(
+                                              context, termFourTestMarkFour),
                                         ],
                                       ),
                                     ),
@@ -1279,19 +1268,19 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          labelText("Assignment 1"),
+                                          labelText(context, "Assignment 1"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Assignment 2"),
+                                          labelText(context, "Assignment 2"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Assignment 3"),
+                                          labelText(context, "Assignment 3"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Assignment 4"),
+                                          labelText(context, "Assignment 4"),
                                         ],
                                       ),
                                     ),
@@ -1305,20 +1294,23 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          labelText(termFourAssignmentMarkOne),
+                                          labelText(context,
+                                              termFourAssignmentMarkOne),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termFourAssignmentMarkTwo),
+                                          labelText(context,
+                                              termFourAssignmentMarkTwo),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(
+                                          labelText(context,
                                               termFourAssignmentMarkThree),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termFourAssignmentMarkFour),
+                                          labelText(context,
+                                              termFourAssignmentMarkFour),
                                         ],
                                       ),
                                     ),
@@ -1374,11 +1366,11 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Exam 1"),
+                                          labelText(context, "Exam 1"),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText("Exam 2"),
+                                          labelText(context, "Exam 2"),
                                         ],
                                       ),
                                     ),
@@ -1395,11 +1387,13 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termFourExamMarkOne),
+                                          labelText(
+                                              context, termFourExamMarkOne),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          labelText(termFourExamMarkTwo),
+                                          labelText(
+                                              context, termFourExamMarkTwo),
                                         ],
                                       ),
                                     ),
@@ -1409,34 +1403,27 @@ class _LearnerViewMarksState extends State<LearnerViewMarks> {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
                       ],
                     ),
-                  ),
+                    const SizedBox(height: 80),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Text labelText(String labelName) {
-    return Text(
-      labelName,
-      style: TextStyle(
-        color: Theme.of(context).primaryColor.withOpacity(.7),
-        fontWeight: FontWeight.w900,
-        fontSize: 16,
-      ),
-    );
-  }
-
-  navigateBack() {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const LearnerHome()));
+          )
+        // ? GestureDetector(
+        //     onTap: () {
+        //       Utils.logger.e("$subjectOfTeacher\n${widget.indexMarks}\n\n");
+        //     },
+        //     child: const Text("Data"))
+        : Center(
+            child: Text(
+              "No marks have been added for this learner",
+              style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).primaryColor),
+            ),
+          );
   }
 }

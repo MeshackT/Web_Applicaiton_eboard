@@ -2,11 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:Eboard/AllNew/screens/Authentication/Authenticate.dart';
+
 import '../../shared/constants.dart';
 import '../home/home.dart';
 import 'DektopLayouts/DesktopMore.dart';
@@ -53,289 +52,7 @@ class _MoreState extends State<More> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth < Utils.mobileWidth) {
-        return Scaffold(
-          body: SafeArea(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              decoration: const BoxDecoration(
-                //screen background color
-                gradient: LinearGradient(
-                    colors: [Color(0x00cccccc), Color(0xE7791971)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight),
-              ),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        OutlinedButton(
-                          style: buttonRound,
-                          onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => const Home()));
-                          },
-                          child: Text(
-                            "Back",
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor),
-                          ),
-                        ),
-                        spaceVertical(),
-                        Container(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .primaryColorLight
-                                  .withOpacity(.4),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                              border: Border.all(
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 150,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 10),
-                                        child: Text(
-                                          "About ",
-                                          style:
-                                              textStyleText(context).copyWith(
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 16,
-                                            letterSpacing: 1,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 10),
-                                        child: Text(
-                                          "An electronic board for both learners and teacher."
-                                          " Send your notification as a teacher to learners."
-                                          " Get your notification feeds directly from the application.",
-                                          style:
-                                              textStyleText(context).copyWith(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16,
-                                            letterSpacing: 1,
-                                            color: Theme.of(context)
-                                                .primaryColor
-                                                .withOpacity(.6),
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )),
-                        spaceVertical(),
-                        Container(
-                          height: 160,
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .primaryColorLight
-                                .withOpacity(.4),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                            border: Border.all(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Share with friends",
-                                style: textStyleText(context).copyWith(
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 16,
-                                    letterSpacing: 1),
-                              ),
-                              spaceVertical(),
-                              InkWell(
-                                onTap: () {
-                                  //show sheet to share
-                                  showSheetToShare(context);
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.only(left: 10),
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 30,
-                                  child: Text(
-                                    "Share with friends",
-                                    textAlign: TextAlign.start,
-                                    style: textStyleText(context).copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                      letterSpacing: 1,
-                                      color: Theme.of(context)
-                                          .primaryColor
-                                          .withOpacity(.6),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  showSheetToSendUsFeedback(context);
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.only(left: 10),
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 30,
-                                  child: Text(
-                                    "Send us Feedback",
-                                    textAlign: TextAlign.start,
-                                    style: textStyleText(context).copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                      letterSpacing: 1,
-                                      color: Theme.of(context)
-                                          .primaryColor
-                                          .withOpacity(.6),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  showSheetForAddingEnquiries(context);
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.only(left: 10),
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 30,
-                                  child: Text(
-                                    "Add the details for enquiries",
-                                    textAlign: TextAlign.start,
-                                    style: textStyleText(context).copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                      letterSpacing: 1,
-                                      color: Theme.of(context)
-                                          .primaryColor
-                                          .withOpacity(.6),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        spaceVertical(),
-                        InkWell(
-                          onTap: () async {
-                            setState(() {
-                              isLoading = true;
-                            });
-                            final navContext = Navigator.of(context);
-
-                            try {
-                              await FirebaseAuth.instance.signOut();
-                              navContext.pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) => const Authenticate(),
-                                ),
-                              );
-                            } catch (e) {
-                              snack("Failed to sign out", context);
-                            }
-                            setState(() {
-                              isLoading = false;
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .primaryColorLight
-                                  .withOpacity(.4),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                              border: Border.all(
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                            width: MediaQuery.of(context).size.width,
-                            height: 50,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 10),
-                              child: Text(
-                                "Sign Out",
-                                style: textStyleText(context).copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
-                                  letterSpacing: 1,
-                                  color: Colors.red,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ),
-                        spaceVertical(),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: isLoading
-                              ? SpinKitChasingDots(
-                                  color: Theme.of(context).primaryColor,
-                                )
-                              : Text(
-                                  "App Name: $appName\nApp Version: $appVersion",
-                                  style: textStyleText(context).copyWith(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
-                                    letterSpacing: 1,
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(.6),
-                                  ),
-                                  textAlign: TextAlign.start,
-                                ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      } else {
-        return const DesktopMore();
-      }
-    });
+    return const DesktopMore();
   }
 
   //TODO send FeedBack
@@ -358,13 +75,15 @@ class _MoreState extends State<More> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             margin: const EdgeInsets.only(top: 0.0),
-            decoration: const BoxDecoration(
-              //screen background color
-              gradient: LinearGradient(
-                  colors: [Color(0x0fffffff), Color(0xE7791971)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight),
-            ),
+            // decoration: const BoxDecoration(
+            //   //screen background color
+            //   gradient: LinearGradient(
+            //       colors: [Color(0x0fffffff), Color(0xE7791971)],
+            //       begin: Alignment.topLeft,
+            //       end: Alignment.bottomRight),
+            // ),
+            color: Theme.of(context).primaryColorLight,
+
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,

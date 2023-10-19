@@ -155,6 +155,25 @@ class _LearnerHomeState extends State<LearnerHome> {
                               ],
                             ),
                           );
+                        } else if (!snapshot.hasData ||
+                            snapshot.data == null ||
+                            snapshot.data!.size <= 0) {
+                          return Center(
+                            child: Column(
+                              children: [
+                                Text(
+                                  "No Subject yet and still loading...",
+                                  style: textStyleText(context).copyWith(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                                CircularProgressIndicator(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ],
+                            ),
+                          );
                         }
 
                         final List<QueryDocumentSnapshot> matchingDocs =
@@ -244,18 +263,9 @@ class _LearnerHomeState extends State<LearnerHome> {
                                     });
                                   },
                                   child: Container(
-                                    decoration: BoxDecoration(
-                                      //screen background color
-                                      gradient: LinearGradient(
-                                          colors: [
-                                            const Color(0xffcccccc),
-                                            const Color(0xE6691971)
-                                                .withOpacity(.7)
-                                          ],
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight),
-                                    ),
-                                    //color: Theme.of(context).primaryColor,
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(.80),
                                     child: ListTile(
                                       title: loading
                                           ? SpinKitChasingDots(
@@ -263,7 +273,7 @@ class _LearnerHomeState extends State<LearnerHome> {
                                                   .primaryColor,
                                             )
                                           : Text(
-                                              subject,
+                                              subject.capitalize(),
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
                                                   fontSize: 12,
@@ -543,28 +553,39 @@ class _LearnerHomeState extends State<LearnerHome> {
               ),
               child: Column(
                 children: [
-                  CircleAvatar(
-                    backgroundColor: Theme.of(context).primaryColorLight,
-                    child: Text(
-                      user!.email.toString()[0].toUpperCase(),
-                      style: TextStyle(
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 1,
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(.8)),
-                    ),
-                  ),
+                  user!.email != "" ||
+                          user!.email!.isEmpty ||
+                          user!.email != null
+                      ? CircleAvatar(
+                          backgroundColor: Theme.of(context).primaryColorLight,
+                          child: Text(
+                            user!.email.toString()[0].toUpperCase() ?? "",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 1,
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.8)),
+                          ),
+                        )
+                      : CircularProgressIndicator(
+                          color: Theme.of(context).primaryColor,
+                        ),
                   const SizedBox(
                     height: 22,
                   ),
                   Wrap(children: [
-                    Text(
-                      learnersSecondName.toString(),
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Theme.of(context).primaryColorLight),
-                    ),
+                    learnersSecondName != ""
+                        ? Text(
+                            learnersSecondName.toString(),
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                color: Theme.of(context).primaryColorLight),
+                          )
+                        : CircularProgressIndicator(
+                            color: Theme.of(context).primaryColor,
+                          ),
                   ]),
                   const SizedBox(
                     height: 22,

@@ -10,10 +10,10 @@ Logger logger = Logger(printer: PrettyPrinter(colors: true));
 var user = FirebaseAuth.instance.currentUser!;
 
 class SubjectNotifications extends StatefulWidget {
-  List<dynamic> teachersIDS;
-  List<dynamic> nameOfSubjects;
+  final List<dynamic> teachersIDS;
+  final List<dynamic> nameOfSubjects;
 
-  SubjectNotifications(
+  const SubjectNotifications(
       {Key? key, required this.teachersIDS, required this.nameOfSubjects})
       : super(key: key);
 

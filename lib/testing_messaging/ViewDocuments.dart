@@ -9,7 +9,6 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -55,13 +54,14 @@ class _ViewDocumentsState extends State<ViewDocuments> {
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               margin: const EdgeInsets.only(top: 0.0),
-              decoration: const BoxDecoration(
-                //screen background color
-                gradient: LinearGradient(
-                    colors: [Color(0x0fffffff), Color(0xE7791971)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight),
-              ),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColorLight,
+                  // color: Theme.of(context).primaryColorLight,
+                  boxShadow: const [
+                    BoxShadow(
+                      blurRadius: 1.0,
+                    )
+                  ]),
               child: Column(
                 children: [
                   Padding(
@@ -101,7 +101,6 @@ class _ViewDocumentsState extends State<ViewDocuments> {
                                       Theme.of(context).primaryColorDark,
                                   keyboardType: TextInputType.name,
                                   decoration: InputDecoration(
-                                    border: InputBorder.none,
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                           color: Theme.of(context)
@@ -109,7 +108,13 @@ class _ViewDocumentsState extends State<ViewDocuments> {
                                           width: 1.0),
                                       borderRadius: BorderRadius.circular(30),
                                     ),
-                                    enabledBorder: InputBorder.none,
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
+                                          width: 1.0),
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
                                     errorBorder: InputBorder.none,
                                     disabledBorder: InputBorder.none,
                                     contentPadding: const EdgeInsets.only(
@@ -217,6 +222,7 @@ class _ViewDocumentsState extends State<ViewDocuments> {
                             }).toList();
                           }
                           return ListView.builder(
+                            padding: const EdgeInsets.only(bottom: 80),
                             itemCount: _documents.length,
                             itemBuilder: (BuildContext context, int index) {
                               DocumentSnapshot document = _documents[index];
@@ -238,19 +244,7 @@ class _ViewDocumentsState extends State<ViewDocuments> {
                                       builder: (context) => View(url: fileUrl),
                                     ),
                                   );
-                                  // if (kIsWeb) {
-                                  //   Fluttertoast.showToast(
-                                  //       backgroundColor:
-                                  //           Theme.of(context).primaryColor,
-                                  //       msg: "Not available yet");
-                                  // } else {
-                                  //   Navigator.of(context).pushReplacement(
-                                  //     MaterialPageRoute(
-                                  //       builder: (context) =>
-                                  //           View(url: fileUrl),
-                                  //     ),
-                                  //   );
-                                  // }
+
                                   print("$fileUrl,$text, $name");
                                 },
                                 child: Container(
@@ -345,58 +339,6 @@ class _ViewDocumentsState extends State<ViewDocuments> {
                                               itemBuilder: (context) => [
                                                 PopupMenuItem<int>(
                                                   value: 0,
-                                                  child: Visibility(
-                                                    visible: kIsWeb
-                                                        ? webDisplay
-                                                        : !webDisplay,
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.share,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColor
-                                                              .withOpacity(.7),
-                                                          size: 15,
-                                                        ),
-                                                        const SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Text(
-                                                          "Share PDF",
-                                                          style: textStyleText(
-                                                                  context)
-                                                              .copyWith(),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                PopupMenuItem<int>(
-                                                  value: 1,
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.download,
-                                                        color: Theme.of(context)
-                                                            .primaryColor
-                                                            .withOpacity(.7),
-                                                        size: 15,
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Text(
-                                                        "Download PDF",
-                                                        style: textStyleText(
-                                                                context)
-                                                            .copyWith(),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                PopupMenuItem<int>(
-                                                  value: 2,
                                                   child: Row(
                                                     children: [
                                                       Icon(
@@ -498,75 +440,6 @@ class _ViewDocumentsState extends State<ViewDocuments> {
       String userCurrentlyLogged) async {
     switch (item) {
       case 0:
-        try {
-          ///share the pdf url
-          if (fileUrlfile.isEmpty || fileUrlfile == "") {
-            print("cant share");
-            snack('There`s no url link found', context);
-          } else {
-            print("can share $fileUrlfile");
-            await FlutterShare.share(
-                title: "By $nameOfSender",
-                text: fileUrlfile,
-                chooserTitle: "By $nameOfSender");
-          }
-        } catch (e) {
-          print(fileUrlfile);
-          snack(e.toString(), context);
-        }
-        break;
-      case 1:
-        try {
-          setState(() {
-            isLoading = true;
-          });
-          // isLoading
-          //     ? Utils.showDownloading(
-          //         context,
-          //         "Downloading PDF",
-          //         "Wait a few seconds"
-          //             " depending on your network")
-          //     : null;
-
-          const Duration(milliseconds: 1500);
-          print("Started downloading");
-          // Download the PDF file
-          http.Response response = await http.get(Uri.parse(fileUrlfile));
-          Uint8List pdfBytes = response.bodyBytes;
-
-          // Get the external storage directory
-          Directory? externalDir = await getExternalStorageDirectory();
-          if (externalDir == null) {
-            print('External storage directory not found');
-            return;
-          }
-
-          // Create the e-board folder if it doesn't exist
-          String folderPath = '${externalDir.path}/e-board';
-          Directory folder = Directory(folderPath);
-          if (!await folder.exists()) {
-            await folder.create(recursive: true);
-          }
-
-          // Extract the file name from the URL
-          String fileName = fileUrlfile.split('/').last;
-
-          // Save the file to the e-board folder
-          String filePath = '$folderPath/$fileName';
-          File file = File(filePath);
-          await file.writeAsBytes(pdfBytes);
-          setState(() {
-            isLoading = false;
-          });
-          Fluttertoast.showToast(
-              msg: 'File downloaded and saved successfully at: $filePath');
-        } catch (e) {
-          print(fileUrlfile);
-          snack(e.toString(), context);
-        }
-
-        break;
-      case 2:
         try {
           Logger logger = Logger(
               printer: PrettyPrinter(
@@ -718,13 +591,17 @@ class View extends StatelessWidget {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         margin: const EdgeInsets.only(top: 0.0),
-        decoration: const BoxDecoration(
-          //screen background color
-          gradient: LinearGradient(
-              colors: [Color(0x0fffffff), Color(0xE7791971)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight),
-        ),
+        decoration: BoxDecoration(
+            color: Theme.of(context).primaryColorLight,
+            gradient: const LinearGradient(
+                colors: [Color(0x0ffffffff), Color(0xE7791971)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight),
+            boxShadow: const [
+              BoxShadow(
+                blurRadius: 1.0,
+              )
+            ]),
         child: SfPdfViewer.network(
           url,
           controller: pdfViewerController,

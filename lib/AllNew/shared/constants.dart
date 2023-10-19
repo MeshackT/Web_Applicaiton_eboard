@@ -4,6 +4,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
+
+//Capitalize
+extension StringExtensions on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1)}";
+  }
+}
+
+Text labelText(BuildContext context, String labelName) {
+  return Text(
+    labelName,
+    style: TextStyle(
+      color: Theme.of(context).primaryColor.withOpacity(.7),
+      fontWeight: FontWeight.w900,
+      fontSize: 16,
+    ),
+  );
+}
 
 TextStyle textStyleText(BuildContext context) {
   return TextStyle(
@@ -28,7 +47,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snack(
           fontWeight: FontWeight.bold,
           color: Theme.of(context).primaryColorLight),
     ),
-    duration: const Duration(seconds: 4),
+    duration: const Duration(seconds: 2),
   ));
 }
 
@@ -53,7 +72,8 @@ InputDecoration textInputDecoration = InputDecoration(
 final messengerKey = GlobalKey<ScaffoldMessengerState>();
 
 class Utils {
-  static const mobileWidth = 700;
+  static const mobileWidth = 900;
+  static Logger logger = Logger(printer: PrettyPrinter(colors: true));
 
   static showDownloading(BuildContext context, String title, String message) {
     return showCupertinoDialog<String>(

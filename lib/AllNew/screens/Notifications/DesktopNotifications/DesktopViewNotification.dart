@@ -48,17 +48,24 @@ class _DesktopViewNotificationsState extends State<DesktopViewNotifications> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColorLight,
         //screen background color
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
             colors: [Color(0x00cccccc), Color(0xE7791971)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight),
       ),
       child: Center(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width / 1.5,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          width: MediaQuery.of(context).size.width / 1.6,
           height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            //screen background color
+            color: Theme.of(context).primaryColorLight,
+          ),
           child: Column(
             children: [
               Expanded(
@@ -252,12 +259,11 @@ class _DesktopViewNotificationsState extends State<DesktopViewNotifications> {
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .primaryColorLight
-                                          .withOpacity(.4),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(10)),
+                                      borderRadius: BorderRadius.circular(10),
+                                      color:
+                                          Theme.of(context).primaryColorLight,
                                       border: Border.all(
+                                        width: .5,
                                         color: Theme.of(context).primaryColor,
                                       ),
                                     ),

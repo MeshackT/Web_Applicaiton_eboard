@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:Eboard/AllNew/screens/home/home.dart';
-import 'package:Eboard/AllNew/screens/home/learnersHome.dart';
 import 'package:Eboard/AllNew/shared/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
@@ -36,6 +35,20 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Subject Private documents",
+          style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+        ),
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.home),
+          ),
+        ],
+      ),
+      backgroundColor: Theme.of(context).primaryColorLight,
       body: SafeArea(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -54,38 +67,15 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    OutlinedButton(
-                      onPressed: () async {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const LearnerHome(),
-                          ),
-                        );
-                      },
-                      style: buttonRound,
-                      child: Text(
-                        "Home",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
                     isLoading
                         ? SpinKitChasingDots(
                             color: Theme.of(context).primaryColor,
                             size: 16,
                           )
-                        : Container(
-                            width: 260,
-                            // color:
-                            // Theme.of(context).primaryColorLight.withOpacity(.8),
+                        : SizedBox(
+                            width: 280,
                             child: TextField(
                               controller: _searchController,
                               cursorColor: Theme.of(context).primaryColorDark,
@@ -98,7 +88,12 @@ class _LearnerViewPrivateDocuments extends State<LearnerViewPrivateDocuments> {
                                       width: 1.0),
                                   borderRadius: BorderRadius.circular(30),
                                 ),
-                                enabledBorder: InputBorder.none,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColorDark,
+                                      width: 1.0),
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
                                 errorBorder: InputBorder.none,
                                 disabledBorder: InputBorder.none,
                                 contentPadding: const EdgeInsets.only(

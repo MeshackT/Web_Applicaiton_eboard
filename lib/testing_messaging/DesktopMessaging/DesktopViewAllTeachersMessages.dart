@@ -1,4 +1,6 @@
 import 'dart:io';
+
+import 'package:Eboard/testing_messaging/ViewAllTeachersMessages.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:Eboard/testing_messaging/ViewAllTeachersMessages.dart';
+
 import '../../AllNew/model/ConnectionChecker.dart';
 import '../../AllNew/shared/constants.dart';
 import '../ViewAllTeachersTexts.dart';
@@ -50,13 +52,15 @@ class _DesktopViewAllTeachersMessagesState
               width: MediaQuery.of(context).size.width,
               margin: const EdgeInsets.only(top: 0.0),
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              decoration: const BoxDecoration(
-                //screen background color
-                gradient: LinearGradient(
-                    colors: [Color(0x0fffffff), Color(0xE7791971)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight),
-              ),
+              // decoration: const BoxDecoration(
+              //   //screen background color
+              //   gradient: LinearGradient(
+              //       colors: [Color(0x0fffffff), Color(0xE7791971)],
+              //       begin: Alignment.topLeft,
+              //       end: Alignment.bottomRight),
+              // ),
+              color: Theme.of(context).primaryColorLight,
+
               child: Center(
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height,
@@ -153,7 +157,7 @@ class _DesktopViewAllTeachersMessagesState
                                     const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
                                   crossAxisSpacing: 5.0,
-                                  mainAxisSpacing: 5.0,
+                                  mainAxisSpacing: 20.0,
                                 ),
                                 itemBuilder: (BuildContext context, int index) {
                                   DocumentSnapshot document = _documents[index];
@@ -174,7 +178,17 @@ class _DesktopViewAllTeachersMessagesState
                                     child: Container(
                                       height: 600,
                                       width: 450,
-                                      color: Colors.white,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
+                                          // color: Theme.of(context).primaryColorLight,
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              blurRadius: 1.0,
+                                            )
+                                          ]),
                                       child: Stack(
                                         alignment: Alignment.topLeft,
                                         children: [

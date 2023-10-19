@@ -14,7 +14,7 @@ class UserModel {
         }
       });
 
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
       authSubscription.cancel();
       return users;
     } catch (e) {

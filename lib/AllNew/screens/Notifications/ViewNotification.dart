@@ -57,13 +57,7 @@ class _ViewNotificationsState extends State<ViewNotifications> {
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          //screen background color
-          gradient: LinearGradient(
-              colors: [Color(0x00cccccc), Color(0xE7791971)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight),
-        ),
+        color: Theme.of(context).primaryColorLight,
         child: Column(
           children: [
             Expanded(
@@ -166,9 +160,11 @@ class _ViewNotificationsState extends State<ViewNotifications> {
                                 snack("Notification deleted", context);
                               },
                               background: Container(
-                                color: Theme.of(context)
-                                    .primaryColor
-                                    .withOpacity(.6),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Theme.of(context).primaryColorLight,
+                                  // color: Theme.of(context).primaryColorLight,
+                                ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [

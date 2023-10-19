@@ -247,7 +247,8 @@ class _LearnerForgotState extends State<LearnerForgot> {
       loading = true;
     });
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email.trim());
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: email.trim().toLowerCase());
     } on FirebaseAuthException catch (e) {
       snack(e.toString(), context);
     }

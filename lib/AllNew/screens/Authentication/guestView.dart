@@ -1,14 +1,14 @@
+import 'package:Eboard/AllNew/model/ConnectionChecker.dart';
+import 'package:Eboard/AllNew/screens/Authentication/Authenticate.dart';
+import 'package:Eboard/AllNew/shared/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:insta_image_viewer/insta_image_viewer.dart';
-import 'package:Eboard/AllNew/model/ConnectionChecker.dart';
-import 'package:Eboard/AllNew/screens/Authentication/Authenticate.dart';
-import 'package:Eboard/AllNew/shared/constants.dart';
+
+import '../../../testing_messaging/LearnerViewAllMessages.dart';
 
 User user = FirebaseAuth.instance.currentUser!;
 
@@ -161,6 +161,7 @@ class _GuestViewState extends State<GuestView> {
                     } else {
                       var _documents = snapshot.data!.docs;
                       return ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 80),
                         itemCount: _documents.length,
                         itemBuilder: (BuildContext context, int index) {
                           DocumentSnapshot document = _documents[index];
@@ -181,103 +182,231 @@ class _GuestViewState extends State<GuestView> {
                             child: Container(
                               margin: const EdgeInsets.symmetric(
                                   vertical: 3, horizontal: 5),
-                              color: Theme.of(context)
-                                  .primaryColorLight
-                                  .withOpacity(.3),
+                              color: Theme.of(context).primaryColorLight,
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Stack(
-                                    alignment: Alignment.topLeft,
-                                    children: [
-                                      Stack(
-                                        alignment: Alignment.bottomLeft,
-                                        children: [
-                                          InstaImageViewer(
-                                            child: CachedNetworkImage(
-                                              imageUrl: imageURLFromFirebase,
-                                              placeholder: (context, url) =>
-                                                  SpinKitChasingDots(
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                size: 25,
-                                              ),
-                                              cacheManager: CacheManager(
-                                                //this removes the image and re-downloads it after 7 days
-                                                Config(
-                                                  'customCacheKey',
-                                                  stalePeriod:
-                                                      const Duration(days: 7),
-                                                ),
-                                              ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      SizedBox(
-                                                height: 200,
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                child: SpinKitChasingDots(
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                  size: 100,
-                                                ),
-                                              ),
-                                              imageBuilder:
-                                                  (context, imageProvider) =>
-                                                      Center(
-                                                child: Image(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.contain,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Container(
-                                        color:
-                                            Theme.of(context).primaryColorLight,
-                                        padding: const EdgeInsets.only(
-                                          top: 5,
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Stack(
+                                      alignment: Alignment.topLeft,
+                                      children: [
+                                        Stack(
+                                          alignment: Alignment.bottomLeft,
                                           children: [
-                                            CircleAvatar(
-                                              child: Text(
-                                                "S",
-                                                style: textStyleText(context)
-                                                    .copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context)
-                                                      .primaryColorLight,
+                                            Container(
+                                              // margin: const EdgeInsets.only(bottom: 20),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        10.0), //
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.white
+                                                        .withOpacity(
+                                                            0.5), // Shadow color
+                                                    spreadRadius:
+                                                        1, // Spread radius
+                                                    blurRadius:
+                                                        80, // Blur radius
+                                                    offset: const Offset(1,
+                                                        2), // Offset in x and y directions
+                                                  ),
+                                                ],
+                                              ),
+                                              // color: Colors.grey.shade100,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0), // Adjust the radius value as needed
+                                                      color: Colors.transparent,
+                                                    ),
+                                                    height: 320,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.of(context)
+                                                            .push(
+                                                                MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ViewImageLarge(
+                                                                  name: name,
+                                                                  image:
+                                                                      imageURLFromFirebase),
+                                                        ));
+                                                      },
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              imageURLFromFirebase,
+                                                          imageBuilder: (context,
+                                                                  imageProvider) =>
+                                                              Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              image:
+                                                                  DecorationImage(
+                                                                image:
+                                                                    imageProvider,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          placeholder:
+                                                              (context, url) =>
+                                                                  Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10.0), // Adjust the radius value as needed
+                                                              color: Colors
+                                                                  .transparent,
+                                                            ),
+                                                            height: 300,
+                                                            width:
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10.0),
+                                                              child:
+                                                                  Image.asset(
+                                                                "assets/images/ic_launcher.jpg",
+                                                                width: double
+                                                                    .infinity,
+                                                                height: double
+                                                                    .infinity,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              const Icon(
+                                                                  Icons.error),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    margin: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 5),
+                                                    child: ExpansionTile(
+                                                      childrenPadding:
+                                                          const EdgeInsets.only(
+                                                              bottom: 10),
+                                                      collapsedIconColor:
+                                                          Theme.of(context)
+                                                              .primaryColor,
+                                                      iconColor:
+                                                          Colors.green.shade900,
+                                                      title: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          Text(
+                                                            "Read More",
+                                                            style: textStyleText(
+                                                                    context)
+                                                                .copyWith(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .primaryColor,
+                                                                    fontSize:
+                                                                        11,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      maintainState: false,
+                                                      expandedCrossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          text,
+                                                          style: textStyleText(
+                                                                  context)
+                                                              .copyWith(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .primaryColor,
+                                                                  fontSize: 11,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal),
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 1, vertical: 2),
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              CircleAvatar(
+                                                child: Text(
+                                                  name.toString()[0],
+                                                  style: textStyleText(context)
+                                                      .copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context)
+                                                        .primaryColorLight,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Flexible(
-                                              flex: 1,
-                                              child: Row(
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Row(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
-                                                  Container(
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                      top: 5,
-                                                    ),
+                                                  SizedBox(
                                                     child: Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
@@ -287,7 +416,7 @@ class _GuestViewState extends State<GuestView> {
                                                               .spaceBetween,
                                                       children: [
                                                         Text(
-                                                          "By The school",
+                                                          name,
                                                           style: textStyleText(
                                                                   context)
                                                               .copyWith(
@@ -317,43 +446,14 @@ class _GuestViewState extends State<GuestView> {
                                                       ],
                                                     ),
                                                   ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width /
-                                                            2.1,
-                                                  ),
                                                 ],
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    color: Theme.of(context)
-                                        .primaryColorLight
-                                        .withOpacity(.8),
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 5),
-                                      child: SelectableText(
-                                        text,
-                                        style: textStyleText(context).copyWith(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w900,
-                                            fontFamily:
-                                                'Hiragino Kaku Gothic ProN'),
-                                        textAlign: TextAlign.center,
-                                      ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
+                                  ]),
                             ),
                           );
                         },

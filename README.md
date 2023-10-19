@@ -64,3 +64,17 @@ changed TO
 
 Open app
 Flutter Tutorial - How To Use URL Launcher | Open URL In Web Browser / In App WebView
+
+
+This is where I made the change on the 13th of october 2023
+check displays, home, ads
+
+
+// web folder manifest
+"src": "icons/Icon-192.png",
+"src": "icons/Icon-512.png",
+"src": "icons/Icon-maskable-192.png",
+"src": "icons/Icon-maskable-512.png",
+
+index.html
+<link rel="apple-touch-icon" href="icons/Icon-192.png">

@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 
 class UploadImages extends StatefulWidget {
   const UploadImages({Key? key}) : super(key: key);
@@ -61,8 +60,6 @@ class _UploadImagesState extends State<UploadImages> {
   }
 
   Future<void> pickImage() async {
-    Logger logger = Logger(printer: PrettyPrinter(colors: true));
-
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
 
     if (result != null) {

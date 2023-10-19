@@ -16,7 +16,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
 Future<void> main() async {
   setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyALUsDsHtmbQrNOIuyl9Mr_zARl3rLGK34",
+          authDomain: "ebase-3f858.firebaseapp.com",
+          databaseURL: "https://ebase-3f858-default-rtdb.firebaseio.com",
+          projectId: "ebase-3f858",
+          storageBucket: "ebase-3f858.appspot.com",
+          messagingSenderId: "231030944816",
+          appId: "1:231030944816:web:07f5bbb2a7ddbdee26e9f5",
+          measurementId: "G-EYXRE3102C"));
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await FastCachedImageConfig.init(clearCacheAfter: const Duration(days: 365));
   runApp(const MyApp());
@@ -91,16 +100,5 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     LocalNotificationService.initialize();
-  }
-}
-
-class TestingThis extends StatelessWidget {
-  const TestingThis({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SizedBox(),
-    );
   }
 }

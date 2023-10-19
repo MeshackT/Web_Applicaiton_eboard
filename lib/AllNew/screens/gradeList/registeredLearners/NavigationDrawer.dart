@@ -1,3 +1,11 @@
+import 'package:Eboard/AllNew/screens/Authentication/DesktopAuthentication/DesktopTeacherProfile.dart';
+import 'package:Eboard/AllNew/screens/gradeList/registeredLearners/DesktopGrade10.dart';
+import 'package:Eboard/AllNew/screens/gradeList/registeredLearners/DesktopGrade11.dart';
+import 'package:Eboard/AllNew/screens/gradeList/registeredLearners/DesktopGrade12.dart';
+import 'package:Eboard/AllNew/screens/gradeList/registeredLearners/DesktopGrade8.dart';
+import 'package:Eboard/AllNew/screens/gradeList/registeredLearners/DesktopGrade9.dart';
+import 'package:Eboard/AllNew/screens/home/home.dart';
+import 'package:Eboard/AllNew/screens/more/DektopLayouts/DesktopMore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -5,32 +13,36 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../shared/constants.dart';
 import '../../Authentication/Authenticate.dart';
-import '../../Authentication/TeacherProfile.dart';
-import '../../home/home.dart';
-import '../../more/more.dart';
-import '../grade10.dart';
-import '../grade11.dart';
-import '../grade12.dart';
-import '../grade8.dart';
-import 'DesktopGrade9.dart';
 
 class NavigationDrawerForALl extends StatelessWidget {
-  const NavigationDrawerForALl({Key? key}) : super(key: key);
+  final String? nameOfTeacher;
+  const NavigationDrawerForALl({Key? key, required this.nameOfTeacher})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Expanded(
+      flex: 1,
       child: Container(
-        color: Theme.of(context).primaryColorLight,
-        width: MediaQuery.of(context).size.width / 3.8,
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColorLight,
+          boxShadow: const [
+            BoxShadow(
+              blurRadius: 3.0,
+            )
+          ],
+        ),
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              buildHeader(context),
-              buildMenueItems(context),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                buildHeader(context),
+                buildMenueItems(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -50,7 +62,7 @@ class NavigationDrawerForALl extends StatelessWidget {
           child: InkWell(
             onTap: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => const TeachersProfile()));
+                  builder: (context) => const DesktopTeachersProfile()));
             },
             child: Container(
               color: Theme.of(context).primaryColorDark.withOpacity(.8),
@@ -75,18 +87,15 @@ class NavigationDrawerForALl extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  Wrap(
-                    children: [
-                      Text(
-                        teachersSecondName.toString(),
-                        style: textStyleText(context).copyWith(
+                  Wrap(children: [
+                    Text(
+                      nameOfTeacher!,
+                      style: TextStyle(
+                          fontSize: 14,
                           fontWeight: FontWeight.w700,
-                          fontSize: 12,
-                          color: Theme.of(context).primaryColorLight,
-                        ),
-                      ),
-                    ],
-                  ),
+                          color: Theme.of(context).primaryColorLight),
+                    ),
+                  ]),
                   const SizedBox(
                     height: 10,
                   ),
@@ -107,6 +116,7 @@ class NavigationDrawerForALl extends StatelessWidget {
                 style: textStyleText(context).copyWith(
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
+                  letterSpacing: 2,
                 ),
               ),
             ],
@@ -133,11 +143,14 @@ class NavigationDrawerForALl extends StatelessWidget {
               title: Text(
                 "Home",
                 style: TextStyle(
-                    color: Theme.of(context).primaryColorDark,
-                    fontWeight: FontWeight.w700),
+                  color: Theme.of(context).primaryColorDark,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 14,
+                  letterSpacing: 1,
+                ),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacement(
+                Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => const Home()));
               },
             ),
@@ -159,11 +172,12 @@ class NavigationDrawerForALl extends StatelessWidget {
                     color: Theme.of(context).primaryColorDark,
                     fontWeight: FontWeight.w900,
                     fontSize: 14,
+                    letterSpacing: 1,
                     fontFamily: 'Poppins-Extrabold'),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const Grade12()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const DesktopGrade12()));
               },
             ),
             ListTile(
@@ -177,11 +191,12 @@ class NavigationDrawerForALl extends StatelessWidget {
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.w900,
                   fontSize: 14,
+                  letterSpacing: 1,
                 ),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const Grade11()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const DesktopGrade11()));
               },
             ),
             ListTile(
@@ -195,11 +210,12 @@ class NavigationDrawerForALl extends StatelessWidget {
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.w900,
                   fontSize: 14,
+                  letterSpacing: 1,
                 ),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const Grade10()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const DesktopGrade10()));
               },
             ),
             ListTile(
@@ -213,10 +229,11 @@ class NavigationDrawerForALl extends StatelessWidget {
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.w900,
                   fontSize: 14,
+                  letterSpacing: 1,
                 ),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const DesktopGrade9()));
               },
             ),
@@ -231,11 +248,12 @@ class NavigationDrawerForALl extends StatelessWidget {
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.w900,
                   fontSize: 14,
+                  letterSpacing: 1,
                 ),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const Grade8()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const DesktopGrade8()));
               },
             ),
             ListTile(
@@ -249,11 +267,12 @@ class NavigationDrawerForALl extends StatelessWidget {
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.w900,
                   fontSize: 14,
+                  letterSpacing: 2,
                 ),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const More()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const DesktopMore()));
               },
             ),
             ListTile(
@@ -265,7 +284,8 @@ class NavigationDrawerForALl extends StatelessWidget {
                 "Sign Out",
                 style: TextStyle(
                     color: Theme.of(context).primaryColorDark,
-                    fontWeight: FontWeight.w700),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w900),
               ),
               onTap: () async {
                 await sigOut(context);
