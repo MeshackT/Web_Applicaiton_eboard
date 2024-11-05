@@ -1,42 +1,23 @@
-# levy
+# Eboard application for web
 
-Eboard
 
-## Getting Started
+This is a school application for teachers and learners. It is a schol management application designed to cater the functionalities of both teachers and learner through communication.
 
-"ebasehosting-751ee"
+Teachers get to send letters digitally to learners instead of printing out paper formates.
 
-This is a school feed application for teachers and learners.
+Messages can be sent by the teacher privately to a class or it can be public for everyone to see.
+This application also enables pdf files to be share within the application.
 
-Teachers get to send letters digitally to learners instead of printing out paper form of letters.
-
-Messages can be sent to provide class taught by the teacher or it can be public.
-this application also enables pdf files to be share within the application.
-
-in order to share the pdf externally u do so using a link and the other end can view the link shared
+In order to share the pdf externally you can do so using a link and the other end(the other person) can view the link shared
 on web browsers.
 
 The main function of this application is to provide marks on a digital platform where they can be 
-accessed anywhere by the user.
+accessed anywhere by learners.
 
-Authen tication, Notifications, Images, pdfs, Texts, sharing, downloading, and viewing capabilities.
+Authentication, Notifications, Images, pdfs, Texts, sharing, downloading, and viewing capabilities are included in the webapp.
 
-firebase deploy --only hosting:ebase-3f858
 
-<!--  <script>-->
-<!--    window.addEventListener('load', function(ev) {-->
-<!--      _flutter.loader.loadEntrypoint({-->
-<!--        serviceWorker: {-->
-<!--          serviceWorkerVersion: serviceWorkerVersion,-->
-<!--        },-->
-<!--        onEntrypointLoaded: function(engineInitializer) {-->
-<!--          engineInitializer.initializeEngine().then(function(appRunner) {-->
-<!--            appRunner.runApp();-->
-<!--          });-->
-<!--        }-->
-<!--      });-->
-<!--    });-->
-<!--  </script>-->
+<!--  Remind myself -->
 
 [//]: # (gsutil cors set cors.json gs://ebase-3f858.appspot.com/)
 
